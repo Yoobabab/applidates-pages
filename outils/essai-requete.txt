@@ -1,0 +1,15 @@
+[out:json][timeout:25][bbox:43.5988,4.1453,44.3950,5.2519];
+(nw["amenity"="restaurant"]["name"];);out count;
+(nw["amenity"="fast_food"]["name"];);out count;
+(nw["amenity"~"^(bar|pub)$"]["name"];);out count;
+(nw["amenity"="cafe"]["name"];);out count;
+(nw["amenity"="nightclub"]["name"];);out count;
+(nw["amenity"="cinema"]["name"];);out count;
+(nw["leisure"~"^(bowling_alley|escape_game|amusement_arcade|miniature_golf)$"]["name"];nw["sport"="laser_tag"]["name"];);out count;
+(nw["sport"~"^(karting|paintball)$"]["name"];nw["leisure"~"^(water_park|trampoline_park)$"]["name"];);out count;
+(nw["amenity"~"^(theatre|arts_centre|music_venue)$"]["name"];);out count;
+(nw["tourism"~"^(museum|gallery)$"]["name"];);out count;
+(nw["leisure"~"^(park|garden)$"]["name"]["access"!="private"];);out count;
+(nw["tourism"="viewpoint"];);out count;
+(nw["natural"="beach"]["name"];);out count;
+(nw["leisure"="stadium"]["name"];);out count;
