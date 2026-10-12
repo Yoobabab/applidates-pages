@@ -4,7 +4,11 @@ Source : extrait France d'OpenStreetMap (Geofabrik), déjà filtré par osmium s
 L'appli additionne les carrés dont le centre est dans le rayon choisi : plus besoin d'interroger les serveurs
 publics Overpass, souvent saturés, pour l'accueil.
 
-Sortie : lieux/v1/comptes/{lat}_{lon}.json (tuile de 1°) = {"i_j": [n par rubrique]} et lieux/v1/index.json.
+Sorties :
+- lieux/v1/comptes/{lat}_{lon}.json (tuile de 1°) = {"i_j": [n par rubrique]} et lieux/v1/index.json (accueil) ;
+- les lieux eux-mêmes, pour composer les programmes, par carrés de 0,1° (≈ 10 km) :
+  lieux/v1/t/{i}_{j}.json (restos, sur le pouce, bars, cafés) et lieux/v1/s/{i}_{j}.json (tout le reste),
+  avec i = floor(lat × 10), j = floor(lon × 10). Chaque lieu = [id, lat, lon, {étiquettes abrégées}].
 
 Usage : python3 outils/lieux.py france-filtre.osm.pbf dossier_sortie
 """
@@ -22,6 +26,20 @@ PAR_DEGRE = round(1 / PAS)
 # Même ordre et mêmes identifiants que RUBRIQUES dans l'appli (src/lib/inventaire-outils.ts).
 RUBRIQUES = ['restos', 'pouce', 'bars', 'cafes', 'boites', 'cinemas', 'jeux', 'sensations', 'scenes', 'musees', 'parcs', 'vues', 'plages', 'stades']
 RANG = {r: i for i, r in enumerate(RUBRIQUES)}
+
+# Rubriques « à table » (fichiers t/, lus dans un petit rayon) ; les autres vont dans s/.
+TABLE = {'restos', 'pouce', 'bars', 'cafes'}
+
+# Étiquettes gardées pour l'appli, sous un nom court (longueur maximale).
+ETIQUETTES = {
+    'name': ('n', 80), 'amenity': ('am', 30), 'leisure': ('le', 30), 'tourism': ('to', 30), 'sport': ('sp', 30),
+    'natural': ('na', 30), 'cuisine': ('cu', 40), 'opening_hours': ('oh', 160),
+    'addr:housenumber': ('hn', 12), 'addr:street': ('st', 80), 'addr:city': ('ci', 60),
+}
+
+
+def abreger(tags):
+    return {court: tags.get(long)[:maxi] for long, (court, maxi) in ETIQUETTES.items() if tags.get(long)}
 
 
 def rubrique(t):
@@ -66,6 +84,14 @@ class Compteur(osmium.SimpleHandler):
         super().__init__()
         self.tuiles = {}
         self.total = [0] * len(RUBRIQUES)
+        self.lieux = {}
+
+    def garder(self, r, ident, lat, lon, tags):
+        if r is None:
+            return
+        famille = 't' if r in TABLE else 's'
+        cle = f'{famille}/{math.floor(lat * 10)}_{math.floor(lon * 10)}'
+        self.lieux.setdefault(cle, []).append([ident, round(lat, 5), round(lon, 5), abreger(tags)])
 
     def ajouter(self, r, lat, lon):
         if r is None or not (-90 <= lat <= 90 and -180 <= lon <= 180):
@@ -80,7 +106,9 @@ class Compteur(osmium.SimpleHandler):
 
     def node(self, n):
         if n.location.valid():
-            self.ajouter(rubrique(n.tags), n.location.lat, n.location.lon)
+            r = rubrique(n.tags)
+            self.ajouter(r, n.location.lat, n.location.lon)
+            self.garder(r, f'n{n.id}', n.location.lat, n.location.lon, n.tags)
 
     def way(self, w):
         r = rubrique(w.tags)
@@ -89,7 +117,9 @@ class Compteur(osmium.SimpleHandler):
         # Point représentatif : moyenne des nœuds (suffisant pour savoir dans quel carré il tombe).
         pts = [(n.lat, n.lon) for n in w.nodes if n.location.valid()]
         if pts:
-            self.ajouter(r, sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts))
+            lat, lon = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
+            self.ajouter(r, lat, lon)
+            self.garder(r, f'w{w.id}', lat, lon, w.tags)
 
 
 def main():
@@ -106,12 +136,17 @@ def main():
         # Carrés vides de 0 retirés : on n'écrit que les nombres utiles.
         with open(os.path.join(sortie, 'comptes', f'{cle}.json'), 'w', encoding='utf-8') as f:
             json.dump(carres, f, separators=(',', ':'))
+    for cle, liste in c.lieux.items():
+        os.makedirs(os.path.join(sortie, os.path.dirname(cle)), exist_ok=True)
+        with open(os.path.join(sortie, f'{cle}.json'), 'w', encoding='utf-8') as f:
+            json.dump(liste, f, ensure_ascii=False, separators=(',', ':'))
     index = {
         'source': 'OpenStreetMap (contributeurs, licence ODbL), extrait Geofabrik',
         'pas': PAS,
         'rubriques': RUBRIQUES,
         'totaux': dict(zip(RUBRIQUES, c.total)),
         'tuiles': sorted(c.tuiles),
+        'carres_lieux': len(c.lieux),
     }
     with open(os.path.join(sortie, 'index.json'), 'w', encoding='utf-8') as f:
         json.dump(index, f, ensure_ascii=False, indent=1)
