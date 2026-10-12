@@ -34,7 +34,7 @@ PAR_CATEGORIE = [
 
 # Mots-clés du nom (sans accents, minuscules) : priment sur les catégories.
 PAR_MOTS = [
-    ('auto', r"\b(voitures?|autos?|automobiles?|moto(s|rs)?|tuning|car ?meet|rassemblement (de |d.)?(vehicules|voitures|motos|vespa|2cv|youngtimers?|americaines?)|retromobile|salon de l.auto|rallye auto|vehicules anciens|belles mecaniques|us cars?)\b"),
+    ('auto', r"\b(voitures?|automobiles?|salon auto|bourse auto|moto(s|rs)?|tuning|car ?meet|rassemblement (de |d.)?(vehicules|voitures|motos|vespa|2cv|youngtimers?|americaines?)|retromobile|salon de l.auto|rallye auto|vehicules anciens|belles mecaniques|us cars?)\b"),
     ('fete', r"\b(fete foraine|foire|feria|bodega|abrivado|bandido|fete votive|fete du village|carnaval|corso|fete locale|fete patronale|fete de la (biere|musique)|festivites|guinguette|bal\b)"),
     ('concert', r"\b(concerts?|festival|dj set|live music|musique live|orchestre)\b"),
     ('marche', r"\b(brocantes?|vide[- ]greniers?|marche de noel|marche nocturne|puces|bourse aux)\b"),
@@ -64,8 +64,14 @@ def lire_periodes(texte, debut, fin):
     return periodes
 
 
+# Sorties pour enfants : pas pour un date.
+ENFANTS = r"\b(jeune public|enfants?|tout[- ]petits|bebes?|p.tits|des \d+ ?ans|kids)\b"
+
+
 def genre(nom, categories):
     texte = sans_accents(nom)
+    if re.search(ENFANTS, texte):
+        return None
     for g, motif in PAR_MOTS:
         if re.search(motif, texte):
             return g
