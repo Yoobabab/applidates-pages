@@ -1,0 +1,37 @@
+# Chaque nuit : événements à venir en France (DATAtourisme), publiés sur la branche « donnees »
+# (réécrite à chaque fois en un seul commit, pour que le dépôt ne grossisse pas).
+# L'appli lit : https://raw.githubusercontent.com/Yoobabab/applidates-pages/donnees/evenements/v1/…
+name: Événements à venir
+on:
+  schedule:
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['outils/evenements.py', 'outils/en-avant.json', '.github/workflows/evenements.yml']
+permissions:
+  contents: write
+concurrency:
+  group: evenements
+  cancel-in-progress: false
+jobs:
+  evenements:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - name: Télécharger le fichier du jour
+        run: curl -sSL --fail --retry 3 -o /tmp/fma.csv "https://www.data.gouv.fr/api/1/datasets/r/2c6023f2-ffce-4c1a-9728-bdc020e463b5"
+      - name: Trier les événements
+        run: python3 outils/evenements.py /tmp/fma.csv /tmp/sortie
+      - name: Publier sur la branche « donnees »
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd /tmp/sortie
+          git init -q -b donnees
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Événements du $(date -u +%F)"
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" donnees
