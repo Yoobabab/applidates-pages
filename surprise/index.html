@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Une surprise t’attend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600&display=swap">
+<style>
+/* Page envoyée à l'invité d'un date surprise : rien à installer, tout se dévoile à l'heure (décidé par le serveur). */
+:root {
+  --fond: #FFF7F4; --surface: #FFFFFF; --encre: #2B1A2E; --doux: #6E5D72; --ligne: #EEDDD7;
+  --corail: #E8505B; --corail-pale: #FDE6E4; --vert: #1E8A5A; --fond-compte: #E8505B;
+  --titre: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --texte: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --fond: #1A1220; --surface: #251A2D; --encre: #F7EEF2; --doux: #B9A9BD; --ligne: #3A2C42;
+    --corail: #FF6B6B; --corail-pale: #43222A; --vert: #5FD39B; --fond-compte: #C93A46; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--encre); font-family: var(--texte); font-size: 17px; line-height: 1.5;
+  padding: max(20px, env(safe-area-inset-top)) 18px max(32px, env(safe-area-inset-bottom)); }
+main { max-width: 520px; margin: 0 auto; display: grid; gap: 18px; }
+h1 { font-family: var(--titre); font-weight: 800; font-size: clamp(2rem, 9vw, 2.6rem); line-height: 1.05; letter-spacing: -0.03em; margin: 8px 0 0; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--corail); }
+.sous { color: var(--doux); margin: 0; }
+.compte { background: var(--fond-compte); color: #fff; border-radius: 22px; padding: 18px 20px; text-align: center; }
+.compte small { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.9; }
+.compte strong { font-family: var(--titre); font-size: 2rem; font-variant-numeric: tabular-nums; }
+.bloc { background: var(--surface); border: 1px solid var(--ligne); border-radius: 18px; padding: 16px 18px; }
+.bloc h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--doux); margin: 0 0 4px; font-weight: 600; }
+.bloc p { margin: 0; white-space: pre-wrap; }
+ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+li { background: var(--surface); border: 1px solid var(--ligne); border-radius: 18px; padding: 16px 18px; display: grid; gap: 6px; }
+li.cache { background: var(--corail-pale); border-style: dashed; }
+.haut { display: flex; justify-content: space-between; gap: 10px; font-weight: 600; color: var(--corail); font-variant-numeric: tabular-nums; }
+.haut span:last-child { color: var(--doux); font-weight: 400; font-size: 0.9rem; white-space: nowrap; }
+.nom { font-family: var(--titre); font-size: 1.35rem; font-weight: 700; margin: 0; }
+.desc { color: var(--doux); margin: 0; font-size: 0.95rem; }
+.indice { margin: 0; }
+a.carte { justify-self: start; color: var(--corail); font-weight: 600; text-decoration: none; border: 1.5px solid var(--corail); border-radius: 12px; padding: 7px 12px; }
+a.carte:focus-visible { outline: 3px solid var(--corail); outline-offset: 2px; }
+.pied { color: var(--doux); font-size: 0.85rem; text-align: center; margin-top: 8px; }
+.etat { text-align: center; color: var(--doux); padding: 60px 10px; }
+</style>
+</head>
+<body>
+<main id="page">
+  <p class="etat" id="etat">Ouverture de ta surprise…</p>
+</main>
+<script>
+(function () {
+  var URL_BASE = 'https://mmoyrhyimcalnztwpydi.supabase.co';
+  var CLE = 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH';
+  var id = new URLSearchParams(location.search).get('id') || '';
+  var page = document.getElementById('page');
+  var decalage = 0; // écart entre l'horloge du serveur et celle du téléphone
+  var donnees = null;
+  var minuteur = null;
+
+  function el(tag, classe, texte) {
+    var e = document.createElement(tag);
+    if (classe) e.className = classe;
+    if (texte != null) e.textContent = texte; // jamais de HTML venant des données
+    return e;
+  }
+  function etat(texte) { page.replaceChildren(el('p', 'etat', texte)); }
+  function maintenant() { return Date.now() + decalage; }
+  function heure(iso) {
+    var d = new Date(iso);
+    return String(d.getHours()).padStart(2, '0') + ' h ' + String(d.getMinutes()).padStart(2, '0');
+  }
+  function jour(iso) {
+    return new Date(iso).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+  function rebours(ms) {
+    if (ms <= 0) return 'C’est parti !';
+    var s = Math.floor(ms / 1000), j = Math.floor(s / 86400), h = Math.floor((s % 86400) / 3600), m = Math.floor((s % 3600) / 60);
+    if (j > 0) return j + ' j ' + h + ' h';
+    if (h > 0) return h + ' h ' + String(m).padStart(2, '0');
+    return m + ' min ' + String(s % 60).padStart(2, '0');
+  }
+
+  function afficher() {
+    var d = donnees;
+    var bloc = [];
+    var titre = el('h1');
+    titre.append((d.invite ? d.invite + ', ' : '') + 'une ', el('em', null, 'surprise'), ' t’attend.');
+    bloc.push(titre);
+    bloc.push(el('p', 'sous', (d.de ? 'Préparée par ' + d.de + ' · ' : '') + jour(d.debut)));
+
+    var compte = el('div', 'compte');
+    compte.append(el('small', null, 'Début dans'), el('strong', null, rebours(new Date(d.debut).getTime() - maintenant())));
+    compte.querySelector('strong').id = 'rebours';
+    bloc.push(compte);
+
+    if (d.rendezvous) { var r = el('div', 'bloc'); r.append(el('h2', null, 'Rendez-vous'), el('p', null, d.rendezvous)); bloc.push(r); }
+    if (d.tenue) { var t = el('div', 'bloc'); t.append(el('h2', null, 'Tenue conseillée'), el('p', null, d.tenue)); bloc.push(t); }
+
+    var liste = el('ol');
+    (d.etapes || []).forEach(function (e) {
+      var li = el('li', e.revele ? '' : 'cache');
+      var haut = el('div', 'haut');
+      haut.append(el('span', null, e.heure.replace(':', ' h ') + ' · ' + e.titre),
+        el('span', null, e.revele ? '🔓' : '🔒 ' + heure(e.revele_a)));
+      li.append(haut);
+      if (e.revele && e.lieu) {
+        li.append(el('p', 'nom', e.lieu.nom));
+        if (e.lieu.description) li.append(el('p', 'desc', e.lieu.description));
+        if (!e.lieu.generique || e.lieu.recherche) {
+          var a = el('a', 'carte', 'Voir sur la carte');
+          a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(e.lieu.recherche || e.lieu.nom);
+          a.target = '_blank'; a.rel = 'noopener';
+          li.append(a);
+        }
+      } else {
+        li.append(el('p', 'nom', 'Mystère…'));
+      }
+      li.append(el('p', 'indice', 'Indice : ' + e.indice));
+      liste.append(li);
+    });
+    bloc.push(liste);
+    bloc.push(el('p', 'pied', 'Chaque étape se dévoile toute seule à l’heure prévue. Organisé avec AppliDates.'));
+    page.replaceChildren.apply(page, bloc);
+  }
+
+  function prochaineRevelation() {
+    var a_venir = (donnees.etapes || []).filter(function (e) { return !e.revele; })
+      .map(function (e) { return new Date(e.revele_a).getTime(); });
+    return a_venir.length ? Math.min.apply(null, a_venir) : null;
+  }
+
+  function charger() {
+    fetch(URL_BASE + '/rest/v1/rpc/surprise_publique', {
+      method: 'POST',
+      headers: { apikey: CLE, Authorization: 'Bearer ' + CLE, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_id: id })
+    }).then(function (r) {
+      if (!r.ok) throw new Error(String(r.status));
+      return r.json();
+    }).then(function (d) {
+      if (!d) { etat('Cette surprise n’existe plus. Demande le lien à la personne qui l’a préparée.'); return; }
+      donnees = d;
+      decalage = new Date(d.maintenant).getTime() - Date.now();
+      afficher();
+      planifier();
+    }).catch(function () {
+      etat('Impossible d’ouvrir la surprise pour le moment. Vérifie ta connexion et recharge la page.');
+    });
+  }
+
+  function planifier() {
+    clearTimeout(minuteur);
+    var p = prochaineRevelation();
+    // Rechargement juste après la prochaine révélation (au plus tard dans 5 min).
+    var attente = p ? Math.max(2000, Math.min(p - maintenant() + 1500, 300000)) : 300000;
+    minuteur = setTimeout(charger, attente);
+  }
+
+  setInterval(function () {
+    var r = document.getElementById('rebours');
+    if (r && donnees) r.textContent = rebours(new Date(donnees.debut).getTime() - maintenant());
+  }, 1000);
+
+  if (!/^[0-9a-f-]{36}$/i.test(id)) etat('Ce lien de surprise est incomplet. Demande-le à nouveau.');
+  else charger();
+})();
+</script>
+</body>
+</html>
