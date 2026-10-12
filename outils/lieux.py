@@ -6,9 +6,9 @@ publics Overpass, souvent saturés, pour l'accueil.
 
 Sorties :
 - lieux/v1/comptes/{lat}_{lon}.json (tuile de 1°) = {"i_j": [n par rubrique]} et lieux/v1/index.json (accueil) ;
-- les lieux eux-mêmes, pour composer les programmes, par carrés de 0,1° (≈ 10 km) :
-  lieux/v1/t/{i}_{j}.json (restos, sur le pouce, bars, cafés) et lieux/v1/s/{i}_{j}.json (tout le reste),
-  avec i = floor(lat × 10), j = floor(lon × 10). Chaque lieu = [id, lat, lon, {étiquettes abrégées}].
+- les lieux eux-mêmes, pour composer les programmes :
+  lieux/v1/t/{i}_{j}.json (restos, sur le pouce, bars, cafés ; carrés de 0,05°, i = floor(lat × 20)) et
+  lieux/v1/s/{i}_{j}.json (tout le reste ; carrés de 0,1°, i = floor(lat × 10)). Chaque lieu = [id, lat, lon, {étiquettes abrégées}].
 
 Usage : python3 outils/lieux.py france-filtre.osm.pbf dossier_sortie
 """
@@ -89,8 +89,11 @@ class Compteur(osmium.SimpleHandler):
     def garder(self, r, ident, lat, lon, tags):
         if r is None:
             return
-        famille = 't' if r in TABLE else 's'
-        cle = f'{famille}/{math.floor(lat * 10)}_{math.floor(lon * 10)}'
+        # Manger/boire : carrés plus fins (0,05°), car très nombreux en ville et cherchés dans un petit rayon.
+        if r in TABLE:
+            cle = f't/{math.floor(lat * 20)}_{math.floor(lon * 20)}'
+        else:
+            cle = f's/{math.floor(lat * 10)}_{math.floor(lon * 10)}'
         self.lieux.setdefault(cle, []).append([ident, round(lat, 5), round(lon, 5), abreger(tags)])
 
     def ajouter(self, r, lat, lon):
