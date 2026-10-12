@@ -43,6 +43,7 @@ li div { min-width: 0; }
 .nom { font-weight: 600; margin: 0; }
 .nom a { color: inherit; text-decoration-color: var(--ligne); }
 .desc { color: var(--doux); margin: 0; font-size: 0.9rem; }
+.desc a { color: inherit; text-decoration-color: var(--ligne); }
 .barre { height: 8px; border-radius: 4px; background: var(--corail-pale); overflow: hidden; }
 .barre span { display: block; height: 100%; background: var(--corail); border-radius: 4px; transition: width .3s; }
 .voix { color: var(--doux); font-size: 0.9rem; margin: 0; }
@@ -147,13 +148,22 @@ button:disabled { opacity: .6; cursor: default; }
         var li = el('li');
         var info = el('div');
         var nom = el('p', 'nom');
+        var lien = null;
         if (!e.generique) {
-          var a = el('a', null, e.nom);
-          a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(e.recherche || e.nom);
-          a.target = '_blank'; a.rel = 'noopener';
-          nom.append(a);
-        } else nom.textContent = e.nom;
-        info.append(nom, el('p', 'desc', e.description));
+          lien = el('a', null, e.nom);
+          lien.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(e.recherche || e.nom);
+          lien.target = '_blank'; lien.rel = 'noopener';
+        }
+        if (typeof e.activite === 'string' && e.activite) {
+          // « Dîner romantique », puis le lieu en dessous.
+          nom.textContent = e.activite;
+          var ou = el('p', 'desc');
+          if (lien) ou.append('📍 ', lien, ' · ' + (e.ville || '')); else ou.textContent = e.description;
+          info.append(nom, ou);
+        } else {
+          if (lien) nom.append(lien); else nom.textContent = e.nom;
+          info.append(nom, el('p', 'desc', e.description));
+        }
         li.append(el('span', 'heure', e.heure.replace(':', ' h ')), info);
         liste.append(li);
       });
