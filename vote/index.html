@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Vote du groupe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Instrument+Sans:wght@400;600&display=swap">
+<style>
+/* Page envoyée au groupe : 3 programmes, chacun met son prénom et vote. Résultats visibles par tous. */
+:root {
+  --fond: #FFF7F4; --surface: #FFFFFF; --encre: #2B1A2E; --doux: #6E5D72; --ligne: #EEDDD7;
+  --corail: #E8505B; --corail-pale: #FDE6E4; --prune: #5B2A6E; --sur-corail: #FFFFFF;
+  --titre: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --texte: "Instrument Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --fond: #1A1220; --surface: #251A2D; --encre: #F7EEF2; --doux: #B9A9BD; --ligne: #3A2C42;
+    --corail: #FF6B6B; --corail-pale: #43222A; --prune: #CFA3E2; --sur-corail: #1A1220; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--encre); font-family: var(--texte); font-size: 17px; line-height: 1.5;
+  padding: max(20px, env(safe-area-inset-top)) 18px max(32px, env(safe-area-inset-bottom)); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 16px; }
+h1 { font-family: var(--titre); font-weight: 800; font-size: clamp(1.9rem, 8vw, 2.4rem); line-height: 1.08; letter-spacing: -0.03em; margin: 8px 0 0; text-wrap: balance; }
+.sous { color: var(--doux); margin: 0; }
+label { font-weight: 600; font-size: 0.95rem; }
+input { width: 100%; font: inherit; color: var(--encre); background: var(--surface); border: 1.5px solid var(--ligne); border-radius: 14px; padding: 12px 14px; margin-top: 6px; }
+input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--corail); outline-offset: 2px; }
+.option { background: var(--surface); border: 1.5px solid var(--ligne); border-radius: 18px; padding: 16px; display: grid; gap: 10px; }
+.option.moi { border-color: var(--corail); }
+.option.gagnant { border-color: var(--corail); box-shadow: 0 0 0 3px var(--corail-pale); }
+.haut { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.lettre { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: var(--corail-pale); color: var(--corail); font-weight: 800; }
+.moi .lettre, .gagnant .lettre { background: var(--corail); color: var(--sur-corail); }
+.cout { font-weight: 700; font-size: 0.95rem; }
+ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+li { display: grid; grid-template-columns: 64px 1fr; gap: 8px; }
+.heure { color: var(--prune); font-weight: 700; font-size: 0.9rem; font-variant-numeric: tabular-nums; padding-top: 1px; white-space: nowrap; }
+li div { min-width: 0; }
+.nom { font-weight: 600; margin: 0; }
+.nom a { color: inherit; text-decoration-color: var(--ligne); }
+.desc { color: var(--doux); margin: 0; font-size: 0.9rem; }
+.barre { height: 8px; border-radius: 4px; background: var(--corail-pale); overflow: hidden; }
+.barre span { display: block; height: 100%; background: var(--corail); border-radius: 4px; transition: width .3s; }
+.voix { color: var(--doux); font-size: 0.9rem; margin: 0; }
+button { font: inherit; font-weight: 700; border-radius: 14px; padding: 12px 14px; cursor: pointer; border: 1.5px solid var(--corail); background: var(--corail); color: var(--sur-corail); }
+button.contour { background: transparent; color: var(--corail); }
+button:disabled { opacity: .6; cursor: default; }
+.message { background: var(--corail-pale); border-radius: 14px; padding: 12px 14px; margin: 0; }
+.erreur { color: var(--corail); margin: 0; }
+.pied { color: var(--doux); font-size: 0.85rem; text-align: center; margin-top: 6px; }
+.etat { text-align: center; color: var(--doux); padding: 60px 10px; }
+@media (prefers-reduced-motion: reduce) { .barre span { transition: none; } }
+</style>
+</head>
+<body>
+<main id="page">
+  <p class="etat">Ouverture du vote…</p>
+</main>
+<script>
+(function () {
+  var URL_BASE = 'https://mmoyrhyimcalnztwpydi.supabase.co';
+  var CLE = 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH';
+  var LETTRES = ['A', 'B', 'C'];
+  var id = new URLSearchParams(location.search).get('id') || '';
+  var page = document.getElementById('page');
+  var donnees = null, envoi = false, erreur = '';
+
+  function lire(cle) { try { return localStorage.getItem(cle); } catch (e) { return null; } }
+  function ecrire(cle, v) { try { localStorage.setItem(cle, v); } catch (e) {} }
+  function uuid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 3 | 8)).toString(16);
+    });
+  }
+  var votant = lire('applidates:votant') || uuid();
+  ecrire('applidates:votant', votant);
+  var monChoix = lire('applidates:vote:' + id);
+  monChoix = monChoix === null ? null : Number(monChoix);
+  var prenom = lire('applidates:prenom') || '';
+
+  function el(tag, classe, texte) {
+    var e = document.createElement(tag);
+    if (classe) e.className = classe;
+    if (texte != null) e.textContent = texte; // jamais de HTML venant des données
+    return e;
+  }
+  function etat(texte) { page.replaceChildren(el('p', 'etat', texte)); }
+  function jour(iso) {
+    var p = iso.split('-');
+    return new Date(+p[0], p[1] - 1, +p[2]).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  }
+
+  function appel(fonction, corps) {
+    return fetch(URL_BASE + '/rest/v1/rpc/' + fonction, {
+      method: 'POST',
+      headers: { apikey: CLE, Authorization: 'Bearer ' + CLE, 'Content-Type': 'application/json' },
+      body: JSON.stringify(corps)
+    }).then(function (r) {
+      return r.text().then(function (t) {
+        var j = t ? JSON.parse(t) : null;
+        if (!r.ok) throw new Error((j && j.message) || 'Erreur ' + r.status);
+        return j;
+      });
+    });
+  }
+
+  function afficher() {
+    var d = donnees, n = d.options.length;
+    var voix = [], prenoms = [];
+    for (var i = 0; i < n; i++) { voix.push(0); prenoms.push([]); }
+    d.bulletins.forEach(function (b) { if (b.choix < n) { voix[b.choix]++; prenoms[b.choix].push(b.prenom); } });
+    var total = voix.reduce(function (a, b) { return a + b; }, 0);
+
+    var bloc = [];
+    bloc.push(el('h1', null, d.titre));
+    bloc.push(el('p', 'sous', (d.de ? d.de + ' vous propose 3 programmes · ' : '') + jour(d.jour)));
+
+    if (d.ferme) {
+      bloc.push(el('p', 'message', '🏆 C’est décidé : programme ' + LETTRES[d.gagnant] + ' !'));
+    } else {
+      var champ = el('div');
+      var lab = el('label', null, 'Ton prénom');
+      lab.htmlFor = 'prenom';
+      var input = el('input');
+      input.id = 'prenom'; input.maxLength = 30; input.autocomplete = 'given-name'; input.value = prenom;
+      input.placeholder = 'Pour que le groupe sache qui a voté';
+      input.addEventListener('input', function () { prenom = input.value; });
+      champ.append(lab, input);
+      bloc.push(champ);
+      if (monChoix !== null) bloc.push(el('p', 'message', 'Tu as voté ' + LETTRES[monChoix] + '. Tu peux changer d’avis tant que le vote est ouvert.'));
+      if (erreur) bloc.push(el('p', 'erreur', erreur));
+    }
+
+    d.options.forEach(function (o, i) {
+      var classes = 'option' + (d.ferme && d.gagnant === i ? ' gagnant' : '') + (!d.ferme && monChoix === i ? ' moi' : '');
+      var carte = el('section', classes);
+      var haut = el('div', 'haut');
+      haut.append(el('span', 'lettre', LETTRES[i]), el('span', 'cout', o.coutParPersonne === 0 ? 'Gratuit' : '≈ ' + o.coutParPersonne + ' € / pers.'));
+      carte.append(haut);
+      var liste = el('ol');
+      o.etapes.forEach(function (e) {
+        var li = el('li');
+        var info = el('div');
+        var nom = el('p', 'nom');
+        if (!e.generique) {
+          var a = el('a', null, e.nom);
+          a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(e.recherche || e.nom);
+          a.target = '_blank'; a.rel = 'noopener';
+          nom.append(a);
+        } else nom.textContent = e.nom;
+        info.append(nom, el('p', 'desc', e.description));
+        li.append(el('span', 'heure', e.heure.replace(':', ' h ')), info);
+        liste.append(li);
+      });
+      carte.append(liste);
+      var barre = el('div', 'barre');
+      var rempli = el('span');
+      rempli.style.width = (total ? Math.round(voix[i] / total * 100) : 0) + '%';
+      barre.append(rempli);
+      carte.append(barre, el('p', 'voix', voix[i] + ' voix' + (prenoms[i].length ? ' · ' + prenoms[i].join(', ') : '')));
+      if (!d.ferme) {
+        var b = el('button', monChoix === i ? 'contour' : '', monChoix === i ? '✓ Mon choix' : 'Je vote ' + LETTRES[i]);
+        b.type = 'button';
+        b.disabled = envoi || monChoix === i;
+        b.addEventListener('click', function () { voter(i); });
+        carte.append(b);
+      }
+      bloc.push(carte);
+    });
+    bloc.push(el('p', 'pied', 'Organisé avec AppliDates.'));
+    page.replaceChildren.apply(page, bloc);
+  }
+
+  function voter(i) {
+    prenom = (prenom || '').trim();
+    if (!prenom) { erreur = 'Indique ton prénom avant de voter.'; afficher(); document.getElementById('prenom').focus(); return; }
+    envoi = true; erreur = ''; afficher();
+    appel('voter', { p_vote: id, p_votant: votant, p_prenom: prenom, p_choix: i }).then(function () {
+      monChoix = i;
+      ecrire('applidates:vote:' + id, String(i));
+      ecrire('applidates:prenom', prenom);
+      envoi = false;
+      return charger();
+    }).catch(function (e) {
+      envoi = false;
+      erreur = e.message || 'Vote impossible pour le moment.';
+      afficher();
+    });
+  }
+
+  function charger() {
+    return appel('vote_public', { p_id: id }).then(function (d) {
+      if (!d) { etat('Ce vote n’existe plus. Demande le lien à la personne qui l’a lancé.'); return; }
+      donnees = d;
+      // Ne pas redessiner pendant que la personne tape son prénom.
+      if (document.activeElement && document.activeElement.id === 'prenom') return;
+      afficher();
+    }).catch(function () {
+      if (!donnees) etat('Impossible d’ouvrir le vote pour le moment. Vérifie ta connexion et recharge la page.');
+    });
+  }
+
+  if (!/^[0-9a-f-]{36}$/i.test(id)) { etat('Ce lien de vote est incomplet. Demande-le à nouveau.'); return; }
+  charger();
+  setInterval(function () { if (!envoi && donnees && !donnees.ferme) charger(); }, 15000);
+})();
+</script>
+</body>
+</html>
