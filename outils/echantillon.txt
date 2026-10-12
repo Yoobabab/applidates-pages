@@ -1,0 +1,168 @@
+78461 lignes
+
+COLONNES
+0: Nom_du_POI
+1: Categories_de_POI
+2: Latitude
+3: Longitude
+4: Adresse_postale
+5: Code_postal_et_commune
+6: Periodes_regroupees
+7: Covid19_mesures_specifiques
+8: Createur_de_la_donnee
+9: SIT_diffuseur
+10: Date_de_mise_a_jour
+11: Contacts_du_POI
+12: Classements_du_POI
+13: Description
+14: URI_ID_du_POI
+
+--- ligne 0
+Nom_du_POI: Les ateliers Maréïs : "Création d'animaux marins en argile"
+Categories_de_POI: https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent|https://www.datatourisme.fr/ontology/core#PointOfInterest|http://schema.org/Event
+Latitude: 50.518596
+Longitude: 1.630327
+Adresse_postale: Centre Maréis La Corderie Boulevard Bigot Descelers
+Code_postal_et_commune: 62630#Étaples
+Periodes_regroupees: 2025-12-30<->2025-12-30
+Covid19_mesures_specifiques: 
+Createur_de_la_donnee: Etaples-sur-Mer
+SIT_diffuseur: Etaples-sur-Mer
+Date_de_mise_a_jour: 2025-12-31
+Contacts_du_POI: #http://www.mareis.fr/
+Classements_du_POI: 
+Description: Un atelier spécial Noël pour les p'tits matelots
+URI_ID_du_POI: https://data.datatourisme.fr/14/624faa5b-11b7-3923-8490-746cbc110de0
+
+--- ligne 1
+Nom_du_POI: Tour du domaine et dégustation au Domaine du Grand Mayne
+Categories_de_POI: https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent|https://www.datatourisme.fr/ontology/core#PointOfInterest|https://www.datatourisme.fr/ontology/core#SportsEvent|http://schema.org/Event
+Latitude: 44.7435604
+Longitude: 0.22270023
+Adresse_postale: Domaine du Grand Mayne
+Code_postal_et_commune: 47120#Villeneuve-de-Duras
+Periodes_regroupees: 2026-01-02<->2026-12-31
+Covid19_mesures_specifiques: 
+Createur_de_la_donnee: OT du Pays de Duras - CDT47
+SIT_diffuseur: SIRTAQUI Nouvelle-Aquitaine
+Date_de_mise_a_jour: 2026-09-16
+Contacts_du_POI: Domaine du Grand Mayne#https://www.domainegrandmayne.com/
+Classements_du_POI: Vignobles & Découvertes#Label Vignobles & Découvertes
+Description: Visite guidée par notre équipe d’experts dans l’art du vin. Des vignes aux chais, entre outils modernes et traditionnels, lacave de fûts de chêne dévoilera ses secrets de l’art subtil de la vinification. Connexion entre l’Homme, la nature et le vin, c’est ici que l’identité remarquable de nos vins.
+URI_ID_du_POI: https://data.datatourisme.fr/23/e604bec2-0d15-37fa-92be-6315bc0bfca2
+
+--- ligne 2
+Nom_du_POI: Course Rose pour Octobre Rose au Domaine du Grand Mayne
+Categories_de_POI: https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent|https://www.datatourisme.fr/ontology/core#PointOfInterest|https://www.datatourisme.fr/ontology/core#SocialEvent|https://www.datatourisme.fr/ontology/core#SportsEvent|http://schema.org/Event|http://schema.org/SocialEvent
+Latitude: 44.7445548
+Longitude: 0.2240628
+Adresse_postale: Domaine du Grand Mayne
+Code_postal_et_commune: 47120#Villeneuve-de-Duras
+Periodes_regroupees: 2026-10-17<->2026-10-17
+Covid19_mesures_specifiques: 
+Createur_de_la_donnee: OT du Pays de Duras - CDT47
+SIT_diffuseur: SIRTAQUI Nouvelle-Aquitaine
+Date_de_mise_a_jour: 2026-09-14
+Contacts_du_POI: Domaine du Grand Mayne#https://www.domainegrandmayne.com/<>https://www.billetweb.fr/course-rose2
+Classements_du_POI: Vignobles & Découvertes#Label Vignobles & Découvertes
+Description: COURSE ROSE AU DOMAINE GRAND MAYNE !
+Partagez un moment sportif, convivial et solidaire au cœur de nos vignes
+- Course ou rando de 5 km — départ dès 14h
+- Visite guidée & dégustation après la course
+- Repas le soir sur réservation
+Burger maison & frites · Nuggets pour les enfants · dessert inclus
+URI_ID_du_POI: https://data.datatourisme.fr/23/7a2f4690-d93e-303b-aed1-7956f38a5d7d
+
+--- ligne 50
+Nom_du_POI: Lecture de façades - Journées Européennes du Patrimoine / Journées Nationales de l'architecture
+Categories_de_POI: https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent|https://www.datatourisme.fr/ontology/core#PointOfInterest|https://www.datatourisme.fr/ontology/core#Product|https://www.datatourisme.fr/ontology/core#Visit|http://schema.org/Event|http://schema.org/Product
+Latitude: 43.514538
+Longitude: 4.987461
+Adresse_postale: 30 Allée Jean Jaurès Office de Tourisme d'Istres
+Code_postal_et_commune: 13800#Istres
+Periodes_regroupees: 2026-10-31<->2026-10-31
+Covid19_mesures_specifiques: 
+Createur_de_la_donnee: Office de Tourisme d'Istres
+SIT_diffuseur: Provence Tourisme / Office de Tourisme d'Istres
+Date_de_mise_a_jour: 2026-09-03
+Contacts_du_POI: #
+Classements_du_POI: 
+Description: À l’occasion des Journées Nationales de l’Architecture, le CAUE 13 propose une déambulation dans le centre historique d’Istres pour apprendre à lire et à comprendre les façades et les paysages urbains.
+URI_ID_du_POI: https://data.datatourisme.fr/58/81f4ca6d-06ae-3b2b-ac16-805436122493
+
+--- ligne 120
+Nom_du_POI: Vignobles en Scène Domaine Rocheville
+Categories_de_POI: https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent|https://www.datatourisme.fr/ontology/core#PointOfInterest|https://www.datatourisme.fr/ontology/core#Product|https://www.datatourisme.fr/ontology/core#Visit|https://www.datatourisme.fr/ontology/core#SportsEvent|http://schema.org/Event|http://schema.org/Product
+Latitude: 44.368718
+Longitude: 5.118322
+Adresse_postale: Domaine Rocheville 117 ter route de Montélimar
+Code_postal_et_commune: 26110#Nyons
+Periodes_regroupees: 2026-10-17<->2026-10-17
+Covid19_mesures_specifiques: 
+Createur_de_la_donnee: Office de Tourisme des Baronnies en Drôme Provençale
+SIT_diffuseur: Agence d'Attractivité de la Drôme - source : Apidae Tourisme
+Date_de_mise_a_jour: 2026-09-21
+Contacts_du_POI: #http://www.domainerocheville.com/
+Classements_du_POI: Vignobles & Découvertes#Label Vignobles & Découvertes
+Description: Une journée gourmande au cœur des vignes !
+Randonnée, dégustations, repas de fin de vendanges, contes et animations… Venez partager un moment convivial au Domaine Rocheville.
+URI_ID_du_POI: https://data.datatourisme.fr/13/2178d31f-7fdd-30b8-8be9-8fb8bea9e3ed
+
+--- ligne 300
+Nom_du_POI: Patrimoine immatériel
+Categories_de_POI: https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent|https://www.datatourisme.fr/ontology/core#PointOfInterest|http://schema.org/Event
+Latitude: 50.51824
+Longitude: 1.63
+Adresse_postale: Boulevard Bigot Descelers
+Code_postal_et_commune: 62630#Étaples
+Periodes_regroupees: 2025-08-26<->2025-08-26
+Covid19_mesures_specifiques: 
+Createur_de_la_donnee: Office de Tourisme d'Etaples-sur-Mer
+SIT_diffuseur: Office de Tourisme d'Etaples-sur-Mer
+Date_de_mise_a_jour: 2025-08-28
+Contacts_du_POI: Chantier Leprêtre#http://www.mareis.fr/
+Classements_du_POI: 
+Description: Visite guidée sur la construction en bois
+URI_ID_du_POI: https://data.datatourisme.fr/14/3456ef0a-8f90-3217-96f3-3ff67642a233
+
+VALEURS FRÉQUENTES de Categories_de_POI
+400  https://www.datatourisme.fr/ontology/core#EntertainmentAndEvent
+400  https://www.datatourisme.fr/ontology/core#PointOfInterest
+400  http://schema.org/Event
+132  https://www.datatourisme.fr/ontology/core#CulturalEvent
+103  https://www.datatourisme.fr/ontology/core#Product
+103  http://schema.org/Product
+93  https://www.datatourisme.fr/ontology/core#Visit
+73  https://www.datatourisme.fr/ontology/core#SportsEvent
+68  https://www.datatourisme.fr/ontology/core#SaleEvent
+68  http://schema.org/SaleEvent
+16  https://www.datatourisme.fr/ontology/core#OpenDay
+11  https://www.datatourisme.fr/ontology/core#Practice
+10  https://www.datatourisme.fr/ontology/core#SocialEvent
+10  http://schema.org/SocialEvent
+9  https://www.datatourisme.fr/ontology/core#Exhibition
+9  http://schema.org/ExhibitionEvent
+9  http://schema.org/SportsEvent
+8  https://www.datatourisme.fr/ontology/core#Traineeship
+8  https://www.datatourisme.fr/ontology/core#ChildrensEvent
+7  https://www.datatourisme.fr/ontology/core#ShowEvent
+7  https://www.datatourisme.fr/ontology/core#Market
+7  https://www.datatourisme.fr/ontology/core#TraditionalCelebration
+6  https://www.datatourisme.fr/ontology/core#LocalAnimation
+6  https://www.datatourisme.fr/ontology/core#Rambling
+6  https://www.datatourisme.fr/ontology/core#ScreeningEvent
+6  http://schema.org/ScreeningEvent
+5  https://www.datatourisme.fr/ontology/core#FairOrShow
+5  https://www.datatourisme.fr/ontology/core#Concert
+5  http://schema.org/MusicEvent
+4  https://www.datatourisme.fr/ontology/core#TheaterEvent
+4  http://schema.org/TheaterEvent
+3  https://www.datatourisme.fr/ontology/core#Tasting
+2  https://www.datatourisme.fr/ontology/core#SportsCompetition
+2  https://www.datatourisme.fr/ontology/core#Festival
+2  http://schema.org/Festival
+2  https://www.datatourisme.fr/ontology/core#Rally
+2  https://www.datatourisme.fr/ontology/core#BusinessEvent
+2  http://schema.org/BusinessEvent
+2  https://www.datatourisme.fr/ontology/core#Conference
+1  https://www.datatourisme.fr/ontology/core#VisualArtsEvent
