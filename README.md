@@ -39,3 +39,9 @@ avec la mention « Mis en avant » dans l'appli. Exemple :
 (Geofabrik), garde les restos, bars, cafés, boîtes, cinémas, jeux, sensations, salles, musées, parcs, points de vue,
 plages et stades, et compte combien il y en a par carrés de 0,05° (≈ 5 km). Publié sur la branche `lieux`
 (`lieux/v1/comptes/{lat}_{lon}.json`, `index.json`). Données © contributeurs OpenStreetMap, licence ODbL.
+
+## Matchs (robot de nuit)
+
+`outils/matchs.py`, lancé avec les événements : matchs de foot pas encore joués dans un stade français (et Monaco)
+dans les 60 prochains jours (Ligue 1, Ligue 2, coupes d'Europe ; source fixturedownload.com), avec heure de Paris
+et position du stade → `matchs/v1/matchs.json` sur la branche `donnees`. Nouveau stade : l'ajouter dans `STADES`.
