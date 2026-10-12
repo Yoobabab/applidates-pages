@@ -1,3 +1,0 @@
-[out:json][timeout:25];
-(nw["amenity"="restaurant"]["name"](around:2000,43.9969,4.6986););out count;
-(nw["amenity"~"^(bar|pub)$"]["name"](around:2000,43.9969,4.6986););out count;
