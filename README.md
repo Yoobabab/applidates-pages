@@ -32,3 +32,10 @@ avec la mention « Mis en avant » dans l'appli. Exemple :
   }
 ]
 ```
+
+## Lieux de France (robot de la semaine)
+
+`outils/lieux.py`, lancé chaque lundi par `.github/workflows/lieux.yml` : télécharge l'extrait France d'OpenStreetMap
+(Geofabrik), garde les restos, bars, cafés, boîtes, cinémas, jeux, sensations, salles, musées, parcs, points de vue,
+plages et stades, et compte combien il y en a par carrés de 0,05° (≈ 5 km). Publié sur la branche `lieux`
+(`lieux/v1/comptes/{lat}_{lon}.json`, `index.json`). Données © contributeurs OpenStreetMap, licence ODbL.
