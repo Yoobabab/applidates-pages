@@ -1,0 +1,27 @@
+# Vérifie si des noms de domaine sont libres (.fr, .app, .com) via les annuaires publics RDAP.
+# Lancé à la main ; dépôt public donc sans frais de minutes GitHub Actions.
+name: Noms de domaine libres
+on:
+  workflow_dispatch:
+    inputs:
+      noms:
+        description: "Noms séparés par des espaces"
+        required: true
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Vérifier
+        env:
+          NOMS: ${{ inputs.noms }}
+        run: |
+          code() { curl -s -o /dev/null -m 15 -w '%{http_code}' -H 'Accept: application/rdap+json' "$1"; }
+          etat() { case "$1" in 200) echo PRIS;; 404) echo libre;; *) echo "?$1";; esac; }
+          printf '%-16s %-8s %-8s %-8s\n' nom .fr .app .com
+          for n in $NOMS; do
+            fr=$(etat $(code "https://rdap.nic.fr/domain/$n.fr"))
+            app=$(etat $(code "https://pubapi.registry.google/rdap/domain/$n.app"))
+            com=$(etat $(code "https://rdap.verisign.com/com/v1/domain/$n.com"))
+            printf '%-16s %-8s %-8s %-8s\n' "$n" "$fr" "$app" "$com"
+          done
