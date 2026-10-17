@@ -24,6 +24,7 @@ jobs:
             app=$(etat $(code "https://pubapi.registry.google/rdap/domain/$n.app"))
             com=$(etat $(code "https://rdap.verisign.com/com/v1/domain/$n.com"))
             printf '%-16s %-8s %-8s %-8s\n' "$n" "$fr" "$app" "$com"
+            sleep 0.5
             tout="$tout $n:fr=$fr,app=$app,com=$com;"
           done
           echo "::notice title=resultats::$tout"
