@@ -45,7 +45,7 @@ header.barre { display: flex; justify-content: space-between; align-items: cente
 @keyframes cligne { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
 @keyframes clin-oeil { 0%,45%,52%,90%,100% { transform: scaleY(1); } 47%,50% { transform: scaleY(0); } 94% { transform: scaleY(.1); } }
 @keyframes clin-trait { 0%,46%,51%,100% { opacity: 0; } 47%,50% { opacity: 1; } }
-@keyframes coucou { 0%,55%,100% { transform: rotate(0); } 65% { transform: rotate(22deg); } 75% { transform: rotate(-8deg); } 85% { transform: rotate(18deg); } }
+@keyframes coucou { 0%,55%,100% { transform: translateY(0); } 65% { transform: translateY(-14px); } 75% { transform: translateY(-4px); } 85% { transform: translateY(-14px); } }
 @media (prefers-reduced-motion: reduce) { .saut, .oeil, .clin, .bras { animation: none; } }
 .marque { display: flex; align-items: center; gap: 10px; }
 .marque .logo { width: 34px; height: 34px; }
@@ -92,7 +92,12 @@ footer { border-top: 1px solid var(--bord); padding-block: 26px 40px; font-size:
 <body>
 <div class="page">
   <header class="barre">
-    <div class="marque"><svg class="logo" viewBox="66 72 176 176" aria-hidden="true"><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(8 9)" fill="#1E1433"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="#FF6B9A" stroke="#1E1433" stroke-width="5" stroke-linejoin="round"/><line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/><path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/><path transform="translate(150 190) scale(2.1)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/></svg>tikette</div>
+    <div class="marque"><svg class="logo" viewBox="68 70 164 176" aria-hidden="true"><defs><linearGradient id="lc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
+<radialGradient id="lr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="lm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(0 7)" fill="#0B0618" opacity=".35"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lr)"/>
+<path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".5" stroke-width="2.5"/>
+<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/><path transform="translate(150 190) scale(2.1)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/></svg>tikette</div>
     <div class="statut">En test · iPhone et Android</div>
   </header>
 
@@ -102,18 +107,17 @@ footer { border-top: 1px solid var(--bord); padding-block: 26px 40px; font-size:
       <h1>Choisis l’ambiance,<br><em>On organise.</em></h1>
       <p class="chapo">Tu dis où, quand, avec qui. Tikette trouve l’activité, le resto et le dernier verre. Toi, tu réserves.</p>
     </div>
-    <svg class="tikette" viewBox="36 60 236 220" role="img" aria-label="Tikette, le petit ticket mascotte, fait coucou">
-<ellipse cx="150" cy="270" rx="78" ry="8" fill="#000" opacity=".25"/>
+    <svg class="tikette" viewBox="36 50 228 220" role="img" aria-label="Tikette, le petit ticket mascotte, fait coucou"><defs><linearGradient id="tc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
+<radialGradient id="tr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="tm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs>
+<ellipse cx="150" cy="258" rx="62" ry="7" fill="#000" opacity=".22"/>
 <g class="saut">
-<g class="bras"><ellipse cx="64" cy="194" rx="13" ry="19" fill="#FF6B9A" stroke="#1E1433" stroke-width="5" transform="rotate(-35 64 194)"/></g>
-<ellipse cx="236" cy="204" rx="13" ry="19" fill="#FF6B9A" stroke="#1E1433" stroke-width="5" transform="rotate(30 236 204)"/>
-<ellipse cx="126" cy="246" rx="20" ry="12" fill="#FFD166" stroke="#1E1433" stroke-width="5"/><ellipse cx="174" cy="246" rx="20" ry="12" fill="#FFD166" stroke="#1E1433" stroke-width="5"/>
-<path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(8 9)" fill="#1E1433"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="#FF6B9A" stroke="#1E1433" stroke-width="5" stroke-linejoin="round"/>
-<path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".6" stroke-width="2.5"/>
-<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+<g class="bras"><circle cx="60" cy="182" r="16" fill="url(#tm)"/></g><circle cx="240" cy="194" r="16" fill="url(#tm)"/>
+<path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(0 7)" fill="#0B0618" opacity=".35"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tr)"/>
+<path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".5" stroke-width="2.5"/>
+<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
 <path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/>
-<path d="M104 170 q6 -14 22 -18" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="5" stroke-linecap="round"/>
-<ellipse cx="106" cy="202" rx="11" ry="6.5" fill="#FF9DBB"/><ellipse cx="194" cy="202" rx="11" ry="6.5" fill="#FF9DBB"/>
+<ellipse cx="106" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/><ellipse cx="194" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/>
 <g class="oeil"><ellipse cx="124" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="128" cy="177" r="4" fill="#fff"/><circle cx="121" cy="187" r="2" fill="#fff"/></g>
 <g class="oeil oeil-d"><ellipse cx="176" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="180" cy="177" r="4" fill="#fff"/><circle cx="173" cy="187" r="2" fill="#fff"/></g>
 <path class="clin" d="M165 184 q11 -12 22 0" fill="none" stroke="#1E1433" stroke-width="5.5" stroke-linecap="round"/>
