@@ -145,7 +145,10 @@ a.carte:focus-visible { outline: 3px solid var(--corail); outline-offset: 2px; }
       afficher();
       planifier();
     }).catch(function () {
-      etat('Impossible d’ouvrir la surprise pour le moment. Vérifie ta connexion et recharge la page.');
+      // Réseau coupé un instant : on garde ce qui est déjà affiché et on réessaie dans 30 s.
+      if (!donnees) etat('Impossible d’ouvrir la surprise pour le moment. Nouvel essai dans quelques secondes…');
+      clearTimeout(minuteur);
+      minuteur = setTimeout(charger, 30000);
     });
   }
 

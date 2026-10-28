@@ -119,7 +119,7 @@ button:disabled { opacity: .6; cursor: default; }
     bloc.push(el('p', 'sous', (d.de ? d.de + ' vous propose 3 programmes · ' : '') + jour(d.jour)));
 
     if (d.ferme) {
-      bloc.push(el('p', 'message', '🏆 C’est décidé : programme ' + LETTRES[d.gagnant] + ' !'));
+      bloc.push(el('p', 'message', d.gagnant != null && LETTRES[d.gagnant] ? '🏆 C’est décidé : programme ' + LETTRES[d.gagnant] + ' !' : '🏆 Le vote est terminé !'));
     } else {
       var champ = el('div');
       var lab = el('label', null, 'Ton prénom');
