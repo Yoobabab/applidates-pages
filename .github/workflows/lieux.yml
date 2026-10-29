@@ -1,4 +1,5 @@
 # Chaque semaine : nombre de restos, bars, cinémas, parcs… partout en France (OpenStreetMap, extrait Geofabrik),
+# plus les lieux d'activités des offices de tourisme (DATAtourisme, outils/datatourisme.py),
 # par carrés de ≈ 5 km, publiés sur la branche « lieux » (réécrite à chaque fois en un seul commit).
 # L'appli lit : https://raw.githubusercontent.com/Yoobabab/applidates-pages/lieux/lieux/v1/…
 name: Lieux de France
@@ -8,7 +9,7 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['outils/lieux.py', '.github/workflows/lieux.yml']
+    paths: ['outils/lieux.py', 'outils/datatourisme.py', '.github/workflows/lieux.yml']
 permissions:
   contents: write
 concurrency:
@@ -40,6 +41,12 @@ jobs:
           ls -lh /tmp/filtre.osm.pbf
       - name: Compter par carrés
         run: python3 outils/lieux.py /tmp/filtre.osm.pbf /tmp/sortie
+      - name: Lieux d'activités DATAtourisme (domaines, canoë, musées, sites naturels…)
+        continue-on-error: true
+        run: |
+          curl -sSL --fail --retry 3 -o /tmp/place.csv "https://www.data.gouv.fr/api/1/datasets/r/cf247ad9-5bcd-4c8a-8f4d-f49f0803bca1"
+          curl -sSL --fail --retry 3 -o /tmp/product.csv "https://www.data.gouv.fr/api/1/datasets/r/0254ad40-3d26-472e-a628-bd9233f22ee0"
+          python3 outils/datatourisme.py /tmp/sortie /tmp/place.csv /tmp/product.csv
       - name: Publier sur la branche « lieux »
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
