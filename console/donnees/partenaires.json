@@ -1,0 +1,10 @@
+{
+ "aide": "Où en sont les affiliations (mis à jour par Claude).",
+ "partenaires": [
+  {"nom": "GetYourGuide", "appli": "tikette", "etat": "accepte", "depuis": "2026-10-29", "detail": "8 % par réservation · partner_id 9UK1XKC", "lien": "https://partner.getyourguide.com"},
+  {"nom": "Viator", "appli": "tikette", "etat": "accepte", "depuis": "2026-10-13", "detail": "≈ 8 % · identifiant P00325264", "lien": "https://partnerresources.viator.com"},
+  {"nom": "Funbooker (Affilae)", "appli": "tikette", "etat": "attente", "depuis": "2026-10-14", "detail": "relancé le 20 oct.", "lien": "https://app.affilae.com"},
+  {"nom": "TheFork (Kwanko)", "appli": "tikette", "etat": "attente", "depuis": "2026-10-14", "detail": "≈ 0,70 € par réservation · formulaire envoyé le 29 oct.", "lien": "https://www.kwanko.com"},
+  {"nom": "Indoleads", "appli": "tikette", "etat": "attente", "depuis": "2026-10-29", "detail": "offre FunBooker introuvable · ticket ouvert", "lien": "https://app.indoleads.com"}
+ ]
+}

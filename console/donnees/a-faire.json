@@ -1,0 +1,522 @@
+{
+ "maj": "2026-10-29",
+ "elements": [
+  {
+   "cle": "demande:tikette:8a56a467d1",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Brevo : ajouter le domaine eggnotfound.fr et l’expéditeur « Egg Not Found » <contact@eggnotfound.fr>"
+  },
+  {
+   "cle": "demande:tikette:1f2b9f5a42",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Supabase : créer la fonction envoyer-email (Verify JWT désactivé)"
+  },
+  {
+   "cle": "demande:tikette:9851b3d48c",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Supabase : Authentication › Hooks › Send Email hook vers envoyer-email + secret SEND_EMAIL_HOOK_SECRET"
+  },
+  {
+   "cle": "demande:tikette:632694b439",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Supabase : lancer supabase/console2.sql (console : applis, à faire, coûts)"
+  },
+  {
+   "cle": "demande:tikette:1269c716ab",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Tous",
+   "titre": "Connexion par SMS : crédits SMS Brevo, fonction envoyer-sms, fournisseur Phone activé, Send SMS hook + SEND_SMS_HOOK_SECRET"
+  },
+  {
+   "cle": "demande:tikette:08dbc778f2",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Tous",
+   "titre": "OVH : redirection de contact@tikette.fr vers contact@eggnotfound.fr"
+  },
+  {
+   "cle": "demande:tikette:757eb73e30",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Tous",
+   "titre": "Comptes développeur au nom du studio : Apple (99 €/an) et Google (25 $ une fois), avant la sortie"
+  },
+  {
+   "cle": "demande:tikette:ed8f96c7cf",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "GetYourGuide : coordonnées bancaires et SIRET une fois la micro-entreprise créée"
+  },
+  {
+   "cle": "demande:studio:16a7afc1e7",
+   "groupe": "demande",
+   "appli": "studio",
+   "qui": "Greg",
+   "titre": "GitHub › EggNotFoundGestion › Pages : cocher « Enforce HTTPS » dès que possible"
+  },
+  {
+   "cle": "demande:shivr:4c1412b0d9",
+   "groupe": "demande",
+   "appli": "shivr",
+   "qui": "Greg",
+   "titre": "Supabase de Shivr : coller le nouveau modèle d’e-mail (Magic Link et Confirm signup)"
+  },
+  {
+   "cle": "demande:shivr:69e6b112e2",
+   "groupe": "demande",
+   "appli": "shivr",
+   "qui": "Tous",
+   "titre": "Supabase de Shivr : vérifier que les scripts tournois, messages, contact-id, support, ouvertures, ouvertures-controles et echanges-preuves sont lancés"
+  },
+  {
+   "cle": "recette:tikette:v0.31:b7a1b85671",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "https://tikette.fr/console/ : connexion avec admin@eggnotfound.fr (code par e-mail) ; une autre adresse est refusée."
+  },
+  {
+   "cle": "recette:tikette:v0.31:a713a1e06d",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "Vue d'ensemble puis Tikette (Semaine / Mois / Année) : les chiffres collent avec vos propres dates (faits, notes, ambiances)."
+  },
+  {
+   "cle": "recette:tikette:v0.31:19a1c4ee70",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "Offres et Or : créer une offre « Test » qui commence aujourd'hui → bandeau rose dans l'appli (Profil › Formules et écran Or, jusqu'à 10 min de délai) ; « Pause » → il disparaît ; supprimer."
+  },
+  {
+   "cle": "recette:tikette:v0.31:1d173563ab",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "Offrir 1 mois d'Or au numéro d'Yvan → il a Or dans l'appli ; puis « Retirer »."
+  },
+  {
+   "cle": "recette:tikette:v0.31:dc1191bd29",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "Avances : photo d'une vraie facture (OVH, Brevo…) → l'IA remplit montant, date, fournisseur ; Enregistrer ; « Voir » la preuve ; « À rembourser » ; exporter le CSV ; supprimer une avance de test."
+  },
+  {
+   "cle": "recette:tikette:v0.31:5eb736ba5a",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "Dans l'appli, toucher GetYourGuide / Viator / TheFork → « Clics partenaires » augmente dans la console."
+  },
+  {
+   "cle": "recette:tikette:v0.30:1133ca1abd",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.30",
+   "titre": "Profil › Formules : ton code de parrainage s'affiche, il s'envoie par message."
+  },
+  {
+   "cle": "recette:tikette:v0.30:e930bc8a05",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.30",
+   "titre": "Avec un compte créé il y a moins de 14 jours : taper le code d'un pote → « 1 mois de Tikette Or pour toi et ton pote » ; refusé avec son propre code ou un 2e code."
+  },
+  {
+   "cle": "recette:tikette:v0.30:71837a294a",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.30",
+   "titre": "Compte sans Or : noter un date 5 étoiles → écran « Garde ce souvenir » ; pas de 2e proposition dans la semaine."
+  },
+  {
+   "cle": "recette:tikette:v0.30:10e1c14bf9",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.30",
+   "titre": "Toucher un pack Or, « Plus de refus » du ticket mystère, un accessoire doré, un 4e rappel, « Récap de soirée », « Parce que tu as adoré » → écran Or avec le bon titre ; « Plus tard » ferme ; « 7 jours gratuits » → message « bientôt »."
+  },
+  {
+   "cle": "recette:tikette:v0.30:2127a17931",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.30",
+   "titre": "Premier lancement : après « Voici ton Tikette », proposition Or une seule fois (à vérifier sur un téléphone neuf ou la vraie version)."
+  },
+  {
+   "cle": "recette:tikette:v0.29:cbadedbcd4",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.29",
+   "titre": "bouton GetYourGuide (orange) à gauche d'Itinéraire sur un musée, canoë, domaine… → recherche GetYourGuide ; plus de variété d'activités (domaines, canoë, visites, équitation…)."
+  },
+  {
+   "cle": "recette:shivr:v0.60:57fbaa49d9",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.60",
+   "titre": "l'appli s'ouvre de nouveau dans Expo Go ; scan (mise au point de près sur une carte à 10-15 cm), pré-gradation, partage de l'image d'une ouverture."
+  },
+  {
+   "cle": "recette:shivr:v0.59:1b2f534ec7",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.59",
+   "titre": "pré-gradation d'une carte de la collection (Collection › Pré-grader) → en tête, l'illustration de la carte ; bloc « centrage selon chaque société » ; « Ajuster le centrage à la main » : glisser les lignes, loupe, flèches, recto/verso, Valider → note et sociétés recalculées ; pré-gradation « Une autre carte » → illustration prise sur la photo."
+  },
+  {
+   "cle": "recette:shivr:v0.58:402a31d566",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.58",
+   "titre": "depuis Recherchées, ouvrir une carte → ♥ la retire (message « Retirée de vos recherchées ») ; nouvelle fiche : barre d'actions, cote en grand, « Ajouter à ma collection » qui se déplie, « D'où vient cette cote ? »."
+  },
+  {
+   "cle": "recette:shivr:v0.57:86edfc00a6",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.57",
+   "titre": "fiche du Lugia Aquapolis (ou de sa réédition 30 ans) → « existe en 2 impressions », passer de l'une à l'autre ; scanner la réédition → Terminer › Vérifier et ajouter › « Original ou réédition ? » ; ajouter la réédition depuis la fiche (à scanner) puis la scanner → validée sur la bonne impression."
+  },
+  {
+   "cle": "recette:shivr:v0.56:1861adb612",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.56",
+   "titre": "rechercher une carte de la série japonaise des 30 ans (ex. « Pikachu » en langue japonaise, ou par numéro) → trouvée avec image et cote estimée, l'ajouter à la collection ; promos MEP récentes ; accueil › Pokémon ▾ › One Piece « Ouvrir » : ajouter des cartes (normale / foil), onglet Ma collection (valeur), retirer ; Yu-Gi-Oh! « Ouvrir » ; avec un compte non modérateur : « Bientôt »."
+  },
+  {
+   "cle": "recette:shivr:v0.55:d36c4c0495",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.55",
+   "titre": "lancer supabase/ouvertures-compte.sql ; Espace Pro › Exports : SIRET faux → rouge, vrai SIRET d'une entreprise → nom en vert et « Utiliser l'adresse » ; en modérateur, enregistrement possible sans SIRET ; Mes ouvertures : « sauvegardées dans votre compte », se connecter sur un 2e téléphone → historique retrouvé ; Modération › Aperçu One Piece (et accueil › Pokémon ▾ › One Piece « Aperçu ») : extensions, cartes, recherche « Luffy », fiche."
+  },
+  {
+   "cle": "recette:shivr:v0.54:afe3926094",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.54",
+   "titre": "lancer supabase/donnees-personnelles.sql ; lire les 3 textes (Profil › Informations légales) et signaler ce qui ne va pas ; créer un compte (case à cocher obligatoire, liens) ; avec un compte de test qui a envoyé une photo : Mon compte › Supprimer mon compte → la photo disparaît du stockage Supabase."
+  },
+  {
+   "cle": "recette:shivr:v0.53:405e4b99c9",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.53",
+   "titre": "lancer supabase/gestion.sql ; s'offrir Max (Modération › Offrir une formule) ; Profil › Espace Pro : enregistrer un achat de lot réparti sur 3 cartes (prix d'achat mis à jour), vendre une de ces cartes sur Cardmarket (commission, port, bénéfice), une dépense ; tableau de bord par période, plafond, stock ; Exports : livre des recettes et registre des achats ouverts dans Excel ; Devis en PDF (après avoir rempli nom et SIRET) ; sans Max : page de présentation et cadenas."
+  },
+  {
+   "cle": "recette:shivr:v0.52:7c7d97090f",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.52",
+   "titre": "Collection › Classeurs, Decks, Passeports, Inventaire, Importer : nouveaux panneaux et couvertures ; Collection › Pré-grader : menu avec les cartes les plus chères, « À tenter », toucher une carte → pré-gradation préremplie."
+  },
+  {
+   "cle": "recette:shivr:v0.51:6ee153b9e0",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.51",
+   "titre": "se connecter avec « Mot de passe oublié » (compte actuel sans mot de passe) → choisir un mot de passe ; créer un 2e compte avec mot de passe (code de confirmation) ; Profil › Sécurité du compte › activer la double authentification, se déconnecter puis se reconnecter (code demandé) ; en formule gratuite : cadenas sur Alertes (Marché, fiche, Profil), Inventaire (Collection), fenêtre « Débloquer » avec l'essai 7 jours."
+  },
+  {
+   "cle": "recette:shivr:v0.50:3a423a7d00",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.50",
+   "titre": "lancer supabase/echanges-preuves.sql (après ouvertures-controles.sql) ; à deux comptes : échange accepté → chacun « Photographier mes cartes et les envoyer » (recto/verso, suivi) → l'autre voit les photos → « J'ai bien reçu ses cartes » possible seulement après les deux envois → terminé."
+  },
+  {
+   "cle": "recette:shivr:v0.49:030a820640",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.49",
+   "titre": "lancer supabase/ouvertures-controles.sql ; nouvelle ouverture avec photo du produit fermé (connecté) → bilan « certifiée » ; sans photo → « non vérifiée » ; scanner deux fois la même carte dans un booster → bandeau orange, bilan « douteuse »."
+  },
+  {
+   "cle": "recette:shivr:v0.48:6397ba068d",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.48",
+   "titre": "lancer supabase/ouvertures.sql ; Collection › Ouvertures (ou scan › « Ouvrir un produit ») › Nouvelle ouverture : produit du catalogue, prix, boosters, pronostic, carte rêvée ; scanner booster par booster (« Booster suivant »), « Frisson ! » sur une illustration rare ; Terminer › bilan, Partager l'image, ajouter à la collection ; Mes ouvertures (total) ; nouveaux avatars ; bouton « Pokémon ▾ » de l'accueil."
+  },
+  {
+   "cle": "recette:shivr:v0.44:ed9d9667c3",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.44",
+   "titre": "carte mal reconnue → toucher sa vignette › grande image, choisir une autre proposition ; Profil › Se connecter (nouvelle page) : se connecter avec le code."
+  },
+  {
+   "cle": "recette:shivr:v0.43:ee0a37bd61",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.43",
+   "titre": "scanner (bouton central) : l'image ne doit plus se figer à chaque analyse ; une carte bien cadrée s'ajoute seule ; une carte en étui → conseil puis « Forcer » ; carte japonaise : Terminer › Vérifier et ajouter › choisir « JP » (la carte devient la version japonaise, cote changée)."
+  },
+  {
+   "cle": "recette:shivr:v0.42:e0033a4dad",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.42",
+   "titre": "lancer supabase/support.sql ; carte en grand (holo et commune) : reflets plus naturels ; Profil › Aide et contact : questions fréquentes, envoyer une question / idée / problème (avec et sans compte) ; Modération › Messages du support (compteur, Répondre, Traité)."
+  },
+  {
+   "cle": "recette:shivr:v0.41:0437fb871c",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.41",
+   "titre": "Marché › Vendre, Alertes, Échanges, Recherchées, Scellé : la barre du bas reste, le carrousel est sous le panneau (même place que sur le Marché), passer d'une page à l'autre, « Marché » pour revenir, toucher l'onglet Marché pour revenir aussi."
+  },
+  {
+   "cle": "recette:shivr:v0.40:044cad0546",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.40",
+   "titre": "lancer supabase/contact-id.sql ; ajouter un contact avec son ID (8 caractères, visible en haut de ses Contacts), partager mon ID ; Marché › Vendre, Alertes… : carrousel en haut à la place du retour, passer d'une page à l'autre, « Marché » pour revenir ; Scellé (panneau des affaires, catégories, rayons, grille) ; accueil › Mes préférées › page « Mes cartes préférées », « + Ajouter » plusieurs à la suite."
+  },
+  {
+   "cle": "recette:shivr:v0.39:a1a9393890",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.39",
+   "titre": "Collection (panneau, grille/liste, badges, appui long) ; Alertes et Échanges (panneaux givrés) ; Profil › Mon avatar et succès (choisir, cadenas) ; conversation › Classeurs (ses classeurs, ses recherchées, envoyer un des miens)."
+  },
+  {
+   "cle": "recette:shivr:v0.38:79dcc63d3f",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.38",
+   "titre": "accueil (panneaux givrés, flocons, cartes qui flottent et brillent, valeur qui défile) ; Marché › flèche « voir tout » des rayons ; Recherchées (panneau, « Ils les ont », grille, appui long) ; Vendre › « Ils cherchent vos cartes » ; Échanges parfaits ; bouton Contacter (demande de contact puis conversation)."
+  },
+  {
+   "cle": "recette:shivr:v0.37:2c59e43b87",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.37",
+   "titre": "secousse (plus franche, vibration), cartes de l'accueil plus grandes ; Marché › Échanges (règles en petit lien) ; Scellé (rayons, images, dernières ventes sur la fiche) ; Vendre (cartes en forme, tri, conseil, dernières ventes)."
+  },
+  {
+   "cle": "recette:shivr:v0.36:96a0fa87d5",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.36",
+   "titre": "accueil : incliner le téléphone (les cartes bougent), le secouer (d'autres préférées/recherchées tombent) ; Marché : vitrine (après le passage du robot), secouer, bouton ⤮, carrousels ; Collection : outils en carrousel."
+  },
+  {
+   "cle": "recette:shivr:v0.35:70ea3ff310",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.35",
+   "titre": "lancer supabase/messages.sql ; à deux comptes contacts : s'écrire (pastilles sur Profil, Contacts, page Contacts), « Lu » sous le dernier message, proposer un échange depuis la conversation (les deux doivent avoir activé les échanges), retirer / bloquer depuis ⋯ ; onglet Marché (outils en haut, échanges dessous, pastille des alertes)."
+  },
+  {
+   "cle": "recette:shivr:v0.34:c41f3ba879",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.34",
+   "titre": "accueil : cartes inclinées (mettre 2 préférées avec l'étoile et 2 cartes recherchées, vérifier lesquelles s'affichent) ; Profil › Apparence : le thème change tout de suite, sans relance ; page Tournois ; page Contacts ; pastille des messages sur l'onglet Échanges."
+  },
+  {
+   "cle": "recette:shivr:v0.33:cd3030ee65",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "accueil allégé ; onglet Collection (grille d'outils, filtres compacts, ↻) ; Mon compte › Âge puis activation des échanges ; fiche d'une carte possédée (bandeau vert, « + Un autre ») ; « Où la vendre ? » compact ; Vendre › choisir une carte ; Sorties visibles seulement en profil Boutique ou modérateur ; présentation à la première connexion."
+  },
+  {
+   "cle": "recette:shivr:v0.32:5cee88f1cd",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.32",
+   "titre": "vérifier en sombre les écrans les plus utilisés (fiche, collection, scanner, échanges) et signaler les textes illisibles ; icônes de l'accueil ; textes trop longs restants."
+  },
+  {
+   "cle": "recette:shivr:v0.31:033855c404",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.31",
+   "titre": "navigation (barre du bas, bouton Scanner au centre, 4e onglet Échanges ou Decks selon les profils, onglet Profil) ; pour revoir la première ouverture : supprimer et réinstaller n'est pas possible dans Expo Go → Profil › « Revoir la présentation » ; Profil › Mes profils (cocher Joueur seul → l'onglet devient Decks, l'accueil met Decks et Tournois en avant ; « Tout voir ») ; scan automatique : passer plusieurs cartes devant l'appareil sans toucher l'écran, vérifier qu'aucune carte n'est ajoutée deux fois, scanner deux exemplaires identiques en retirant la carte entre les deux, pause, « 📸 Forcer » ; Terminer › « Vérifier et ajouter » (langue, version, état, quantité, prix) ; collection › « 📚 Filtrer par extension » ; Modération rangée dans Profil."
+  },
+  {
+   "cle": "recette:shivr:v0.30:6b47612001",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.30",
+   "titre": "decks (accueil › 🃏 Mes decks) : créer un deck, ajouter des cartes depuis la recherche, − / +, format Standard/Étendu, problèmes affichés, cartes manquantes et leur coût, « manquantes → souhaits », exporter et coller dans Pokémon TCG Live ; coller une liste copiée de Limitless ou de PTCGL (« 📋 Coller une liste ») et vérifier les cartes reconnues."
+  },
+  {
+   "cle": "recette:shivr:v0.29:883d04997b",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.29",
+   "titre": "(formule Max offerte à soi-même) Ma collection › 📄 PDF : nom, seuil, vignettes, créer le PDF, l'ouvrir/l'envoyer par e-mail ; vérifier les vignettes, les cartes gradées, les cartes à scanner à part ; hors Max : renvoi vers les formules."
+  },
+  {
+   "cle": "recette:shivr:v0.28:ec25873296",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.28",
+   "titre": "(formule Collectionneur ou Max offerte à soi-même) fiche › « 🔔 Alerte de cote », seuil proche de la cote actuelle (ex. −10 % pour une carte qui baisse) ; revenir à l'accueil le lendemain → bloc « alerte atteinte » ; écran des alertes, réactiver, supprimer ; en formule gratuite : enregistrement refusé avec renvoi vers les formules."
+  },
+  {
+   "cle": "recette:shivr:v0.27:0c1d875692",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.27",
+   "titre": "lancer supabase/echanges-disponibles.sql puis supabase/abonnements.sql ; fiche d'une carte mise à l'échange par un 2e compte → « 🔁 1 collectionneur la propose » → liste → proposer (carte pré-cochée) ; badge 🔁 dans la complétion ; formules (Mon compte › ⭐ Ma formule) ; en gratuit : 4e proposition d'échange refusée avec renvoi vers les formules, 4e pré-gradation du mois bloquée ; « 🎁 Offrir une formule » à son propre pseudo → illimité."
+  },
+  {
+   "cle": "recette:shivr:v0.26:0868ccb42a",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.26",
+   "titre": "lancer supabase/tournois.sql ; proposer un tournoi (sans être modérateur, avec un 2e compte : il doit rester invisible jusqu'à validation), le publier dans « Tournois à vérifier », filtre par département, bloc de l'accueil, itinéraire, bouton « Tournois officiels »."
+  },
+  {
+   "cle": "recette:shivr:v0.25:29ffe0cd72",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.25",
+   "titre": "mise au point de près (sur iPhone Pro la photo doit rester nette à 10-15 cm ; vérifier que le cadrage de départ ressemble au ×1 habituel et pas à l'ultra grand-angle) ; ajouter une carte depuis la fiche → estompée « 📷 À scanner », hors du total ; la scanner depuis le badge → validée ; scanner en mode lot une carte en attente → validée sans doublon ; carte en attente impossible à mettre à l'échange."
+  },
+  {
+   "cle": "recette:shivr:v0.24:abcd012cc7",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.24",
+   "titre": "mode lot (écran photo › 📚 Mode lot) : scanner une dizaine de cartes à la suite, corriger une carte mal reconnue, quitter et revenir (le lot reste), bilan (seuil 1/2/5/10 €), partager la liste, tout ajouter à la collection."
+  },
+  {
+   "cle": "recette:shivr:v0.23:9d84e480e0",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.23",
+   "titre": "import d'un fichier exporté de Collectr / PokéCardex / Cardmarket ou d'un tableau Excel/CSV fait main (Ma collection › 📥 Importer) : cartes reconnues, choix des « à vérifier », quantités, doublons non rajoutés, cotes."
+  },
+  {
+   "cle": "recette:shivr:v0.22:13fc6ffd5a",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.22",
+   "titre": "zoom (pincer, − / +) et mise au point au toucher sur les 4 écrans photo ; recadrage automatique (photographier une carte petite dans le cadre → elle doit remplir la photo ; essayer sur la table, sur un tapis, carte un peu penchée ; « Garder tout le cadre » si mal coupée) ; carte en grand depuis la fiche ou la collection : glisser du doigt, incliner le téléphone, reflets arc-en-ciel sur une carte holo/rare, simple reflet sur une commune, bouton Loupe."
+  },
+  {
+   "cle": "recette:shivr:v0.21:57e7211801",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.21",
+   "titre": "créer le passeport d'une carte (Ma collection › appui long › Modifier), ouvrir son lien dans un navigateur, ajouter de nouvelles photos ; à deux comptes : transmettre un passeport par pseudo et l'accepter, et vérifier qu'il suit la carte lors d'un échange terminé. Vérifier aussi que la photo pour une carte sans image (« 📷 Vous avez cette carte ? ») marche toujours (même caméra)."
+  },
+  {
+   "cle": "recette:shivr:v0.20:198ada9eff",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.20",
+   "titre": "calendrier des sorties (ajouter une sortie depuis l'appli, l'accueil, les filtres)."
+  },
+  {
+   "cle": "recette:shivr:v0.19:641cec3471",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.19",
+   "titre": "complétion des extensions (liste, détail, filtres, « ajouter les manquantes à mes souhaits », appui long)."
+  },
+  {
+   "cle": "recette:shivr:v0.18:bb74fe4761",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.18",
+   "titre": "échanges à deux comptes (activation, carte à l'échange / souhait, proposition, acceptation, messages, « échange fait », mise à jour de la collection, signaler/bloquer)."
+  },
+  {
+   "cle": "recette:shivr:v0.17:18d2432ac5",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.17",
+   "titre": "pré-gradation sur de vraies cartes (bordure jaune ou dos bleu de préférence)."
+  },
+  {
+   "cle": "recette:shivr:v0.16:afb089f265",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.16",
+   "titre": "scellé (recherche, fiche, ajout à la collection) et cartes gradées (ajout PSA 10 avec valeur, total de la collection)."
+  },
+  {
+   "cle": "recette:shivr:v0.14:82007835db",
+   "groupe": "recette",
+   "appli": "shivr",
+   "qui": "Tous",
+   "version": "v0.14",
+   "titre": "photo envoyée puis validée qui apparaît sur la fiche le lendemain (après le robot de nuit) ; lancer supabase/photos-annulation.sql puis essayer « Validées récemment »."
+  }
+ ]
+}

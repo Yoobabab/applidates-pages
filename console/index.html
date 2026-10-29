@@ -5,33 +5,57 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Console Egg Not Found</title>
+<link rel="icon" href="logos/oeuf.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=DM+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
   :root {
-    --fond: #0F0B18; --panneau: #1A1426; --ligne: rgba(247,241,255,.08); --rouge: #E63950; --creme: #F2EDE3;
-    --doux: #8C83A3; --jaune: #FFD166; --vert: #5ED6A0; --bleu: #9AD1FF; --rose: #FF6B9A;
+    --fond: #0A0A0A; --panneau: #141414; --ligne: rgba(237,231,220,.09); --rouge: #E8344E; --creme: #EDE7DC;
+    --doux: #8A857C; --jaune: #F2C14E; --vert: #5ED6A0; --bleu: #9AD1FF; --rose: #F0506A;
+    --mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--fond); color: var(--creme); font-family: 'DM Sans', system-ui, sans-serif; }
+  html, body { margin: 0; background: var(--fond); color: var(--creme); font-family: 'Space Grotesk', system-ui, sans-serif; }
   body { min-height: 100vh; }
-  .titre { font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; }
+  .titre { font-family: var(--mono); font-weight: 700; }
   .rouge { color: var(--rouge); }
   .doux { color: var(--doux); }
   button, input, select { font: inherit; }
   button { cursor: pointer; }
   [hidden] { display: none !important; }
+  a { color: var(--creme); }
+
+  /* Logo 404 | EGG NOT FOUND */
+  .marque { display: flex; align-items: stretch; gap: 10px; }
+  .marque .q { align-self: center; }
+  .marque .q { font-family: var(--mono); font-weight: 700; color: var(--creme); display: inline-flex; align-items: center; gap: 1px; }
+  .marque .trait { width: 1.5px; align-self: stretch; background: var(--creme); opacity: .7; }
+  .marque .mots { font-family: var(--mono); font-weight: 700; line-height: 1.12; letter-spacing: .5px; }
+  .marque .mots b { color: var(--rouge); }
+
+  /* L'œuf qui se craquelle (bouton « confirmer ») */
+  .oeuf { width: 26px; height: 32px; display: block; overflow: visible; }
+  .oeuf .haut, .oeuf .bas { transition: transform .35s cubic-bezier(.3,1.6,.5,1); transform-box: view-box; }
+  .oeuf .haut { transform-origin: 4px 24px; }
+  .oeuf .jaune { opacity: 0; transition: opacity .25s; }
+  .bouton-oeuf { background: none; border: 0; padding: 2px; margin-left: auto; display: inline-flex; }
+  .bouton-oeuf:hover .oeuf, .bouton-oeuf:focus-visible .oeuf { animation: secoue .35s ease-in-out; }
+  .bouton-oeuf:hover .haut, .bouton-oeuf:focus-visible .haut { transform: translate(-2px, -7px) rotate(-22deg); }
+  .bouton-oeuf:hover .bas, .bouton-oeuf:focus-visible .bas { transform: translateY(1px); }
+  .bouton-oeuf:hover .jaune, .bouton-oeuf:focus-visible .jaune { opacity: 1; }
+  @keyframes secoue { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-8deg); } 60% { transform: rotate(7deg); } }
+  .eclos .oeuf { animation: eclot .6s ease-out forwards; }
+  @keyframes eclot { 40% { transform: scale(1.25); } 100% { transform: scale(0); opacity: 0; } }
 
   /* Connexion */
   #connexion { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
   .carte-connexion { width: 100%; max-width: 380px; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 22px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; }
-  .logo { font-size: 26px; }
-  .champ { width: 100%; background: var(--fond); border: 1px solid var(--ligne); border-radius: 12px; color: var(--creme); padding: 12px 14px; font-size: 16px; }
-  .champ:focus { outline: 2px solid rgba(230,57,80,.6); border-color: transparent; }
-  .btn { border: 0; background: var(--rouge); color: #fff; font-weight: 800; border-radius: 999px; padding: 12px 18px; font-size: 14px; }
+  .champ { width: 100%; background: var(--fond); border: 1px solid var(--ligne); border-radius: 12px; color: var(--creme); padding: 11px 13px; font-size: 15px; }
+  .champ:focus { outline: 2px solid rgba(232,52,78,.6); border-color: transparent; }
+  .btn { border: 0; background: var(--rouge); color: #fff; font-weight: 700; border-radius: 999px; padding: 11px 18px; font-size: 14px; }
   .btn:disabled { opacity: .5; cursor: default; }
-  .btn-contour { background: transparent; border: 1px solid rgba(230,57,80,.6); color: var(--rouge); font-weight: 800; border-radius: 999px; padding: 6px 12px; font-size: 12px; }
+  .btn-contour { background: transparent; border: 1px solid rgba(232,52,78,.6); color: var(--rouge); font-weight: 700; border-radius: 999px; padding: 6px 12px; font-size: 12px; }
   .btn-lien { background: none; border: 0; color: var(--doux); text-decoration: underline; padding: 0; font-size: 13px; }
   .message { font-size: 13px; min-height: 18px; }
   .message.erreur { color: var(--rose); }
@@ -39,66 +63,72 @@
 
   /* Console */
   #console { display: flex; min-height: 100vh; }
-  nav { width: 230px; flex-shrink: 0; border-right: 1px solid var(--ligne); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
-  nav .logo { font-size: 18px; padding: 0 10px 2px; }
-  nav .qui { font-size: 11px; color: var(--doux); padding: 0 10px 14px; font-weight: 600; word-break: break-all; }
-  .rubrique { font-size: 10px; letter-spacing: 1px; color: var(--doux); font-weight: 800; padding: 10px 12px 4px; }
-  .onglet { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; border: 0; background: none; color: var(--doux); font-size: 14px; font-weight: 600; text-align: left; width: 100%; }
-  .onglet.actif { background: rgba(230,57,80,.15); color: var(--creme); font-weight: 800; }
-  .pastille-app { width: 18px; height: 18px; border-radius: 6px; flex-shrink: 0; }
-  nav .bas { margin-top: auto; padding: 10px 12px; }
+  nav { width: 240px; flex-shrink: 0; border-right: 1px solid var(--ligne); padding: 20px 12px 16px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+  nav .qui { font-size: 11px; color: var(--doux); padding: 8px 10px 10px; word-break: break-all; }
+  .rubrique { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--doux); font-weight: 700; padding: 12px 10px 4px; }
+  .onglet { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 10px; border: 0; background: none; color: #C9C3B8; font-size: 13.5px; font-weight: 600; text-align: left; width: 100%; }
+  .onglet:hover { background: rgba(237,231,220,.05); }
+  .onglet.actif { background: rgba(232,52,78,.14); color: var(--creme); font-weight: 700; }
+  .onglet .badge { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--rouge); }
+  .propose { display: flex; align-items: center; gap: 10px; padding: 4px 6px 4px 10px; }
+  .propose .estompe { display: flex; align-items: center; gap: 10px; opacity: .38; font-size: 13.5px; font-weight: 600; color: #C9C3B8; }
+  .icone-app { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; object-fit: cover; display: inline-flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--creme); }
+  nav .bas { margin-top: auto; padding: 14px 10px 0; }
   main { flex: 1; min-width: 0; padding: 24px 28px 60px; display: flex; flex-direction: column; gap: 16px; }
   .entete { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
-  .entete h1 { margin: 0; font-size: 26px; }
+  .entete h1 { margin: 0; font-size: 24px; }
   .entete p { margin: 2px 0 0; font-size: 13px; color: var(--doux); }
-  .periodes { display: flex; gap: 6px; }
-  .periode { border: 1px solid var(--ligne); background: none; color: var(--doux); border-radius: 999px; padding: 6px 13px; font-size: 12px; font-weight: 800; }
+  .periodes { display: flex; gap: 6px; flex-wrap: wrap; }
+  .periode { border: 1px solid var(--ligne); background: none; color: var(--doux); border-radius: 999px; padding: 6px 13px; font-size: 12px; font-weight: 700; }
   .periode.actif { background: var(--rouge); border-color: var(--rouge); color: #fff; }
-  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
   .kpi { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 13px 15px; }
   .kpi .t { font-size: 11.5px; color: var(--doux); font-weight: 700; }
-  .kpi .v { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 26px; margin-top: 3px; }
+  .kpi .v { font-family: var(--mono); font-weight: 700; font-size: 24px; margin-top: 4px; }
   .kpi .s { font-size: 11.5px; color: var(--doux); font-weight: 700; }
   .s.monte { color: var(--vert); }
   .s.baisse { color: var(--rose); }
   .grille { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  .grille3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .panneau { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 15px 17px; min-width: 0; }
-  .panneau h2 { margin: 0 0 10px; font-size: 14px; font-weight: 800; }
+  .panneau h2 { margin: 0 0 10px; font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
   .barres { display: flex; gap: 8px; align-items: flex-end; height: 160px; margin-top: 8px; }
   .barre { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 5px; height: 100%; min-width: 0; }
-  .barre .b { width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(var(--rouge), #9B1D3A); position: relative; min-height: 2px; }
-  .barre .n { font-size: 11px; font-weight: 800; }
+  .barre .b { width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(var(--rouge), #8E1B2E); min-height: 2px; }
+  .barre .n { font-family: var(--mono); font-size: 11px; font-weight: 700; }
   .barre .l { font-size: 10px; color: var(--doux); white-space: nowrap; }
-  .liste-ligne { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--ligne); }
+  .liste-ligne { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--ligne); }
   .liste-ligne:last-child { border-bottom: 0; }
   .vide { font-size: 13px; color: var(--doux); padding: 8px 0; }
-  .apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-  .app { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .app .nom { display: flex; align-items: center; gap: 10px; font-size: 18px; }
-  .app .chiffres { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .app .chiffre { background: var(--fond); border-radius: 10px; padding: 8px 10px; }
-  .app .chiffre b { display: block; font-size: 18px; }
-  .app .chiffre span { font-size: 11px; color: var(--doux); }
-  .etiquette { font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px; align-self: flex-start; }
-  .etiquette.direct { background: rgba(94,214,160,.15); color: var(--vert); }
-  .etiquette.attente { background: rgba(140,131,163,.15); color: var(--doux); }
+  .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .app { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; cursor: pointer; text-align: left; color: var(--creme); }
+  .app:hover { border-color: rgba(232,52,78,.4); }
+  .app .nom { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; }
+  .app .icone-app { width: 32px; height: 32px; border-radius: 9px; }
+  .app .info { font-size: 12px; color: var(--doux); }
+  .etiquette { font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px; margin-left: auto; white-space: nowrap; }
+  .etiquette.direct { background: rgba(94,214,160,.14); color: var(--vert); }
+  .etiquette.attente { background: rgba(242,193,78,.14); color: var(--jaune); }
+  .etiquette.gris { background: rgba(138,133,124,.14); color: var(--doux); }
+  .etiquette.alerte { background: rgba(232,52,78,.16); color: var(--rouge); }
   form.bloc { display: flex; flex-direction: column; gap: 10px; }
   .ligne-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   label.lab { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--doux); font-weight: 700; }
   .boutons { display: flex; gap: 8px; flex-wrap: wrap; }
-  .depot { border: 1.5px dashed rgba(230,57,80,.5); border-radius: 12px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--doux); font-size: 12.5px; text-align: center; padding: 12px; cursor: pointer; position: relative; }
-  .depot.survol { background: rgba(230,57,80,.08); }
+  .depot { border: 1.5px dashed rgba(232,52,78,.5); border-radius: 12px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--doux); font-size: 12.5px; text-align: center; padding: 12px; cursor: pointer; position: relative; }
+  .depot.survol { background: rgba(232,52,78,.08); }
   .depot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .depot .gros { font-size: 22px; color: var(--rouge); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { text-align: left; font-size: 10.5px; color: var(--doux); font-weight: 800; letter-spacing: .5px; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--ligne); }
+  th { text-align: left; font-family: var(--mono); font-size: 10px; color: var(--doux); font-weight: 700; letter-spacing: .5px; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--ligne); }
   td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--ligne); vertical-align: middle; }
-  td.montant, th.montant { text-align: right; font-weight: 800; white-space: nowrap; }
+  td.montant, th.montant { text-align: right; font-weight: 700; white-space: nowrap; font-family: var(--mono); }
   .tableau { overflow-x: auto; }
-  .greg { color: var(--rouge); font-weight: 800; }
-  .yvan { color: var(--bleu); font-weight: 800; }
+  .greg { color: var(--rouge); font-weight: 700; }
+  .yvan { color: var(--bleu); font-weight: 700; }
+  .tous { color: var(--doux); font-weight: 700; }
   .mini { font-size: 11px; padding: 4px 9px; }
-  .rembourse { color: var(--vert); font-weight: 800; font-size: 12px; }
+  .rembourse { color: var(--vert); font-weight: 700; font-size: 12px; }
   .offre { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--ligne); }
   .offre:last-child { border-bottom: 0; }
   .offre .txt { flex: 1; min-width: 0; }
@@ -106,16 +136,30 @@
   .offre .txt span { font-size: 12px; color: var(--doux); }
   .chargement { color: var(--doux); font-size: 13px; padding: 30px 0; text-align: center; }
   .note-bas { font-size: 12px; color: var(--doux); line-height: 1.5; }
+  .coche { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--ligne); font-size: 13px; line-height: 1.4; }
+  .coche:last-child { border-bottom: 0; }
+  .coche input { appearance: none; width: 17px; height: 17px; flex-shrink: 0; margin-top: 1px; border: 1.5px solid var(--rouge); border-radius: 5px; cursor: pointer; display: grid; place-content: center; }
+  .coche input:checked { background: var(--rouge); }
+  .coche input:checked::after { content: ''; width: 8px; height: 4px; border: 2px solid #fff; border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+  .coche.fait .texte { color: var(--doux); text-decoration: line-through; }
+  .coche .texte { flex: 1; }
+  .coche .meta { font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+  .version { font-family: var(--mono); font-size: 11.5px; color: var(--rouge); font-weight: 700; padding: 12px 0 2px; }
+  details > summary { cursor: pointer; list-style: none; }
+  details > summary::-webkit-details-marker { display: none; }
+  .liens { display: flex; flex-wrap: wrap; gap: 8px; }
+  .liens a { text-decoration: none; font-size: 12.5px; border: 1px solid var(--ligne); border-radius: 999px; padding: 6px 12px; color: var(--creme); }
+  .liens a:hover { border-color: var(--rouge); }
 
-  @media (max-width: 860px) {
+  @media (max-width: 900px) {
     #console { flex-direction: column; }
-    nav { width: auto; height: auto; position: static; border-right: 0; border-bottom: 1px solid var(--ligne); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 4px; }
-    nav .logo { width: 100%; }
+    nav { width: auto; height: auto; position: static; border-right: 0; border-bottom: 1px solid var(--ligne); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 4px; overflow: visible; }
+    nav .marque-nav { width: 100%; }
     nav .qui, nav .rubrique { display: none; }
-    nav .onglet { width: auto; padding: 7px 10px; font-size: 13px; }
-    nav .bas { margin: 0; padding: 7px 10px; }
+    nav .onglet { width: auto; padding: 6px 10px; font-size: 13px; }
+    nav .bas { margin: 0; padding: 6px 10px; }
     main { padding: 16px 16px 50px; }
-    .grille, .ligne-form { grid-template-columns: 1fr; }
+    .grille, .grille3, .ligne-form { grid-template-columns: 1fr; }
     .barres { height: 120px; gap: 4px; }
     .barre .l { font-size: 9px; }
   }
@@ -125,8 +169,8 @@
 
 <section id="connexion" hidden>
   <div class="carte-connexion">
-    <div class="logo titre"><span class="rouge">E</span>gg <span class="rouge">N</span>ot <span class="rouge">F</span>ound</div>
-    <div class="doux" style="font-size:14px;margin-top:-8px">Console du studio. Réservée à admin@ et contact@eggnotfound.fr.</div>
+    <div class="marque" data-marque="18"></div>
+    <div class="doux" style="font-size:14px">Console du studio, réservée à admin@ et contact@eggnotfound.fr.</div>
     <form id="form-email" class="bloc">
       <input id="email" class="champ" type="email" autocomplete="email" placeholder="admin@eggnotfound.fr" required>
       <button class="btn" type="submit">Recevoir mon code</button>
@@ -142,37 +186,34 @@
 </section>
 
 <section id="console" hidden>
-  <nav>
-    <div class="logo titre"><span class="rouge">E</span>gg <span class="rouge">N</span>ot <span class="rouge">F</span>ound</div>
-    <div class="qui" id="qui"></div>
-    <button class="onglet" data-page="ensemble">Vue d’ensemble</button>
-    <div class="rubrique">NOS APPLIS</div>
-    <button class="onglet" data-page="tikette"><span class="pastille-app" style="background:#FF6B9A"></span>Tikette</button>
-    <button class="onglet" data-page="attente" data-app="Shivr"><span class="pastille-app" style="background:#3FA9F5"></span>Shivr</button>
-    <button class="onglet" data-page="attente" data-app="Panier Fantôme"><span class="pastille-app" style="background:#8A6BD1"></span>Panier Fantôme</button>
-    <button class="onglet" data-page="attente" data-app="robi"><span class="pastille-app" style="background:#2EC4A6"></span>robi</button>
-    <div class="rubrique">LE STUDIO</div>
-    <button class="onglet" data-page="offres">Offres et Or</button>
-    <button class="onglet" data-page="avances">Avances de frais</button>
-    <button class="onglet" data-page="sources">Sources des données</button>
-    <div class="bas"><button class="btn-lien" id="deconnexion">Se déconnecter</button></div>
-  </nav>
+  <nav id="nav"></nav>
   <main id="page"></main>
 </section>
 
 <script>
 'use strict';
-// Console Egg Not Found : lit les chiffres directement dans Supabase (projet de Tikette).
-// Rien n'est tapé à la main sauf les avances de frais. Tout est vérifié côté serveur (supabase/console.sql : est_admin).
+// Console Egg Not Found : lit les chiffres dans Supabase (projet de Tikette pour l'instant) et les fichiers donnees/*.json du site.
+// Tout est vérifié côté serveur (est_admin). Le texte venu des données passe toujours par textContent.
 const URL_SUPABASE = 'https://mmoyrhyimcalnztwpydi.supabase.co';
 const CLE_PUBLIQUE = 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH';
 const sb = window.supabase.createClient(URL_SUPABASE, CLE_PUBLIQUE, { auth: { persistSession: true, storageKey: 'console-enf' } });
 
 const AMBIANCES = { romantique: 'Romantique', loufoque: 'Insolite', potes: 'Entre potes', girlpower: 'Entre copines', match: 'Avant / après match' };
 const PLATEFORMES = { viator: 'Viator', getyourguide: 'GetYourGuide', thefork: 'TheFork', funbooker: 'Funbooker', ticketmaster: 'Ticketmaster', autre: 'Autre' };
-const APPLIS = ['Studio', 'Tikette', 'Shivr', 'Panier Fantôme', 'robi', 'Hearthaven'];
+let APPLIS = ['Studio'];          // noms pour les listes (avances, coûts), remplis avec donnees/applis.json
+let CATALOGUE = [];               // applis et jeux (donnees/applis.json)
+let CONFIRMEES = new Set();       // confirmées avec l'œuf (Supabase)
+let A_FAIRE = { elements: [] };   // demandes de Claude + recette (donnees/a-faire.json)
+let PARTENAIRES = [];
+const LIENS = [
+  ['Supabase', 'https://supabase.com/dashboard/projects'], ['GitHub', 'https://github.com/Yoobabab'], ['Expo', 'https://expo.dev'],
+  ['Brevo', 'https://app.brevo.com'], ['OVH', 'https://www.ovh.com/manager/'], ['App Store Connect', 'https://appstoreconnect.apple.com'],
+  ['Play Console', 'https://play.google.com/console'], ['GetYourGuide', 'https://partner.getyourguide.com'], ['Viator', 'https://partnerresources.viator.com'],
+  ['Affilae', 'https://app.affilae.com'], ['Kwanko', 'https://www.kwanko.com'], ['Anthropic', 'https://console.anthropic.com'],
+  ['Tikette', 'https://tikette.fr'], ['Canevas des maquettes', 'https://claude.ai/artifact/M3o4jM7a57wowQ6BKpGbqv'],
+];
 
-// ───────── Petits outils (tout le texte passe par textContent : jamais de HTML venu des données) ─────────
+// ───────── Petits outils ─────────
 function h(tag, attrs, ...enfants) {
   const el = document.createElement(tag);
   for (const [k, v] of Object.entries(attrs || {})) {
@@ -185,10 +226,32 @@ function h(tag, attrs, ...enfants) {
   for (const e of enfants.flat()) if (e != null && e !== false) el.append(e instanceof Node ? e : String(e));
   return el;
 }
+// Dessins fixes écrits ici (jamais de données dedans).
+function svg(code) { const t = document.createElement('template'); t.innerHTML = code.trim(); return t.content.firstChild; }
+const OEUF_FORME = 'M20 2C9 2 2 20 2 31c0 10 8 17 18 17s18-7 18-17C38 20 31 2 20 2z';
+function oeufPlein(taille) {
+  return svg(`<svg width="${taille}" height="${Math.round(taille * 1.25)}" viewBox="0 0 40 50" aria-hidden="true"><path d="${OEUF_FORME}" fill="#E8344E"/><path d="M2.5 26l7-4 6 5 6-6 6 5 6-4 4 3" fill="none" stroke="#0A0A0A" stroke-width="3.4" stroke-linejoin="round"/></svg>`);
+}
+function oeufBouton() {
+  return svg(`<svg class="oeuf" viewBox="-6 -10 52 62" aria-hidden="true">
+    <defs><clipPath id="o-h"><polygon points="-6,-10 46,-10 46,25 33,22 27,26 21,21 15,27 9,22 -6,27"/></clipPath>
+    <clipPath id="o-b"><polygon points="-6,27 9,22 15,27 21,21 27,26 33,22 46,25 46,52 -6,52"/></clipPath></defs>
+    <ellipse class="jaune" cx="20" cy="31" rx="9" ry="7" fill="#F2C14E"/>
+    <g class="bas"><path d="${OEUF_FORME}" fill="#E8344E" clip-path="url(#o-b)"/></g>
+    <g class="haut"><path d="${OEUF_FORME}" fill="#F0506A" clip-path="url(#o-h)"/></g></svg>`);
+}
+function marque(taille) {
+  return h('div', { class: 'marque' },
+    h('span', { class: 'q', style: `font-size:${taille + 6}px` }, '4', oeufPlein(Math.round((taille + 6) * 0.6)), '4'),
+    h('span', { class: 'trait' }),
+    h('span', { class: 'mots', style: `font-size:${taille - 3}px` }, h('b', { style: `font-size:${taille}px` }, 'E'), 'GG', h('br'), h('b', { style: `font-size:${taille}px` }, 'N'), 'OT', h('br'), h('b', { style: `font-size:${taille}px` }, 'F'), 'OUND'));
+}
 const euros = (n) => (Number(n) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 const nombre = (n) => (Number(n) || 0).toLocaleString('fr-FR');
 const dateFr = (d) => (d ? new Date(d.length === 10 ? d + 'T12:00:00' : d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '');
 const aujourdhui = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+const joursDepuis = (d) => Math.max(0, Math.floor((Date.now() - new Date(d.length === 10 ? d + 'T12:00:00' : d)) / 864e5));
+const joursAvant = (d) => Math.ceil((new Date(d + 'T12:00:00') - Date.now()) / 864e5);
 function evolution(maintenant, avant) {
   if (!avant) return maintenant ? { t: 'nouveau', c: 'monte' } : { t: '—', c: '' };
   const p = Math.round(((maintenant - avant) / avant) * 100);
@@ -198,14 +261,14 @@ function kpi(titre, valeur, sous, couleur, classeSous) {
   return h('div', { class: 'kpi' }, h('div', { class: 't' }, titre), h('div', { class: 'v', style: couleur ? 'color:' + couleur : '' }, valeur), h('div', { class: 's ' + (classeSous || '') }, sous || ''));
 }
 const page = document.getElementById('page');
-function afficher(...enfants) { page.replaceChildren(...enfants); }
+function afficher(...enfants) { page.replaceChildren(...enfants); window.scrollTo(0, 0); }
 function entete(titre, sousTitre, droite) {
   return h('div', { class: 'entete' }, h('div', {}, h('h1', { class: 'titre' }, titre), h('p', {}, sousTitre)), droite || '');
 }
 function erreur(e) {
   const m = String(e?.message || e || '');
   if (/reserve au studio/i.test(m)) return 'Cette adresse n’a pas accès à la console.';
-  if (/function .* does not exist|Could not find the function/i.test(m)) return 'Le script supabase/console.sql n’est pas encore lancé dans Supabase.';
+  if (/function .* does not exist|Could not find the function/i.test(m)) return 'Un script SQL de la console n’est pas encore lancé dans Supabase (console.sql ou console2.sql).';
   return 'Erreur : ' + m;
 }
 async function rpc(nom, args) {
@@ -213,8 +276,18 @@ async function rpc(nom, args) {
   if (error) throw error;
   return data;
 }
+async function json(chemin) {
+  try { const r = await fetch(chemin + '?v=' + Date.now()); return r.ok ? await r.json() : null; } catch { return null; }
+}
+function iconeApp(a, taille) {
+  const st = taille ? `width:${taille}px;height:${taille}px` : '';
+  return a.logo ? h('img', { class: 'icone-app', src: a.logo, alt: '', style: st }) : h('span', { class: 'icone-app', style: `background:${a.couleur};${st}` }, a.initiale || a.nom[0]);
+}
+const nomAppli = (id) => CATALOGUE.find((a) => a.id === id)?.nom || (id === 'studio' ? 'Studio' : id);
+const quiClasse = (q) => (q === 'Greg' ? 'greg' : q === 'Yvan' ? 'yvan' : 'tous');
 
 // ───────── Connexion par code e-mail ─────────
+document.querySelector('[data-marque]').replaceWith(marque(18));
 const msg = document.getElementById('message-connexion');
 function dire(texte, ok) { msg.textContent = texte; msg.className = 'message ' + (ok ? 'ok' : 'erreur'); }
 document.getElementById('form-email').addEventListener('submit', async (e) => {
@@ -245,11 +318,8 @@ document.getElementById('changer-email').addEventListener('click', () => {
   document.getElementById('form-code').hidden = true;
   dire('');
 });
-document.getElementById('deconnexion').addEventListener('click', async () => {
-  await sb.auth.signOut();
-  location.reload();
-});
 
+let email = '';
 async function demarrer() {
   const { data } = await sb.auth.getSession();
   const session = data.session;
@@ -267,59 +337,303 @@ async function demarrer() {
     document.getElementById('form-code').hidden = true;
     return dire('Cette adresse n’a pas accès à la console.');
   }
+  email = session.user.email || '';
+  const [applis, faire, part] = await Promise.all([json('donnees/applis.json'), json('donnees/a-faire.json'), json('donnees/partenaires.json')]);
+  CATALOGUE = applis?.applis || [];
+  APPLIS = ['Studio', ...CATALOGUE.map((a) => a.nom)];
+  A_FAIRE = faire || { elements: [] };
+  PARTENAIRES = part?.partenaires || [];
+  try { CONFIRMEES = new Set(await rpc('console_applis')); } catch { CONFIRMEES = new Set(); }
   document.getElementById('connexion').hidden = true;
   document.getElementById('console').hidden = false;
-  document.getElementById('qui').textContent = 'Console · ' + (session.user.email || '');
-  aller(location.hash.slice(1) || 'ensemble');
+  const [nomPage, app] = decodeURIComponent(location.hash.slice(1) || 'ensemble').split('/');
+  aller(nomPage, app);
 }
 
 // ───────── Navigation ─────────
-const PAGES = { ensemble: pageEnsemble, tikette: pageTikette, offres: pageOffres, avances: pageAvances, sources: pageSources, attente: pageAttente };
-document.querySelectorAll('.onglet').forEach((b) => b.addEventListener('click', () => aller(b.dataset.page, b.dataset.app)));
+const PAGES = { ensemble: pageEnsemble, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres };
+let courant = { nom: 'ensemble', app: null };
+let cochesCache = null;
+let tachesCache = [];
+const estConfirmee = (a) => a.statut === 'confirmee' || CONFIRMEES.has(a.id);
+
+function dessinerNav() {
+  const nav = document.getElementById('nav');
+  const onglet = (libelle, nom, app, debut, badge) => h('button', {
+    class: 'onglet' + (courant.nom === nom && (courant.app || null) === (app || null) ? ' actif' : ''),
+    onclick: () => aller(nom, app),
+  }, debut || '', h('span', {}, libelle), badge ? h('span', { class: 'badge' }, badge) : '');
+  const ongletApp = (a) => (a.id === 'tikette' ? onglet(a.nom, 'tikette', null, iconeApp(a)) : onglet(a.nom, 'appli', a.id, iconeApp(a)));
+  const confirmees = CATALOGUE.filter(estConfirmee);
+  const proposees = CATALOGUE.filter((a) => !estConfirmee(a));
+  const restant = cochesCache ? A_FAIRE.elements.filter((e) => e.groupe === 'demande' && !cochesCache[e.cle]).length + tachesCache.filter((t) => !cochesCache['tache:' + t.id]).length : '';
+  nav.replaceChildren(...[
+    h('div', { class: 'marque-nav', style: 'padding:0 8px' }, marque(15)),
+    h('div', { class: 'qui' }, 'Console · ' + email),
+    onglet('Vue d’ensemble', 'ensemble'),
+    h('div', { class: 'rubrique' }, 'NOS APPLIS'), confirmees.filter((a) => a.type === 'appli').map(ongletApp),
+    h('div', { class: 'rubrique' }, 'NOS JEUX'), confirmees.filter((a) => a.type === 'jeu').map(ongletApp),
+    proposees.length ? [h('div', { class: 'rubrique' }, 'À CONFIRMER'), proposees.map((a) => {
+      const b = h('button', { class: 'bouton-oeuf', title: 'Ajouter ' + a.nom + ' au studio', 'aria-label': 'Ajouter ' + a.nom, onclick: async () => {
+        b.classList.add('eclos');
+        try { await rpc('console_appli_confirmer', { p_id: a.id }); CONFIRMEES.add(a.id); setTimeout(dessinerNav, 550); }
+        catch (e) { b.classList.remove('eclos'); alert(erreur(e)); }
+      } }, oeufBouton());
+      return h('div', { class: 'propose' }, h('span', { class: 'estompe' }, iconeApp(a), h('span', {}, a.nom)), b);
+    })] : '',
+    h('div', { class: 'rubrique' }, 'LE STUDIO'),
+    onglet('À faire', 'afaire', null, '', restant ? String(restant) : ''),
+    onglet('Coûts et échéances', 'couts'),
+    onglet('Partenaires', 'partenaires'),
+    onglet('Avances de frais', 'avances'),
+    onglet('Offres et Or', 'offres'),
+    h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
+}
 function aller(nom, app) {
   if (!PAGES[nom]) nom = 'ensemble';
-  document.querySelectorAll('.onglet').forEach((b) => b.classList.toggle('actif', b.dataset.page === nom && (nom !== 'attente' || b.dataset.app === app)));
-  if (nom !== 'attente') history.replaceState(null, '', '#' + nom);
+  courant = { nom, app: app || null };
+  history.replaceState(null, '', '#' + nom + (app ? '/' + app : ''));
+  dessinerNav();
   afficher(h('div', { class: 'chargement' }, 'Chargement…'));
   PAGES[nom](app).catch((e) => afficher(h('div', { class: 'panneau' }, erreur(e))));
+}
+async function chargerCoches() {
+  try { const r = await rpc('console_a_faire'); cochesCache = r.coches || {}; tachesCache = r.taches || []; return r; }
+  catch { cochesCache = cochesCache || {}; return { coches: cochesCache, taches: [], absent: true }; }
 }
 
 // ───────── Vue d'ensemble ─────────
 async function pageEnsemble() {
-  const [t, avances] = await Promise.all([rpc('console_tikette', { p_periode: 'mois' }), rpc('console_avances').catch(() => [])]);
-  const total = avances.reduce((s, a) => s + Number(a.montant), 0);
+  const [t, avances, couts, faire, robots] = await Promise.all([
+    rpc('console_tikette', { p_periode: 'mois' }).catch(() => null), rpc('console_avances').catch(() => []),
+    rpc('console_couts').catch(() => []), chargerCoches(), robotsGithub()]);
+  dessinerNav();
   const reste = avances.filter((a) => !a.rembourse_le).reduce((s, a) => s + Number(a.montant), 0);
-  const carteApp = (nom, couleur, enDirect, chiffres, page) =>
-    h('div', { class: 'app' },
-      h('div', { class: 'nom titre' }, h('span', { class: 'pastille-app', style: 'background:' + couleur }), nom),
-      h('span', { class: 'etiquette ' + (enDirect ? 'direct' : 'attente') }, enDirect ? 'Données en direct' : 'À brancher'),
-      chiffres ? h('div', { class: 'chiffres' }, chiffres.map(([v, l]) => h('div', { class: 'chiffre' }, h('b', {}, v), h('span', {}, l)))) : h('div', { class: 'doux', style: 'font-size:13px' }, 'Ses chiffres remonteront ici quand elle sera reliée à la console.'),
-      page ? h('button', { class: 'btn-contour', style: 'align-self:flex-start', onclick: () => aller(page) }, 'Voir le détail') : '');
+  const parMois = coutMensuel(couts);
+  const proche = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0).sort((a, b) => a.echeance.localeCompare(b.echeance))[0];
+  const payants = t?.or?.payants || 0;
+  const demandes = A_FAIRE.elements.filter((e) => e.groupe === 'demande' && !faire.coches[e.cle]);
+  const recette = A_FAIRE.elements.filter((e) => e.groupe === 'recette');
+  const recetteFaite = recette.filter((e) => faire.coches[e.cle]).length;
+  const carteApp = (a) => h('button', { class: 'app', onclick: () => (a.id === 'tikette' ? aller('tikette') : aller('appli', a.id)) },
+    h('div', { class: 'nom' }, iconeApp(a), a.nom, h('span', { class: 'etiquette ' + (a.relie ? 'direct' : 'gris') }, a.version ? 'v' + a.version : a.type === 'jeu' ? 'jeu' : '—')),
+    h('div', { class: 'info' }, a.id === 'tikette' && t ? `${nombre(t.dates.faits)} dates ce mois · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : '—'} · ${nombre(t.or.actifs)} Or` : a.resume || ''));
   afficher(
-    entete('Vue d’ensemble', 'Toutes nos applis · ce mois-ci'),
+    entete('Vue d’ensemble', 'Tout le studio, ce mois-ci'),
     h('div', { class: 'kpis' },
-      kpi('Comptes Tikette', nombre(t.comptes.total), '+' + nombre(t.comptes.nouveaux) + ' ce mois'),
-      kpi('Abonnés Or', nombre(t.or.payants), nombre(t.or.offerts) + ' Or offert en cours', 'var(--jaune)'),
-      kpi('Revenus du mois', euros(0), 'Paiement branché avec la vraie version'),
-      kpi('Avances à rembourser', euros(reste), 'sur ' + euros(total) + ' avancés', 'var(--rose)')),
-    h('div', { class: 'apps' },
-      carteApp('Tikette', '#FF6B9A', true, [
-        [nombre(t.dates.faits), 'dates faits ce mois'],
-        [t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : '—', 'note moyenne'],
-        [nombre(t.comptes.actifs), 'comptes actifs ce mois'],
-        [nombre(t.clics_total), 'clics vers les partenaires'],
-      ], 'tikette'),
-      carteApp('Shivr', '#3FA9F5', false),
-      carteApp('Panier Fantôme', '#8A6BD1', false),
-      carteApp('robi', '#2EC4A6', false)));
+      kpi('Revenus du mois', euros(payants * 2.54), payants ? `${payants} abonnés payants (estimation)` : 'paiement branché avec la vraie version'),
+      kpi('Coûts du mois', euros(parMois), proche ? `prochaine échéance : ${proche.nom.split(' ')[0]} le ${dateFr(proche.echeance)}` : 'aucune échéance datée', 'var(--rouge)'),
+      kpi('Abonnés Or', nombre(t?.or?.actifs || 0), `${nombre(payants)} payants · ${nombre(t?.or?.offerts || 0)} offerts`, 'var(--jaune)'),
+      kpi('Avances à rembourser', euros(reste), avances.length + ' avance' + (avances.length > 1 ? 's' : ''))),
+    h('div', { class: 'apps' }, CATALOGUE.filter(estConfirmee).map(carteApp)),
+    h('div', { class: 'grille3' },
+      h('div', { class: 'panneau' }, h('h2', {}, 'À faire'),
+        demandes.length ? demandes.slice(0, 6).map((e) => ligneCoche(e, faire.coches, () => aller('ensemble'))) : h('div', { class: 'vide' }, 'Rien en attente.'),
+        h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', { class: 'doux' }, `Recette : ${recetteFaite} / ${recette.length} tests faits`), h('button', { class: 'btn-contour mini', onclick: () => aller('afaire') }, 'Tout voir'))),
+      h('div', { class: 'panneau' }, h('h2', {}, 'Partenaires'),
+        PARTENAIRES.map((p) => h('div', { class: 'liste-ligne' }, h('span', {}, p.nom), etatPartenaire(p)))),
+      h('div', { class: 'panneau' }, h('h2', {}, 'Robots et services'),
+        robots.length ? robots.map((r) => h('div', { class: 'liste-ligne' }, h('span', {}, r.nom), h('span', { class: 'etiquette ' + (r.ok ? 'direct' : r.encours ? 'attente' : 'alerte') }, (r.ok ? 'OK' : r.encours ? 'en cours' : 'échec') + ' · ' + r.quand)))
+          : h('div', { class: 'vide' }, 'GitHub ne répond pas pour l’instant.'))),
+    h('div', { class: 'panneau' }, h('h2', {}, 'Liens rapides'), h('div', { class: 'liens' }, LIENS.map(([n, u]) => h('a', { href: u, target: '_blank', rel: 'noopener' }, n)))));
+}
+function etatPartenaire(p) {
+  const j = joursDepuis(p.depuis);
+  if (p.etat === 'accepte') return h('span', { class: 'etiquette direct' }, 'accepté');
+  if (p.etat === 'refuse') return h('span', { class: 'etiquette alerte' }, 'refusé');
+  return h('span', { class: 'etiquette ' + (j >= 10 ? 'alerte' : 'attente') }, `en attente · ${j} j`);
+}
+// Derniers passages des robots (dépôts publics, API GitHub sans connexion).
+async function robotsGithub() {
+  const depots = [['Yoobabab/applidates-pages', { 'Lieux de France': 'Lieux (Tikette)', 'Événements à venir': 'Événements (Tikette)', 'pages build and deployment': 'Site tikette.fr' }],
+    ['Yoobabab/AppliCard-donnees', null]];
+  const lignes = [];
+  await Promise.all(depots.map(async ([depot, noms]) => {
+    try {
+      const r = await fetch(`https://api.github.com/repos/${depot}/actions/runs?per_page=30`);
+      if (!r.ok) return;
+      const vus = new Set();
+      for (const run of (await r.json()).workflow_runs || []) {
+        if (vus.has(run.name)) continue;
+        vus.add(run.name);
+        if (noms ? !noms[run.name] : /pages build/i.test(run.name)) continue;
+        const nom = noms ? noms[run.name] : 'Shivr · ' + run.name;
+        const d = new Date(run.updated_at);
+        lignes.push({ nom, ok: run.conclusion === 'success', encours: run.status !== 'completed', quand: d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }) + ' ' + d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) });
+      }
+    } catch { /* hors ligne */ }
+  }));
+  return lignes.sort((a, b) => a.nom.localeCompare(b.nom)).slice(0, 7);
 }
 
-function pageAttente(app) {
-  afficher(entete(app || 'Appli', 'Pas encore reliée à la console'),
-    h('div', { class: 'panneau' },
-      h('p', { style: 'margin:0 0 8px;font-size:14px' }, 'Les chiffres de ' + (app || 'cette appli') + ' remonteront ici automatiquement une fois reliée : il faudra lancer un petit script SQL dans son projet Supabase (comptes du studio + fonction des chiffres), comme pour Tikette.'),
-      h('p', { class: 'note-bas', style: 'margin:0' }, 'Règle du studio : chaque nouvelle appli a son espace admin (admin@ et contact@eggnotfound.fr) et apparaît dans cette console.')));
-  return Promise.resolve();
+// ───────── Une appli (hors Tikette) ─────────
+async function pageAppli(id) {
+  const a = CATALOGUE.find((x) => x.id === id);
+  if (!a) return pageEnsemble();
+  const faire = await chargerCoches();
+  const elements = A_FAIRE.elements.filter((e) => e.appli === id);
+  const taches = (faire.taches || []).filter((x) => x.appli === id);
+  afficher(
+    h('div', { class: 'entete' }, h('div', { style: 'display:flex;gap:14px;align-items:center' }, iconeApp(a, 52), h('div', {}, h('h1', { class: 'titre' }, a.nom), h('p', {}, (a.type === 'jeu' ? 'Jeu' : 'Appli') + (a.version ? ' · version ' + a.version : '') + ' · ' + (a.resume || ''))))),
+    h('div', { class: 'grille' },
+      h('div', { class: 'panneau' }, h('h2', {}, 'À faire et recette'),
+        elements.length || taches.length ? [
+          elements.filter((e) => e.groupe === 'demande').map((e) => ligneCoche(e, faire.coches, () => aller('appli', id))),
+          taches.map((x) => ligneCoche(tacheEnElement(x), faire.coches, () => aller('appli', id))),
+          blocRecette(elements.filter((e) => e.groupe === 'recette'), faire.coches, () => aller('appli', id))]
+          : h('div', { class: 'vide' }, 'Rien à faire pour l’instant.')),
+      h('div', { class: 'panneau' }, h('h2', {}, 'Chiffres'),
+        h('p', { class: 'note-bas', style: 'margin:0 0 10px' }, a.relie ? 'Chiffres en direct.' : 'Pas encore reliée à la console : il faudra lancer un petit script SQL dans sa base (comptes du studio + chiffres), comme pour Tikette. Dis-le à Claude quand vous voulez la brancher.'),
+        h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('a', { href: 'https://github.com/' + a.depot, target: '_blank', rel: 'noopener' }, a.depot)),
+        a.site ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Site'), h('a', { href: a.site, target: '_blank', rel: 'noopener' }, a.site)) : '')));
+}
+
+// ───────── À faire (demandes de Claude, recette, tâches ajoutées) ─────────
+let filtreAppli = 'toutes';
+function tacheEnElement(x) {
+  return { cle: 'tache:' + x.id, groupe: 'tache', appli: x.appli, qui: x.qui, titre: x.titre, echeance: x.echeance, id: x.id };
+}
+function ligneCoche(e, coches, recharger) {
+  const fait = !!coches[e.cle];
+  const box = h('input', { type: 'checkbox', 'aria-label': e.titre });
+  box.checked = fait;
+  box.addEventListener('change', async () => {
+    try { await rpc('console_cocher', { p_cle: e.cle, p_fait: box.checked }); if (box.checked) coches[e.cle] = new Date().toISOString(); else delete coches[e.cle]; recharger(); }
+    catch (err) { box.checked = !box.checked; alert(erreur(err)); }
+  });
+  return h('label', { class: 'coche' + (fait ? ' fait' : '') }, box,
+    h('span', { class: 'texte' }, e.titre, e.echeance ? h('span', { class: 'doux' }, ' · avant le ' + dateFr(e.echeance)) : ''),
+    h('span', { class: 'meta' }, h('span', { class: quiClasse(e.qui) }, e.qui === 'Tous' ? 'Greg et Yvan' : e.qui), e.appli && courant.nom !== 'appli' ? h('span', { class: 'doux' }, ' · ' + nomAppli(e.appli)) : ''),
+    e.groupe === 'tache' ? h('button', { class: 'btn-lien', style: 'font-size:11px', onclick: async (ev) => { ev.preventDefault(); if (confirm('Supprimer « ' + e.titre + ' » ?')) { await rpc('console_tache_supprimer', { p_id: e.id }); recharger(); } } }, 'Retirer') : '');
+}
+function blocRecette(items, coches, recharger) {
+  if (!items.length) return '';
+  const parVersion = new Map();
+  for (const e of items) { const k = nomAppli(e.appli) + ' · ' + e.version; if (!parVersion.has(k)) parVersion.set(k, []); parVersion.get(k).push(e); }
+  return [...parVersion].map(([v, liste], i) => {
+    const faits = liste.filter((e) => coches[e.cle]).length;
+    const d = h('details', {}, h('summary', {}, h('div', { class: 'version' }, `▸ Recette ${v} · ${faits}/${liste.length}`)), liste.map((e) => ligneCoche(e, coches, recharger)));
+    if (i < 2 && faits < liste.length) d.open = true;
+    return d;
+  });
+}
+async function pageAFaire() {
+  const faire = await chargerCoches();
+  dessinerNav();
+  const garder = (e) => filtreAppli === 'toutes' || e.appli === filtreAppli;
+  const recharger = () => aller('afaire');
+  const demandes = A_FAIRE.elements.filter((e) => e.groupe === 'demande' && garder(e));
+  const taches = (faire.taches || []).map(tacheEnElement).filter(garder);
+  const recette = A_FAIRE.elements.filter((e) => e.groupe === 'recette' && garder(e));
+  const restantes = [...demandes, ...taches].filter((e) => !faire.coches[e.cle]);
+  const faites = [...demandes, ...taches].filter((e) => faire.coches[e.cle]);
+  const applisAvecTaches = ['toutes', ...new Set([...A_FAIRE.elements, ...taches].map((e) => e.appli))];
+  const form = h('form', { class: 'bloc' },
+    h('input', { class: 'champ', name: 'titre', required: true, maxlength: 160, placeholder: 'Nouvelle tâche…' }),
+    h('div', { class: 'ligne-form' },
+      h('select', { class: 'champ', name: 'qui' }, ['Tous', 'Greg', 'Yvan'].map((q) => h('option', { value: q }, q === 'Tous' ? 'Greg et Yvan' : q))),
+      h('select', { class: 'champ', name: 'appli' }, h('option', { value: 'studio' }, 'Studio'), CATALOGUE.map((a) => h('option', { value: a.id }, a.nom)))),
+    h('div', { class: 'ligne-form' }, h('input', { class: 'champ', name: 'echeance', type: 'date', title: 'À faire avant le (facultatif)' }), h('button', { class: 'btn', type: 'submit' }, 'Ajouter')),
+    h('div', { class: 'message', id: 'msg-tache' }));
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const f = new FormData(form);
+    try { await rpc('console_tache_ajouter', { p: { titre: f.get('titre'), qui: f.get('qui'), appli: f.get('appli'), echeance: f.get('echeance') } }); recharger(); }
+    catch (err) { const m = document.getElementById('msg-tache'); m.className = 'message erreur'; m.textContent = erreur(err); }
+  });
+  afficher(
+    entete('À faire', 'Ce que Claude vous demande arrive ici tout seul · mis à jour le ' + dateFr(A_FAIRE.maj || aujourdhui()),
+      h('div', { class: 'periodes' }, applisAvecTaches.map((id) => h('button', { class: 'periode' + (filtreAppli === id ? ' actif' : ''), onclick: () => { filtreAppli = id; aller('afaire'); } }, id === 'toutes' ? 'Tout' : nomAppli(id))))),
+    faire.absent ? h('div', { class: 'panneau note-bas' }, 'Pour cocher et ajouter des tâches, lance supabase/console2.sql dans Supabase.') : '',
+    h('div', { class: 'grille' },
+      h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
+        h('div', { class: 'panneau' }, h('h2', {}, `À faire (${restantes.length})`),
+          restantes.length ? restantes.map((e) => ligneCoche(e, faire.coches, recharger)) : h('div', { class: 'vide' }, 'Tout est fait. Bravo !'),
+          faites.length ? h('details', {}, h('summary', {}, h('div', { class: 'version' }, `▸ Déjà fait (${faites.length})`)), faites.map((e) => ligneCoche(e, faire.coches, recharger))) : ''),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Ajouter une tâche'), form)),
+      h('div', { class: 'panneau' }, h('h2', {}, 'Recette : les tests à faire'),
+        recette.length ? blocRecette(recette, faire.coches, recharger) : h('div', { class: 'vide' }, 'Pas de test en attente.'),
+        h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, 'Liste tenue à jour par Claude à chaque nouvelle version. Si un test coince, dites-le à Claude.'))));
+}
+
+// ───────── Coûts et échéances ─────────
+const USD = 0.92; // conversion indicative
+function coutMensuel(couts) {
+  return couts.reduce((s, c) => {
+    if (c.montant == null || c.rythme === 'unique') return s;
+    const m = Number(c.montant) * (c.devise === 'USD' ? USD : 1);
+    return s + (c.rythme === 'mois' ? m : m / 12);
+  }, 0);
+}
+async function pageCouts() {
+  const couts = await rpc('console_couts');
+  let edition = null;
+  const formulaire = () => {
+    const c = edition || {};
+    const f = h('form', { class: 'bloc' },
+      h('label', { class: 'lab' }, 'Quoi', h('input', { class: 'champ', name: 'nom', required: true, maxlength: 80, value: c.nom || '', placeholder: 'Domaine tikette.fr' })),
+      h('div', { class: 'ligne-form' },
+        h('label', { class: 'lab' }, 'Fournisseur', h('input', { class: 'champ', name: 'fournisseur', maxlength: 40, value: c.fournisseur || '', placeholder: 'OVH' })),
+        h('label', { class: 'lab' }, 'Pour', h('select', { class: 'champ', name: 'appli' }, h('option', { value: 'studio' }, 'Studio'), CATALOGUE.map((a) => h('option', { value: a.id, selected: c.appli === a.id }, a.nom))))),
+      h('div', { class: 'ligne-form' },
+        h('label', { class: 'lab' }, 'Montant', h('input', { class: 'champ', name: 'montant', inputmode: 'decimal', value: c.montant != null ? String(c.montant).replace('.', ',') : '', placeholder: 'vide si inconnu' })),
+        h('label', { class: 'lab' }, 'Devise', h('select', { class: 'champ', name: 'devise' }, ['EUR', 'USD'].map((d) => h('option', { selected: c.devise === d }, d))))),
+      h('div', { class: 'ligne-form' },
+        h('label', { class: 'lab' }, 'Rythme', h('select', { class: 'champ', name: 'rythme' }, [['mois', 'par mois'], ['an', 'par an'], ['unique', 'une fois']].map(([v, l]) => h('option', { value: v, selected: (c.rythme || 'an') === v }, l)))),
+        h('label', { class: 'lab' }, 'Prochaine échéance', h('input', { class: 'champ', name: 'echeance', type: 'date', value: c.echeance || '' }))),
+      h('label', { class: 'lab' }, 'Note', h('input', { class: 'champ', name: 'note', maxlength: 160, value: c.note || '' })),
+      h('div', { class: 'boutons' }, h('button', { class: 'btn', type: 'submit' }, edition ? 'Enregistrer' : 'Ajouter'), edition ? h('button', { class: 'btn-lien', type: 'button', onclick: () => { edition = null; dessiner(); } }, 'Annuler') : ''));
+    f.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const d = new FormData(f);
+      const montant = String(d.get('montant') || '').replace(/\s/g, '').replace(',', '.');
+      try {
+        await rpc('console_cout_enregistrer', { p: { id: edition?.id || null, nom: d.get('nom'), fournisseur: d.get('fournisseur'), appli: d.get('appli'), montant: montant || null, devise: d.get('devise'), rythme: d.get('rythme'), echeance: d.get('echeance'), note: d.get('note') } });
+        aller('couts');
+      } catch (err) { alert(erreur(err)); }
+    });
+    return f;
+  };
+  const prix = (c) => (c.montant == null ? h('span', { class: 'doux' }, 'à compléter') : (c.devise === 'USD' ? Number(c.montant).toLocaleString('fr-FR') + ' $' : euros(c.montant)) + (c.rythme === 'mois' ? ' / mois' : c.rythme === 'an' ? ' / an' : ''));
+  const echeance = (c) => {
+    if (!c.echeance) return h('span', { class: 'doux' }, '—');
+    const j = joursAvant(c.echeance);
+    return h('span', { class: 'etiquette ' + (j < 0 ? 'gris' : j <= 15 ? 'alerte' : j <= 60 ? 'attente' : 'direct'), style: 'margin:0' }, dateFr(c.echeance) + (j >= 0 && j <= 60 ? ` · J-${j}` : ''));
+  };
+  const parAn = couts.reduce((s, c) => (c.montant == null || c.rythme === 'unique' ? s : s + Number(c.montant) * (c.devise === 'USD' ? USD : 1) * (c.rythme === 'mois' ? 12 : 1)), 0);
+  const alertes = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15);
+  const dessiner = () => afficher(
+    entete('Coûts et échéances', 'Tout ce que le studio paie, et quand'),
+    h('div', { class: 'kpis' },
+      kpi('Par mois', euros(coutMensuel(couts)), 'abonnements ramenés au mois', 'var(--rouge)'),
+      kpi('Par an', euros(parAn), 'sans les achats uniques'),
+      kpi('À renouveler sous 15 jours', String(alertes.length), alertes.map((c) => c.nom).join(' · ') || 'rien', alertes.length ? 'var(--rouge)' : null),
+      kpi('Montants à compléter', String(couts.filter((c) => c.montant == null).length), 'touche « Modifier »')),
+    h('div', { class: 'grille' },
+      h('div', { class: 'panneau tableau' }, h('table', {},
+        h('thead', {}, h('tr', {}, h('th', {}, 'QUOI'), h('th', {}, 'POUR'), h('th', { class: 'montant' }, 'PRIX'), h('th', {}, 'ÉCHÉANCE'), h('th', {}, ''))),
+        h('tbody', {}, couts.map((c) => h('tr', {},
+          h('td', {}, c.nom, h('div', { class: 'doux', style: 'font-size:11.5px' }, [c.fournisseur, c.note].filter(Boolean).join(' · '))),
+          h('td', { class: 'doux' }, nomAppli(c.appli)),
+          h('td', { class: 'montant' }, prix(c)),
+          h('td', {}, echeance(c)),
+          h('td', { style: 'white-space:nowrap' }, h('button', { class: 'btn-contour mini', onclick: () => { edition = c; dessiner(); } }, 'Modifier'), ' ',
+            h('button', { class: 'btn-lien', onclick: async () => { if (confirm('Supprimer « ' + c.nom + ' » ?')) { await rpc('console_cout_supprimer', { p_id: c.id }); aller('couts'); } } }, 'Retirer'))))))),
+      h('div', { class: 'panneau' }, h('h2', {}, edition ? 'Modifier' : 'Ajouter un coût'), formulaire(),
+        h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, 'Les dollars sont convertis à titre indicatif (1 $ ≈ 0,92 €).'))));
+  dessiner();
+}
+
+// ───────── Partenaires ─────────
+async function pagePartenaires() {
+  afficher(entete('Partenaires', 'Où en sont les affiliations · tenu à jour par Claude'),
+    h('div', { class: 'panneau tableau' }, h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'PARTENAIRE'), h('th', {}, 'POUR'), h('th', {}, 'ÉTAT'), h('th', {}, 'DÉTAIL'), h('th', {}, ''))),
+      h('tbody', {}, PARTENAIRES.map((p) => h('tr', {},
+        h('td', {}, h('b', {}, p.nom)), h('td', { class: 'doux' }, nomAppli(p.appli)), h('td', {}, etatPartenaire(p)),
+        h('td', { class: 'doux' }, p.detail || '', p.etat === 'attente' && joursDepuis(p.depuis) >= 10 ? h('div', { style: 'color:var(--rouge);font-size:11.5px' }, 'Pas de réponse depuis 10 jours : demandez une relance à Claude.') : ''),
+        h('td', {}, p.lien ? h('a', { href: p.lien, target: '_blank', rel: 'noopener', class: 'btn-contour mini', style: 'text-decoration:none' }, 'Ouvrir') : '')))))),
+    h('p', { class: 'note-bas' }, 'Les commissions elles-mêmes se lisent dans chaque espace partenaire.'));
 }
 
 // ───────── Tikette ─────────
@@ -374,6 +688,7 @@ async function pageTikette() {
           lignes(clics.map(([k, v]) => h('div', { class: 'liste-ligne' }, h('span', {}, PLATEFORMES[k] || k), h('b', {}, nombre(v)))), 'Aucun clic pour l’instant.'),
           h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, 'Les commissions elles-mêmes sont dans les espaces partenaires (GetYourGuide, Viator…).')))));
 }
+
 
 // ───────── Offres et Or ─────────
 async function pageOffres() {
@@ -443,8 +758,14 @@ async function pageOffres() {
           h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, '1 mois d’Or offert à chacun ; compte de moins de 14 jours ; 12 filleuls par an au plus.')))));
 }
 
+
 // ───────── Avances de frais ─────────
 let justificatif = null; // chemin du fichier envoyé pour la nouvelle avance
+function ecart(g, y) {
+  const d = (g - y) / 2;
+  if (Math.abs(d) < 0.01) return 'à égalité';
+  return (d > 0 ? 'Yvan → Greg ' : 'Greg → Yvan ') + euros(Math.abs(d));
+}
 async function pageAvances() {
   const avances = await rpc('console_avances');
   justificatif = null;
@@ -515,6 +836,7 @@ async function pageAvances() {
       kpi('Total avancé', euros(somme(avances)), premiere ? 'depuis le ' + dateFr(premiere) : ''),
       kpi('Greg', euros(somme(greg)), greg.length + ' avance' + (greg.length > 1 ? 's' : ''), 'var(--rouge)'),
       kpi('Yvan', euros(somme(yvan)), yvan.length + ' avance' + (yvan.length > 1 ? 's' : ''), 'var(--bleu)'),
+      kpi('Bilan 50/50', ecart(somme(greg), somme(yvan)), 'pour que chacun ait mis autant'),
       kpi('Reste à rembourser', euros(somme(avances) - somme(rembourse)), rembourse.length ? euros(somme(rembourse)) + ' déjà remboursés' : 'SAS pas encore créée')),
     h('div', { class: 'grille' },
       h('div', { class: 'panneau' }, tableau),
@@ -574,20 +896,7 @@ function exporter(avances) {
   document.body.append(a); a.click(); a.remove();
 }
 
-// ───────── Sources ─────────
-function pageSources() {
-  const ligne = (titre, texte) => h('div', { class: 'liste-ligne', style: 'flex-direction:column;gap:2px' }, h('b', {}, titre), h('span', { class: 'doux' }, texte));
-  afficher(entete('Sources des données', 'D’où vient chaque chiffre (rien n’est tapé à la main, sauf les avances)'),
-    h('div', { class: 'panneau' },
-      ligne('Comptes', 'Les comptes Tikette (connexion par SMS ou e-mail), dans Supabase.'),
-      ligne('Dates faits, gardés, notes, ambiances', 'Le carnet sauvegardé dans le compte de chaque utilisateur connecté (sorties commencées ou terminées). Les sorties des personnes sans compte restent sur leur téléphone et ne remontent pas.'),
-      ligne('Lieux adorés', 'Les avis anonymes envoyés à la fin d’un date (Bof / Bien / Adoré).'),
-      ligne('Abonnés Or', 'La table des abonnements. Payants = App Store et Google Play (avec la vraie version et RevenueCat) ; offerts = depuis cette console ou le parrainage.'),
-      ligne('Clics partenaires', 'Chaque toucher sur Viator, GetYourGuide, TheFork, Funbooker ou Ticketmaster dans l’appli (compteur anonyme par jour, depuis la v0.31).'),
-      ligne('Revenus', 'Abonnements : RevenueCat, branché avec la vraie version (gratuit jusqu’à 2 500 $ de revenus par mois, puis 1 %). Commissions : dans les espaces partenaires, pas encore relié.'),
-      ligne('Avances de frais', 'Saisies ici avec leur photo ou PDF, rangés dans un espace privé lisible seulement par le studio. La lecture par l’IA coûte moins d’un centime par facture.')));
-  return Promise.resolve();
-}
+
 
 sb.auth.onAuthStateChange((e) => { if (e === 'SIGNED_OUT') { document.getElementById('console').hidden = true; } });
 demarrer();

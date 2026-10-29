@@ -1,0 +1,16 @@
+{
+ "aide": "Applis et jeux du studio. statut « confirmee » = dans la liste ; « proposee » = ajoutée par Claude au lancement d'un projet, en transparence avec un œuf à toucher pour confirmer. relie = chiffres en direct dans la console.",
+ "applis": [
+  {"id": "tikette", "nom": "Tikette", "type": "appli", "couleur": "#FF6B9A", "logo": "logos/tikette.png", "version": "0.31", "depot": "Yoobabab/AppliDates", "site": "https://tikette.fr", "resume": "Organise les sorties clés en main", "statut": "confirmee", "relie": true},
+  {"id": "shivr", "nom": "Shivr", "type": "appli", "couleur": "#3FA9F5", "logo": "logos/shivr.png", "version": "0.60", "depot": "Yoobabab/AppliCard", "resume": "Cartes Pokémon : collection, cote, échanges", "statut": "confirmee", "relie": false},
+  {"id": "panier-fantome", "nom": "Panier Fantôme", "type": "appli", "couleur": "#8A6BD1", "logo": "logos/panier-fantome.png", "version": "0.1", "depot": "Yoobabab/PanierFantome", "resume": "Faux achats contre les achats impulsifs", "statut": "confirmee", "relie": false},
+  {"id": "robi", "nom": "robi", "type": "appli", "couleur": "#2EC4A6", "logo": "logos/robi.png", "version": "0.1", "depot": "Yoobabab/AppliPlomberie", "resume": "Aide plomberie à distance", "statut": "confirmee", "relie": false},
+  {"id": "applibd", "nom": "AppliBD", "type": "appli", "couleur": "#D7263D", "logo": "logos/applibd.png", "version": "0.21", "depot": "Yoobabab/AppliBD", "resume": "BD, manga, romans : auteurs et lecteurs", "statut": "confirmee", "relie": false},
+  {"id": "applinature", "nom": "AppliNature", "type": "appli", "couleur": "#2F9E44", "initiale": "N", "version": "0.4", "depot": "Yoobabab/AppliNature", "resume": "Le Pokédex de la vraie nature", "statut": "confirmee", "relie": false},
+  {"id": "hearthaven", "nom": "Hearthaven", "type": "jeu", "couleur": "#B5651D", "initiale": "H", "depot": "Yoobabab/Hearthhaven", "resume": "Jeu mobile 3D sur une île", "statut": "confirmee", "relie": false},
+  {"id": "agent-de-foot", "nom": "Agent de foot", "type": "jeu", "couleur": "#1E7B4A", "logo": "logos/agent-de-foot.png", "depot": "Yoobabab/agent-de-foot", "resume": "Gestion d’agent de joueurs (PC / Steam)", "statut": "confirmee", "relie": false},
+  {"id": "notif", "nom": "Notif!", "type": "jeu", "couleur": "#F2C14E", "logo": "logos/notif.png", "depot": "Yoobabab/AppTycoon", "resume": "Tycoon de création d’applis", "statut": "confirmee", "relie": false},
+  {"id": "braise", "nom": "BRAISE", "type": "jeu", "couleur": "#C0392B", "initiale": "B", "depot": "Yoobabab/BRAISE", "resume": "Pokémon × Dragon Quest × Fallout × Zelda", "statut": "proposee", "relie": false},
+  {"id": "ce-que-tu-semes", "nom": "Ce que tu sèmes", "type": "jeu", "couleur": "#6A8D3A", "initiale": "C", "depot": "Yoobabab/ce-que-tu-semes", "resume": "RPG à grosse histoire", "statut": "proposee", "relie": false}
+ ]
+}
