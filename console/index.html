@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Console Egg Not Found</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=DM+Sans:wght@400;500;600;700;800&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+  :root {
+    --fond: #0F0B18; --panneau: #1A1426; --ligne: rgba(247,241,255,.08); --rouge: #E63950; --creme: #F2EDE3;
+    --doux: #8C83A3; --jaune: #FFD166; --vert: #5ED6A0; --bleu: #9AD1FF; --rose: #FF6B9A;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--fond); color: var(--creme); font-family: 'DM Sans', system-ui, sans-serif; }
+  body { min-height: 100vh; }
+  .titre { font-family: 'Bricolage Grotesque', 'DM Sans', sans-serif; font-weight: 800; }
+  .rouge { color: var(--rouge); }
+  .doux { color: var(--doux); }
+  button, input, select { font: inherit; }
+  button { cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  /* Connexion */
+  #connexion { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .carte-connexion { width: 100%; max-width: 380px; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 22px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .logo { font-size: 26px; }
+  .champ { width: 100%; background: var(--fond); border: 1px solid var(--ligne); border-radius: 12px; color: var(--creme); padding: 12px 14px; font-size: 16px; }
+  .champ:focus { outline: 2px solid rgba(230,57,80,.6); border-color: transparent; }
+  .btn { border: 0; background: var(--rouge); color: #fff; font-weight: 800; border-radius: 999px; padding: 12px 18px; font-size: 14px; }
+  .btn:disabled { opacity: .5; cursor: default; }
+  .btn-contour { background: transparent; border: 1px solid rgba(230,57,80,.6); color: var(--rouge); font-weight: 800; border-radius: 999px; padding: 6px 12px; font-size: 12px; }
+  .btn-lien { background: none; border: 0; color: var(--doux); text-decoration: underline; padding: 0; font-size: 13px; }
+  .message { font-size: 13px; min-height: 18px; }
+  .message.erreur { color: var(--rose); }
+  .message.ok { color: var(--vert); }
+
+  /* Console */
+  #console { display: flex; min-height: 100vh; }
+  nav { width: 230px; flex-shrink: 0; border-right: 1px solid var(--ligne); padding: 20px 12px; display: flex; flex-direction: column; gap: 4px; position: sticky; top: 0; height: 100vh; }
+  nav .logo { font-size: 18px; padding: 0 10px 2px; }
+  nav .qui { font-size: 11px; color: var(--doux); padding: 0 10px 14px; font-weight: 600; word-break: break-all; }
+  .rubrique { font-size: 10px; letter-spacing: 1px; color: var(--doux); font-weight: 800; padding: 10px 12px 4px; }
+  .onglet { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; border: 0; background: none; color: var(--doux); font-size: 14px; font-weight: 600; text-align: left; width: 100%; }
+  .onglet.actif { background: rgba(230,57,80,.15); color: var(--creme); font-weight: 800; }
+  .pastille-app { width: 18px; height: 18px; border-radius: 6px; flex-shrink: 0; }
+  nav .bas { margin-top: auto; padding: 10px 12px; }
+  main { flex: 1; min-width: 0; padding: 24px 28px 60px; display: flex; flex-direction: column; gap: 16px; }
+  .entete { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+  .entete h1 { margin: 0; font-size: 26px; }
+  .entete p { margin: 2px 0 0; font-size: 13px; color: var(--doux); }
+  .periodes { display: flex; gap: 6px; }
+  .periode { border: 1px solid var(--ligne); background: none; color: var(--doux); border-radius: 999px; padding: 6px 13px; font-size: 12px; font-weight: 800; }
+  .periode.actif { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+  .kpi { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 13px 15px; }
+  .kpi .t { font-size: 11.5px; color: var(--doux); font-weight: 700; }
+  .kpi .v { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 26px; margin-top: 3px; }
+  .kpi .s { font-size: 11.5px; color: var(--doux); font-weight: 700; }
+  .s.monte { color: var(--vert); }
+  .s.baisse { color: var(--rose); }
+  .grille { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
+  .panneau { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 15px 17px; min-width: 0; }
+  .panneau h2 { margin: 0 0 10px; font-size: 14px; font-weight: 800; }
+  .barres { display: flex; gap: 8px; align-items: flex-end; height: 160px; margin-top: 8px; }
+  .barre { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 5px; height: 100%; min-width: 0; }
+  .barre .b { width: 100%; border-radius: 6px 6px 0 0; background: linear-gradient(var(--rouge), #9B1D3A); position: relative; min-height: 2px; }
+  .barre .n { font-size: 11px; font-weight: 800; }
+  .barre .l { font-size: 10px; color: var(--doux); white-space: nowrap; }
+  .liste-ligne { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--ligne); }
+  .liste-ligne:last-child { border-bottom: 0; }
+  .vide { font-size: 13px; color: var(--doux); padding: 8px 0; }
+  .apps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+  .app { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .app .nom { display: flex; align-items: center; gap: 10px; font-size: 18px; }
+  .app .chiffres { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .app .chiffre { background: var(--fond); border-radius: 10px; padding: 8px 10px; }
+  .app .chiffre b { display: block; font-size: 18px; }
+  .app .chiffre span { font-size: 11px; color: var(--doux); }
+  .etiquette { font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 9px; align-self: flex-start; }
+  .etiquette.direct { background: rgba(94,214,160,.15); color: var(--vert); }
+  .etiquette.attente { background: rgba(140,131,163,.15); color: var(--doux); }
+  form.bloc { display: flex; flex-direction: column; gap: 10px; }
+  .ligne-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  label.lab { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--doux); font-weight: 700; }
+  .boutons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .depot { border: 1.5px dashed rgba(230,57,80,.5); border-radius: 12px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--doux); font-size: 12.5px; text-align: center; padding: 12px; cursor: pointer; position: relative; }
+  .depot.survol { background: rgba(230,57,80,.08); }
+  .depot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .depot .gros { font-size: 22px; color: var(--rouge); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 10.5px; color: var(--doux); font-weight: 800; letter-spacing: .5px; padding: 6px 8px 6px 0; border-bottom: 1px solid var(--ligne); }
+  td { padding: 9px 8px 9px 0; border-bottom: 1px solid var(--ligne); vertical-align: middle; }
+  td.montant, th.montant { text-align: right; font-weight: 800; white-space: nowrap; }
+  .tableau { overflow-x: auto; }
+  .greg { color: var(--rouge); font-weight: 800; }
+  .yvan { color: var(--bleu); font-weight: 800; }
+  .mini { font-size: 11px; padding: 4px 9px; }
+  .rembourse { color: var(--vert); font-weight: 800; font-size: 12px; }
+  .offre { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--ligne); }
+  .offre:last-child { border-bottom: 0; }
+  .offre .txt { flex: 1; min-width: 0; }
+  .offre .txt b { display: block; font-size: 13.5px; }
+  .offre .txt span { font-size: 12px; color: var(--doux); }
+  .chargement { color: var(--doux); font-size: 13px; padding: 30px 0; text-align: center; }
+  .note-bas { font-size: 12px; color: var(--doux); line-height: 1.5; }
+
+  @media (max-width: 860px) {
+    #console { flex-direction: column; }
+    nav { width: auto; height: auto; position: static; border-right: 0; border-bottom: 1px solid var(--ligne); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 4px; }
+    nav .logo { width: 100%; }
+    nav .qui, nav .rubrique { display: none; }
+    nav .onglet { width: auto; padding: 7px 10px; font-size: 13px; }
+    nav .bas { margin: 0; padding: 7px 10px; }
+    main { padding: 16px 16px 50px; }
+    .grille, .ligne-form { grid-template-columns: 1fr; }
+    .barres { height: 120px; gap: 4px; }
+    .barre .l { font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<section id="connexion" hidden>
+  <div class="carte-connexion">
+    <div class="logo titre"><span class="rouge">E</span>gg <span class="rouge">N</span>ot <span class="rouge">F</span>ound</div>
+    <div class="doux" style="font-size:14px;margin-top:-8px">Console du studio. Réservée à admin@ et contact@eggnotfound.fr.</div>
+    <form id="form-email" class="bloc">
+      <input id="email" class="champ" type="email" autocomplete="email" placeholder="admin@eggnotfound.fr" required>
+      <button class="btn" type="submit">Recevoir mon code</button>
+    </form>
+    <form id="form-code" class="bloc" hidden>
+      <div class="doux" style="font-size:13px">Code envoyé à <b id="email-envoye"></b>.</div>
+      <input id="code" class="champ" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Code reçu par e-mail" required>
+      <button class="btn" type="submit">Me connecter</button>
+      <button class="btn-lien" type="button" id="changer-email">Changer d’adresse</button>
+    </form>
+    <div id="message-connexion" class="message"></div>
+  </div>
+</section>
+
+<section id="console" hidden>
+  <nav>
+    <div class="logo titre"><span class="rouge">E</span>gg <span class="rouge">N</span>ot <span class="rouge">F</span>ound</div>
+    <div class="qui" id="qui"></div>
+    <button class="onglet" data-page="ensemble">Vue d’ensemble</button>
+    <div class="rubrique">NOS APPLIS</div>
+    <button class="onglet" data-page="tikette"><span class="pastille-app" style="background:#FF6B9A"></span>Tikette</button>
+    <button class="onglet" data-page="attente" data-app="Shivr"><span class="pastille-app" style="background:#3FA9F5"></span>Shivr</button>
+    <button class="onglet" data-page="attente" data-app="Panier Fantôme"><span class="pastille-app" style="background:#8A6BD1"></span>Panier Fantôme</button>
+    <button class="onglet" data-page="attente" data-app="robi"><span class="pastille-app" style="background:#2EC4A6"></span>robi</button>
+    <div class="rubrique">LE STUDIO</div>
+    <button class="onglet" data-page="offres">Offres et Or</button>
+    <button class="onglet" data-page="avances">Avances de frais</button>
+    <button class="onglet" data-page="sources">Sources des données</button>
+    <div class="bas"><button class="btn-lien" id="deconnexion">Se déconnecter</button></div>
+  </nav>
+  <main id="page"></main>
+</section>
+
+<script>
+'use strict';
+// Console Egg Not Found : lit les chiffres directement dans Supabase (projet de Tikette).
+// Rien n'est tapé à la main sauf les avances de frais. Tout est vérifié côté serveur (supabase/console.sql : est_admin).
+const URL_SUPABASE = 'https://mmoyrhyimcalnztwpydi.supabase.co';
+const CLE_PUBLIQUE = 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH';
+const sb = window.supabase.createClient(URL_SUPABASE, CLE_PUBLIQUE, { auth: { persistSession: true, storageKey: 'console-enf' } });
+
+const AMBIANCES = { romantique: 'Romantique', loufoque: 'Insolite', potes: 'Entre potes', girlpower: 'Entre copines', match: 'Avant / après match' };
+const PLATEFORMES = { viator: 'Viator', getyourguide: 'GetYourGuide', thefork: 'TheFork', funbooker: 'Funbooker', ticketmaster: 'Ticketmaster', autre: 'Autre' };
+const APPLIS = ['Studio', 'Tikette', 'Shivr', 'Panier Fantôme', 'robi', 'Hearthaven'];
+
+// ───────── Petits outils (tout le texte passe par textContent : jamais de HTML venu des données) ─────────
+function h(tag, attrs, ...enfants) {
+  const el = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) {
+    if (v == null || v === false) continue;
+    if (k === 'class') el.className = v;
+    else if (k === 'style') el.style.cssText = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v === true ? '' : v);
+  }
+  for (const e of enfants.flat()) if (e != null && e !== false) el.append(e instanceof Node ? e : String(e));
+  return el;
+}
+const euros = (n) => (Number(n) || 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+const nombre = (n) => (Number(n) || 0).toLocaleString('fr-FR');
+const dateFr = (d) => (d ? new Date(d.length === 10 ? d + 'T12:00:00' : d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '');
+const aujourdhui = () => new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+function evolution(maintenant, avant) {
+  if (!avant) return maintenant ? { t: 'nouveau', c: 'monte' } : { t: '—', c: '' };
+  const p = Math.round(((maintenant - avant) / avant) * 100);
+  return { t: (p > 0 ? '+' : '') + p + ' %', c: p > 0 ? 'monte' : p < 0 ? 'baisse' : '' };
+}
+function kpi(titre, valeur, sous, couleur, classeSous) {
+  return h('div', { class: 'kpi' }, h('div', { class: 't' }, titre), h('div', { class: 'v', style: couleur ? 'color:' + couleur : '' }, valeur), h('div', { class: 's ' + (classeSous || '') }, sous || ''));
+}
+const page = document.getElementById('page');
+function afficher(...enfants) { page.replaceChildren(...enfants); }
+function entete(titre, sousTitre, droite) {
+  return h('div', { class: 'entete' }, h('div', {}, h('h1', { class: 'titre' }, titre), h('p', {}, sousTitre)), droite || '');
+}
+function erreur(e) {
+  const m = String(e?.message || e || '');
+  if (/reserve au studio/i.test(m)) return 'Cette adresse n’a pas accès à la console.';
+  if (/function .* does not exist|Could not find the function/i.test(m)) return 'Le script supabase/console.sql n’est pas encore lancé dans Supabase.';
+  return 'Erreur : ' + m;
+}
+async function rpc(nom, args) {
+  const { data, error } = await sb.rpc(nom, args || {});
+  if (error) throw error;
+  return data;
+}
+
+// ───────── Connexion par code e-mail ─────────
+const msg = document.getElementById('message-connexion');
+function dire(texte, ok) { msg.textContent = texte; msg.className = 'message ' + (ok ? 'ok' : 'erreur'); }
+document.getElementById('form-email').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const bouton = e.submitter; bouton.disabled = true; dire('');
+  const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+  bouton.disabled = false;
+  if (error) return dire(/rate|seconds/i.test(error.message) ? 'Patiente une minute avant de redemander un code.' : 'Envoi impossible : ' + error.message);
+  document.getElementById('email-envoye').textContent = email;
+  document.getElementById('form-email').hidden = true;
+  document.getElementById('form-code').hidden = false;
+  document.getElementById('code').focus();
+  dire('Regarde ta boîte mail (et les indésirables).', true);
+});
+document.getElementById('form-code').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email-envoye').textContent;
+  const token = document.getElementById('code').value.replace(/\D/g, '');
+  const bouton = e.submitter; bouton.disabled = true; dire('');
+  const { error } = await sb.auth.verifyOtp({ email, token, type: 'email' });
+  bouton.disabled = false;
+  if (error) return dire('Code incorrect ou expiré.');
+  demarrer();
+});
+document.getElementById('changer-email').addEventListener('click', () => {
+  document.getElementById('form-email').hidden = false;
+  document.getElementById('form-code').hidden = true;
+  dire('');
+});
+document.getElementById('deconnexion').addEventListener('click', async () => {
+  await sb.auth.signOut();
+  location.reload();
+});
+
+async function demarrer() {
+  const { data } = await sb.auth.getSession();
+  const session = data.session;
+  if (!session) {
+    document.getElementById('connexion').hidden = false;
+    document.getElementById('console').hidden = true;
+    return;
+  }
+  let admin = false;
+  try { admin = await rpc('est_admin'); } catch (e) { /* script pas lancé */ }
+  if (!admin) {
+    await sb.auth.signOut();
+    document.getElementById('connexion').hidden = false;
+    document.getElementById('form-email').hidden = false;
+    document.getElementById('form-code').hidden = true;
+    return dire('Cette adresse n’a pas accès à la console.');
+  }
+  document.getElementById('connexion').hidden = true;
+  document.getElementById('console').hidden = false;
+  document.getElementById('qui').textContent = 'Console · ' + (session.user.email || '');
+  aller(location.hash.slice(1) || 'ensemble');
+}
+
+// ───────── Navigation ─────────
+const PAGES = { ensemble: pageEnsemble, tikette: pageTikette, offres: pageOffres, avances: pageAvances, sources: pageSources, attente: pageAttente };
+document.querySelectorAll('.onglet').forEach((b) => b.addEventListener('click', () => aller(b.dataset.page, b.dataset.app)));
+function aller(nom, app) {
+  if (!PAGES[nom]) nom = 'ensemble';
+  document.querySelectorAll('.onglet').forEach((b) => b.classList.toggle('actif', b.dataset.page === nom && (nom !== 'attente' || b.dataset.app === app)));
+  if (nom !== 'attente') history.replaceState(null, '', '#' + nom);
+  afficher(h('div', { class: 'chargement' }, 'Chargement…'));
+  PAGES[nom](app).catch((e) => afficher(h('div', { class: 'panneau' }, erreur(e))));
+}
+
+// ───────── Vue d'ensemble ─────────
+async function pageEnsemble() {
+  const [t, avances] = await Promise.all([rpc('console_tikette', { p_periode: 'mois' }), rpc('console_avances').catch(() => [])]);
+  const total = avances.reduce((s, a) => s + Number(a.montant), 0);
+  const reste = avances.filter((a) => !a.rembourse_le).reduce((s, a) => s + Number(a.montant), 0);
+  const carteApp = (nom, couleur, enDirect, chiffres, page) =>
+    h('div', { class: 'app' },
+      h('div', { class: 'nom titre' }, h('span', { class: 'pastille-app', style: 'background:' + couleur }), nom),
+      h('span', { class: 'etiquette ' + (enDirect ? 'direct' : 'attente') }, enDirect ? 'Données en direct' : 'À brancher'),
+      chiffres ? h('div', { class: 'chiffres' }, chiffres.map(([v, l]) => h('div', { class: 'chiffre' }, h('b', {}, v), h('span', {}, l)))) : h('div', { class: 'doux', style: 'font-size:13px' }, 'Ses chiffres remonteront ici quand elle sera reliée à la console.'),
+      page ? h('button', { class: 'btn-contour', style: 'align-self:flex-start', onclick: () => aller(page) }, 'Voir le détail') : '');
+  afficher(
+    entete('Vue d’ensemble', 'Toutes nos applis · ce mois-ci'),
+    h('div', { class: 'kpis' },
+      kpi('Comptes Tikette', nombre(t.comptes.total), '+' + nombre(t.comptes.nouveaux) + ' ce mois'),
+      kpi('Abonnés Or', nombre(t.or.payants), nombre(t.or.offerts) + ' Or offert en cours', 'var(--jaune)'),
+      kpi('Revenus du mois', euros(0), 'Paiement branché avec la vraie version'),
+      kpi('Avances à rembourser', euros(reste), 'sur ' + euros(total) + ' avancés', 'var(--rose)')),
+    h('div', { class: 'apps' },
+      carteApp('Tikette', '#FF6B9A', true, [
+        [nombre(t.dates.faits), 'dates faits ce mois'],
+        [t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : '—', 'note moyenne'],
+        [nombre(t.comptes.actifs), 'comptes actifs ce mois'],
+        [nombre(t.clics_total), 'clics vers les partenaires'],
+      ], 'tikette'),
+      carteApp('Shivr', '#3FA9F5', false),
+      carteApp('Panier Fantôme', '#8A6BD1', false),
+      carteApp('robi', '#2EC4A6', false)));
+}
+
+function pageAttente(app) {
+  afficher(entete(app || 'Appli', 'Pas encore reliée à la console'),
+    h('div', { class: 'panneau' },
+      h('p', { style: 'margin:0 0 8px;font-size:14px' }, 'Les chiffres de ' + (app || 'cette appli') + ' remonteront ici automatiquement une fois reliée : il faudra lancer un petit script SQL dans son projet Supabase (comptes du studio + fonction des chiffres), comme pour Tikette.'),
+      h('p', { class: 'note-bas', style: 'margin:0' }, 'Règle du studio : chaque nouvelle appli a son espace admin (admin@ et contact@eggnotfound.fr) et apparaît dans cette console.')));
+  return Promise.resolve();
+}
+
+// ───────── Tikette ─────────
+let periode = 'semaine';
+async function pageTikette() {
+  const t = await rpc('console_tikette', { p_periode: periode });
+  const mots = { semaine: 'cette semaine', mois: 'ce mois-ci', annee: 'cette année' };
+  const choix = h('div', { class: 'periodes' }, [['semaine', 'Semaine'], ['mois', 'Mois'], ['annee', 'Année']].map(([v, l]) =>
+    h('button', { class: 'periode' + (periode === v ? ' actif' : ''), onclick: () => { periode = v; aller('tikette'); } }, l)));
+  const evoComptes = evolution(t.comptes.nouveaux, t.comptes.avant);
+  const evoDates = evolution(t.dates.faits, t.dates.faits_avant);
+  const max = Math.max(1, ...t.serie.map((s) => Math.max(s.faits, s.gardes)));
+  const etiquette = (de) => {
+    const d = new Date(de);
+    if (periode === 'annee') return String(d.getFullYear());
+    if (periode === 'mois') return d.toLocaleDateString('fr-FR', { month: 'short' });
+    return d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+  };
+  const barres = h('div', { class: 'barres' }, t.serie.map((s) =>
+    h('div', { class: 'barre', title: s.faits + ' dates faits, ' + s.gardes + ' gardés' },
+      h('span', { class: 'n' }, s.faits || ''),
+      h('div', { class: 'b', style: 'height:' + Math.round((s.faits / max) * 100) + '%' }),
+      h('span', { class: 'l' }, etiquette(s.de)))));
+  const lignes = (items, vide) => (items.length ? items : [h('div', { class: 'vide' }, vide)]);
+  const themes = Object.entries(t.themes).sort((a, b) => b[1] - a[1]);
+  const clics = Object.entries(t.clics).sort((a, b) => b[1] - a[1]);
+  const notes = t.notes.repartition || {};
+  afficher(
+    entete('Tikette', 'Chiffres en direct · ' + mots[periode], choix),
+    h('div', { class: 'kpis' },
+      kpi('Nouveaux comptes', nombre(t.comptes.nouveaux), evoComptes.t + ' · ' + nombre(t.comptes.total) + ' en tout', null, evoComptes.c),
+      kpi('Abonnés Or', nombre(t.or.payants), nombre(t.or.offerts) + ' Or offert · ' + nombre(t.or.actifs) + ' Or en tout', 'var(--jaune)'),
+      kpi('Dates faits', nombre(t.dates.faits), evoDates.t + ' · ' + nombre(t.dates.gardes) + ' gardés', null, evoDates.c),
+      kpi('Note moyenne', t.notes.periode ? String(t.notes.periode).replace('.', ',') + ' ★' : '—', 'depuis le début : ' + (t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') : '—') + ' sur ' + nombre(t.notes.nombre) + ' notes', 'var(--jaune)'),
+      kpi('Clics partenaires', nombre(Object.values(t.clics).reduce((a, b) => a + b, 0)), nombre(t.clics_total) + ' depuis le début')),
+    h('div', { class: 'grille' },
+      h('div', { class: 'panneau' },
+        h('h2', {}, 'Dates faits par ' + (periode === 'semaine' ? 'semaine' : periode === 'mois' ? 'mois' : 'année')), barres,
+        h('h2', { style: 'margin-top:18px' }, 'Les sorties les mieux notées'),
+        lignes(t.top_sorties.map((s) => h('div', { class: 'liste-ligne' }, h('span', {}, s.titre), h('span', { style: 'color:var(--jaune);font-weight:800;white-space:nowrap' }, '★ ' + String(s.moyenne).replace('.', ',') + ' · ' + s.nombre))), 'Pas encore de date noté.'),
+        h('h2', { style: 'margin-top:18px' }, 'Les lieux les plus adorés'),
+        lignes(t.top_lieux.map((l) => h('div', { class: 'liste-ligne' }, h('span', {}, l.nom), h('span', { class: 'doux', style: 'white-space:nowrap' }, l.adore + ' « Adoré » sur ' + l.nombre))), 'Pas encore d’avis envoyé.')),
+      h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
+        h('div', { class: 'panneau' }, h('h2', {}, 'Ambiances choisies (carnet)'),
+          lignes(themes.map(([k, v]) => h('div', { class: 'liste-ligne' }, h('span', {}, AMBIANCES[k] || k), h('b', {}, nombre(v)))), 'Rien pour l’instant.')),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Notes données'),
+          [5, 4, 3, 2, 1].map((n) => h('div', { class: 'liste-ligne' }, h('span', { style: 'color:var(--jaune)' }, '★'.repeat(n)), h('b', {}, nombre(notes[n] || 0))))),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Ce qui sert · ' + mots[periode]),
+          [['Programmes par l’IA', t.usages.ia], ['Tickets mystère', t.usages.mystere], ['Votes entre potes', t.usages.votes], ['Surprises', t.usages.surprises], ['Parrainages', t.usages.parrainages]]
+            .map(([l, v]) => h('div', { class: 'liste-ligne' }, h('span', {}, l), h('b', {}, nombre(v))))),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Clics vers les partenaires · ' + mots[periode]),
+          lignes(clics.map(([k, v]) => h('div', { class: 'liste-ligne' }, h('span', {}, PLATEFORMES[k] || k), h('b', {}, nombre(v)))), 'Aucun clic pour l’instant.'),
+          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, 'Les commissions elles-mêmes sont dans les espaces partenaires (GetYourGuide, Viator…).')))));
+}
+
+// ───────── Offres et Or ─────────
+async function pageOffres() {
+  const [offres, offerts, parr] = await Promise.all([rpc('console_offres'), rpc('console_or_offerts'), rpc('console_parrainages')]);
+  const maintenant = Date.now();
+  const etatOffre = (o) => (!o.actif ? 'En pause' : new Date(o.fin) < maintenant ? 'Terminée' : new Date(o.debut) > maintenant ? 'Programmée' : 'En cours');
+
+  const formOffre = h('form', { class: 'bloc' },
+    h('label', { class: 'lab' }, 'Nom de l’offre (vu dans l’appli)', h('input', { class: 'champ', name: 'titre', maxlength: 60, required: true, placeholder: 'Offre Saint-Valentin' })),
+    h('label', { class: 'lab' }, 'Texte (facultatif)', h('input', { class: 'champ', name: 'texte', maxlength: 200, placeholder: '1re année à 9,99 € pour les amoureux' })),
+    h('div', { class: 'ligne-form' },
+      h('label', { class: 'lab' }, 'Prix de la 1re année (€, facultatif)', h('input', { class: 'champ', name: 'prix', inputmode: 'decimal', placeholder: '9,99' })),
+      h('label', { class: 'lab' }, 'Début', h('input', { class: 'champ', name: 'debut', type: 'date', value: aujourdhui() }))),
+    h('label', { class: 'lab' }, 'Fin', h('input', { class: 'champ', name: 'fin', type: 'date', required: true })),
+    h('div', { class: 'boutons' }, h('button', { class: 'btn', type: 'submit' }, 'Activer l’offre')),
+    h('div', { class: 'message', id: 'msg-offre' }));
+  formOffre.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(formOffre);
+    const prix = String(f.get('prix') || '').replace(',', '.').trim();
+    try {
+      await rpc('console_offre_enregistrer', { p: {
+        titre: f.get('titre'), texte: f.get('texte'), prix_an: prix || null,
+        debut: f.get('debut') ? new Date(f.get('debut') + 'T00:00:00').toISOString() : null, fin: new Date(f.get('fin') + 'T23:59:00').toISOString(), actif: true } });
+      aller('offres');
+    } catch (err) { document.getElementById('msg-offre').textContent = erreur(err); document.getElementById('msg-offre').className = 'message erreur'; }
+  });
+
+  const formOr = h('form', { class: 'bloc' },
+    h('label', { class: 'lab' }, 'E-mail ou numéro du compte', h('input', { class: 'champ', name: 'compte', required: true, placeholder: 'pote@mail.fr ou 06 12 34 56 78' })),
+    h('div', { class: 'boutons' },
+      [[30, '1 mois'], [90, '3 mois'], [365, '1 an'], [0, 'Retirer']].map(([j, l]) => h('button', { class: j ? 'btn' : 'btn-contour', type: 'submit', value: j }, l))),
+    h('div', { class: 'message', id: 'msg-or' }));
+  formOr.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const m = document.getElementById('msg-or');
+    try {
+      const r = await rpc('console_offrir_or', { p_compte: new FormData(formOr).get('compte'), p_jours: Number(e.submitter.value) });
+      if (!r.ok) { m.className = 'message erreur'; m.textContent = r.raison === 'inconnu' ? 'Aucun compte Tikette avec cette adresse ou ce numéro.' : 'Durée refusée.'; return; }
+      m.className = 'message ok'; m.textContent = r.jusquau ? 'C’est fait : Or jusqu’au ' + dateFr(r.jusquau) + '.' : 'Or offert retiré.';
+      setTimeout(() => aller('offres'), 1200);
+    } catch (err) { m.className = 'message erreur'; m.textContent = erreur(err); }
+  });
+
+  afficher(
+    entete('Offres et Or', 'Ce que vous activez ici apparaît tout de suite dans l’appli'),
+    h('div', { class: 'grille' },
+      h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
+        h('div', { class: 'panneau' }, h('h2', {}, 'Offres du moment'),
+          offres.length ? offres.map((o) => h('div', { class: 'offre' },
+            h('div', { class: 'txt' }, h('b', {}, o.titre), h('span', {}, [o.texte, o.prix_an != null ? '1re année à ' + euros(o.prix_an) : '', 'du ' + dateFr(o.debut) + ' au ' + dateFr(o.fin)].filter(Boolean).join(' · '))),
+            h('span', { class: 'etiquette ' + (etatOffre(o) === 'En cours' ? 'direct' : 'attente') }, etatOffre(o)),
+            h('button', { class: 'btn-contour mini', onclick: async () => { await rpc('console_offre_enregistrer', { p: { ...o, actif: !o.actif } }); aller('offres'); } }, o.actif ? 'Pause' : 'Reprendre'),
+            h('button', { class: 'btn-lien', onclick: async () => { if (confirm('Supprimer l’offre « ' + o.titre + ' » ?')) { await rpc('console_offre_supprimer', { p_id: o.id }); aller('offres'); } } }, 'Supprimer')))
+            : h('div', { class: 'vide' }, 'Aucune offre pour l’instant.')),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Nouvelle offre'), formOffre,
+          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, 'Le prix réduit devra aussi être créé dans l’App Store et Google Play (offre promotionnelle) quand le paiement sera branché.'))),
+      h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
+        h('div', { class: 'panneau' }, h('h2', {}, 'Offrir Tikette Or'), formOr,
+          h('h2', { style: 'margin-top:16px' }, 'Or offert en ce moment'),
+          offerts.length ? offerts.map((o) => h('div', { class: 'liste-ligne' }, h('span', {}, (o.prenom ? o.prenom + ' · ' : '') + o.compte), h('span', { class: 'doux', style: 'white-space:nowrap' }, 'jusqu’au ' + dateFr(o.jusquau))))
+            : h('div', { class: 'vide' }, 'Personne (hors comptes du studio, qui ont Or à vie).')),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Parrainage'),
+          h('div', { class: 'liste-ligne' }, h('span', {}, 'Filleuls en tout'), h('b', {}, nombre(parr.total))),
+          h('div', { class: 'liste-ligne' }, h('span', {}, 'Codes créés'), h('b', {}, nombre(parr.codes))),
+          parr.meilleurs.map((p) => h('div', { class: 'liste-ligne' }, h('span', {}, (p.prenom || 'Sans prénom') + ' · ' + p.code), h('b', {}, p.filleuls + ' filleul' + (p.filleuls > 1 ? 's' : '')))),
+          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, '1 mois d’Or offert à chacun ; compte de moins de 14 jours ; 12 filleuls par an au plus.')))));
+}
+
+// ───────── Avances de frais ─────────
+let justificatif = null; // chemin du fichier envoyé pour la nouvelle avance
+async function pageAvances() {
+  const avances = await rpc('console_avances');
+  justificatif = null;
+  const somme = (l) => l.reduce((s, a) => s + Number(a.montant), 0);
+  const greg = avances.filter((a) => a.qui === 'Greg');
+  const yvan = avances.filter((a) => a.qui === 'Yvan');
+  const rembourse = avances.filter((a) => a.rembourse_le);
+  const premiere = avances.length ? avances[avances.length - 1].le : null;
+
+  const etat = h('div', { class: 'message' });
+  const champ = (nom, attrs) => h('input', { class: 'champ', name: nom, ...attrs });
+  const form = h('form', { class: 'bloc' },
+    h('div', { class: 'depot', id: 'depot' },
+      h('span', { class: 'gros' }, '⇪'), h('b', { id: 'depot-titre' }, 'Photo ou fichier de la facture'),
+      h('span', { style: 'font-size:11px' }, 'L’IA lit le montant, la date et le fournisseur'),
+      h('input', { type: 'file', accept: 'image/*,application/pdf', id: 'fichier' })),
+    etat,
+    h('div', { class: 'ligne-form' },
+      h('label', { class: 'lab' }, 'Qui a payé', h('select', { class: 'champ', name: 'qui' }, h('option', {}, 'Greg'), h('option', {}, 'Yvan'))),
+      h('label', { class: 'lab' }, 'Pour quelle appli', h('select', { class: 'champ', name: 'appli' }, APPLIS.map((a) => h('option', {}, a))))),
+    h('label', { class: 'lab' }, 'Quoi', champ('quoi', { required: true, maxlength: 120, placeholder: 'Compte Apple Developer' })),
+    h('label', { class: 'lab' }, 'Fournisseur', champ('fournisseur', { maxlength: 80, placeholder: 'Apple' })),
+    h('div', { class: 'ligne-form' },
+      h('label', { class: 'lab' }, 'Montant TTC (€)', champ('montant', { required: true, inputmode: 'decimal', placeholder: '99,00' })),
+      h('label', { class: 'lab' }, 'Date', champ('le', { required: true, type: 'date', value: aujourdhui() }))),
+    h('button', { class: 'btn', type: 'submit' }, 'Enregistrer'));
+
+  form.querySelector('#fichier').addEventListener('change', (e) => e.target.files[0] && envoyerJustificatif(e.target.files[0], form, etat));
+  const depot = form.querySelector('#depot');
+  depot.addEventListener('dragover', () => depot.classList.add('survol'));
+  depot.addEventListener('dragleave', () => depot.classList.remove('survol'));
+  depot.addEventListener('drop', () => depot.classList.remove('survol'));
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    const montant = Number(String(f.get('montant')).replace(/\s/g, '').replace(',', '.'));
+    if (!(montant > 0)) { etat.className = 'message erreur'; etat.textContent = 'Montant à vérifier.'; return; }
+    try {
+      await rpc('console_avance_enregistrer', { p: { qui: f.get('qui'), appli: f.get('appli'), quoi: f.get('quoi'), fournisseur: f.get('fournisseur'), montant, le: f.get('le'), justificatif } });
+      aller('avances');
+    } catch (err) { etat.className = 'message erreur'; etat.textContent = erreur(err); }
+  });
+
+  const tableau = avances.length
+    ? h('div', { class: 'tableau' }, h('table', {},
+        h('thead', {}, h('tr', {}, ['DATE', 'QUI', 'QUOI', 'APPLI'].map((t) => h('th', {}, t)), h('th', { class: 'montant' }, 'MONTANT'), h('th', {}, 'PREUVE'), h('th', {}, 'SAS'), h('th', {}, ''))),
+        h('tbody', {}, avances.map((a) => h('tr', {},
+          h('td', { class: 'doux', style: 'white-space:nowrap' }, dateFr(a.le)),
+          h('td', { class: a.qui === 'Greg' ? 'greg' : 'yvan' }, a.qui),
+          h('td', {}, a.quoi, a.fournisseur ? h('div', { class: 'doux', style: 'font-size:11.5px' }, a.fournisseur) : ''),
+          h('td', { class: 'doux' }, a.appli),
+          h('td', { class: 'montant' }, euros(a.montant)),
+          h('td', {}, a.justificatif ? h('button', { class: 'btn-contour mini', onclick: () => voirJustificatif(a.justificatif) }, 'Voir') : h('span', { class: 'doux', style: 'font-size:12px' }, 'aucune')),
+          h('td', {}, a.rembourse_le
+            ? h('button', { class: 'btn-lien rembourse', title: 'Annuler', onclick: async () => { await rpc('console_avance_rembourser', { p_id: a.id, p_rembourse: false }); aller('avances'); } }, '✓ ' + dateFr(a.rembourse_le))
+            : h('button', { class: 'btn-contour mini', onclick: async () => { if (confirm('La SAS a remboursé ' + euros(a.montant) + ' à ' + a.qui + ' ?')) { await rpc('console_avance_rembourser', { p_id: a.id, p_rembourse: true }); aller('avances'); } } }, 'À rembourser')),
+          h('td', {}, h('button', { class: 'btn-lien', onclick: async () => {
+            if (!confirm('Supprimer « ' + a.quoi + ' » (' + euros(a.montant) + ') ?')) return;
+            const fichier = await rpc('console_avance_supprimer', { p_id: a.id });
+            if (fichier) await sb.storage.from('justificatifs').remove([fichier]);
+            aller('avances');
+          } }, 'Supprimer')))))))
+    : h('div', { class: 'vide' }, 'Aucune avance pour l’instant. Ajoute la première à droite.');
+
+  afficher(
+    entete('Avances de frais', 'Ce que chacun avance en attendant la SAS, avec la preuve', h('button', { class: 'btn-contour', onclick: () => exporter(avances) }, 'Exporter pour la compta (CSV)')),
+    h('div', { class: 'kpis' },
+      kpi('Total avancé', euros(somme(avances)), premiere ? 'depuis le ' + dateFr(premiere) : ''),
+      kpi('Greg', euros(somme(greg)), greg.length + ' avance' + (greg.length > 1 ? 's' : ''), 'var(--rouge)'),
+      kpi('Yvan', euros(somme(yvan)), yvan.length + ' avance' + (yvan.length > 1 ? 's' : ''), 'var(--bleu)'),
+      kpi('Reste à rembourser', euros(somme(avances) - somme(rembourse)), rembourse.length ? euros(somme(rembourse)) + ' déjà remboursés' : 'SAS pas encore créée')),
+    h('div', { class: 'grille' },
+      h('div', { class: 'panneau' }, tableau),
+      h('div', { class: 'panneau' }, h('h2', {}, 'Nouvelle avance'), form)));
+}
+
+// Photo réduite (1600 px, JPEG) avant l'envoi ; les PDF partent tels quels (10 Mo au plus).
+async function preparerFichier(fichier) {
+  if (fichier.type === 'application/pdf') return { blob: fichier, ext: 'pdf', type: 'application/pdf' };
+  const image = await createImageBitmap(fichier).catch(() => null);
+  if (!image) throw new Error('Ce fichier n’est pas une image lisible (essaie une photo JPEG ou un PDF).');
+  const echelle = Math.min(1, 1600 / Math.max(image.width, image.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(image.width * echelle); c.height = Math.round(image.height * echelle);
+  c.getContext('2d').drawImage(image, 0, 0, c.width, c.height);
+  const blob = await new Promise((ok) => c.toBlob(ok, 'image/jpeg', 0.85));
+  return { blob, ext: 'jpg', type: 'image/jpeg' };
+}
+
+async function envoyerJustificatif(fichier, form, etat) {
+  etat.className = 'message'; etat.textContent = 'Envoi de la preuve…';
+  try {
+    if (fichier.size > 10 * 1024 * 1024 && fichier.type === 'application/pdf') throw new Error('PDF trop lourd (10 Mo au plus).');
+    const { blob, ext, type } = await preparerFichier(fichier);
+    const { data: s } = await sb.auth.getSession();
+    const chemin = s.session.user.id + '/' + crypto.randomUUID() + '.' + ext;
+    const { error } = await sb.storage.from('justificatifs').upload(chemin, blob, { contentType: type });
+    if (error) throw error;
+    justificatif = chemin;
+    document.getElementById('depot-titre').textContent = '✓ ' + fichier.name;
+    etat.textContent = 'Preuve enregistrée. L’IA lit la facture…';
+    const { data, error: e2 } = await sb.functions.invoke('lire-justificatif', { body: { chemin } });
+    if (e2 || !data) { etat.className = 'message'; etat.textContent = 'Preuve enregistrée. Lecture automatique indisponible : remplis les cases.'; return; }
+    if (data.quoi && !form.quoi.value) form.quoi.value = data.quoi;
+    if (data.fournisseur && !form.fournisseur.value) form.fournisseur.value = data.fournisseur;
+    if (data.montant) form.montant.value = String(data.montant).replace('.', ',');
+    if (data.date) form.le.value = data.date;
+    etat.className = 'message ok'; etat.textContent = 'Lu par l’IA : vérifie les cases puis Enregistrer.';
+  } catch (err) {
+    etat.className = 'message erreur'; etat.textContent = erreur(err);
+  }
+}
+
+async function voirJustificatif(chemin) {
+  const fenetre = window.open('', '_blank');
+  const { data, error } = await sb.storage.from('justificatifs').createSignedUrl(chemin, 300);
+  if (error) { fenetre && fenetre.close(); return alert(erreur(error)); }
+  if (fenetre) fenetre.location = data.signedUrl; else location.href = data.signedUrl;
+}
+
+function exporter(avances) {
+  const cellule = (v) => '"' + String(v ?? '').replace(/"/g, '""') + '"';
+  const lignes = [['Date', 'Qui', 'Quoi', 'Fournisseur', 'Appli', 'Montant TTC', 'Remboursé le', 'Preuve'].map(cellule).join(';')]
+    .concat(avances.map((a) => [dateFr(a.le), a.qui, a.quoi, a.fournisseur, a.appli, String(a.montant).replace('.', ','), dateFr(a.rembourse_le), a.justificatif ? 'oui' : 'non'].map(cellule).join(';')));
+  const blob = new Blob(['﻿' + lignes.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+  const a = h('a', { href: URL.createObjectURL(blob), download: 'avances-egg-not-found-' + aujourdhui() + '.csv' });
+  document.body.append(a); a.click(); a.remove();
+}
+
+// ───────── Sources ─────────
+function pageSources() {
+  const ligne = (titre, texte) => h('div', { class: 'liste-ligne', style: 'flex-direction:column;gap:2px' }, h('b', {}, titre), h('span', { class: 'doux' }, texte));
+  afficher(entete('Sources des données', 'D’où vient chaque chiffre (rien n’est tapé à la main, sauf les avances)'),
+    h('div', { class: 'panneau' },
+      ligne('Comptes', 'Les comptes Tikette (connexion par SMS ou e-mail), dans Supabase.'),
+      ligne('Dates faits, gardés, notes, ambiances', 'Le carnet sauvegardé dans le compte de chaque utilisateur connecté (sorties commencées ou terminées). Les sorties des personnes sans compte restent sur leur téléphone et ne remontent pas.'),
+      ligne('Lieux adorés', 'Les avis anonymes envoyés à la fin d’un date (Bof / Bien / Adoré).'),
+      ligne('Abonnés Or', 'La table des abonnements. Payants = App Store et Google Play (avec la vraie version et RevenueCat) ; offerts = depuis cette console ou le parrainage.'),
+      ligne('Clics partenaires', 'Chaque toucher sur Viator, GetYourGuide, TheFork, Funbooker ou Ticketmaster dans l’appli (compteur anonyme par jour, depuis la v0.31).'),
+      ligne('Revenus', 'Abonnements : RevenueCat, branché avec la vraie version (gratuit jusqu’à 2 500 $ de revenus par mois, puis 1 %). Commissions : dans les espaces partenaires, pas encore relié.'),
+      ligne('Avances de frais', 'Saisies ici avec leur photo ou PDF, rangés dans un espace privé lisible seulement par le studio. La lecture par l’IA coûte moins d’un centime par facture.')));
+  return Promise.resolve();
+}
+
+sb.auth.onAuthStateChange((e) => { if (e === 'SIGNED_OUT') { document.getElementById('console').hidden = true; } });
+demarrer();
+</script>
+</body>
+</html>
