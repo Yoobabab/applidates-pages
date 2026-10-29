@@ -326,6 +326,8 @@ function kpi(titre, valeur, sous, couleur, classeSous) {
   return h('div', { class: 'kpi' }, h('div', { class: 't' }, titre), h('div', { class: 'v', style: couleur ? 'color:' + couleur : '' }, valeur), h('div', { class: 's ' + (classeSous || '') }, sous || ''));
 }
 const page = document.getElementById('page');
+let generation = 0;
+function afficherPour(g, ...enfants) { if (g === generation) afficher(...enfants); }
 function afficher(...enfants) { page.replaceChildren(...enfants.flat(Infinity).filter((e) => e != null && e !== false && e !== '')); window.scrollTo(0, 0); }
 function entete(titre, sousTitre, droite) {
   return h('div', { class: 'entete' }, h('div', {}, h('h1', { class: 'titre' }, titre), h('p', {}, sousTitre)), droite || '');
@@ -455,13 +457,17 @@ function dessinerNav() {
     onglet('Offres et abonnements', 'offres'),
     h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
 }
-function aller(nom, app) {
+function aller(nom, app, depuisHistorique) {
   if (!PAGES[nom]) nom = 'ensemble';
+  const nouvelle = courant.nom !== nom || (courant.app || null) !== (app || null);
   courant = { nom, app: app || null };
-  history.replaceState(null, '', '#' + nom + (app ? '/' + app : ''));
+  generation++;
+  const adresse = '#' + nom + (app ? '/' + app : '');
+  if (!depuisHistorique) (nouvelle && location.hash ? history.pushState : history.replaceState).call(history, null, '', adresse);
   dessinerNav();
   afficher(h('div', { class: 'chargement' }, 'Chargement…'));
-  PAGES[nom](app).catch((e) => afficher(h('div', { class: 'panneau' }, erreur(e))));
+  const g = generation;
+  PAGES[nom](app).catch((e) => afficherPour(g, h('div', { class: 'panneau' }, erreur(e))));
 }
 async function chargerCoches() {
   try { const r = await rpc('console_a_faire'); cochesCache = r.coches || {}; tachesCache = r.taches || []; return r; }
@@ -470,9 +476,10 @@ async function chargerCoches() {
 
 // ───────── Vue d'ensemble ─────────
 async function pageEnsemble() {
+  const g = generation;
   const [t, avances, couts, faire, robots] = await Promise.all([
     rpc('console_tikette', { p_periode: 'mois' }).catch(() => null), rpc('console_avances').catch(() => []),
-    rpc('console_couts').catch(() => []), chargerCoches(), robotsGithub()]);
+    rpc('console_couts').catch(() => []), chargerCoches(), Promise.race([robotsGithub(), new Promise((ok) => setTimeout(() => ok(null), 1200))])]);
   dessinerNav();
   const reste = avances.filter((a) => !a.rembourse_le).reduce((s, a) => s + Number(a.montant), 0);
   const parMois = coutMensuel(couts);
@@ -487,7 +494,7 @@ async function pageEnsemble() {
       .map((c) => ['var(--rouge)', `${c.nom} à renouveler le ${dateFr(c.echeance)} (J-${joursAvant(c.echeance)})`, () => aller('couts')]),
     ...PARTENAIRES.filter((p) => p.etat === 'attente' && joursDepuis(p.depuis) >= 10)
       .map((p) => ['var(--jaune)', `${p.nom} : pas de réponse depuis ${joursDepuis(p.depuis)} jours`, () => aller('partenaires')]),
-    ...robots.filter((r) => !r.ok && !r.encours).map((r) => ['var(--rouge)', `Robot « ${r.nom} » en échec (${r.quand})`, null]),
+    ...(robots || []).filter((r) => !r.ok && !r.encours).map((r) => ['var(--rouge)', `Robot « ${r.nom} » en échec (${r.quand})`, null]),
     ...couts.filter((c) => c.montant == null).slice(0, 1).map(() => ['var(--doux)', `${couts.filter((c) => c.montant == null).length} coûts sans montant à compléter`, () => aller('couts')]),
   ];
 
@@ -498,13 +505,13 @@ async function pageEnsemble() {
       : (a.version ? 'v' + a.version + ' · ' : '') + (a.resume || '')));
   const confirmees = CATALOGUE.filter(estConfirmee);
 
-  afficher(
+  afficherPour(g, 
     entete('Vue d’ensemble', 'Le studio en un coup d’œil · ' + new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })),
     h('div', { class: 'kpis' },
       kpi('Revenus du mois', euros(ab.payants * 2.54), ab.payants ? `${ab.payants} abonnés payants (estimation)` : 'les paiements arrivent avec la vraie version'),
       kpi('Coûts du mois', euros(parMois), 'abonnements et domaines ramenés au mois', 'var(--rouge)'),
       kpi('Abonnés', nombre(ab.payants), `${nombre(ab.offerts)} abonnement${ab.offerts > 1 ? 's' : ''} offert${ab.offerts > 1 ? 's' : ''} · comptes du studio non comptés`, 'var(--jaune)'),
-      kpi('Avances à rembourser', euros(reste), avances.length ? avances.length + ' avance' + (avances.length > 1 ? 's' : '') + ' en attente de la SAS' : 'aucune avance')),
+      kpi('Avances à rembourser', euros(reste), (() => { const n = avances.filter((a) => !a.rembourse_le).length; return n ? n + ' avance' + (n > 1 ? 's' : '') + ' en attente de la SAS' : 'aucune avance en attente'; })())),
     h('div', { class: 'grille' },
       h('div', { class: 'panneau' },
         h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px' }, h('h2', { style: 'margin:0' }, `À faire maintenant (${demandes.length})`), h('button', { class: 'btn-contour mini', onclick: () => aller('afaire') }, 'Tout voir')),
@@ -515,8 +522,7 @@ async function pageEnsemble() {
       h('div', { class: 'panneau' }, h('h2', {}, 'À surveiller'),
         alertes.length ? alertes.map(([c, texte, f]) => h('div', { class: 'alerte-ligne', style: f ? 'cursor:pointer' : '', onclick: f || null }, h('span', { class: 'point', style: 'background:' + c }), h('span', {}, texte)))
           : h('div', { class: 'vide' }, 'Rien d’urgent : échéances, partenaires et robots vont bien.'),
-        h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', { class: 'doux' }, 'Robots'),
-          h('span', {}, robots.length ? `${robots.filter((r) => r.ok).length} / ${robots.length} OK` : 'GitHub ne répond pas')))),
+        ligneRobots(robots, g))),
     h('div', { class: 'titre-section' }, `NOS APPLIS ET JEUX (${confirmees.length})`),
     h('div', { class: 'apps' }, confirmees.map(carteApp)),
     h('div', { class: 'panneau' }, h('h2', {}, 'Liens rapides'), blocLiens()));
@@ -526,6 +532,17 @@ function etatPartenaire(p) {
   if (p.etat === 'accepte') return h('span', { class: 'etiquette direct' }, 'accepté');
   if (p.etat === 'refuse') return h('span', { class: 'etiquette alerte' }, 'refusé');
   return h('span', { class: 'etiquette ' + (j >= 10 ? 'alerte' : 'attente') }, `en attente · ${j} j`);
+}
+function ligneRobots(robots, g) {
+  const valeur = h('span', {}, '…');
+  const ligne = h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', { class: 'doux' }, 'Robots'), valeur);
+  const remplir = (r) => {
+    valeur.textContent = r && r.length ? `${r.filter((x) => x.ok).length} / ${r.length} OK` : 'GitHub ne répond pas';
+    for (const x of (r || []).filter((x) => !x.ok && !x.encours)) ligne.before(h('div', { class: 'alerte-ligne' }, h('span', { class: 'point', style: 'background:var(--rouge)' }), h('span', {}, `Robot « ${x.nom} » en échec (${x.quand})`)));
+  };
+  if (robots) remplir(robots);
+  else robotsGithub().then((r) => g === generation && remplir(r));
+  return ligne;
 }
 // Derniers passages des robots (dépôts publics, API GitHub sans connexion).
 async function robotsGithub() {
@@ -552,12 +569,13 @@ async function robotsGithub() {
 
 // ───────── Une appli (hors Tikette) ─────────
 async function pageAppli(id) {
+  const g = generation;
   const a = CATALOGUE.find((x) => x.id === id);
   if (!a) return pageEnsemble();
   const faire = await chargerCoches();
   const elements = A_FAIRE.elements.filter((e) => e.appli === id);
   const taches = (faire.taches || []).filter((x) => x.appli === id);
-  afficher(
+  afficherPour(g, 
     h('div', { class: 'entete' }, h('div', { style: 'display:flex;gap:14px;align-items:center' }, iconeApp(a, 52), h('div', {}, h('h1', { class: 'titre' }, a.nom), h('p', { style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap' }, badgeEtape(a), (a.type === 'jeu' ? 'Jeu' : 'Appli') + (a.version ? ' · version ' + a.version : '') + ' · ' + (a.resume || ''))))),
     h('div', { class: 'grille' },
       h('div', { class: 'panneau' }, h('h2', {}, 'À faire et recette'),
@@ -618,6 +636,7 @@ function blocRecette(items, coches, recharger, options = {}) {
   });
 }
 async function pageAFaire() {
+  const g = generation;
   const faire = await chargerCoches();
   dessinerNav();
   const garder = (e) => filtreAppli === 'toutes' || e.appli === filtreAppli;
@@ -648,7 +667,7 @@ async function pageAFaire() {
       liste.length ? liste.map((e) => ligneCoche(e, faire.coches, recharger, { sansQui: true })) : h('div', { class: 'vide' }, 'Rien pour l’instant.'));
   };
 
-  afficher(
+  afficherPour(g, 
     entete('À faire', 'Ce que Claude vous demande arrive ici tout seul · liste mise à jour le ' + dateFr(A_FAIRE.maj || aujourdhui()),
       h('div', { class: 'onglets-page' },
         h('button', { class: ongletAFaire === 'taches' ? 'actif' : '', onclick: () => { ongletAFaire = 'taches'; aller('afaire'); } }, `À faire (${restantes.length})`),
@@ -673,6 +692,7 @@ function coutMensuel(couts) {
   }, 0);
 }
 async function pageCouts() {
+  const g = generation;
   const couts = await rpc('console_couts');
   let edition = null;
   const formulaire = () => {
@@ -710,7 +730,7 @@ async function pageCouts() {
   };
   const parAn = couts.reduce((s, c) => (c.montant == null || c.rythme === 'unique' ? s : s + Number(c.montant) * (c.devise === 'USD' ? USD : 1) * (c.rythme === 'mois' ? 12 : 1)), 0);
   const alertes = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15);
-  const dessiner = () => afficher(
+  const dessiner = () => afficherPour(g, 
     entete('Coûts et échéances', 'Tout ce que le studio paie, et quand'),
     h('div', { class: 'kpis' },
       kpi('Par mois', euros(coutMensuel(couts)), 'abonnements ramenés au mois', 'var(--rouge)'),
@@ -725,7 +745,7 @@ async function pageCouts() {
           h('td', { class: 'doux' }, nomAppli(c.appli)),
           h('td', { class: 'montant' }, prix(c)),
           h('td', {}, echeance(c)),
-          h('td', { style: 'white-space:nowrap' }, h('button', { class: 'btn-contour mini', onclick: () => { edition = c; dessiner(); } }, 'Modifier'), ' ',
+          h('td', { style: 'white-space:nowrap' }, h('button', { class: 'btn-contour mini', onclick: () => { edition = c; dessiner(); requestAnimationFrame(() => document.querySelector('main form')?.scrollIntoView({ behavior: 'smooth', block: 'start' })); } }, 'Modifier'), ' ',
             h('button', { class: 'btn-lien', onclick: async () => { if (confirm('Supprimer « ' + c.nom + ' » ?')) { await rpc('console_cout_supprimer', { p_id: c.id }); aller('couts'); } } }, 'Retirer'))))))),
       h('div', { class: 'panneau' }, h('h2', {}, edition ? 'Modifier' : 'Ajouter un coût'), formulaire(),
         h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, 'Les dollars sont convertis à titre indicatif (1 $ ≈ 0,92 €).'))));
@@ -734,7 +754,8 @@ async function pageCouts() {
 
 // ───────── Partenaires ─────────
 async function pagePartenaires() {
-  afficher(entete('Partenaires', 'Où en sont les affiliations · tenu à jour par Claude'),
+  const g = generation;
+  afficherPour(g, entete('Partenaires', 'Où en sont les affiliations · tenu à jour par Claude'),
     h('div', { class: 'panneau tableau' }, h('table', {},
       h('thead', {}, h('tr', {}, h('th', {}, 'PARTENAIRE'), h('th', {}, 'POUR'), h('th', {}, 'ÉTAT'), h('th', {}, 'DÉTAIL'), h('th', {}, ''))),
       h('tbody', {}, PARTENAIRES.map((p) => h('tr', {},
@@ -747,6 +768,7 @@ async function pagePartenaires() {
 // ───────── Tikette ─────────
 let periode = 'semaine';
 async function pageTikette() {
+  const g = generation;
   const t = await rpc('console_tikette', { p_periode: periode });
   const mots = { semaine: 'cette semaine', mois: 'ce mois-ci', annee: 'cette année' };
   const choix = h('div', { class: 'periodes' }, [['semaine', 'Semaine'], ['mois', 'Mois'], ['annee', 'Année']].map(([v, l]) =>
@@ -769,7 +791,7 @@ async function pageTikette() {
   const themes = Object.entries(t.themes).sort((a, b) => b[1] - a[1]);
   const clics = Object.entries(t.clics).sort((a, b) => b[1] - a[1]);
   const notes = t.notes.repartition || {};
-  afficher(
+  afficherPour(g, 
     entete('Tikette', 'Chiffres en direct · ' + mots[periode], choix),
     h('div', { class: 'kpis' },
       kpi('Nouveaux comptes', nombre(t.comptes.nouveaux), evoComptes.t + ' · ' + nombre(t.comptes.total) + ' en tout', null, evoComptes.c),
@@ -801,6 +823,7 @@ async function pageTikette() {
 // ───────── Offres et abonnements (toutes les applis) ─────────
 let filtreOffres = 'toutes';
 async function pageOffres() {
+  const g = generation;
   const [offres, offerts, parr] = await Promise.all([rpc('console_offres'), rpc('console_or_offerts').catch(() => []), rpc('console_parrainages').catch(() => ({ total: 0, codes: 0, meilleurs: [] }))]);
   const maintenant = Date.now();
   const etatOffre = (o) => (!o.actif ? 'En pause' : new Date(o.fin) < maintenant ? 'Terminée' : new Date(o.debut) > maintenant ? 'Programmée' : 'En cours');
@@ -847,7 +870,7 @@ async function pageOffres() {
     } catch (err) { m.className = 'message erreur'; m.textContent = erreur(err); }
   });
 
-  afficher(
+  afficherPour(g, 
     entete('Offres et abonnements', 'Ce que vous activez ici apparaît tout de suite dans l’appli concernée'),
     h('div', { class: 'periodes' }, ['toutes', ...applis.map((a) => a.id)].map((id) => h('button', { class: 'periode' + (filtreOffres === id ? ' actif' : ''), onclick: () => { filtreOffres = id; aller('offres'); } }, id === 'toutes' ? 'Toutes les applis' : nomAppli(id)))),
     h('div', { class: 'grille' },
@@ -886,6 +909,7 @@ function ecart(g, y) {
   return (d > 0 ? 'Yvan → Greg ' : 'Greg → Yvan ') + euros(Math.abs(d));
 }
 async function pageAvances() {
+  const g = generation;
   const avances = await rpc('console_avances');
   justificatif = null;
   const somme = (l) => l.reduce((s, a) => s + Number(a.montant), 0);
@@ -949,7 +973,7 @@ async function pageAvances() {
           } }, 'Supprimer')))))))
     : h('div', { class: 'vide' }, 'Aucune avance pour l’instant. Ajoute la première à droite.');
 
-  afficher(
+  afficherPour(g, 
     entete('Avances de frais', 'Ce que chacun avance en attendant la SAS, avec la preuve', h('button', { class: 'btn-contour', onclick: () => exporter(avances) }, 'Exporter pour la compta (CSV)')),
     h('div', { class: 'kpis' },
       kpi('Total avancé', euros(somme(avances)), premiere ? 'depuis le ' + dateFr(premiere) : ''),
@@ -984,6 +1008,7 @@ async function envoyerJustificatif(fichier, form, etat) {
     const chemin = s.session.user.id + '/' + crypto.randomUUID() + '.' + ext;
     const { error } = await sb.storage.from('justificatifs').upload(chemin, blob, { contentType: type });
     if (error) throw error;
+    if (justificatif && justificatif !== chemin) sb.storage.from('justificatifs').remove([justificatif]).catch(() => {});
     justificatif = chemin;
     document.getElementById('depot-titre').textContent = '✓ ' + fichier.name;
     etat.textContent = 'Preuve enregistrée. L’IA lit la facture…';
@@ -1017,6 +1042,11 @@ function exporter(avances) {
 
 
 
+window.addEventListener('popstate', () => {
+  if (document.getElementById('console').hidden) return;
+  const [n, a] = decodeURIComponent(location.hash.slice(1) || 'ensemble').split('/');
+  aller(n, a, true);
+});
 sb.auth.onAuthStateChange((e) => { if (e === 'SIGNED_OUT') { document.getElementById('console').hidden = true; } });
 demarrer();
 </script>
