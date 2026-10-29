@@ -1,0 +1,15 @@
+# Provisoire : liste les fichiers du jeu DATAtourisme sur data.gouv.fr (lancé à la main, puis supprimé).
+name: Découverte DATAtourisme
+on: workflow_dispatch
+jobs:
+  liste:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - run: |
+          curl -sS "https://www.data.gouv.fr/api/1/datasets/5b598be088ee387c0c353714/" | python3 -c "
+          import json,sys
+          d=json.load(sys.stdin)
+          for r in d['resources']: print(r['id'], '|', r['title'], '|', r.get('format'), '|', r.get('filesize'))
+          "
+          curl -sS -L "https://www.data.gouv.fr/api/1/datasets/r/1ad4899d-fab3-4abd-8df7-025004902932" | head -c 3000
