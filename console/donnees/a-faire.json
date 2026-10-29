@@ -9,25 +9,11 @@
    "titre": "Brevo : ajouter le domaine eggnotfound.fr et l’expéditeur « Egg Not Found » <contact@eggnotfound.fr>"
   },
   {
-   "cle": "demande:tikette:1f2b9f5a42",
+   "cle": "demande:studio:4b61cbe43e",
    "groupe": "demande",
-   "appli": "tikette",
+   "appli": "studio",
    "qui": "Greg",
-   "titre": "Supabase : créer la fonction envoyer-email (Verify JWT désactivé)"
-  },
-  {
-   "cle": "demande:tikette:9851b3d48c",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Supabase : Authentication › Hooks › Send Email hook vers envoyer-email + secret SEND_EMAIL_HOOK_SECRET"
-  },
-  {
-   "cle": "demande:tikette:632694b439",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Supabase : lancer supabase/console2.sql (console : applis, à faire, coûts)"
+   "titre": "Supabase (Tikette) : lancer supabase/console3.sql (offres pour toutes les applis)"
   },
   {
    "cle": "demande:tikette:1269c716ab",
@@ -56,13 +42,6 @@
    "appli": "tikette",
    "qui": "Greg",
    "titre": "GetYourGuide : coordonnées bancaires et SIRET une fois la micro-entreprise créée"
-  },
-  {
-   "cle": "demande:studio:16a7afc1e7",
-   "groupe": "demande",
-   "appli": "studio",
-   "qui": "Greg",
-   "titre": "GitHub › EggNotFoundGestion › Pages : cocher « Enforce HTTPS » dès que possible"
   },
   {
    "cle": "demande:shivr:4c1412b0d9",

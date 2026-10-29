@@ -88,8 +88,10 @@
   .kpi .s { font-size: 11.5px; color: var(--doux); font-weight: 700; }
   .s.monte { color: var(--vert); }
   .s.baisse { color: var(--rose); }
-  .grille { display: grid; grid-template-columns: 1.4fr 1fr; gap: 14px; }
-  .grille3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .grille { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; }
+  .grille > *, .grille3 > *, .ligne-form > * { min-width: 0; }
+  .champ { max-width: 100%; box-sizing: border-box; }
+  .grille3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
   .panneau { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 15px 17px; min-width: 0; }
   .panneau h2 { margin: 0 0 10px; font-family: var(--mono); font-size: 12.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
   .barres { display: flex; gap: 8px; align-items: flex-end; height: 160px; margin-top: 8px; }
@@ -112,7 +114,7 @@
   .etiquette.gris { background: rgba(138,133,124,.14); color: var(--doux); }
   .etiquette.alerte { background: rgba(232,52,78,.16); color: var(--rouge); }
   form.bloc { display: flex; flex-direction: column; gap: 10px; }
-  .ligne-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ligne-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
   label.lab { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--doux); font-weight: 700; }
   .boutons { display: flex; gap: 8px; flex-wrap: wrap; }
   .depot { border: 1.5px dashed rgba(232,52,78,.5); border-radius: 12px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--doux); font-size: 12.5px; text-align: center; padding: 12px; cursor: pointer; position: relative; }
@@ -151,7 +153,47 @@
   .liens a { text-decoration: none; font-size: 12.5px; border: 1px solid var(--ligne); border-radius: 999px; padding: 6px 12px; color: var(--creme); }
   .liens a:hover { border-color: var(--rouge); }
 
+  /* Liens rapides */
+  .tuiles-liens { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .tuile-lien { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--fond); border: 1px solid var(--ligne); color: var(--creme); text-decoration: none; font-size: 13px; font-weight: 600; }
+  .tuile-lien:hover { border-color: var(--rouge); background: rgba(232,52,78,.06); }
+  .tuile-lien img { width: 22px; height: 22px; border-radius: 5px; background: #fff; padding: 2px; flex-shrink: 0; }
+  .groupe-liens { font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.2px; color: var(--doux); font-weight: 700; margin: 14px 0 8px; }
+  .groupe-liens:first-child { margin-top: 0; }
+  .voile { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: flex; align-items: flex-start; justify-content: center; padding: 6vh 16px; z-index: 50; overflow-y: auto; }
+  .fenetre { width: 100%; max-width: 760px; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 18px; padding: 20px 22px; }
+  .fenetre .haut-fenetre { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .bouton-liens { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0 2px; padding: 9px 12px; border-radius: 12px; border: 1px solid rgba(232,52,78,.55); background: rgba(232,52,78,.10); color: var(--creme); font-weight: 700; font-size: 13.5px; }
+  .bouton-liens:hover { background: rgba(232,52,78,.2); }
+  /* Étapes des applis */
+  .etape { font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
+  .etape.idee { background: rgba(154,209,255,.14); color: var(--bleu); }
+  .etape.cours { background: rgba(242,193,78,.14); color: var(--jaune); }
+  .etape.test { background: rgba(240,80,106,.16); color: var(--rose); }
+  .etape.ligne { background: rgba(94,214,160,.14); color: var(--vert); }
+  .etape.pause { background: rgba(138,133,124,.16); color: var(--doux); }
+  /* À faire */
+  .onglets-page { display: inline-flex; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 999px; padding: 4px; gap: 4px; }
+  .onglets-page button { border: 0; background: none; color: var(--doux); font-weight: 700; font-size: 13px; padding: 8px 16px; border-radius: 999px; }
+  .onglets-page button.actif { background: var(--rouge); color: #fff; }
+  .personne { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .personne .rond { width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: #0A0A0A; }
+  .personne h2 { margin: 0 !important; }
+  .chip-app { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--doux); white-space: nowrap; }
+  .chip-app .icone-app { width: 16px; height: 16px; border-radius: 4px; font-size: 9px; }
+  .progression { height: 6px; border-radius: 3px; background: rgba(237,231,220,.08); overflow: hidden; margin: 6px 0 4px; }
+  .progression span { display: block; height: 100%; background: var(--vert); border-radius: 3px; }
+  .groupe-recette { border: 1px solid var(--ligne); border-radius: 12px; padding: 10px 14px; margin-top: 10px; }
+  .groupe-recette > summary { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 14px; }
+  .groupe-recette > summary .doux { font-weight: 600; font-size: 12px; margin-left: auto; }
+  .ajout-rapide { display: grid; grid-template-columns: 1fr 150px 150px auto; gap: 8px; }
+  .alerte-ligne { display: flex; gap: 10px; align-items: center; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--ligne); }
+  .alerte-ligne:last-child { border-bottom: 0; }
+  .point { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .titre-section { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; color: var(--doux); font-weight: 700; margin: 6px 0 -4px; }
+
   @media (max-width: 900px) {
+    .ajout-rapide { grid-template-columns: 1fr; }
     #console { flex-direction: column; }
     nav { width: auto; height: auto; position: static; border-right: 0; border-bottom: 1px solid var(--ligne); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 4px; overflow: visible; }
     nav .marque-nav { width: 100%; }
@@ -206,12 +248,35 @@ let CONFIRMEES = new Set();       // confirmées avec l'œuf (Supabase)
 let A_FAIRE = { elements: [] };   // demandes de Claude + recette (donnees/a-faire.json)
 let PARTENAIRES = [];
 const LIENS = [
-  ['Supabase', 'https://supabase.com/dashboard/projects'], ['GitHub', 'https://github.com/Yoobabab'], ['Expo', 'https://expo.dev'],
-  ['Brevo', 'https://app.brevo.com'], ['OVH', 'https://www.ovh.com/manager/'], ['App Store Connect', 'https://appstoreconnect.apple.com'],
-  ['Play Console', 'https://play.google.com/console'], ['GetYourGuide', 'https://partner.getyourguide.com'], ['Viator', 'https://partnerresources.viator.com'],
-  ['Affilae', 'https://app.affilae.com'], ['Kwanko', 'https://www.kwanko.com'], ['Anthropic', 'https://console.anthropic.com'],
-  ['Tikette', 'https://tikette.fr'], ['Canevas des maquettes', 'https://claude.ai/artifact/M3o4jM7a57wowQ6BKpGbqv'],
+  ['Nos outils', [['Supabase', 'https://supabase.com/dashboard/projects', 'supabase.com'], ['GitHub', 'https://github.com/Yoobabab', 'github.com'], ['Expo', 'https://expo.dev', 'expo.dev'],
+    ['Brevo', 'https://app.brevo.com', 'brevo.com'], ['OVH', 'https://www.ovh.com/manager/', 'ovhcloud.com'], ['Anthropic (IA)', 'https://console.anthropic.com', 'anthropic.com']]],
+  ['Boutiques d’applis', [['App Store Connect', 'https://appstoreconnect.apple.com', 'apple.com'], ['Google Play Console', 'https://play.google.com/console', 'play.google.com'], ['RevenueCat', 'https://app.revenuecat.com', 'revenuecat.com']]],
+  ['Partenaires', [['GetYourGuide', 'https://partner.getyourguide.com', 'getyourguide.com'], ['Viator', 'https://partnerresources.viator.com', 'viator.com'],
+    ['Affilae (Funbooker)', 'https://app.affilae.com', 'affilae.com'], ['Kwanko (TheFork)', 'https://www.kwanko.com', 'kwanko.com'], ['Indoleads', 'https://app.indoleads.com', 'indoleads.com']]],
+  ['Nos sites', [['tikette.fr', 'https://tikette.fr', 'tikette.fr'], ['Maquettes (canevas)', 'https://claude.ai/artifact/M3o4jM7a57wowQ6BKpGbqv', 'claude.ai'], ['Claude', 'https://claude.ai', 'claude.ai']]],
 ];
+function tuileLien([nom, url, dom]) {
+  const img = h('img', { src: `https://www.google.com/s2/favicons?domain=${dom}&sz=64`, alt: '', loading: 'lazy' });
+  img.addEventListener('error', () => img.replaceWith(h('span', { class: 'icone-app', style: 'width:22px;height:22px;background:#333;font-size:11px' }, nom[0])));
+  return h('a', { class: 'tuile-lien', href: url, target: '_blank', rel: 'noopener' }, img, nom);
+}
+const blocLiens = () => LIENS.map(([g, liste]) => [h('div', { class: 'groupe-liens' }, g.toUpperCase()), h('div', { class: 'tuiles-liens' }, liste.map(tuileLien))]);
+function ouvrirLiens() {
+  const voile = h('div', { class: 'voile', onclick: (e) => { if (e.target === voile) voile.remove(); } },
+    h('div', { class: 'fenetre' }, h('div', { class: 'haut-fenetre' }, h('h1', { class: 'titre', style: 'margin:0;font-size:20px' }, 'Liens rapides'), h('button', { class: 'btn-contour', onclick: () => voile.remove() }, 'Fermer')), blocLiens()));
+  document.addEventListener('keydown', function f(e) { if (e.key === 'Escape') { voile.remove(); document.removeEventListener('keydown', f); } });
+  document.body.append(voile);
+}
+const ETAPES = { 'idée': ['idee', 'Idée'], 'en cours': ['cours', 'En cours'], 'en test': ['test', 'En test'], 'en ligne': ['ligne', 'En ligne'], 'en pause': ['pause', 'En pause'] };
+const badgeEtape = (a) => { const [c, l] = ETAPES[a.etape] || ETAPES['en cours']; return h('span', { class: 'etape ' + c }, l); };
+// Abonnés : les comptes du studio (abonnement à vie) ne comptent pas.
+// « 41,86 € », « 1 234,5 », « 25$ » → "41.86" ; vide → '' ; illisible → null
+function lireMontant(v) {
+  const t = String(v ?? '').replace(/[\s\u00a0\u202f€$]|eur|usd/gi, '').replace(',', '.');
+  if (!t) return '';
+  return /^\d+(\.\d{1,2})?$/.test(t) ? t : null;
+}
+const abonnes = (t) => { const o = t?.or || {}; return { payants: o.payants || 0, offerts: o.offerts || 0, studio: Math.max(0, (o.actifs || 0) - (o.payants || 0) - (o.offerts || 0)) }; };
 
 // ───────── Petits outils ─────────
 function h(tag, attrs, ...enfants) {
@@ -223,7 +288,7 @@ function h(tag, attrs, ...enfants) {
     else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
     else el.setAttribute(k, v === true ? '' : v);
   }
-  for (const e of enfants.flat()) if (e != null && e !== false) el.append(e instanceof Node ? e : String(e));
+  for (const e of enfants.flat(Infinity)) if (e != null && e !== false) el.append(e instanceof Node ? e : String(e));
   return el;
 }
 // Dessins fixes écrits ici (jamais de données dedans).
@@ -261,7 +326,7 @@ function kpi(titre, valeur, sous, couleur, classeSous) {
   return h('div', { class: 'kpi' }, h('div', { class: 't' }, titre), h('div', { class: 'v', style: couleur ? 'color:' + couleur : '' }, valeur), h('div', { class: 's ' + (classeSous || '') }, sous || ''));
 }
 const page = document.getElementById('page');
-function afficher(...enfants) { page.replaceChildren(...enfants); window.scrollTo(0, 0); }
+function afficher(...enfants) { page.replaceChildren(...enfants.flat(Infinity).filter((e) => e != null && e !== false && e !== '')); window.scrollTo(0, 0); }
 function entete(titre, sousTitre, droite) {
   return h('div', { class: 'entete' }, h('div', {}, h('h1', { class: 'titre' }, titre), h('p', {}, sousTitre)), droite || '');
 }
@@ -370,6 +435,7 @@ function dessinerNav() {
   nav.replaceChildren(...[
     h('div', { class: 'marque-nav', style: 'padding:0 8px' }, marque(15)),
     h('div', { class: 'qui' }, 'Console · ' + email),
+    h('button', { class: 'bouton-liens', onclick: ouvrirLiens }, '↗', h('span', {}, 'Liens rapides')),
     onglet('Vue d’ensemble', 'ensemble'),
     h('div', { class: 'rubrique' }, 'NOS APPLIS'), confirmees.filter((a) => a.type === 'appli').map(ongletApp),
     h('div', { class: 'rubrique' }, 'NOS JEUX'), confirmees.filter((a) => a.type === 'jeu').map(ongletApp),
@@ -386,7 +452,7 @@ function dessinerNav() {
     onglet('Coûts et échéances', 'couts'),
     onglet('Partenaires', 'partenaires'),
     onglet('Avances de frais', 'avances'),
-    onglet('Offres et Or', 'offres'),
+    onglet('Offres et abonnements', 'offres'),
     h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
 }
 function aller(nom, app) {
@@ -410,32 +476,50 @@ async function pageEnsemble() {
   dessinerNav();
   const reste = avances.filter((a) => !a.rembourse_le).reduce((s, a) => s + Number(a.montant), 0);
   const parMois = coutMensuel(couts);
-  const proche = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0).sort((a, b) => a.echeance.localeCompare(b.echeance))[0];
-  const payants = t?.or?.payants || 0;
-  const demandes = A_FAIRE.elements.filter((e) => e.groupe === 'demande' && !faire.coches[e.cle]);
+  const ab = abonnes(t);
+  const demandes = [...A_FAIRE.elements.filter((e) => e.groupe === 'demande'), ...(faire.taches || []).map(tacheEnElement)].filter((e) => !faire.coches[e.cle]);
   const recette = A_FAIRE.elements.filter((e) => e.groupe === 'recette');
   const recetteFaite = recette.filter((e) => faire.coches[e.cle]).length;
+
+  // Ce qui demande votre attention (échéances, partenaires muets, robots en panne).
+  const alertes = [
+    ...couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15)
+      .map((c) => ['var(--rouge)', `${c.nom} à renouveler le ${dateFr(c.echeance)} (J-${joursAvant(c.echeance)})`, () => aller('couts')]),
+    ...PARTENAIRES.filter((p) => p.etat === 'attente' && joursDepuis(p.depuis) >= 10)
+      .map((p) => ['var(--jaune)', `${p.nom} : pas de réponse depuis ${joursDepuis(p.depuis)} jours`, () => aller('partenaires')]),
+    ...robots.filter((r) => !r.ok && !r.encours).map((r) => ['var(--rouge)', `Robot « ${r.nom} » en échec (${r.quand})`, null]),
+    ...couts.filter((c) => c.montant == null).slice(0, 1).map(() => ['var(--doux)', `${couts.filter((c) => c.montant == null).length} coûts sans montant à compléter`, () => aller('couts')]),
+  ];
+
   const carteApp = (a) => h('button', { class: 'app', onclick: () => (a.id === 'tikette' ? aller('tikette') : aller('appli', a.id)) },
-    h('div', { class: 'nom' }, iconeApp(a), a.nom, h('span', { class: 'etiquette ' + (a.relie ? 'direct' : 'gris') }, a.version ? 'v' + a.version : a.type === 'jeu' ? 'jeu' : '—')),
-    h('div', { class: 'info' }, a.id === 'tikette' && t ? `${nombre(t.dates.faits)} dates ce mois · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : '—'} · ${nombre(t.or.actifs)} Or` : a.resume || ''));
+    h('div', { class: 'nom' }, iconeApp(a), a.nom, h('span', { style: 'margin-left:auto' }, badgeEtape(a))),
+    h('div', { class: 'info' }, a.id === 'tikette' && t
+      ? `${nombre(t.dates.faits)} dates ce mois · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : 'pas encore de note'} · ${nombre(ab.payants)} abonnés`
+      : (a.version ? 'v' + a.version + ' · ' : '') + (a.resume || '')));
+  const confirmees = CATALOGUE.filter(estConfirmee);
+
   afficher(
-    entete('Vue d’ensemble', 'Tout le studio, ce mois-ci'),
+    entete('Vue d’ensemble', 'Le studio en un coup d’œil · ' + new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })),
     h('div', { class: 'kpis' },
-      kpi('Revenus du mois', euros(payants * 2.54), payants ? `${payants} abonnés payants (estimation)` : 'paiement branché avec la vraie version'),
-      kpi('Coûts du mois', euros(parMois), proche ? `prochaine échéance : ${proche.nom.split(' ')[0]} le ${dateFr(proche.echeance)}` : 'aucune échéance datée', 'var(--rouge)'),
-      kpi('Abonnés Or', nombre(t?.or?.actifs || 0), `${nombre(payants)} payants · ${nombre(t?.or?.offerts || 0)} offerts`, 'var(--jaune)'),
-      kpi('Avances à rembourser', euros(reste), avances.length + ' avance' + (avances.length > 1 ? 's' : ''))),
-    h('div', { class: 'apps' }, CATALOGUE.filter(estConfirmee).map(carteApp)),
-    h('div', { class: 'grille3' },
-      h('div', { class: 'panneau' }, h('h2', {}, 'À faire'),
-        demandes.length ? demandes.slice(0, 6).map((e) => ligneCoche(e, faire.coches, () => aller('ensemble'))) : h('div', { class: 'vide' }, 'Rien en attente.'),
-        h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', { class: 'doux' }, `Recette : ${recetteFaite} / ${recette.length} tests faits`), h('button', { class: 'btn-contour mini', onclick: () => aller('afaire') }, 'Tout voir'))),
-      h('div', { class: 'panneau' }, h('h2', {}, 'Partenaires'),
-        PARTENAIRES.map((p) => h('div', { class: 'liste-ligne' }, h('span', {}, p.nom), etatPartenaire(p)))),
-      h('div', { class: 'panneau' }, h('h2', {}, 'Robots et services'),
-        robots.length ? robots.map((r) => h('div', { class: 'liste-ligne' }, h('span', {}, r.nom), h('span', { class: 'etiquette ' + (r.ok ? 'direct' : r.encours ? 'attente' : 'alerte') }, (r.ok ? 'OK' : r.encours ? 'en cours' : 'échec') + ' · ' + r.quand)))
-          : h('div', { class: 'vide' }, 'GitHub ne répond pas pour l’instant.'))),
-    h('div', { class: 'panneau' }, h('h2', {}, 'Liens rapides'), h('div', { class: 'liens' }, LIENS.map(([n, u]) => h('a', { href: u, target: '_blank', rel: 'noopener' }, n)))));
+      kpi('Revenus du mois', euros(ab.payants * 2.54), ab.payants ? `${ab.payants} abonnés payants (estimation)` : 'les paiements arrivent avec la vraie version'),
+      kpi('Coûts du mois', euros(parMois), 'abonnements et domaines ramenés au mois', 'var(--rouge)'),
+      kpi('Abonnés', nombre(ab.payants), `${nombre(ab.offerts)} abonnement${ab.offerts > 1 ? 's' : ''} offert${ab.offerts > 1 ? 's' : ''} · comptes du studio non comptés`, 'var(--jaune)'),
+      kpi('Avances à rembourser', euros(reste), avances.length ? avances.length + ' avance' + (avances.length > 1 ? 's' : '') + ' en attente de la SAS' : 'aucune avance')),
+    h('div', { class: 'grille' },
+      h('div', { class: 'panneau' },
+        h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px' }, h('h2', { style: 'margin:0' }, `À faire maintenant (${demandes.length})`), h('button', { class: 'btn-contour mini', onclick: () => aller('afaire') }, 'Tout voir')),
+        demandes.length ? demandes.slice(0, 5).map((e) => ligneCoche(e, faire.coches, () => aller('ensemble'))) : h('div', { class: 'vide' }, 'Rien en attente. Bravo !'),
+        h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', {}, 'Recette (tests sur le téléphone)'),
+          h('b', {}, `${recetteFaite} / ${recette.length} faits`)),
+        h('div', { class: 'progression' }, h('span', { style: `width:${recette.length ? Math.round((recetteFaite / recette.length) * 100) : 0}%` }))),
+      h('div', { class: 'panneau' }, h('h2', {}, 'À surveiller'),
+        alertes.length ? alertes.map(([c, texte, f]) => h('div', { class: 'alerte-ligne', style: f ? 'cursor:pointer' : '', onclick: f || null }, h('span', { class: 'point', style: 'background:' + c }), h('span', {}, texte)))
+          : h('div', { class: 'vide' }, 'Rien d’urgent : échéances, partenaires et robots vont bien.'),
+        h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', { class: 'doux' }, 'Robots'),
+          h('span', {}, robots.length ? `${robots.filter((r) => r.ok).length} / ${robots.length} OK` : 'GitHub ne répond pas')))),
+    h('div', { class: 'titre-section' }, `NOS APPLIS ET JEUX (${confirmees.length})`),
+    h('div', { class: 'apps' }, confirmees.map(carteApp)),
+    h('div', { class: 'panneau' }, h('h2', {}, 'Liens rapides'), blocLiens()));
 }
 function etatPartenaire(p) {
   const j = joursDepuis(p.depuis);
@@ -474,26 +558,31 @@ async function pageAppli(id) {
   const elements = A_FAIRE.elements.filter((e) => e.appli === id);
   const taches = (faire.taches || []).filter((x) => x.appli === id);
   afficher(
-    h('div', { class: 'entete' }, h('div', { style: 'display:flex;gap:14px;align-items:center' }, iconeApp(a, 52), h('div', {}, h('h1', { class: 'titre' }, a.nom), h('p', {}, (a.type === 'jeu' ? 'Jeu' : 'Appli') + (a.version ? ' · version ' + a.version : '') + ' · ' + (a.resume || ''))))),
+    h('div', { class: 'entete' }, h('div', { style: 'display:flex;gap:14px;align-items:center' }, iconeApp(a, 52), h('div', {}, h('h1', { class: 'titre' }, a.nom), h('p', { style: 'display:flex;gap:8px;align-items:center;flex-wrap:wrap' }, badgeEtape(a), (a.type === 'jeu' ? 'Jeu' : 'Appli') + (a.version ? ' · version ' + a.version : '') + ' · ' + (a.resume || ''))))),
     h('div', { class: 'grille' },
       h('div', { class: 'panneau' }, h('h2', {}, 'À faire et recette'),
         elements.length || taches.length ? [
-          elements.filter((e) => e.groupe === 'demande').map((e) => ligneCoche(e, faire.coches, () => aller('appli', id))),
-          taches.map((x) => ligneCoche(tacheEnElement(x), faire.coches, () => aller('appli', id))),
-          blocRecette(elements.filter((e) => e.groupe === 'recette'), faire.coches, () => aller('appli', id))]
+          elements.filter((e) => e.groupe === 'demande').map((e) => ligneCoche(e, faire.coches, () => aller('appli', id), { sansAppli: true })),
+          taches.map((x) => ligneCoche(tacheEnElement(x), faire.coches, () => aller('appli', id), { sansAppli: true })),
+          blocRecette(elements.filter((e) => e.groupe === 'recette'), faire.coches, () => aller('appli', id), { sansAppli: true, ouvert: true })]
           : h('div', { class: 'vide' }, 'Rien à faire pour l’instant.')),
       h('div', { class: 'panneau' }, h('h2', {}, 'Chiffres'),
         h('p', { class: 'note-bas', style: 'margin:0 0 10px' }, a.relie ? 'Chiffres en direct.' : 'Pas encore reliée à la console : il faudra lancer un petit script SQL dans sa base (comptes du studio + chiffres), comme pour Tikette. Dis-le à Claude quand vous voulez la brancher.'),
-        h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('a', { href: 'https://github.com/' + a.depot, target: '_blank', rel: 'noopener' }, a.depot)),
+        a.depot ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('a', { href: 'https://github.com/' + a.depot, target: '_blank', rel: 'noopener' }, a.depot)) : h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('span', { class: 'doux' }, 'pas encore créé')),
         a.site ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Site'), h('a', { href: a.site, target: '_blank', rel: 'noopener' }, a.site)) : '')));
 }
 
 // ───────── À faire (demandes de Claude, recette, tâches ajoutées) ─────────
 let filtreAppli = 'toutes';
+let ongletAFaire = 'taches';
 function tacheEnElement(x) {
   return { cle: 'tache:' + x.id, groupe: 'tache', appli: x.appli, qui: x.qui, titre: x.titre, echeance: x.echeance, id: x.id };
 }
-function ligneCoche(e, coches, recharger) {
+function chipApp(id) {
+  const a = CATALOGUE.find((x) => x.id === id);
+  return h('span', { class: 'chip-app' }, a ? iconeApp(a) : h('span', { class: 'icone-app', style: 'background:#E8344E' }, '4'), a ? a.nom : 'Studio');
+}
+function ligneCoche(e, coches, recharger, options = {}) {
   const fait = !!coches[e.cle];
   const box = h('input', { type: 'checkbox', 'aria-label': e.titre });
   box.checked = fait;
@@ -501,19 +590,30 @@ function ligneCoche(e, coches, recharger) {
     try { await rpc('console_cocher', { p_cle: e.cle, p_fait: box.checked }); if (box.checked) coches[e.cle] = new Date().toISOString(); else delete coches[e.cle]; recharger(); }
     catch (err) { box.checked = !box.checked; alert(erreur(err)); }
   });
+  const retard = e.echeance && !fait && joursAvant(e.echeance) < 0;
   return h('label', { class: 'coche' + (fait ? ' fait' : '') }, box,
-    h('span', { class: 'texte' }, e.titre, e.echeance ? h('span', { class: 'doux' }, ' · avant le ' + dateFr(e.echeance)) : ''),
-    h('span', { class: 'meta' }, h('span', { class: quiClasse(e.qui) }, e.qui === 'Tous' ? 'Greg et Yvan' : e.qui), e.appli && courant.nom !== 'appli' ? h('span', { class: 'doux' }, ' · ' + nomAppli(e.appli)) : ''),
+    h('span', { class: 'texte' }, e.titre,
+      e.echeance ? h('span', { style: 'color:' + (retard ? 'var(--rouge)' : 'var(--doux)') }, (retard ? ' · en retard, prévu le ' : ' · avant le ') + dateFr(e.echeance)) : ''),
+    h('span', { class: 'meta', style: 'display:flex;flex-direction:column;align-items:flex-end;gap:3px' },
+      options.sansQui ? '' : h('span', { class: quiClasse(e.qui) }, e.qui === 'Tous' ? 'Greg et Yvan' : e.qui),
+      options.sansAppli ? '' : chipApp(e.appli)),
     e.groupe === 'tache' ? h('button', { class: 'btn-lien', style: 'font-size:11px', onclick: async (ev) => { ev.preventDefault(); if (confirm('Supprimer « ' + e.titre + ' » ?')) { await rpc('console_tache_supprimer', { p_id: e.id }); recharger(); } } }, 'Retirer') : '');
 }
-function blocRecette(items, coches, recharger) {
+// Recette regroupée par appli puis par version, avec une barre d'avancement.
+function blocRecette(items, coches, recharger, options = {}) {
   if (!items.length) return '';
-  const parVersion = new Map();
-  for (const e of items) { const k = nomAppli(e.appli) + ' · ' + e.version; if (!parVersion.has(k)) parVersion.set(k, []); parVersion.get(k).push(e); }
-  return [...parVersion].map(([v, liste], i) => {
+  const parAppli = new Map();
+  for (const e of items) { if (!parAppli.has(e.appli)) parAppli.set(e.appli, []); parAppli.get(e.appli).push(e); }
+  return [...parAppli].map(([appli, liste], i) => {
     const faits = liste.filter((e) => coches[e.cle]).length;
-    const d = h('details', {}, h('summary', {}, h('div', { class: 'version' }, `▸ Recette ${v} · ${faits}/${liste.length}`)), liste.map((e) => ligneCoche(e, coches, recharger)));
-    if (i < 2 && faits < liste.length) d.open = true;
+    const parVersion = new Map();
+    for (const e of liste) { if (!parVersion.has(e.version)) parVersion.set(e.version, []); parVersion.get(e.version).push(e); }
+    const d = h('details', { class: 'groupe-recette' },
+      h('summary', {}, options.sansAppli ? h('span', {}, 'Tests à faire') : chipApp(appli), h('span', { class: 'doux' }, `${faits} / ${liste.length} faits`)),
+      h('div', { class: 'progression' }, h('span', { style: `width:${Math.round((faits / liste.length) * 100)}%` })),
+      [...parVersion].map(([v, l]) => [h('div', { class: 'version' }, 'Version ' + String(v).replace(/^v/, '') + ` · ${l.filter((e) => coches[e.cle]).length}/${l.length}`),
+        l.map((e) => ligneCoche(e, coches, recharger, { sansQui: true, sansAppli: true }))]));
+    if ((i === 0 || options.ouvert) && faits < liste.length) d.open = true;
     return d;
   });
 }
@@ -522,38 +622,45 @@ async function pageAFaire() {
   dessinerNav();
   const garder = (e) => filtreAppli === 'toutes' || e.appli === filtreAppli;
   const recharger = () => aller('afaire');
-  const demandes = A_FAIRE.elements.filter((e) => e.groupe === 'demande' && garder(e));
-  const taches = (faire.taches || []).map(tacheEnElement).filter(garder);
+  const toutes = [...A_FAIRE.elements.filter((e) => e.groupe === 'demande'), ...(faire.taches || []).map(tacheEnElement)].filter(garder);
+  const restantes = toutes.filter((e) => !faire.coches[e.cle]);
+  const faites = toutes.filter((e) => faire.coches[e.cle]);
   const recette = A_FAIRE.elements.filter((e) => e.groupe === 'recette' && garder(e));
-  const restantes = [...demandes, ...taches].filter((e) => !faire.coches[e.cle]);
-  const faites = [...demandes, ...taches].filter((e) => faire.coches[e.cle]);
-  const applisAvecTaches = ['toutes', ...new Set([...A_FAIRE.elements, ...taches].map((e) => e.appli))];
-  const form = h('form', { class: 'bloc' },
-    h('input', { class: 'champ', name: 'titre', required: true, maxlength: 160, placeholder: 'Nouvelle tâche…' }),
-    h('div', { class: 'ligne-form' },
-      h('select', { class: 'champ', name: 'qui' }, ['Tous', 'Greg', 'Yvan'].map((q) => h('option', { value: q }, q === 'Tous' ? 'Greg et Yvan' : q))),
-      h('select', { class: 'champ', name: 'appli' }, h('option', { value: 'studio' }, 'Studio'), CATALOGUE.map((a) => h('option', { value: a.id }, a.nom)))),
-    h('div', { class: 'ligne-form' }, h('input', { class: 'champ', name: 'echeance', type: 'date', title: 'À faire avant le (facultatif)' }), h('button', { class: 'btn', type: 'submit' }, 'Ajouter')),
-    h('div', { class: 'message', id: 'msg-tache' }));
+  const recetteFaite = recette.filter((e) => faire.coches[e.cle]).length;
+  const ids = [...new Set([...A_FAIRE.elements, ...(faire.taches || [])].map((e) => e.appli))];
+
+  const form = h('form', { class: 'ajout-rapide' },
+    h('input', { class: 'champ', name: 'titre', required: true, maxlength: 160, placeholder: 'Ajouter une tâche… (ex. Envoyer le logo à Yvan)' }),
+    h('select', { class: 'champ', name: 'qui', title: 'Pour qui' }, ['Tous', 'Greg', 'Yvan'].map((q) => h('option', { value: q }, q === 'Tous' ? 'Greg et Yvan' : 'Pour ' + q))),
+    h('select', { class: 'champ', name: 'appli', title: 'Pour quelle appli' }, h('option', { value: 'studio' }, 'Studio'), CATALOGUE.filter(estConfirmee).map((a) => h('option', { value: a.id, selected: filtreAppli === a.id }, a.nom))),
+    h('button', { class: 'btn', type: 'submit' }, 'Ajouter'));
   form.addEventListener('submit', async (ev) => {
     ev.preventDefault();
     const f = new FormData(form);
-    try { await rpc('console_tache_ajouter', { p: { titre: f.get('titre'), qui: f.get('qui'), appli: f.get('appli'), echeance: f.get('echeance') } }); recharger(); }
-    catch (err) { const m = document.getElementById('msg-tache'); m.className = 'message erreur'; m.textContent = erreur(err); }
+    try { await rpc('console_tache_ajouter', { p: { titre: f.get('titre'), qui: f.get('qui'), appli: f.get('appli') } }); recharger(); }
+    catch (err) { alert(erreur(err)); }
   });
+
+  const personne = (qui, nom, couleur) => {
+    const liste = restantes.filter((e) => (e.qui || 'Tous') === qui);
+    return h('div', { class: 'panneau' },
+      h('div', { class: 'personne' }, h('span', { class: 'rond', style: 'background:' + couleur }, nom === 'Greg et Yvan' ? 'G+Y' : nom[0]), h('h2', {}, nom), h('span', { class: 'doux', style: 'margin-left:auto;font-size:13px' }, liste.length ? liste.length + ' à faire' : 'rien')),
+      liste.length ? liste.map((e) => ligneCoche(e, faire.coches, recharger, { sansQui: true })) : h('div', { class: 'vide' }, 'Rien pour l’instant.'));
+  };
+
   afficher(
-    entete('À faire', 'Ce que Claude vous demande arrive ici tout seul · mis à jour le ' + dateFr(A_FAIRE.maj || aujourdhui()),
-      h('div', { class: 'periodes' }, applisAvecTaches.map((id) => h('button', { class: 'periode' + (filtreAppli === id ? ' actif' : ''), onclick: () => { filtreAppli = id; aller('afaire'); } }, id === 'toutes' ? 'Tout' : nomAppli(id))))),
+    entete('À faire', 'Ce que Claude vous demande arrive ici tout seul · liste mise à jour le ' + dateFr(A_FAIRE.maj || aujourdhui()),
+      h('div', { class: 'onglets-page' },
+        h('button', { class: ongletAFaire === 'taches' ? 'actif' : '', onclick: () => { ongletAFaire = 'taches'; aller('afaire'); } }, `À faire (${restantes.length})`),
+        h('button', { class: ongletAFaire === 'recette' ? 'actif' : '', onclick: () => { ongletAFaire = 'recette'; aller('afaire'); } }, `Recette (${recetteFaite}/${recette.length})`))),
+    h('div', { class: 'periodes' }, ['toutes', ...ids].map((id) => h('button', { class: 'periode' + (filtreAppli === id ? ' actif' : ''), onclick: () => { filtreAppli = id; aller('afaire'); } }, id === 'toutes' ? 'Toutes les applis' : nomAppli(id)))),
     faire.absent ? h('div', { class: 'panneau note-bas' }, 'Pour cocher et ajouter des tâches, lance supabase/console2.sql dans Supabase.') : '',
-    h('div', { class: 'grille' },
-      h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
-        h('div', { class: 'panneau' }, h('h2', {}, `À faire (${restantes.length})`),
-          restantes.length ? restantes.map((e) => ligneCoche(e, faire.coches, recharger)) : h('div', { class: 'vide' }, 'Tout est fait. Bravo !'),
-          faites.length ? h('details', {}, h('summary', {}, h('div', { class: 'version' }, `▸ Déjà fait (${faites.length})`)), faites.map((e) => ligneCoche(e, faire.coches, recharger))) : ''),
-        h('div', { class: 'panneau' }, h('h2', {}, 'Ajouter une tâche'), form)),
-      h('div', { class: 'panneau' }, h('h2', {}, 'Recette : les tests à faire'),
-        recette.length ? blocRecette(recette, faire.coches, recharger) : h('div', { class: 'vide' }, 'Pas de test en attente.'),
-        h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, 'Liste tenue à jour par Claude à chaque nouvelle version. Si un test coince, dites-le à Claude.'))));
+    ongletAFaire === 'taches'
+      ? [h('div', { class: 'panneau' }, form),
+        h('div', { class: 'grille3' }, personne('Greg', 'Greg', 'var(--rouge)'), personne('Yvan', 'Yvan', 'var(--bleu)'), personne('Tous', 'Greg et Yvan', 'var(--creme)')),
+        faites.length ? h('details', { class: 'panneau' }, h('summary', {}, h('h2', { style: 'margin:0' }, `Déjà fait (${faites.length}) ▸`)), faites.map((e) => ligneCoche(e, faire.coches, recharger))) : '']
+      : [h('div', { class: 'panneau note-bas' }, 'La recette, ce sont les tests à faire sur le téléphone après chaque nouvelle version. Faites le test, cochez quand ça marche ; si ça coince, dites-le à Claude.'),
+        recette.length ? blocRecette(recette, faire.coches, recharger) : h('div', { class: 'panneau vide' }, 'Pas de test en attente.')]);
 }
 
 // ───────── Coûts et échéances ─────────
@@ -586,7 +693,8 @@ async function pageCouts() {
     f.addEventListener('submit', async (ev) => {
       ev.preventDefault();
       const d = new FormData(f);
-      const montant = String(d.get('montant') || '').replace(/\s/g, '').replace(',', '.');
+      const montant = lireMontant(d.get('montant'));
+      if (montant === null) { alert('Montant à vérifier : écris juste le nombre, par exemple 41,86.'); return; }
       try {
         await rpc('console_cout_enregistrer', { p: { id: edition?.id || null, nom: d.get('nom'), fournisseur: d.get('fournisseur'), appli: d.get('appli'), montant: montant || null, devise: d.get('devise'), rythme: d.get('rythme'), echeance: d.get('echeance'), note: d.get('note') } });
         aller('couts');
@@ -665,7 +773,7 @@ async function pageTikette() {
     entete('Tikette', 'Chiffres en direct · ' + mots[periode], choix),
     h('div', { class: 'kpis' },
       kpi('Nouveaux comptes', nombre(t.comptes.nouveaux), evoComptes.t + ' · ' + nombre(t.comptes.total) + ' en tout', null, evoComptes.c),
-      kpi('Abonnés Or', nombre(t.or.payants), nombre(t.or.offerts) + ' Or offert · ' + nombre(t.or.actifs) + ' Or en tout', 'var(--jaune)'),
+      kpi('Abonnés (Tikette Or)', nombre(abonnes(t).payants), nombre(abonnes(t).offerts) + ' offert' + (abonnes(t).offerts > 1 ? 's' : '') + ' · comptes du studio non comptés', 'var(--jaune)'),
       kpi('Dates faits', nombre(t.dates.faits), evoDates.t + ' · ' + nombre(t.dates.gardes) + ' gardés', null, evoDates.c),
       kpi('Note moyenne', t.notes.periode ? String(t.notes.periode).replace('.', ',') + ' ★' : '—', 'depuis le début : ' + (t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') : '—') + ' sur ' + nombre(t.notes.nombre) + ' notes', 'var(--jaune)'),
       kpi('Clics partenaires', nombre(Object.values(t.clics).reduce((a, b) => a + b, 0)), nombre(t.clics_total) + ' depuis le début')),
@@ -690,13 +798,17 @@ async function pageTikette() {
 }
 
 
-// ───────── Offres et Or ─────────
+// ───────── Offres et abonnements (toutes les applis) ─────────
+let filtreOffres = 'toutes';
 async function pageOffres() {
-  const [offres, offerts, parr] = await Promise.all([rpc('console_offres'), rpc('console_or_offerts'), rpc('console_parrainages')]);
+  const [offres, offerts, parr] = await Promise.all([rpc('console_offres'), rpc('console_or_offerts').catch(() => []), rpc('console_parrainages').catch(() => ({ total: 0, codes: 0, meilleurs: [] }))]);
   const maintenant = Date.now();
   const etatOffre = (o) => (!o.actif ? 'En pause' : new Date(o.fin) < maintenant ? 'Terminée' : new Date(o.debut) > maintenant ? 'Programmée' : 'En cours');
+  const applis = CATALOGUE.filter(estConfirmee);
+  const visibles = offres.filter((o) => filtreOffres === 'toutes' || (o.appli || 'tikette') === filtreOffres);
 
   const formOffre = h('form', { class: 'bloc' },
+    h('label', { class: 'lab' }, 'Pour quelle appli', h('select', { class: 'champ', name: 'appli' }, applis.map((a) => h('option', { value: a.id, selected: a.id === (filtreOffres === 'toutes' ? 'tikette' : filtreOffres) }, a.nom + (a.relie ? '' : ' (affichée quand l’appli sera reliée)'))))),
     h('label', { class: 'lab' }, 'Nom de l’offre (vu dans l’appli)', h('input', { class: 'champ', name: 'titre', maxlength: 60, required: true, placeholder: 'Offre Saint-Valentin' })),
     h('label', { class: 'lab' }, 'Texte (facultatif)', h('input', { class: 'champ', name: 'texte', maxlength: 200, placeholder: '1re année à 9,99 € pour les amoureux' })),
     h('div', { class: 'ligne-form' },
@@ -708,54 +820,61 @@ async function pageOffres() {
   formOffre.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = new FormData(formOffre);
-    const prix = String(f.get('prix') || '').replace(',', '.').trim();
+    const prix = lireMontant(f.get('prix'));
+    if (prix === null) { const m = document.getElementById('msg-offre'); m.className = 'message erreur'; m.textContent = 'Prix à vérifier : juste le nombre, par exemple 9,99.'; return; }
+    if (f.get('debut') && f.get('fin') < f.get('debut')) { const m = document.getElementById('msg-offre'); m.className = 'message erreur'; m.textContent = 'La fin doit être après le début.'; return; }
     try {
       await rpc('console_offre_enregistrer', { p: {
-        titre: f.get('titre'), texte: f.get('texte'), prix_an: prix || null,
+        appli: f.get('appli'), titre: f.get('titre'), texte: f.get('texte'), prix_an: prix || null,
         debut: f.get('debut') ? new Date(f.get('debut') + 'T00:00:00').toISOString() : null, fin: new Date(f.get('fin') + 'T23:59:00').toISOString(), actif: true } });
       aller('offres');
-    } catch (err) { document.getElementById('msg-offre').textContent = erreur(err); document.getElementById('msg-offre').className = 'message erreur'; }
+    } catch (err) { const m = document.getElementById('msg-offre'); m.className = 'message erreur'; m.textContent = /appli/.test(String(err?.message)) ? 'Lance supabase/console3.sql pour les offres des autres applis.' : erreur(err); }
   });
 
-  const formOr = h('form', { class: 'bloc' },
-    h('label', { class: 'lab' }, 'E-mail ou numéro du compte', h('input', { class: 'champ', name: 'compte', required: true, placeholder: 'pote@mail.fr ou 06 12 34 56 78' })),
+  const formAbo = h('form', { class: 'bloc' },
+    h('label', { class: 'lab' }, 'E-mail ou numéro du compte Tikette', h('input', { class: 'champ', name: 'compte', required: true, placeholder: 'pote@mail.fr ou 06 12 34 56 78' })),
     h('div', { class: 'boutons' },
       [[30, '1 mois'], [90, '3 mois'], [365, '1 an'], [0, 'Retirer']].map(([j, l]) => h('button', { class: j ? 'btn' : 'btn-contour', type: 'submit', value: j }, l))),
-    h('div', { class: 'message', id: 'msg-or' }));
-  formOr.addEventListener('submit', async (e) => {
+    h('div', { class: 'message', id: 'msg-abo' }));
+  formAbo.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const m = document.getElementById('msg-or');
+    const m = document.getElementById('msg-abo');
     try {
-      const r = await rpc('console_offrir_or', { p_compte: new FormData(formOr).get('compte'), p_jours: Number(e.submitter.value) });
+      const r = await rpc('console_offrir_or', { p_compte: new FormData(formAbo).get('compte'), p_jours: Number(e.submitter.value) });
       if (!r.ok) { m.className = 'message erreur'; m.textContent = r.raison === 'inconnu' ? 'Aucun compte Tikette avec cette adresse ou ce numéro.' : 'Durée refusée.'; return; }
-      m.className = 'message ok'; m.textContent = r.jusquau ? 'C’est fait : Or jusqu’au ' + dateFr(r.jusquau) + '.' : 'Or offert retiré.';
+      m.className = 'message ok'; m.textContent = r.jusquau ? 'C’est fait : abonnement offert jusqu’au ' + dateFr(r.jusquau) + '.' : 'Abonnement offert retiré.';
       setTimeout(() => aller('offres'), 1200);
     } catch (err) { m.className = 'message erreur'; m.textContent = erreur(err); }
   });
 
   afficher(
-    entete('Offres et Or', 'Ce que vous activez ici apparaît tout de suite dans l’appli'),
+    entete('Offres et abonnements', 'Ce que vous activez ici apparaît tout de suite dans l’appli concernée'),
+    h('div', { class: 'periodes' }, ['toutes', ...applis.map((a) => a.id)].map((id) => h('button', { class: 'periode' + (filtreOffres === id ? ' actif' : ''), onclick: () => { filtreOffres = id; aller('offres'); } }, id === 'toutes' ? 'Toutes les applis' : nomAppli(id)))),
     h('div', { class: 'grille' },
       h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
-        h('div', { class: 'panneau' }, h('h2', {}, 'Offres du moment'),
-          offres.length ? offres.map((o) => h('div', { class: 'offre' },
+        h('div', { class: 'panneau' }, h('h2', {}, 'Offres'),
+          visibles.length ? visibles.map((o) => h('div', { class: 'offre' },
+            chipApp(o.appli || 'tikette'),
             h('div', { class: 'txt' }, h('b', {}, o.titre), h('span', {}, [o.texte, o.prix_an != null ? '1re année à ' + euros(o.prix_an) : '', 'du ' + dateFr(o.debut) + ' au ' + dateFr(o.fin)].filter(Boolean).join(' · '))),
-            h('span', { class: 'etiquette ' + (etatOffre(o) === 'En cours' ? 'direct' : 'attente') }, etatOffre(o)),
+            h('span', { class: 'etiquette ' + (etatOffre(o) === 'En cours' ? 'direct' : etatOffre(o) === 'Terminée' ? 'gris' : 'attente'), style: 'margin:0' }, etatOffre(o)),
             h('button', { class: 'btn-contour mini', onclick: async () => { await rpc('console_offre_enregistrer', { p: { ...o, actif: !o.actif } }); aller('offres'); } }, o.actif ? 'Pause' : 'Reprendre'),
             h('button', { class: 'btn-lien', onclick: async () => { if (confirm('Supprimer l’offre « ' + o.titre + ' » ?')) { await rpc('console_offre_supprimer', { p_id: o.id }); aller('offres'); } } }, 'Supprimer')))
             : h('div', { class: 'vide' }, 'Aucune offre pour l’instant.')),
         h('div', { class: 'panneau' }, h('h2', {}, 'Nouvelle offre'), formOffre,
-          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, 'Le prix réduit devra aussi être créé dans l’App Store et Google Play (offre promotionnelle) quand le paiement sera branché.'))),
+          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, 'Le prix réduit devra aussi être créé dans l’App Store et Google Play quand le paiement sera branché.'))),
       h('div', { style: 'display:flex;flex-direction:column;gap:14px;min-width:0' },
-        h('div', { class: 'panneau' }, h('h2', {}, 'Offrir Tikette Or'), formOr,
-          h('h2', { style: 'margin-top:16px' }, 'Or offert en ce moment'),
+        h('div', { class: 'panneau' }, h('h2', {}, 'Offrir un abonnement'),
+          h('div', { style: 'margin:-4px 0 10px' }, chipApp('tikette'), h('span', { class: 'doux', style: 'font-size:12px' }, '  · les autres applis quand elles seront reliées')),
+          formAbo,
+          h('h2', { style: 'margin-top:16px' }, 'Abonnements offerts en ce moment'),
           offerts.length ? offerts.map((o) => h('div', { class: 'liste-ligne' }, h('span', {}, (o.prenom ? o.prenom + ' · ' : '') + o.compte), h('span', { class: 'doux', style: 'white-space:nowrap' }, 'jusqu’au ' + dateFr(o.jusquau))))
-            : h('div', { class: 'vide' }, 'Personne (hors comptes du studio, qui ont Or à vie).')),
+            : h('div', { class: 'vide' }, 'Aucun (vos comptes du studio ont un abonnement à vie, ils ne sont pas comptés).')),
         h('div', { class: 'panneau' }, h('h2', {}, 'Parrainage'),
+          h('div', { style: 'margin:-4px 0 6px' }, chipApp('tikette')),
           h('div', { class: 'liste-ligne' }, h('span', {}, 'Filleuls en tout'), h('b', {}, nombre(parr.total))),
           h('div', { class: 'liste-ligne' }, h('span', {}, 'Codes créés'), h('b', {}, nombre(parr.codes))),
           parr.meilleurs.map((p) => h('div', { class: 'liste-ligne' }, h('span', {}, (p.prenom || 'Sans prénom') + ' · ' + p.code), h('b', {}, p.filleuls + ' filleul' + (p.filleuls > 1 ? 's' : '')))),
-          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, '1 mois d’Or offert à chacun ; compte de moins de 14 jours ; 12 filleuls par an au plus.')))));
+          h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, '1 mois d’abonnement offert à chacun ; compte de moins de 14 jours ; 12 filleuls par an au plus.')))));
 }
 
 
@@ -801,7 +920,7 @@ async function pageAvances() {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const f = new FormData(form);
-    const montant = Number(String(f.get('montant')).replace(/\s/g, '').replace(',', '.'));
+    const montant = Number(lireMontant(f.get('montant')));
     if (!(montant > 0)) { etat.className = 'message erreur'; etat.textContent = 'Montant à vérifier.'; return; }
     try {
       await rpc('console_avance_enregistrer', { p: { qui: f.get('qui'), appli: f.get('appli'), quoi: f.get('quoi'), fournisseur: f.get('fournisseur'), montant, le: f.get('le'), justificatif } });
