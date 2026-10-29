@@ -29,10 +29,11 @@ jobs:
       - name: Garder les lieux utiles
         run: |
           osmium tags-filter /tmp/france.osm.pbf \
-            nw/amenity=restaurant,fast_food,bar,pub,cafe,nightclub,cinema,theatre,arts_centre,music_venue \
-            nw/leisure=bowling_alley,escape_game,amusement_arcade,miniature_golf,water_park,trampoline_park,park,garden,stadium \
-            nw/sport=laser_tag,karting,paintball \
-            nw/tourism=museum,gallery,viewpoint \
+            nw/amenity=restaurant,fast_food,bar,pub,cafe,nightclub,cinema,theatre,arts_centre,music_venue,karaoke_box,planetarium,public_bath \
+            nw/leisure=bowling_alley,escape_game,amusement_arcade,miniature_golf,water_park,trampoline_park,park,garden,stadium,ice_rink,horse_riding,sauna \
+            nw/sport=laser_tag,karting,paintball,climbing_adventure,climbing,canoe,kayak \
+            nw/tourism=museum,gallery,viewpoint,theme_park,zoo,aquarium \
+            nw/craft=winery nw/shop=wine \
             nw/natural=beach \
             -o /tmp/filtre.osm.pbf --overwrite
           rm /tmp/france.osm.pbf

@@ -1,18 +1,29 @@
-# Provisoire : liste les fichiers du jeu DATAtourisme sur data.gouv.fr (lancé à la main, puis supprimé).
+# Provisoire : explore les fichiers DATAtourisme « place » et « product » (lancé à la main, puis supprimé).
 name: Découverte DATAtourisme
 on: workflow_dispatch
 jobs:
   liste:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - run: |
-          curl -sS "https://www.data.gouv.fr/api/1/datasets/5b598be088ee387c0c353714/" > /tmp/d.json
+          curl -sSL --fail -o /tmp/place.csv "https://www.data.gouv.fr/api/1/datasets/r/cf247ad9-5bcd-4c8a-8f4d-f49f0803bca1"
+          curl -sSL --fail -o /tmp/product.csv "https://www.data.gouv.fr/api/1/datasets/r/0254ad40-3d26-472e-a628-bd9233f22ee0"
           python3 - <<'PY'
-          import json
-          d=json.load(open('/tmp/d.json'))
-          lignes=[f"{r['id']} | {r['title']} | {r.get('filesize')}" for r in d['resources']]
-          print('::notice title=liste::' + '%0A'.join(lignes))
+          import csv, collections, sys
+          csv.field_size_limit(10**9)
+          for nom in ('place', 'product'):
+              c = collections.Counter(); n = 0; exemples = {}
+              with open(f'/tmp/{nom}.csv', encoding='utf-8', newline='') as f:
+                  r = csv.DictReader(f)
+                  entetes = r.fieldnames
+                  for l in r:
+                      n += 1
+                      cats = [x.split('#')[-1] for x in (l.get('Categories_de_POI') or '').split('|') if x]
+                      for x in cats:
+                          c[x] += 1
+                          exemples.setdefault(x, (l.get('Nom_du_POI') or '')[:50])
+              lignes = [f'{nom} : {n} lignes ; colonnes : {entetes}'] + [f'{k} {v} ex. {exemples[k]}' for k, v in c.most_common(170)]
+              txt = '%0A'.join(lignes).replace('\r', '')
+              print(f'::notice title={nom}::' + txt[:60000])
           PY
-          curl -sS -L "https://www.data.gouv.fr/api/1/datasets/r/1ad4899d-fab3-4abd-8df7-025004902932" | head -c 2500 > /tmp/t.txt
-          python3 -c "print('::notice title=extrait::'+open('/tmp/t.txt',errors='ignore').read().replace('%','%25').replace('\r','').replace('\n','%0A'))"

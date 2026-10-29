@@ -24,7 +24,8 @@ PAS = 0.05  # taille d'un carré, en degrés
 PAR_DEGRE = round(1 / PAS)
 
 # Même ordre et mêmes identifiants que RUBRIQUES dans l'appli (src/lib/inventaire-outils.ts).
-RUBRIQUES = ['restos', 'pouce', 'bars', 'cafes', 'boites', 'cinemas', 'jeux', 'sensations', 'scenes', 'musees', 'parcs', 'vues', 'plages', 'stades']
+# Les rubriques ajoutées vont toujours à la fin (les anciennes versions de l'appli lisent les nombres par position).
+RUBRIQUES = ['restos', 'pouce', 'bars', 'cafes', 'boites', 'cinemas', 'jeux', 'sensations', 'scenes', 'musees', 'parcs', 'vues', 'plages', 'stades', 'detente', 'domaines']
 RANG = {r: i for i, r in enumerate(RUBRIQUES)}
 
 # Rubriques « à table » (fichiers t/, lus dans un petit rayon) ; les autres vont dans s/.
@@ -35,6 +36,7 @@ ETIQUETTES = {
     'name': ('n', 80), 'amenity': ('am', 30), 'leisure': ('le', 30), 'tourism': ('to', 30), 'sport': ('sp', 30),
     'natural': ('na', 30), 'cuisine': ('cu', 40), 'opening_hours': ('oh', 160),
     'addr:housenumber': ('hn', 12), 'addr:street': ('st', 80), 'addr:city': ('ci', 60),
+    'craft': ('cr', 30), 'shop': ('sh', 30), 'website': ('w', 160),
 }
 
 
@@ -66,10 +68,22 @@ def rubrique(t):
         return 'scenes'
     if leisure in ('bowling_alley', 'escape_game', 'amusement_arcade', 'miniature_golf') or sport == 'laser_tag':
         return 'jeux'
-    if sport in ('karting', 'paintball') or leisure in ('water_park', 'trampoline_park'):
+    if amenity == 'karaoke_box':
+        return 'jeux'
+    if sport in ('karting', 'paintball', 'climbing_adventure') or leisure in ('water_park', 'trampoline_park', 'ice_rink', 'horse_riding'):
         return 'sensations'
-    if tourism in ('museum', 'gallery'):
+    if sport == 'climbing' and leisure == 'sports_centre':
+        return 'sensations'
+    if sport in ('canoe', 'kayak') and (leisure == 'sports_centre' or t.get('rental')):
+        return 'sensations'
+    if tourism in ('theme_park', 'zoo', 'aquarium'):
+        return 'sensations'
+    if tourism in ('museum', 'gallery') or amenity == 'planetarium':
         return 'musees'
+    if leisure == 'sauna' or (amenity == 'public_bath' and t.get('bath:type') in ('thermal', 'hammam', 'onsen')):
+        return 'detente'
+    if t.get('craft') == 'winery' or (t.get('shop') == 'wine' and t.get('tasting') == 'yes'):
+        return 'domaines'
     if leisure in ('park', 'garden') and t.get('access') != 'private':
         return 'parcs'
     if t.get('natural') == 'beach':
