@@ -1,5 +1,5 @@
 {
- "maj": "2026-10-29",
+ "maj": "2026-10-30",
  "elements": [
   {
    "cle": "demande:tikette:8a56a467d1",
@@ -30,6 +30,20 @@
    "titre": "OVH : redirection de contact@tikette.fr vers contact@eggnotfound.fr"
   },
   {
+   "cle": "demande:tikette:62d14644b1",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Pages légales : donner à Claude nom, adresse et SIRET de la micro-entreprise dès l’immatriculation (bandeau « version provisoire » jusque-là)"
+  },
+  {
+   "cle": "demande:tikette:4c558dee1a",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Tous",
+   "titre": "Adhérer à un médiateur de la consommation (≈ 30-80 €/an, ex. CM2C, Médicys) avant la sortie de Tikette Or"
+  },
+  {
    "cle": "demande:tikette:757eb73e30",
    "groupe": "demande",
    "appli": "tikette",
@@ -56,6 +70,46 @@
    "appli": "shivr",
    "qui": "Tous",
    "titre": "Supabase de Shivr : vérifier que les scripts tournois, messages, contact-id, support, ouvertures, ouvertures-controles et echanges-preuves sont lancés"
+  },
+  {
+   "cle": "recette:tikette:v0.32:21453670cb",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.32",
+   "titre": "https://tikette.fr/conditions/, /confidentialite/ et /mentions-legales/ s'ouvrent (ordinateur et téléphone), onglets entre les trois."
+  },
+  {
+   "cle": "recette:tikette:v0.32:473e778908",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.32",
+   "titre": "Profil (connecté ou non) : liens Conditions / Confidentialité / Mentions légales en bas → écran dans l'appli, « Ouvrir cette page dans le navigateur »."
+  },
+  {
+   "cle": "recette:tikette:v0.32:cd9f110749",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.32",
+   "titre": "Écran de connexion : « Conditions » et « Politique de confidentialité » sont touchables."
+  },
+  {
+   "cle": "recette:tikette:v0.32:6fd4e3e8c0",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.32",
+   "titre": "Écran Tikette Or : Conditions et Confidentialité ouvrent les pages du site."
+  },
+  {
+   "cle": "recette:tikette:v0.32:3caaefcd3d",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.32",
+   "titre": "Relire les textes et signaler ce qui ne colle pas (âge minimum 15 ans, contact, etc.)."
   },
   {
    "cle": "recette:tikette:v0.31:b7a1b85671",

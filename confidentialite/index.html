@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Confidentialité · Tikette</title>
+<meta name="description" content="Quelles données, pourquoi, combien de temps, tes droits.">
+<meta name="theme-color" content="#1E1433">
+<link rel="icon" href="/mail/tikette.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=DM+Sans:wght@400;600;700&display=swap">
+<style>
+:root{--fond:#1E1433;--carte:#2A1D45;--texte:#F7F1FF;--doux:#C9BCE3;--bord:#3B2A5C;--lueur:#FFD166;--rose:#FF6B9A}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--fond);color:var(--texte);font:16px/1.65 'DM Sans',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:radial-gradient(120% 140% at 85% -10%,rgba(255,209,102,.35),transparent 45%),linear-gradient(150deg,#FF6B9A 0%,#6B3FB0 55%,#1E1433 100%);padding:22px 16px 30px}
+.large{max-width:760px;margin:0 auto}
+.marque{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;font-size:24px;letter-spacing:-.01em}
+h1{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;margin:22px 0 6px;font-size:clamp(26px,6vw,36px);line-height:1.12;letter-spacing:-.01em}
+.version{margin:0;color:rgba(255,255,255,.8);font-size:14px}
+nav.onglets{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}
+nav.onglets a{color:#fff;text-decoration:none;font-weight:700;font-size:14px;padding:7px 14px;border-radius:999px;background:rgba(30,20,51,.35);border:1px solid rgba(255,255,255,.18)}
+nav.onglets a.actif{background:var(--lueur);color:var(--fond);border-color:var(--lueur)}
+main{padding:10px 16px 30px}
+.sommaire{background:var(--carte);border:1px solid var(--bord);border-radius:18px;padding:14px 18px;margin:18px 0 6px}
+.sommaire b{font-size:13px;color:var(--doux);letter-spacing:.06em;text-transform:uppercase}
+.sommaire ol{margin:8px 0 0;padding-left:20px;columns:2;column-gap:28px}
+.sommaire li{margin:3px 0;break-inside:avoid}
+.sommaire a{color:var(--texte);text-decoration:none}
+.sommaire a:hover{color:var(--lueur)}
+h2{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:800;font-size:21px;margin:30px 0 6px;color:var(--rose);scroll-margin-top:16px}
+p,li{color:var(--texte)}
+strong{color:#fff}
+a{color:var(--lueur)}
+ul{padding-left:20px}li{margin:7px 0}
+ul li::marker{color:var(--rose)}
+mark{background:var(--lueur);color:var(--fond);border-radius:5px;padding:0 4px}
+.provisoire{background:var(--carte);border:1px dashed var(--lueur);border-radius:14px;padding:10px 14px;color:var(--doux);font-size:14px;margin-top:18px}
+footer{padding:20px 16px 34px;color:var(--doux);font-size:13px;border-top:1px solid var(--bord)}
+footer a{color:var(--doux)}
+@media (max-width:560px){.sommaire ol{columns:1}}
+</style></head>
+<body>
+<header><div class="large">
+<a class="marque" href="/"><svg width="30" height="38" viewBox="0 0 60 76" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF8FB2"/><stop offset="1" stop-color="#FF6B9A"/></linearGradient></defs><path d="M8 2h44a6 6 0 0 1 6 6v18a6 6 0 0 0 0 12v30a6 6 0 0 1-6 6H8a6 6 0 0 1-6-6V38a6 6 0 0 0 0-12V8a6 6 0 0 1 6-6z" fill="url(#g)"/><path d="M8 32h44" stroke="#1E1433" stroke-opacity=".35" stroke-width="2" stroke-dasharray="3 4"/><path d="M30 60c-6-4-10-7-10-11a5 5 0 0 1 10-1 5 5 0 0 1 10 1c0 4-4 7-10 11z" fill="#1E1433" fill-opacity=".85"/></svg><span>tikette</span></a>
+<h1>Politique de confidentialité</h1>
+<p class="version">Version du 30 octobre 2026</p>
+<nav class="onglets" aria-label="Pages légales"><a href="/conditions/">Conditions</a><a href="/confidentialite/" class="actif" aria-current="page">Confidentialité</a><a href="/mentions-legales/">Mentions légales</a></nav>
+</div></header>
+<main class="large">
+<p class="provisoire">Version provisoire : les informations sur l’éditeur seront complétées avant la sortie de l’application.</p>
+<div class="sommaire"><b>Sommaire</b><ol><li><a href="#s0">En bref</a></li><li><a href="#s1">Qui est responsable de tes données</a></li><li><a href="#s2">Sans compte</a></li><li><a href="#s3">Avec un compte : ce que nous enregistrons et pourquoi</a></li><li><a href="#s4">Ce que les autres voient</a></li><li><a href="#s5">L’intelligence artificielle</a></li><li><a href="#s6">Ce que nous ne faisons pas</a></li><li><a href="#s7">Les autorisations du téléphone</a></li><li><a href="#s8">Nos prestataires</a></li><li><a href="#s9">Combien de temps</a></li><li><a href="#s10">Âge</a></li><li><a href="#s11">Sécurité</a></li><li><a href="#s12">Tes droits</a></li><li><a href="#s13">Changements</a></li></ol></div>
+<section id="s0"><h2>En bref</h2>
+<ul><li>Tikette s’utilise <strong>sans compte</strong> : tes sorties restent alors sur ton téléphone.</li><li><strong>Pas de publicité, pas de revente de données, pas de traceurs</strong> publicitaires ni de mesure d’audience.</li><li>Tes <strong>photos souvenir restent sur ton téléphone</strong> : elles ne sont jamais envoyées.</li><li>Tes <strong>contacts ne quittent jamais ton téléphone en clair</strong> et ne sont jamais gardés.</li><li>Ta <strong>position n’est jamais enregistrée</strong> sur nos serveurs.</li><li>Tes données sont stockées <strong>en France</strong> (Paris).</li><li>Tu peux <strong>supprimer ton compte</strong> et ses données à tout moment, dans l’appli.</li></ul></section>
+<section id="s1"><h2>Qui est responsable de tes données</h2>
+<p><mark>[à compléter : prénom et nom de l’éditeur]</mark>, éditeur de Tikette (voir les mentions légales). Pour toute question : <a href="mailto:contact@eggnotfound.fr">contact@eggnotfound.fr</a>.</p></section>
+<section id="s2"><h2>Sans compte</h2>
+<p>Ce que tu fais dans Tikette (sorties gardées dans ton carnet, notes, souvenirs, photos, ton Tikette personnalisé, ta zone, tes rappels, tes bandes de potes, « qui doit quoi ») est enregistré <strong>uniquement sur ton téléphone</strong>. Si tu supprimes l’application, tout est perdu.</p>
+<p>Pour composer tes sorties, ton téléphone télécharge des fichiers publics de lieux, d’événements et de matchs (sur GitHub), cherche les communes que tu tapes (Géoplateforme de l’IGN) et demande à notre serveur les activités Viator autour du point choisi. Ces services voient l’adresse IP de ta connexion et le point de recherche ; ils ne reçoivent rien d’autre sur toi, et notre serveur ne garde pas ce point.</p></section>
+<section id="s3"><h2>Avec un compte : ce que nous enregistrons et pourquoi</h2>
+<p>Nous utilisons tes données pour <strong>te fournir le service</strong> que tu demandes (c’est la base légale : l’exécution des conditions d’utilisation), sauf mention contraire.</p>
+<ul><li><strong>Ton compte</strong> : ton numéro de mobile (pour te connecter par code SMS), ton prénom, et une adresse e-mail de secours si tu en donnes une (pour retrouver ton compte si tu changes de numéro).</li><li><strong>La sauvegarde de ton carnet</strong> : les sorties gardées (programme, jour prévu), tes notes, réactions et mots-clés, ton souvenir écrit, le nom de ta bande et les dépenses de « qui doit quoi » (avec les prénoms que tu y tapes). Tes photos ne sont pas sauvegardées.</li><li><strong>Retrouver tes potes</strong> : si tu le choisis, les numéros de tes contacts sont <strong>brouillés sur ton téléphone</strong> (empreinte SHA-256) avant d’être comparés à ceux des comptes Tikette. Nous ne recevons jamais les numéros en clair, ni les noms, et nous ne gardons pas ces empreintes : seulement le nombre de comparaisons faites, 2 jours, pour éviter les abus. Ton propre numéro est gardé sous la même forme brouillée pour que tes potes te retrouvent.</li><li><strong>Votes entre potes</strong> (si tu en lances un) : le titre, ton prénom, les programmes proposés, et pour chaque votant le prénom qu’il a tapé et son choix.</li><li><strong>Surprises</strong> (si tu en prépares une) : les prénoms, le rendez-vous, la tenue, les étapes et leurs indices. Le lieu de chaque étape n’est montré à ton invité qu’à l’heure que tu as choisie.</li><li><strong>Avis sur tes sorties</strong> (quand tu notes un date) : la note, l’ambiance, le moment, le budget, le nombre de personnes, tes réactions par étape (bof, bien, adoré), les mots-clés, et une position <strong>arrondie à environ 1 km</strong>. Jamais ton souvenir, ta bande ni tes dépenses. Les autres ne voient que des moyennes, à partir de 3 avis par lieu. Base légale : notre intérêt légitime à recommander les sorties qui plaisent.</li><li><strong>Tikette Or</strong> : la formule, ses dates, et d’où elle vient (App Store, Google Play, offerte, parrainage). Le paiement est fait par Apple ou Google : nous ne voyons jamais ta carte bancaire.</li><li><strong>Parrainage</strong> : ton code (fait à partir de ton prénom) et qui a utilisé le code de qui.</li><li><strong>Ticket mystère et programme par l’IA</strong> : combien tu en as utilisé dans le mois ou dans la journée, pour appliquer les limites.</li><li><strong>La sécurité</strong> : pour bloquer les envois de SMS abusifs, nous gardons 2 jours une empreinte brouillée du numéro et l’heure de chaque code envoyé. Notre hébergeur enregistre aussi les connexions (adresse IP, date) quelques jours. Base légale : intérêt légitime.</li></ul>
+<p>Nous comptons aussi, chaque jour, le nombre de clics vers chaque partenaire (Viator, GetYourGuide…), <strong>sans savoir qui a cliqué</strong>.</p></section>
+<section id="s4"><h2>Ce que les autres voient</h2>
+<ul><li>Une personne qui a ton numéro dans ses contacts et cherche ses potes : que tu es sur Tikette, et ton prénom.</li><li>Toute personne qui a le lien d’un vote : les programmes proposés (sans liens de réservation), ton prénom et les prénoms des votants.</li><li>Ton invité, avec le lien d’une surprise : ce que tu as écrit, et les lieux au fil des révélations.</li><li>Tout le monde : des moyennes de notes par lieu, sans aucun nom.</li></ul>
+<p>Ne mets jamais d’adresse personnelle ni d’information sensible dans un nom de bande, un vote ou une surprise : ces pages sont lisibles par quiconque a le lien.</p></section>
+<section id="s5"><h2>L’intelligence artificielle</h2>
+<p>Quand tu demandes un programme « sur mesure » (Tikette Or), ton souhait et la liste des lieux candidats sont envoyés à <strong>Anthropic</strong> (l’IA Claude), qui choisit les lieux et écrit les textes. Ni ton numéro, ni ton prénom, ni ta position exacte ne lui sont envoyés. Anthropic ne se sert pas de ces demandes pour entraîner ses modèles. N’écris pas d’information sensible dans ton souhait.</p></section>
+<section id="s6"><h2>Ce que nous ne faisons pas</h2>
+<p>Nous ne vendons pas tes données, nous n’affichons pas de publicité, nous ne te suivons pas d’une appli à l’autre. Aucune décision ayant un effet juridique n’est prise automatiquement à ton sujet : les propositions de sorties sont de simples idées.</p></section>
+<section id="s7"><h2>Les autorisations du téléphone</h2>
+<ul><li><strong>Position</strong> (pendant que tu utilises l’appli) : trouver des sorties autour de toi. Elle sert à la recherche et n’est pas enregistrée sur nos serveurs.</li><li><strong>Contacts</strong> (facultatif) : retrouver tes potes déjà sur Tikette, comme expliqué plus haut.</li><li><strong>Appareil photo et photos</strong> : ajouter des photos souvenir à tes sorties. Elles restent sur ton téléphone.</li><li><strong>Enregistrer dans les photos</strong> : enregistrer le récap de ta soirée.</li><li><strong>Mouvements</strong> : te proposer une sortie au hasard quand tu secoues le téléphone. Ces mesures ne quittent jamais le téléphone.</li><li><strong>Notifications</strong> : tes rappels (Saint-Valentin, anniversaires…) et la sortie du ticket mystère. Ils sont programmés sur ton téléphone.</li><li>Tikette n’utilise pas le micro.</li></ul></section>
+<section id="s8"><h2>Nos prestataires</h2>
+<p>Seuls ces prestataires traitent tes données pour notre compte, chacun pour sa mission :</p>
+<ul><li><strong>Supabase</strong> : comptes et données, serveurs à Paris.</li><li><strong>Brevo</strong> (Sendinblue SAS, Paris) : envoi des codes par SMS et par e-mail.</li><li><strong>Anthropic</strong> (États-Unis) : programmes « sur mesure » par l’IA.</li><li><strong>Viator</strong> (Tripadvisor, États-Unis) : interrogé par notre serveur pour trouver des activités autour d’un point, sans aucune donnée te concernant.</li><li><strong>GitHub</strong> : site tikette.fr, pages de vote et de surprise, fichiers publics des lieux.</li><li><strong>OVH</strong> (Roubaix) : nom de domaine et boîte e-mail.</li><li><strong>Expo</strong> (650 Industries, Inc., États-Unis) : mises à jour de l’application (adresse IP et modèle du téléphone).</li><li><strong>Apple et Google</strong> : téléchargement de l’application et paiement de Tikette Or. Un service de gestion des abonnements (RevenueCat) sera ajouté avec le paiement ; il ne recevra qu’un identifiant de compte et l’état de ton abonnement.</li></ul>
+<p>Quand tu touches un bouton de réservation (Viator, GetYourGuide, TheFork, Funbooker, Ticketmaster), tu quittes Tikette : le site du partenaire voit ta visite, avec notre identifiant de partenaire, et applique sa propre politique de confidentialité.</p>
+<p>Certains prestataires sont situés hors de l’Union européenne. Ces transferts sont encadrés par les clauses contractuelles types de la Commission européenne ou par le cadre de protection des données UE–États-Unis.</p></section>
+<section id="s9"><h2>Combien de temps</h2>
+<ul><li>Compte, carnet, votes, surprises et avis : tant que le compte existe, ou jusqu’à ce que tu les supprimes. Un compte qui n’a pas servi depuis 3 ans est supprimé, avec ses données.</li><li>Empreintes des numéros pour les SMS et compteur de recherche de potes : 2 jours.</li><li>Journaux de connexion de l’hébergeur : quelques jours.</li></ul>
+<p><strong>Quand tu supprimes ton compte</strong> (Profil › Supprimer mon compte), nous effaçons ton compte, ton numéro, ton prénom, ton carnet sauvegardé, tes votes, tes surprises, tes avis et ton parrainage. Le carnet est aussi vidé de ton téléphone.</p></section>
+<section id="s10"><h2>Âge</h2>
+<p>Il faut avoir <strong>au moins 15 ans</strong> pour créer un compte.</p></section>
+<section id="s11"><h2>Sécurité</h2>
+<p>Connexions chiffrées, connexion par code à usage unique (pas de mot de passe à retenir ni à se faire voler), et des règles vérifiées par le serveur : chacun n’accède qu’à ses propres données et à ce que les autres ont choisi de partager.</p></section>
+<section id="s12"><h2>Tes droits</h2>
+<p>Tu peux accéder à tes données, les corriger, les effacer, en recevoir une copie dans un format lisible, t’opposer à un traitement ou en demander la limitation. Écris à <a href="mailto:contact@eggnotfound.fr">contact@eggnotfound.fr</a> en indiquant le numéro de ton compte : nous répondons sous un mois.</p>
+<p>Si tu estimes que tes droits ne sont pas respectés, tu peux saisir la CNIL (<a href="https://www.cnil.fr/fr/plaintes">cnil.fr</a>).</p></section>
+<section id="s13"><h2>Changements</h2>
+<p>Si cette politique change de façon importante, nous te prévenons dans l’application avant que le changement s’applique.</p></section>
+</main>
+<footer><div class="large">Tikette · Choisis l’ambiance, On organise. · <a href="mailto:contact@eggnotfound.fr">contact@eggnotfound.fr</a></div></footer>
+</body></html>
