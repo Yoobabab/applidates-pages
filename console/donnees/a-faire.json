@@ -16,13 +16,6 @@
    "titre": "Avant la sortie : retirer les numéros de test de Supabase (Sign In / Providers › Phone › Test Phone Numbers), sauf celui donné aux testeurs d’Apple et Google"
   },
   {
-   "cle": "demande:tikette:08dbc778f2",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Tous",
-   "titre": "OVH : redirection de contact@tikette.fr vers contact@eggnotfound.fr"
-  },
-  {
    "cle": "demande:studio:f6174ec102",
    "groupe": "demande",
    "appli": "studio",
