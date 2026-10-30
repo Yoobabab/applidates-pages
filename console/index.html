@@ -181,6 +181,9 @@
   .personne h2 { margin: 0 !important; }
   .chip-app { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--doux); white-space: nowrap; }
   .chip-app .icone-app { width: 16px; height: 16px; border-radius: 4px; font-size: 9px; }
+  .moteur { font-family: var(--mono); font-size: 10.5px; color: var(--doux); margin-top: 4px; }
+  .puce-app { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12px; color: var(--creme, #EDE7DC); background: rgba(237,231,220,.06); border: 1px solid var(--ligne); border-radius: 999px; padding: 3px 9px 3px 4px; cursor: pointer; }
+  .puce-app .icone-app { border-radius: 50%; font-size: 10px; }
   .progression { height: 6px; border-radius: 3px; background: rgba(237,231,220,.08); overflow: hidden; margin: 6px 0 4px; }
   .progression span { display: block; height: 100%; background: var(--vert); border-radius: 3px; }
   .groupe-recette { border: 1px solid var(--ligne); border-radius: 12px; padding: 10px 14px; margin-top: 10px; }
@@ -505,6 +508,7 @@ async function pageEnsemble() {
     h('div', { class: 'info' }, a.id === 'tikette' && t
       ? `${nombre(t.dates.faits)} dates ce mois · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : 'pas encore de note'} · ${nombre(ab.payants)} abonnés`
       : (a.version ? 'v' + a.version + ' · ' : '') + (a.resume || '')),
+    a.moteur ? h('div', { class: 'moteur' }, a.moteur) : '',
     AVANCEMENT[a.id] ? h('div', { class: 'progression', title: `Avancement : ${pctAvancement(a.id)} %` }, h('span', { style: `width:${pctAvancement(a.id)}%` })) : '');
   const confirmees = CATALOGUE.filter(estConfirmee);
 
@@ -528,6 +532,7 @@ async function pageEnsemble() {
         ligneRobots(robots, g))),
     h('div', { class: 'titre-section' }, `NOS APPLIS ET JEUX (${confirmees.length})`),
     h('div', { class: 'apps' }, confirmees.map(carteApp)),
+    panneauMoteurs(),
     h('div', { class: 'panneau' }, h('h2', {}, 'Liens rapides'), blocLiens()));
 }
 function etatPartenaire(p) {
@@ -591,8 +596,26 @@ async function pageAppli(id) {
       panneauAvancement(id),
       h('div', { class: 'panneau' }, h('h2', {}, 'Chiffres'),
         h('p', { class: 'note-bas', style: 'margin:0 0 10px' }, a.relie ? 'Chiffres en direct.' : 'Pas encore reliée à la console : il faudra lancer un petit script SQL dans sa base (comptes du studio + chiffres), comme pour Tikette. Dis-le à Claude quand vous voulez la brancher.'),
+        a.moteur ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Moteur'), h('b', {}, a.moteur)) : '',
+        a.technique ? h('p', { class: 'note-bas', style: 'margin:6px 0 4px' }, a.technique) : '',
         a.depot ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('a', { href: 'https://github.com/' + a.depot, target: '_blank', rel: 'noopener' }, a.depot)) : h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('span', { class: 'doux' }, 'pas encore créé')),
         a.site ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Site'), h('a', { href: a.site, target: '_blank', rel: 'noopener' }, a.site)) : '')));
+}
+
+// ───────── Moteurs utilisés (champ « moteur » de donnees/applis.json) ─────────
+function panneauMoteurs() {
+  const parMoteur = new Map();
+  for (const a of CATALOGUE) {
+    if (!a.moteur) continue;
+    const m = a.moteur.replace(/ \((à confirmer|prévu)\)$/, '').replace(/ \d+(\.\d+)*$/, '');
+    if (!parMoteur.has(m)) parMoteur.set(m, []);
+    parMoteur.get(m).push(a);
+  }
+  if (!parMoteur.size) return '';
+  return h('div', { class: 'panneau' }, h('h2', {}, 'Nos moteurs'),
+    [...parMoteur].sort((x, y) => y[1].length - x[1].length).map(([m, l]) => h('div', { class: 'liste-ligne' },
+      h('b', {}, m),
+      h('span', { style: 'display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end' }, l.map((a) => h('button', { class: 'puce-app', title: a.technique || '', onclick: () => (a.id === 'tikette' ? aller('tikette') : aller('appli', a.id)) }, iconeApp(a, 18), a.nom + (/(à confirmer|prévu)/.test(a.moteur) ? ' ?' : '')))))));
 }
 
 // ───────── Avancement (grandes étapes, donnees/avancement.json) ─────────

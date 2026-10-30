@@ -1,5 +1,5 @@
 {
- "aide": "Applis et jeux du studio. statut « confirmee » = dans la liste ; « proposee » = ajoutée par Claude au lancement d'un projet, en transparence avec un œuf à toucher pour confirmer. relie = chiffres en direct dans la console. etape = idée / en cours / en test / en ligne / en pause.",
+ "aide": "Applis et jeux du studio. statut « confirmee » = dans la liste ; « proposee » = ajoutée par Claude au lancement d'un projet, en transparence avec un œuf à toucher pour confirmer. relie = chiffres en direct dans la console. etape = idée / en cours / en test / en ligne / en pause. moteur = moteur ou technique principale (court), technique = détails.",
  "applis": [
   {
    "id": "tikette",
@@ -13,7 +13,9 @@
    "resume": "Organise les sorties clés en main",
    "statut": "confirmee",
    "relie": true,
-   "etape": "en test"
+   "etape": "en test",
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone et Android en TypeScript, testée dans Expo Go ; serveur Supabase (base, comptes, fonctions)"
   },
   {
    "id": "shivr",
@@ -26,7 +28,9 @@
    "resume": "Cartes Pokémon : collection, cote, échanges",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en test"
+   "etape": "en test",
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone et Android, testée dans Expo Go ; serveur Supabase ; données des cartes publiées par un robot GitHub (AppliCard-donnees)"
   },
   {
    "id": "panier-fantome",
@@ -39,7 +43,9 @@
    "resume": "Faux achats contre les achats impulsifs",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone et Android, testée dans Expo Go ; tout sur le téléphone, sans serveur"
   },
   {
    "id": "robi",
@@ -52,7 +58,9 @@
    "resume": "Aide plomberie à distance",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone et Android en TypeScript (Expo 58), testée dans Expo Go ; serveur Supabase"
   },
   {
    "id": "applibd",
@@ -65,7 +73,9 @@
    "resume": "BD, manga, romans : auteurs et lecteurs",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone, Android et web, testée dans Expo Go"
   },
   {
    "id": "applinature",
@@ -78,7 +88,9 @@
    "resume": "Le Pokédex de la vraie nature",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en test"
+   "etape": "en test",
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone et Android, testée dans Expo Go ; IA de reconnaissance entraînée par un robot GitHub (AppliNature-ia)"
   },
   {
    "id": "hearthaven",
@@ -91,7 +103,9 @@
    "statut": "confirmee",
    "relie": false,
    "etape": "en test",
-   "version": "0.1"
+   "version": "0.1",
+   "moteur": "Godot 4.7",
+   "technique": "Jeu 3D en GDScript, rendu « Mobile » (prévu pour le téléphone) ; testé sur PC, portage iPhone à la fin ; modèles 3D Meshy"
   },
   {
    "id": "agent-de-foot",
@@ -103,7 +117,9 @@
    "resume": "Gestion d’agent de joueurs (PC / Steam)",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "TypeScript · Three.js",
+   "technique": "Moteur de jeu maison en TypeScript avec base SQLite (sql.js) ; interface web React, bureau 3D en Three.js ; bureau Unreal Engine envisagé pour la version PC"
   },
   {
    "id": "notif",
@@ -115,7 +131,9 @@
    "resume": "Tycoon de création d’applis",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "Electron · Three.js",
+   "technique": "Jeu web (HTML, CSS, JavaScript) avec vue 3D isométrique en Three.js ; version Windows via Electron ; décors Kenney et Quaternius"
   },
   {
    "id": "braise",
@@ -127,7 +145,9 @@
    "resume": "Pokémon × Dragon Quest × Fallout × Zelda",
    "statut": "proposee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "Godot",
+   "technique": "Jeu 3D sur Godot (prototype de la zone 1 « Station Étoile ») ; modèles Meshy prévus"
   },
   {
    "id": "ce-que-tu-semes",
@@ -139,7 +159,9 @@
    "resume": "RPG à grosse histoire",
    "statut": "proposee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en cours",
+   "moteur": "Godot (à confirmer)",
+   "technique": "Prototypes faits sur Godot (HD-2D et 3D « jouet ») ; Unreal Engine choisi au départ : moteur final à trancher ; dépôt GitHub encore vide"
   },
   {
    "id": "attends-moi",
@@ -150,7 +172,9 @@
    "resume": "Messages à ouvrir plus tard (nom provisoire, ex-« Plus tard »)",
    "etape": "en cours",
    "statut": "proposee",
-   "relie": false
+   "relie": false,
+   "moteur": "Expo · React Native (prévu)",
+   "technique": "Même méthode que les autres applis ; projet Supabase et dépôt GitHub à créer"
   },
   {
    "id": "raconte",
@@ -161,7 +185,9 @@
    "resume": "Jeu de cartes pour faire raconter sa vie à ses proches (nom provisoire)",
    "etape": "en pause",
    "statut": "proposee",
-   "relie": false
+   "relie": false,
+   "moteur": "Jeu de cartes",
+   "technique": "Jeu de 54 cartes physiques, pas de moteur"
   },
   {
    "id": "maison-connectee",
@@ -172,7 +198,9 @@
    "resume": "Caméras, interphone, lumières… toutes marques (nom à trouver)",
    "etape": "idée",
    "statut": "proposee",
-   "relie": false
+   "relie": false,
+   "moteur": "À choisir",
+   "technique": "Idée : audio et vidéo par LiveKit, interphone par appel SIP, sans boîtier chez l’utilisateur"
   }
  ]
 }
