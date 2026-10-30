@@ -9,13 +9,6 @@
    "titre": "Brevo : ajouter le domaine eggnotfound.fr et l’expéditeur « Egg Not Found » <contact@eggnotfound.fr>"
   },
   {
-   "cle": "demande:studio:4b61cbe43e",
-   "groupe": "demande",
-   "appli": "studio",
-   "qui": "Greg",
-   "titre": "Supabase (Tikette) : lancer supabase/console3.sql (offres pour toutes les applis)"
-  },
-  {
    "cle": "demande:tikette:1269c716ab",
    "groupe": "demande",
    "appli": "tikette",
@@ -51,11 +44,11 @@
    "titre": "Adhérer au médiateur de la consommation CM2C (cm2c.net, ≈ 48 € pour 3 ans) dès l’immatriculation de la micro-entreprise, avant la vente de Tikette Or ; garder l’attestation (PDF) et donner à Claude le nom et l’adresse du médiateur pour les CGV"
   },
   {
-   "cle": "demande:tikette:757eb73e30",
+   "cle": "demande:tikette:8fb7b4ac64",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Tous",
-   "titre": "Comptes développeur au nom du studio : Apple (99 €/an) et Google (25 $ une fois), avant la sortie"
+   "titre": "Comptes développeur au nom du studio : Apple (99 €/an, ouvre TestFlight pour tester sur iPhone) et Google (25 $ une fois), vers la sortie"
   },
   {
    "cle": "demande:tikette:ed8f96c7cf",
