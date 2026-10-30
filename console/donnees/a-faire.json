@@ -2,11 +2,18 @@
  "maj": "2026-10-30",
  "elements": [
   {
-   "cle": "demande:tikette:1269c716ab",
+   "cle": "demande:tikette:83e3a37d95",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "SMS : suivre la validation de l’expéditeur « Tikette » chez Brevo (Paramètres › SMS Sender ID), puis faire le test du vrai SMS de connexion (remis à plus tard le 30 oct.)"
+  },
+  {
+   "cle": "demande:tikette:eed1f7bdd1",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Tous",
-   "titre": "Connexion par SMS : crédits SMS Brevo, fonction envoyer-sms, fournisseur Phone activé, Send SMS hook + SEND_SMS_HOOK_SECRET"
+   "titre": "Avant la sortie : retirer les numéros de test de Supabase (Sign In / Providers › Phone › Test Phone Numbers), sauf celui donné aux testeurs d’Apple et Google"
   },
   {
    "cle": "demande:tikette:08dbc778f2",
