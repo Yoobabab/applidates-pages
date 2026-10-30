@@ -2,13 +2,6 @@
  "maj": "2026-10-30",
  "elements": [
   {
-   "cle": "demande:tikette:8a56a467d1",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Brevo : ajouter le domaine eggnotfound.fr et l’expéditeur « Egg Not Found » <contact@eggnotfound.fr>"
-  },
-  {
    "cle": "demande:tikette:1269c716ab",
    "groupe": "demande",
    "appli": "tikette",
@@ -23,11 +16,11 @@
    "titre": "OVH : redirection de contact@tikette.fr vers contact@eggnotfound.fr"
   },
   {
-   "cle": "demande:studio:d8f6cbba57",
+   "cle": "demande:studio:f6174ec102",
    "groupe": "demande",
    "appli": "studio",
-   "qui": "Greg",
-   "titre": "Confirmer la proposition d’Yvan : contact@eggnotfound.fr comme adresse de contact unique de toutes les applis (Tikette l’utilise déjà ; Shivr encore sur contact@shivr.fr)"
+   "qui": "Tous",
+   "titre": "Décider ensemble la proposition d’Yvan : contact@eggnotfound.fr comme adresse de contact unique de toutes les applis (Tikette l’utilise déjà ; Shivr encore sur contact@shivr.fr)"
   },
   {
    "cle": "demande:tikette:62d14644b1",
@@ -710,6 +703,30 @@
    "titre": "Les empreintes de pas s’assombrissent à l’ombre, sous les nuages et la nuit"
   },
   {
+   "cle": "recette:hearthaven:v0.1:278e406ed6",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Ceinture à droite : le rabat ouvre la sacoche, la nappe est dans la première poche, les outils dans les suivantes"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:2254911cb0",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Nappe : elle se déroule au sol, on y pose des objets, « Assembler » fait tourbillonner les objets et l’outil apparaît"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:6cf39c5424",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Carnet : il s’ouvre comme un vrai livre (la couverture se rabat), seule la feuille de papier tourne, sans trous"
+  },
+  {
    "cle": "recette:applinature:v0.10.1:2356b8090a",
    "groupe": "recette",
    "appli": "applinature",
@@ -772,30 +789,6 @@
    "qui": "Tous",
    "version": "v0.6",
    "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
-  },
-  {
-   "cle": "recette:hearthaven:v0.1:278e406ed6",
-   "groupe": "recette",
-   "appli": "hearthaven",
-   "qui": "Yvan",
-   "version": "v0.1",
-   "titre": "Ceinture à droite : le rabat ouvre la sacoche, la nappe est dans la première poche, les outils dans les suivantes"
-  },
-  {
-   "cle": "recette:hearthaven:v0.1:2254911cb0",
-   "groupe": "recette",
-   "appli": "hearthaven",
-   "qui": "Yvan",
-   "version": "v0.1",
-   "titre": "Nappe : elle se déroule au sol, on y pose des objets, « Assembler » fait tourbillonner les objets et l’outil apparaît"
-  },
-  {
-   "cle": "recette:hearthaven:v0.1:6cf39c5424",
-   "groupe": "recette",
-   "appli": "hearthaven",
-   "qui": "Yvan",
-   "version": "v0.1",
-   "titre": "Carnet : il s’ouvre comme un vrai livre (la couverture se rabat), seule la feuille de papier tourne, sans trous"
   }
  ]
 }
