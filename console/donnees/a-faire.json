@@ -30,6 +30,13 @@
    "titre": "OVH : redirection de contact@tikette.fr vers contact@eggnotfound.fr"
   },
   {
+   "cle": "demande:studio:d8f6cbba57",
+   "groupe": "demande",
+   "appli": "studio",
+   "qui": "Greg",
+   "titre": "Confirmer la proposition d’Yvan : contact@eggnotfound.fr comme adresse de contact unique de toutes les applis (Tikette l’utilise déjà ; Shivr encore sur contact@shivr.fr)"
+  },
+  {
    "cle": "demande:tikette:62d14644b1",
    "groupe": "demande",
    "appli": "tikette",
