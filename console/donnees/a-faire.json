@@ -114,11 +114,11 @@
    "titre": "Relancer Hearthaven (dossier « Hearthaven » du bureau) et faire la recette de la version 0.1 ; envoyer une capture à Claude si quelque chose cloche"
   },
   {
-   "cle": "demande:hearthaven:8a6b6648b8",
+   "cle": "demande:hearthaven:2045788357",
    "groupe": "demande",
    "appli": "hearthaven",
    "qui": "Yvan",
-   "titre": "Choisir la prochaine grande étape d’Hearthaven : fabrication sur la nappe, autres personnages, carte et boussole, ou biomes et animaux"
+   "titre": "Choisir la prochaine grande étape d’Hearthaven : autres personnages, carte et boussole, ou biomes et animaux"
   },
   {
    "cle": "demande:hearthaven:6ff69d3261",
@@ -772,6 +772,33 @@
    "qui": "Tous",
    "version": "v0.6",
    "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
+<<<<<<< Updated upstream
+=======
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:278e406ed6",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Ceinture à droite : le rabat ouvre la sacoche, la nappe est dans la première poche, les outils dans les suivantes"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:2254911cb0",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Nappe : elle se déroule au sol, on y pose des objets, « Assembler » fait tourbillonner les objets et l’outil apparaît"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:6cf39c5424",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Carnet : il s’ouvre comme un vrai livre (la couverture se rabat), seule la feuille de papier tourne, sans trous"
+>>>>>>> Stashed changes
   }
  ]
 }

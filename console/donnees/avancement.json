@@ -5,27 +5,94 @@
    "maj": "2026-10-30",
    "note": "Version de travail sur Godot 4.7, testée sur le PC d’Yvan (dossier « Hearthaven » du bureau). Portage iPhone à la toute fin.",
    "jalons": [
-    {"etat": "fait", "titre": "Passage sur le moteur Godot (rendu adapté au téléphone)"},
-    {"etat": "fait", "titre": "Île générée à partir d’une graine : plage tout autour, point d’arrivée sur une grande plage avec voile échouée et caisses"},
-    {"etat": "fait", "titre": "Relief naturel : montagnes érodées et arrondies, falaises, îlots au large (à 40 m minimum, non praticables)"},
-    {"etat": "fait", "titre": "Sol peint et fondu : sable, herbe, roche, éboulis et neige sans limites nettes"},
-    {"etat": "fait", "titre": "Ciel vivant : jour et nuit, soleil, lune, étoiles, nuages et petites ombres de nuages (1 h de jeu = 2 min)"},
-    {"etat": "fait", "titre": "Mer stylisée : volutes façon Wind Waker, écume sur la plage, reflets de lumière au fond de l’eau"},
-    {"etat": "fait", "titre": "Végétation au vent, contre-jour, plantes qui s’écartent au passage"},
-    {"etat": "fait", "titre": "Renard jouable : marche, course, saut, empreintes dans le sable et la neige, bruits de pas"},
-    {"etat": "fait", "titre": "Sacoche ramassée au réveil (animation) et son interface : objets, fabrication, carnet"},
-    {"etat": "fait", "titre": "Esprit de la forêt : accueil, dialogues, suit le joueur, s’endort, coulée de miel, yeux qui clignent"},
-    {"etat": "fait", "titre": "Feu de camp, fumée peinte, cuisine et carnet de recettes en 3D"},
-    {"etat": "fait", "titre": "Objets à ramasser qui brillent (liseré, reflet, étincelle)"},
-    {"etat": "fait", "titre": "Sons et ambiances : plage, forêt, marais, feu, mer, vent"},
-    {"etat": "fait", "titre": "Collisions : rochers, souches, troncs et arbres bloquent le joueur"},
-    {"etat": "en cours", "titre": "Derniers défauts visuels signalés par Yvan (carrés sur le sol et dans l’eau, pied des rochers)"},
-    {"etat": "à faire", "titre": "Fabrication sur la nappe posée au sol, avec une animation à chaque fabrication"},
-    {"etat": "à faire", "titre": "Autres personnages jouables (lapin, tortue, mouton noir…) et choix du personnage en carrousel"},
-    {"etat": "à faire", "titre": "Carte ronde avec sa boussole (seul élément affiché en permanence)"},
-    {"etat": "à faire", "titre": "Biomes complets (forêt et marécage d’abord) et leurs animaux qui vivent dans leurs habitats"},
-    {"etat": "à faire", "titre": "Histoire principale (5–6 h) : réparation du bateau et événements partout sur l’île"},
-    {"etat": "à faire", "titre": "Portage iPhone (à la toute fin, avec un Mac récent)"}
+    {
+     "etat": "fait",
+     "titre": "Passage sur le moteur Godot (rendu adapté au téléphone)"
+    },
+    {
+     "etat": "fait",
+     "titre": "Île générée à partir d’une graine : plage tout autour, point d’arrivée sur une grande plage avec voile échouée et caisses"
+    },
+    {
+     "etat": "fait",
+     "titre": "Relief naturel : montagnes érodées et arrondies, falaises, îlots au large (à 40 m minimum, non praticables)"
+    },
+    {
+     "etat": "fait",
+     "titre": "Sol peint et fondu : sable, herbe, roche, éboulis et neige sans limites nettes"
+    },
+    {
+     "etat": "fait",
+     "titre": "Ciel vivant : jour et nuit, soleil, lune, étoiles, nuages et petites ombres de nuages (1 h de jeu = 2 min)"
+    },
+    {
+     "etat": "fait",
+     "titre": "Mer stylisée : volutes façon Wind Waker, écume sur la plage, reflets de lumière au fond de l’eau"
+    },
+    {
+     "etat": "fait",
+     "titre": "Végétation au vent, contre-jour, plantes qui s’écartent au passage"
+    },
+    {
+     "etat": "fait",
+     "titre": "Renard jouable : marche, course, saut, empreintes dans le sable et la neige, bruits de pas"
+    },
+    {
+     "etat": "fait",
+     "titre": "Sacoche ramassée au réveil (animation) et son interface : objets, fabrication, carnet"
+    },
+    {
+     "etat": "fait",
+     "titre": "Esprit de la forêt : accueil, dialogues, suit le joueur, s’endort, coulée de miel, yeux qui clignent"
+    },
+    {
+     "etat": "fait",
+     "titre": "Feu de camp, fumée peinte, cuisine et carnet de recettes en 3D"
+    },
+    {
+     "etat": "fait",
+     "titre": "Objets à ramasser qui brillent (liseré, reflet, étincelle)"
+    },
+    {
+     "etat": "fait",
+     "titre": "Sons et ambiances : plage, forêt, marais, feu, mer, vent"
+    },
+    {
+     "etat": "fait",
+     "titre": "Ceinture comme sur la version web : sacoche en haut, poches pour la nappe et les outils"
+    },
+    {
+     "etat": "fait",
+     "titre": "Collisions : rochers, souches, troncs et arbres bloquent le joueur"
+    },
+    {
+     "etat": "en cours",
+     "titre": "Derniers défauts visuels signalés par Yvan (carrés sur le sol et dans l’eau, pied des rochers)"
+    },
+    {
+     "etat": "fait",
+     "titre": "Fabrication sur la nappe à carreaux (déroulée au sol, objets posés puis assemblés en animation)"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Autres personnages jouables (lapin, tortue, mouton noir…) et choix du personnage en carrousel"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Carte ronde avec sa boussole (seul élément affiché en permanence)"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Biomes complets (forêt et marécage d’abord) et leurs animaux qui vivent dans leurs habitats"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Histoire principale (5–6 h) : réparation du bateau et événements partout sur l’île"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Portage iPhone (à la toute fin, avec un Mac récent)"
+    }
    ]
   }
  }
