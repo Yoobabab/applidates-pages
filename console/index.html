@@ -174,6 +174,10 @@
   .bouton-objectifs .nom { font-weight: 700; font-size: 14.5px; letter-spacing: .3px; }
   .bouton-objectifs .dates { font-family: var(--mono); font-size: 10.5px; opacity: .9; }
   .cadre-objectifs { width: 100%; height: 4200px; border: 0; display: block; background: transparent; }
+  .bouton-dixans { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 6px; padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(232,52,78,.55); background: rgba(232,52,78,.08); color: var(--creme); font-weight: 700; font-size: 13.5px; text-align: left; }
+  .bouton-dixans:hover { background: rgba(232,52,78,.18); }
+  .bouton-dixans.actif { background: rgba(232,52,78,.22); border-color: var(--rouge); }
+  .bouton-dixans .courbe { width: 18px; text-align: center; color: var(--rouge); font-family: var(--mono); }
   /* Étapes des applis */
   .etape { font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
   .etape.idee { background: rgba(154,209,255,.14); color: var(--bleu); }
@@ -425,6 +429,7 @@ async function demarrer() {
   A_FAIRE = faire || { elements: [] };
   PARTENAIRES = part?.partenaires || [];
   try { CONFIRMEES = new Set(await rpc('console_applis')); } catch { CONFIRMEES = new Set(); }
+  window.ENF_CONFIRMEES = [...CONFIRMEES]; // lu par la page « Les idées sur 10 ans »
   document.getElementById('connexion').hidden = true;
   document.getElementById('console').hidden = false;
   const [nomPage, app] = decodeURIComponent(location.hash.slice(1) || 'ensemble').split('/');
@@ -432,7 +437,7 @@ async function demarrer() {
 }
 
 // ───────── Navigation ─────────
-const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres };
+const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres };
 let courant = { nom: 'ensemble', app: null };
 let cochesCache = null;
 let tachesCache = [];
@@ -456,12 +461,16 @@ function dessinerNav() {
     h('button', { class: 'bouton-objectifs' + (courant.nom === 'objectifs' ? ' actif' : ''), onclick: () => aller('objectifs') },
       h('span', { class: 'cible', 'aria-hidden': 'true' }),
       h('span', { class: 'textes' }, h('span', { class: 'nom' }, 'Objectifs'), h('span', { class: 'dates' }, 'Greg 09/2029 · Yvan 04/2030'))),
+    h('button', { class: 'bouton-dixans' + (courant.nom === 'dixans' ? ' actif' : ''), onclick: () => aller('dixans') }, h('span', { class: 'courbe', 'aria-hidden': 'true' }, '↗'), h('span', {}, 'Les idées sur 10 ans')),
     h('div', { class: 'rubrique' }, 'NOS APPLIS'), confirmees.filter((a) => a.type === 'appli').map(ongletApp),
     h('div', { class: 'rubrique' }, 'NOS JEUX'), confirmees.filter((a) => a.type === 'jeu').map(ongletApp),
     proposees.length ? [h('div', { class: 'rubrique' }, 'À CONFIRMER'), proposees.map((a) => {
       const b = h('button', { class: 'bouton-oeuf', title: 'Ajouter ' + a.nom + ' au studio', 'aria-label': 'Ajouter ' + a.nom, onclick: async () => {
         b.classList.add('eclos');
-        try { await rpc('console_appli_confirmer', { p_id: a.id }); CONFIRMEES.add(a.id); setTimeout(dessinerNav, 550); }
+        try {
+          await rpc('console_appli_confirmer', { p_id: a.id }); CONFIRMEES.add(a.id); window.ENF_CONFIRMEES = [...CONFIRMEES];
+          setTimeout(() => (courant.nom === 'dixans' ? aller('dixans') : dessinerNav()), 550);
+        }
         catch (e) { b.classList.remove('eclos'); alert(erreur(e)); }
       } }, oeufBouton());
       return h('div', { class: 'propose' }, h('span', { class: 'estompe' }, iconeApp(a), h('span', {}, a.nom)), b);
@@ -493,7 +502,14 @@ async function chargerCoches() {
 
 // ───────── Objectifs (page objectifs.html, même site) ─────────
 async function pageObjectifs() {
-  const cadre = h('iframe', { class: 'cadre-objectifs', src: 'objectifs.html?console=1', title: 'Objectifs du studio' });
+  afficher(entete('Objectifs', 'Quitter le boulot : Greg en septembre 2029, Yvan en avril 2030 · revenus, dividendes et priorités'), cadrePage('objectifs.html?console=1', 'Objectifs du studio'));
+}
+async function pageDixAns() {
+  afficher(entete('Les idées sur 10 ans', 'Laquelle rapporte le plus, et le plus vite ? Les applis et jeux validés, de 2027 à 2036'), cadrePage('dix-ans.html?console=1&v=' + Date.now(), 'Les idées sur 10 ans'));
+}
+// Page du même site affichée dans la console, à la hauteur de son contenu.
+function cadrePage(adresse, titre) {
+  const cadre = h('iframe', { class: 'cadre-objectifs', src: adresse, title: titre });
   const ajuster = () => {
     try { cadre.style.height = cadre.contentDocument.documentElement.scrollHeight + 'px'; } catch (e) { cadre.style.height = '4200px'; }
   };
@@ -501,7 +517,7 @@ async function pageObjectifs() {
     ajuster();
     try { new ResizeObserver(ajuster).observe(cadre.contentDocument.body); } catch (e) { /* rien */ }
   });
-  afficher(entete('Objectifs', 'Quitter le boulot : Greg en septembre 2029, Yvan en avril 2030 · revenus, dividendes et priorités'), cadre);
+  return cadre;
 }
 
 // ───────── Vue d'ensemble ─────────

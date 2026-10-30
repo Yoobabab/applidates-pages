@@ -201,6 +201,32 @@
    "relie": false,
    "moteur": "À choisir",
    "technique": "Idée : audio et vidéo par LiveKit, interphone par appel SIP, sans boîtier chez l’utilisateur"
+  },
+  {
+   "id": "a-deux-doigts",
+   "nom": "À deux doigts",
+   "type": "appli",
+   "couleur": "#FF8A5B",
+   "initiale": "À",
+   "resume": "Où vous vous êtes croisés avant de vous connaître, grâce aux photos (nom provisoire)",
+   "etape": "idée",
+   "statut": "proposee",
+   "relie": false,
+   "moteur": "Expo · React Native (prévu)",
+   "technique": "Lecture de la date et du lieu des photos sur le téléphone, rien n'est envoyé ; Supabase pour relier les deux comptes"
+  },
+  {
+   "id": "guinche",
+   "nom": "Guinche",
+   "type": "appli",
+   "couleur": "#E8A33D",
+   "initiale": "G",
+   "resume": "Invitations entre potes façon années 70 : soirées, anniversaires, cagnotte",
+   "etape": "idée",
+   "statut": "proposee",
+   "relie": false,
+   "moteur": "Expo · React Native (prévu)",
+   "technique": "Réponse aux invitations sans télécharger l'appli (page web), cagnotte et partage des frais"
   }
  ]
 }
