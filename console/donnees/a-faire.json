@@ -772,8 +772,6 @@
    "qui": "Tous",
    "version": "v0.6",
    "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
-<<<<<<< Updated upstream
-=======
   },
   {
    "cle": "recette:hearthaven:v0.1:278e406ed6",
@@ -798,7 +796,6 @@
    "qui": "Yvan",
    "version": "v0.1",
    "titre": "Carnet : il s’ouvre comme un vrai livre (la couverture se rabat), seule la feuille de papier tourne, sans trous"
->>>>>>> Stashed changes
   }
  ]
 }
