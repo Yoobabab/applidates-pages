@@ -94,6 +94,40 @@
      "titre": "Portage iPhone (à la toute fin, avec un Mac récent)"
     }
    ]
+  },
+  "guinche": {
+   "maj": "2026-10-30",
+   "note": "V1 codée et testée sur ordinateur (mode démo). En attente : dépôt GitHub Guinche + secret EXPO_TOKEN, choix du projet Supabase, nom de domaine.",
+   "jalons": [
+    {
+     "etat": "fait",
+     "titre": "Nom Guinche, 5 ambiances (Crépuscule par défaut, Nacré, Lagon, Aurore boréale, Aube), logo boule à facettes"
+    },
+    {
+     "etat": "fait",
+     "titre": "Écrans : Mes soirées, Nouvelle soirée, Partager le lien, vue organisateur"
+    },
+    {
+     "etat": "fait",
+     "titre": "Page invité : répondre sans appli ni compte (je viens / peut-être / non, +1), qui ramène quoi"
+    },
+    {
+     "etat": "fait",
+     "titre": "Base Supabase écrite et testée (supabase/schema.sql)"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Mise en ligne : dépôt GitHub, publication Expo Go, branchement Supabase"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Page web des invitations en ligne (guinche.fr à acheter, ~7 €/an)"
+    },
+    {
+     "etat": "à faire",
+     "titre": "V2 : cagnotte et partage des frais (Stripe, ~3 % de commission)"
+    }
+   ]
   }
  }
 }

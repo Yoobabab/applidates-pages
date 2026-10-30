@@ -222,14 +222,15 @@
    "id": "guinche",
    "nom": "Guinche",
    "type": "appli",
-   "couleur": "#E8A33D",
-   "initiale": "G",
-   "resume": "Invitations entre potes façon années 70 : soirées, anniversaires, cagnotte",
-   "etape": "idée",
+   "couleur": "#E0569A",
+   "resume": "Invitations entre potes : soirées, anniversaires, qui ramène quoi",
+   "etape": "en cours",
    "statut": "proposee",
    "relie": false,
-   "moteur": "Expo · React Native (prévu)",
-   "technique": "Réponse aux invitations sans télécharger l'appli (page web), cagnotte et partage des frais"
+   "moteur": "Expo · React Native",
+   "technique": "Appli iPhone et Android en TypeScript (Expo 58), testée dans Expo Go ; les invités répondent depuis une page web sans rien installer ; serveur Supabase (à brancher)",
+   "logo": "logos/guinche.png",
+   "version": "0.1"
   }
  ]
 }
