@@ -87,10 +87,11 @@
    "couleur": "#B5651D",
    "initiale": "H",
    "depot": "Yoobabab/Hearthhaven",
-   "resume": "Jeu mobile 3D sur une île",
+   "resume": "Jeu 3D cosy sur une île (Godot, tests sur PC)",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en test",
+   "version": "0.1"
   },
   {
    "id": "agent-de-foot",

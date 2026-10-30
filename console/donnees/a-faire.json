@@ -121,6 +121,34 @@
    "titre": "Supabase de Shivr : vérifier que les scripts tournois, messages, contact-id, support, ouvertures, ouvertures-controles et echanges-preuves sont lancés"
   },
   {
+   "cle": "demande:hearthaven:592fdc5c9f",
+   "groupe": "demande",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "titre": "Relancer Hearthaven (dossier « Hearthaven » du bureau) et faire la recette de la version 0.1 ; envoyer une capture à Claude si quelque chose cloche"
+  },
+  {
+   "cle": "demande:hearthaven:8a6b6648b8",
+   "groupe": "demande",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "titre": "Choisir la prochaine grande étape d’Hearthaven : fabrication sur la nappe, autres personnages, carte et boussole, ou biomes et animaux"
+  },
+  {
+   "cle": "demande:hearthaven:6ff69d3261",
+   "groupe": "demande",
+   "appli": "hearthaven",
+   "qui": "Tous",
+   "titre": "Décider si on sauvegarde la version Godot d’Hearthaven sur GitHub (dépôt Hearthhaven, pas à jour depuis le 27 oct.)"
+  },
+  {
+   "cle": "demande:hearthaven:46ef00dfb7",
+   "groupe": "demande",
+   "appli": "hearthaven",
+   "qui": "Tous",
+   "titre": "Générique de fin d’Hearthaven : créditer Fish_233 (godotshaders.com) et Rune Skovbo Johansen (filtre d’érosion, licence MPL 2.0)"
+  },
+  {
    "cle": "recette:tikette:v0.32:21453670cb",
    "groupe": "recette",
    "appli": "tikette",
@@ -663,6 +691,78 @@
    "qui": "Tous",
    "version": "v0.6",
    "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:71316a9a98",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Plus de carrés sur le sol, près de la plage comme sur la roche"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:72bd8aae6f",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Plus de carrés ni de cassures dans la mer, au bord comme au large"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:7456a975d1",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Gros rochers et souches sur une pente : le pied se fond dans le sol, sans bande sombre"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:29a5e39de4",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Esprit : yeux visibles qui clignent, bouche visible, miel bien doré sur le haut de la tête"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:964b8192db",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Esprit assez opaque (on ne voit plus le décor à travers son corps)"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:757b841cd2",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "On ne traverse plus les rochers, souches, troncs couchés ni les troncs d’arbres ; on passe toujours dans les buissons, fleurs et herbes"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:390e218317",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Nuages lents, ombres en petites taches sur le sol"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:326337cd17",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Objets à ramasser : brillance sans halo au sol, posés à plat"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:170a3084d7",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Plus de ligne nette entre les textures de la montagne"
   }
  ]
 }

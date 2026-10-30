@@ -247,6 +247,7 @@ let CATALOGUE = [];               // applis et jeux (donnees/applis.json)
 let CONFIRMEES = new Set();       // confirmées avec l'œuf (Supabase)
 let A_FAIRE = { elements: [] };   // demandes de Claude + recette (donnees/a-faire.json)
 let PARTENAIRES = [];
+let AVANCEMENT = {};             // grandes étapes par appli (donnees/avancement.json)
 const LIENS = [
   ['Nos outils', [['Supabase', 'https://supabase.com/dashboard/projects', 'supabase.com'], ['GitHub', 'https://github.com/Yoobabab', 'github.com'], ['Expo', 'https://expo.dev', 'expo.dev'],
     ['Brevo', 'https://app.brevo.com', 'brevo.com'], ['OVH', 'https://www.ovh.com/manager/', 'ovhcloud.com'], ['Anthropic (IA)', 'https://console.anthropic.com', 'anthropic.com']]],
@@ -405,7 +406,8 @@ async function demarrer() {
     return dire('Cette adresse n’a pas accès à la console.');
   }
   email = session.user.email || '';
-  const [applis, faire, part] = await Promise.all([json('donnees/applis.json'), json('donnees/a-faire.json'), json('donnees/partenaires.json')]);
+  const [applis, faire, part, av] = await Promise.all([json('donnees/applis.json'), json('donnees/a-faire.json'), json('donnees/partenaires.json'), json('donnees/avancement.json')]);
+  AVANCEMENT = av?.applis || {};
   CATALOGUE = applis?.applis || [];
   APPLIS = ['Studio', ...CATALOGUE.map((a) => a.nom)];
   A_FAIRE = faire || { elements: [] };
@@ -502,7 +504,8 @@ async function pageEnsemble() {
     h('div', { class: 'nom' }, iconeApp(a), a.nom, h('span', { style: 'margin-left:auto' }, badgeEtape(a))),
     h('div', { class: 'info' }, a.id === 'tikette' && t
       ? `${nombre(t.dates.faits)} dates ce mois · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : 'pas encore de note'} · ${nombre(ab.payants)} abonnés`
-      : (a.version ? 'v' + a.version + ' · ' : '') + (a.resume || '')));
+      : (a.version ? 'v' + a.version + ' · ' : '') + (a.resume || '')),
+    AVANCEMENT[a.id] ? h('div', { class: 'progression', title: `Avancement : ${pctAvancement(a.id)} %` }, h('span', { style: `width:${pctAvancement(a.id)}%` })) : '');
   const confirmees = CATALOGUE.filter(estConfirmee);
 
   afficherPour(g, 
@@ -585,10 +588,41 @@ async function pageAppli(id) {
           taches.map((x) => ligneCoche(tacheEnElement(x), faire.coches, () => aller('appli', id), { sansAppli: true })),
           blocRecette(elements.filter((e) => e.groupe === 'recette'), faire.coches, () => aller('appli', id), { sansAppli: true, ouvert: true })]
           : h('div', { class: 'vide' }, 'Rien à faire pour l’instant.')),
+      panneauAvancement(id),
       h('div', { class: 'panneau' }, h('h2', {}, 'Chiffres'),
         h('p', { class: 'note-bas', style: 'margin:0 0 10px' }, a.relie ? 'Chiffres en direct.' : 'Pas encore reliée à la console : il faudra lancer un petit script SQL dans sa base (comptes du studio + chiffres), comme pour Tikette. Dis-le à Claude quand vous voulez la brancher.'),
         a.depot ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('a', { href: 'https://github.com/' + a.depot, target: '_blank', rel: 'noopener' }, a.depot)) : h('div', { class: 'liste-ligne' }, h('span', {}, 'Dépôt GitHub'), h('span', { class: 'doux' }, 'pas encore créé')),
         a.site ? h('div', { class: 'liste-ligne' }, h('span', {}, 'Site'), h('a', { href: a.site, target: '_blank', rel: 'noopener' }, a.site)) : '')));
+}
+
+// ───────── Avancement (grandes étapes, donnees/avancement.json) ─────────
+// « en cours » compte pour moitié.
+function pctAvancement(id) {
+  const j = AVANCEMENT[id]?.jalons || [];
+  if (!j.length) return 0;
+  return Math.round((j.reduce((n, x) => n + (x.etat === 'fait' ? 1 : x.etat === 'en cours' ? 0.5 : 0), 0) / j.length) * 100);
+}
+function panneauAvancement(id) {
+  const av = AVANCEMENT[id];
+  if (!av) return '';
+  const j = av.jalons || [];
+  const groupe = (etat, titre, couleur, ouvert) => {
+    const l = j.filter((x) => x.etat === etat);
+    if (!l.length) return '';
+    const d = h('details', { class: 'groupe-recette' },
+      h('summary', {}, h('span', { style: `width:9px;height:9px;border-radius:50%;background:${couleur};flex:none` }), titre, h('span', { class: 'doux' }, String(l.length))),
+      l.map((x) => h('div', { class: 'liste-ligne', style: 'justify-content:flex-start' }, x.titre)));
+    if (ouvert) d.open = true;
+    return d;
+  };
+  return h('div', { class: 'panneau' }, h('h2', {}, 'Avancement'),
+    h('div', { class: 'liste-ligne', style: 'border:0;padding-bottom:0' }, h('span', {}, 'Grandes étapes'), h('b', {}, `${pctAvancement(id)} %`)),
+    h('div', { class: 'progression' }, h('span', { style: `width:${pctAvancement(id)}%` })),
+    av.note ? h('p', { class: 'note-bas', style: 'margin:6px 0 0' }, av.note) : '',
+    groupe('en cours', 'En cours', 'var(--jaune)', true),
+    groupe('à faire', 'À venir', 'var(--doux)', true),
+    groupe('fait', 'Déjà fait', 'var(--vert)', false),
+    av.maj ? h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, 'Mis à jour le ' + dateFr(av.maj)) : '');
 }
 
 // ───────── À faire (demandes de Claude, recette, tâches ajoutées) ─────────
