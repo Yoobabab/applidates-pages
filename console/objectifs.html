@@ -268,7 +268,7 @@ tr.total td { font-weight: 700; background: var(--carte); }
 </div>
 
 <script>
-const LOGOS = {"tikette": "logos/tikette.png", "shivr": "logos/shivr.png", "robi": "logos/robi.png", "panier-fantome": "logos/panier-fantome.png", "agent-de-foot": "logos/agent-de-foot.png"};
+let LOGOS = {"tikette": "logos/tikette.png", "shivr": "logos/shivr.png", "robi": "logos/robi.png", "panier-fantome": "logos/panier-fantome.png", "agent-de-foot": "logos/agent-de-foot.png"};
 const PROJETS = [
   { id: 'tikette', nom: 'Tikette', type: 'Appli', couleur: '#FF6B9A', etat: 'v0.31 · en test', sortie: 'Sortie début 2027', pourquoi: 'Le plus complet : comptes, vrais lieux, vote, IA, abonnement Or.', r: [2000, 15000, 35000], o: [12000, 90000, 200000], c: [300, 3000, 8000] },
   { id: 'shivr', nom: 'Shivr', type: 'Appli', couleur: '#3FA9F5', etat: 'v0.60 · en test', sortie: 'Sortie début 2027', pourquoi: 'Très avancé, gros public de collectionneurs qui paie déjà ce genre d’appli.', r: [3000, 20000, 45000], o: [15000, 120000, 250000], c: [500, 4000, 10000] },
@@ -318,8 +318,8 @@ const total = (cle, i) => PROJETS.reduce((s, p) => s + p[cle][i], 0);
   });
 })();
 
-/* Priorités */
-(function () {
+/* Priorités (logos repris de donnees/applis.json : un logo choisi apparaît ici tout seul) */
+function dessinerPriorites() {
   const max = Math.max(...PROJETS.map((p) => p.r[2]));
   const liste = document.getElementById('projets');
   PROJETS.forEach((p, i) => {
@@ -335,7 +335,13 @@ const total = (cle, i) => PROJETS.reduce((s, p) => s + p[cle][i], 0);
       '<div class="barres">' + barres + '</div>';
     liste.appendChild(art);
   });
-})();
+}
+dessinerPriorites();
+fetch('donnees/applis.json', { cache: 'no-store' }).then((r) => r.json()).then((d) => {
+  (d.applis || []).forEach((a) => { if (a.logo) LOGOS[a.id] = a.logo; });
+  document.getElementById('projets').replaceChildren();
+  dessinerPriorites();
+}).catch(() => { /* garde les logos connus */ });
 
 /* Scénario choisi (le même pour le graphique des départs, les dividendes et « qui fait les revenus ») */
 const NOMS_SCEN = { o: 'Optimiste', r: 'Réaliste', c: 'Pessimiste' };

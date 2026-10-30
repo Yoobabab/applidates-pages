@@ -105,7 +105,8 @@
    "etape": "en test",
    "version": "0.1",
    "moteur": "Godot 4.7",
-   "technique": "Jeu 3D en GDScript, rendu « Mobile » (prévu pour le téléphone) ; testé sur PC, portage iPhone à la fin ; modèles 3D Meshy"
+   "technique": "Jeu 3D en GDScript, rendu « Mobile » (prévu pour le téléphone) ; testé sur PC, portage iPhone à la fin ; modèles 3D Meshy",
+   "logo": "logos/hearthaven.png"
   },
   {
    "id": "agent-de-foot",
@@ -147,7 +148,8 @@
    "relie": false,
    "etape": "en cours",
    "moteur": "Godot",
-   "technique": "Jeu 3D sur Godot (prototype de la zone 1 « Station Étoile ») ; modèles Meshy prévus"
+   "technique": "Jeu 3D sur Godot (prototype de la zone 1 « Station Étoile ») ; modèles Meshy prévus",
+   "logo": "logos/braise.png"
   },
   {
    "id": "ce-que-tu-semes",
@@ -213,7 +215,8 @@
    "statut": "proposee",
    "relie": false,
    "moteur": "Expo · React Native (prévu)",
-   "technique": "Lecture de la date et du lieu des photos sur le téléphone, rien n'est envoyé ; Supabase pour relier les deux comptes"
+   "technique": "Lecture de la date et du lieu des photos sur le téléphone, rien n'est envoyé ; Supabase pour relier les deux comptes",
+   "logo": "logos/a-deux-doigts.png"
   },
   {
    "id": "guinche",
