@@ -547,7 +547,8 @@ function ligneRobots(robots, g) {
 // Derniers passages des robots (dépôts publics, API GitHub sans connexion).
 async function robotsGithub() {
   const depots = [['Yoobabab/applidates-pages', { 'Lieux de France': 'Lieux (Tikette)', 'Événements à venir': 'Événements (Tikette)', 'pages build and deployment': 'Site tikette.fr' }],
-    ['Yoobabab/AppliCard-donnees', null]];
+    ['Yoobabab/AppliCard-donnees', null],
+    ['Yoobabab/AppliNature-ia', { "Entraîner l'IA": 'IA (AppliNature)' }]];
   const lignes = [];
   await Promise.all(depots.map(async ([depot, noms]) => {
     try {

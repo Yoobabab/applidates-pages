@@ -73,12 +73,12 @@
    "type": "appli",
    "couleur": "#2F9E44",
    "initiale": "N",
-   "version": "0.4",
+   "version": "0.10",
    "depot": "Yoobabab/AppliNature",
    "resume": "Le Pokédex de la vraie nature",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en cours"
+   "etape": "en test"
   },
   {
    "id": "hearthaven",
