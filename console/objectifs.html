@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Objectifs · Egg Not Found</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="logos/oeuf.png">
+<script>if (/[?&]console\b/.test(location.search)) document.documentElement.classList.add('dans-console');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; }
+/* Mise en page : une seule colonne de 1080 px sur fond noir, bandes séparées par un trait crème comme dans le logo ; le rouge cerise est réservé aux objectifs de départ. */
+:root {
+  --noir: #070606;
+  --carte: #12100F;
+  --carte-2: #1A1716;
+  --trait: #2C2725;
+  --creme: #E6DFD6;
+  --creme-doux: #A69D93;
+  --creme-faible: #6E665E;
+  --cerise: #E5243B;
+  --cerise-sombre: #4A0F17;
+  --vert: #5FB58A;
+  --titre: "Space Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  color-scheme: dark;
+}
+html { background: var(--noir); }
+body { background: var(--noir); color: var(--creme); font-family: var(--titre); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--noir); }
+.page { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 28px 64px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--titre); font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(24px, 3.4vw, 32px); line-height: 1.15; }
+h3 { font-size: 18px; }
+p { margin: 0; }
+.etiquette { font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--creme-doux); }
+.chiffre { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.section { display: grid; gap: 20px; border-top: 2px solid var(--trait); padding-top: 28px; }
+.entete-section { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; }
+.entete-section p { color: var(--creme-doux); max-width: 62ch; }
+
+/* En-tête */
+.haut { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; }
+.haut svg.logo { height: 92px; width: auto; max-width: 100%; }
+.haut .meta { display: grid; gap: 4px; text-align: right; }
+.haut .meta strong { font-size: 20px; }
+
+/* Objectifs de départ */
+.objectifs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.objectif { background: var(--carte); border: 1px solid var(--trait); border-radius: 6px; padding: 24px; display: grid; gap: 14px; position: relative; overflow: hidden; }
+.objectif::after { content: ""; position: absolute; right: -40px; top: -40px; width: 160px; height: 210px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--cerise); opacity: 0.09; }
+.objectif .qui { display: flex; align-items: center; gap: 12px; }
+.pastille-qui { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 18px; background: var(--cerise); color: var(--noir); }
+.objectif .date { font-size: clamp(38px, 6vw, 58px); font-weight: 700; line-height: 1; letter-spacing: -0.02em; color: var(--cerise); }
+.objectif .reste { font-family: var(--mono); font-size: 15px; color: var(--creme); }
+.objectif ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; color: var(--creme-doux); font-size: 15px; }
+.objectif li { display: flex; gap: 10px; }
+.objectif li::before { content: ""; flex: 0 0 auto; width: 6px; height: 6px; margin-top: 9px; background: var(--creme-faible); }
+.suite { background: var(--carte-2); border-radius: 6px; padding: 16px 20px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between; }
+.suite strong { font-size: 18px; }
+
+/* Graphiques */
+.cadre { background: var(--carte); border: 1px solid var(--trait); border-radius: 6px; padding: 18px 16px 12px; overflow-x: auto; }
+.cadre svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.legende { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--creme-doux); padding: 4px 4px 2px; }
+.legende span { display: inline-flex; align-items: center; gap: 8px; }
+.legende i { width: 14px; height: 3px; display: inline-block; }
+
+/* Dividendes */
+.tuiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tuile { background: var(--carte); border: 1px solid var(--trait); border-radius: 6px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.tuile .valeur { font-family: var(--mono); font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tuile .valeur.fort { color: var(--cerise); }
+.tuile p { color: var(--creme-doux); font-size: 14px; }
+
+.choix { display: inline-flex; border: 1px solid var(--trait); border-radius: 6px; padding: 3px; gap: 3px; background: var(--carte); }
+.choix button { border: 0; background: none; color: var(--creme-doux); font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; padding: 7px 12px; border-radius: 4px; cursor: pointer; }
+.choix button:hover { color: var(--creme); }
+.choix button[aria-pressed="true"] { background: var(--creme); color: var(--noir); font-weight: 700; }
+.choix button:focus-visible { outline: 2px solid var(--cerise); outline-offset: 2px; }
+.resultat { display: flex; flex-wrap: wrap; gap: 8px 28px; align-items: baseline; padding: 4px 4px 0; }
+.resultat strong { font-size: 17px; color: var(--cerise); margin-left: 6px; }
+.resultat .doux { color: var(--creme-faible); font-size: 13px; }
+.titre-choix { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+
+/* Priorités */
+.projets { display: grid; gap: 10px; }
+.projet { display: grid; grid-template-columns: 34px 52px minmax(0, 1fr) minmax(0, 300px); gap: 14px; align-items: center; background: var(--carte); border: 1px solid var(--trait); border-radius: 6px; padding: 12px 16px; }
+.rang { font-family: var(--mono); font-size: 22px; font-weight: 700; color: var(--creme-faible); text-align: center; }
+.projet:nth-child(-n+3) .rang { color: var(--cerise); }
+.logo-appli { width: 52px; height: 52px; border-radius: 12px; overflow: hidden; display: grid; place-items: center; font-weight: 700; font-size: 22px; color: var(--noir); }
+.logo-appli img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.infos { display: grid; gap: 2px; min-width: 0; }
+.infos .nom { font-size: 18px; font-weight: 700; display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+.badge { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--trait); color: var(--creme-doux); padding: 1px 7px; border-radius: 3px; }
+.infos .pourquoi { color: var(--creme-doux); font-size: 14px; }
+.infos .sortie { font-family: var(--mono); font-size: 12px; color: var(--creme-faible); }
+.barres { display: grid; gap: 4px; }
+.barre { display: grid; grid-template-columns: 40px minmax(0, 1fr) 76px; gap: 8px; align-items: center; font-family: var(--mono); font-size: 12px; color: var(--creme-doux); }
+.barre .fond { height: 8px; background: var(--carte-2); border-radius: 1px; overflow: hidden; }
+.barre .plein { height: 100%; background: var(--creme); }
+.barre .montant { text-align: right; color: var(--creme); font-variant-numeric: tabular-nums; }
+.pause { color: var(--creme-faible); font-size: 14px; }
+
+/* Tableaux */
+.tableau { overflow-x: auto; border: 1px solid var(--trait); border-radius: 6px; }
+table { width: 100%; border-collapse: collapse; min-width: 560px; font-size: 14px; }
+th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--trait); vertical-align: top; }
+th { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--creme-doux); font-weight: 400; background: var(--carte); }
+td.n, th.n { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+tr.total td { font-weight: 700; background: var(--carte); }
+
+.notes { display: grid; gap: 8px; color: var(--creme-doux); font-size: 14px; max-width: 75ch; }
+.notes a { color: var(--creme); }
+.pied { color: var(--creme-faible); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; border-top: 2px solid var(--trait); padding-top: 18px; }
+
+@media (max-width: 760px) {
+  .objectifs, .tuiles { grid-template-columns: minmax(0, 1fr); }
+  .tuiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .projet { grid-template-columns: 26px 44px minmax(0, 1fr); }
+  .projet .barres { grid-column: 1 / -1; }
+  .logo-appli { width: 44px; height: 44px; }
+  .haut .meta { text-align: left; }
+  .haut svg.logo { height: 72px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .trace { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dessin 1.4s ease-out 0.1s forwards; }
+  @keyframes dessin { to { stroke-dashoffset: 0; } }
+}
+/* Dans la console : pas de second logo, même fond que la console */
+.dans-console { --noir: #0A0A0A; }
+.dans-console .haut { display: none; }
+.dans-console .page { padding-block: 4px 24px; padding-left: 0; padding-right: 0; max-width: none; }
+.dans-console body { overflow: hidden; }
+</style>
+
+</head>
+<body>
+<div class="page">
+  <header class="haut">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="114 110 1034 640" role="img" aria-label="Egg Not Found"><defs><mask id="m1" maskUnits="userSpaceOnUse" x="-5" y="-5" width="110" height="140"><rect x="-5" y="-5" width="110" height="140" fill="#fff"/><path d="M0 72 L18 64 L32 78 L50 60 L66 78 L82 64 L100 72" fill="none" stroke="#000" stroke-width="9"/></mask></defs><path d="M182.16 487.68V463.824H124.368V438.96L165.024 370.08H203.664V444.672H223.152V463.824H203.664V487.68ZM144.864 444.672H182.16V383.856H179.136L144.864 441.984Z" fill="#E6DFD6"/><g transform="translate(250.85 366.48) scale(0.9600)"><g mask="url(#m1)"><path d="M50 4 C 72 4 93 46 93 80 C 93 109 75 126 50 126 C 25 126 7 109 7 80 C 7 46 28 4 50 4 Z" fill="#E5243B"/></g></g><path d="M433.00800000000004 487.68V463.824H375.216V438.96L415.872 370.08H454.512V444.672H474.0V463.824H454.512V487.68ZM395.712 444.672H433.00800000000004V383.856H429.98400000000004L395.712 441.984Z" fill="#E6DFD6"/><rect x="573.70" y="128.88" width="16.00" height="600.00" fill="#E6DFD6"/><path d="M699.952 271.2V120.0H797.152V145.92H728.464V181.992H791.104V207.91199999999998H728.464V245.28H798.448V271.2Z" fill="#E5243B"/><path d="M844.1104 272.8632Q835.5568 272.8632 828.607 269.0022Q821.6572 265.14119999999997 817.5586000000001 257.71619999999996Q813.46 250.29119999999998 813.46 239.5992V219.64079999999998Q813.46 203.60279999999997 822.4888000000001 194.98979999999997Q831.5176 186.37679999999997 846.9616 186.37679999999997Q862.2868 186.37679999999997 870.6622 194.51459999999997Q879.0376 202.6524 879.0376 216.55199999999996V217.0272H863.5936V216.0768Q863.5936 211.6812 861.7522 208.11719999999997Q859.9108 204.55319999999998 856.2280000000001 202.4742Q852.5452 200.3952 846.9616 200.3952Q838.6456 200.3952 833.8936 205.50359999999998Q829.1416 210.61199999999997 829.1416 219.40319999999997V239.83679999999998Q829.1416 248.5092 833.8936 253.79579999999999Q838.6456 259.0824 847.1992 259.0824Q855.7528 259.0824 859.6732 254.56799999999998Q863.5936 250.0536 863.5936 243.1632V241.97519999999997H843.8728V228.66959999999997H879.0376V271.2H864.544V263.24039999999997H862.4056Q861.574 265.26 859.7326 267.5172Q857.8912 269.7744 854.2084 271.3188Q850.5255999999999 272.8632 844.1104 272.8632Z M929.884 272.8632Q921.3303999999999 272.8632 914.3806 269.0022Q907.4308 265.14119999999997 903.3322000000001 257.71619999999996Q899.2336 250.29119999999998 899.2336 239.5992V219.64079999999998Q899.2336 203.60279999999997 908.2624000000001 194.98979999999997Q917.2912 186.37679999999997 932.7352 186.37679999999997Q948.0604 186.37679999999997 956.4358 194.51459999999997Q964.8112 202.6524 964.8112 216.55199999999996V217.0272H949.3672V216.0768Q949.3672 211.6812 947.5258 208.11719999999997Q945.6844 204.55319999999998 942.0016 202.4742Q938.3188 200.3952 932.7352 200.3952Q924.4191999999999 200.3952 919.6672 205.50359999999998Q914.9152 210.61199999999997 914.9152 219.40319999999997V239.83679999999998Q914.9152 248.5092 919.6672 253.79579999999999Q924.4191999999999 259.0824 932.9728 259.0824Q941.5264 259.0824 945.4467999999999 254.56799999999998Q949.3672 250.0536 949.3672 243.1632V241.97519999999997H929.6464V228.66959999999997H964.8112V271.2H950.3176V263.24039999999997H948.1792Q947.3475999999999 265.26 945.5062 267.5172Q943.6648 269.7744 939.982 271.3188Q936.2991999999999 272.8632 929.884 272.8632Z" fill="#E6DFD6"/><path d="M699.952 504.48V353.28000000000003H754.168L784.192 485.04H788.08V353.28000000000003H816.1600000000001V504.48H761.9440000000001L731.9200000000001 372.72H728.032V504.48Z" fill="#E5243B"/><path d="M872.7304 506.14320000000004Q857.0488 506.14320000000004 847.7824 497.53020000000004Q838.5160000000001 488.91720000000004 838.5160000000001 472.8792V452.9208Q838.5160000000001 436.8828 847.7824 428.2698Q857.0488 419.6568 872.7304 419.6568Q888.412 419.6568 897.6784 428.2698Q906.9448 436.8828 906.9448 452.9208V472.8792Q906.9448 488.91720000000004 897.6784 497.53020000000004Q888.412 506.14320000000004 872.7304 506.14320000000004ZM872.7304 492.1248Q881.5216 492.1248 886.3924 487.0164Q891.2632 481.908 891.2632 473.3544V452.4456Q891.2632 443.892 886.3924 438.7836Q881.5216 433.6752 872.7304 433.6752Q864.058 433.6752 859.1278 438.7836Q854.1976000000001 443.892 854.1976000000001 452.4456V473.3544Q854.1976000000001 481.908 859.1278 487.0164Q864.058 492.1248 872.7304 492.1248Z M947.0992 504.48V435.576H922.8639999999999V421.32H987.016V435.576H962.7808V504.48Z" fill="#E6DFD6"/><path d="M699.952 737.76V586.56H794.992V612.48H728.464V648.984H789.808V674.904H728.464V737.76Z" fill="#E5243B"/><path d="M843.3543999999999 739.4232Q827.6727999999999 739.4232 818.4064 730.8101999999999Q809.14 722.1972 809.14 706.1591999999999V686.2008Q809.14 670.1628 818.4064 661.5498Q827.6727999999999 652.9368 843.3543999999999 652.9368Q859.036 652.9368 868.3023999999999 661.5498Q877.5687999999999 670.1628 877.5687999999999 686.2008V706.1591999999999Q877.5687999999999 722.1972 868.3023999999999 730.8101999999999Q859.036 739.4232 843.3543999999999 739.4232ZM843.3543999999999 725.4048Q852.1456 725.4048 857.0164 720.2964Q861.8871999999999 715.188 861.8871999999999 706.6344V685.7256Q861.8871999999999 677.172 857.0164 672.0636Q852.1456 666.9552 843.3543999999999 666.9552Q834.6819999999999 666.9552 829.7518 672.0636Q824.8216 677.172 824.8216 685.7256V706.6344Q824.8216 715.188 829.7518 720.2964Q834.6819999999999 725.4048 843.3543999999999 725.4048Z M930.5536 739.4232Q920.3368 739.4232 913.0306 735.681Q905.7244 731.9388 901.8634 724.989Q898.0024 718.0391999999999 898.0024 708.5352V654.6H913.684V709.0104Q913.684 716.6136 918.0201999999999 721.0092Q922.3564 725.4048 930.5536 725.4048Q938.7508 725.4048 943.087 721.0092Q947.4232 716.6136 947.4232 709.0104V654.6H963.1048V708.5352Q963.1048 718.0391999999999 959.2438 724.989Q955.3828 731.9388 948.0766 735.681Q940.7704 739.4232 930.5536 739.4232Z M985.4392 737.76V654.6H1015.2579999999999L1031.7712 727.068H1033.9096V654.6H1049.3536V737.76H1019.5348L1003.0215999999999 665.292H1000.8832V737.76Z M1069.7872 737.76V723.9792H1080.7168V668.3808H1069.7872V654.6H1104.0016Q1120.7524 654.6 1129.4842 663.0942Q1138.2160000000001 671.5884 1138.2160000000001 688.3392V704.0208Q1138.2160000000001 720.7716 1129.4842 729.2658Q1120.7524 737.76 1104.0016 737.76ZM1096.3984 723.504H1104.2392Q1113.7432000000001 723.504 1118.1388000000002 718.5144Q1122.5344 713.5248 1122.5344 704.496V687.864Q1122.5344 678.7164 1118.1388000000002 673.7862Q1113.7432000000001 668.856 1104.2392 668.856H1096.3984Z" fill="#E6DFD6"/></svg>
+    <div class="meta">
+      <span class="etiquette">Plan du studio · scénario réaliste</span>
+      <strong>Priorités, revenus et départs</strong>
+      <span class="chiffre" style="color:var(--creme-doux);font-size:13px">mis à jour le 30 octobre 2026</span>
+    </div>
+  </header>
+
+  <section class="section" aria-labelledby="t-objectifs" style="border-top:0;padding-top:0">
+    <div class="entete-section">
+      <h2 id="t-objectifs">Quitter le boulot</h2>
+      <p>Dividendes seulement, pas de salaire. 24 000 € nets chacun la première année (2 000 € par mois), puis 3 000 € par mois.</p>
+    </div>
+    <div class="objectifs">
+      <article class="objectif">
+        <div class="qui"><span class="pastille-qui">G</span><span class="etiquette">Greg quitte son emploi</span></div>
+        <div class="date">Septembre 2029</div>
+        <div class="reste" data-cible="2029-09-01">dans 35 mois</div>
+        <ul>
+          <li>Le studio a encaissé ≈ 62 000 € sur 12 mois (seuil vers juillet 2029, deux mois de marge)</li>
+          <li>24 000 € nets la première année, soit 2 000 € par mois</li>
+          <li>24 000 € de côté : le premier dividende arrive après la clôture des comptes</li>
+          <li>Statuts qui permettent de lui verser plus qu'à Yvan jusqu'en avril 2030</li>
+        </ul>
+      </article>
+      <article class="objectif">
+        <div class="qui"><span class="pastille-qui">Y</span><span class="etiquette">Yvan quitte son emploi</span></div>
+        <div class="date">Avril 2030</div>
+        <div class="reste" data-cible="2030-04-01">dans 42 mois</div>
+        <ul>
+          <li>Le studio a encaissé ≈ 105 000 € sur 12 mois (seuil vers mars 2030)</li>
+          <li>Vous deux à 24 000 € nets par an, soit 2 000 € par mois chacun</li>
+          <li>24 000 € de côté au moment de partir</li>
+          <li>Tikette, Shivr et robi font à eux trois près des deux tiers des revenus</li>
+        </ul>
+      </article>
+    </div>
+    <div class="suite">
+      <span><span class="etiquette">Ensuite</span>&nbsp;&nbsp;<strong>3 000 € nets par mois chacun à partir de 2031</strong></span>
+      <span class="chiffre" style="color:var(--creme-doux)">≈ 155 000 € encaissés sur 12 mois, atteints vers mars 2031</span>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="t-courbe">
+    <div class="entete-section">
+      <div class="titre-choix"><h2 id="t-courbe">Ce que le studio encaisse sur 12 mois</h2><div class="choix" role="group" aria-label="Scénario"></div></div>
+      <p>Somme glissante des 12 derniers mois, tous projets. Chaque trait horizontal est un seuil de départ ; les points rouges montrent quand vous pourriez partir dans ce scénario.</p>
+    </div>
+    <div class="resultat" id="resultat-courbe"></div>
+    <div class="cadre"><svg id="courbe" viewBox="0 0 1000 440" role="img" aria-label="Encaissements du studio sur 12 mois glissants, 2027 à 2031, avec les seuils de départ de Greg et Yvan"></svg></div>
+    <div class="legende">
+      <span><i style="background:var(--creme)"></i><em style="font-style:normal">Encaissé sur 12 mois (scénario <b data-nom-scen style="font-weight:400">réaliste</b>)</em></span>
+      <span><i style="background:var(--cerise)"></i>Départs</span>
+      <span><i style="background:var(--creme-faible)"></i>Sorties prévues et objectifs retenus</span>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="t-div">
+    <div class="entete-section">
+      <div class="titre-choix"><h2 id="t-div">Les dividendes, année par année</h2><div class="choix" role="group" aria-label="Scénario"></div></div>
+      <p>Après les coûts du studio, l'impôt sur les sociétés (15 % puis 25 %), la taxe sur les dividendes (31,4 %) et la cotisation maladie.</p>
+    </div>
+    <div class="tuiles" id="tuiles-div"></div>
+  </section>
+
+  <section class="section" aria-labelledby="t-prio">
+    <div class="entete-section">
+      <h2 id="t-prio">Les priorités</h2>
+      <p>Classement du 30 octobre 2026. Les barres montrent ce que chaque projet encaisse sur l'année, en réaliste.</p>
+    </div>
+    <div class="projets" id="projets"></div>
+    <p class="pause">En pause ou à l'état d'idée : Notif!, Ce que tu sèmes, AppliBD, Raconte, Maison connectée.</p>
+  </section>
+
+  <section class="section" aria-labelledby="t-qui">
+    <div class="entete-section">
+      <div class="titre-choix"><h2 id="t-qui">Qui fait les revenus</h2><div class="choix" role="group" aria-label="Scénario"></div></div>
+      <p>Part de chaque projet dans le total du scénario <span data-nom-scen>réaliste</span>. En 2031, Tikette, Shivr et robi en font <strong id="part-trois">63 %</strong> ; les autres projets complètent à partir de 2029.</p>
+    </div>
+    <div class="cadre"><svg id="empile" viewBox="0 0 1000 300" role="img" aria-label="Revenus par projet en 2027, 2029 et 2031"></svg></div>
+    <div class="legende" id="legende-empile"></div>
+  </section>
+
+  <section class="section" aria-labelledby="t-scen">
+    <div class="entete-section">
+      <h2 id="t-scen">Les trois scénarios</h2>
+      <p>Total encaissé par le studio sur l'année, avant coûts et impôts.</p>
+    </div>
+    <div class="tableau"><table id="scenarios"></table></div>
+    <div class="tableau"><table>
+      <thead><tr><th>Scénario</th><th>Greg part</th><th>Yvan part</th><th>3 000 € chacun</th></tr></thead>
+      <tbody>
+        <tr><td>Optimiste</td><td>mars 2028</td><td>juillet 2028</td><td>décembre 2028</td></tr>
+        <tr><td><strong>Réaliste</strong></td><td><strong style="color:var(--cerise)">septembre 2029</strong></td><td><strong style="color:var(--cerise)">avril 2030</strong></td><td>avril 2031</td></tr>
+        <tr><td>Pessimiste</td><td>après 2031</td><td>après 2031</td><td>après 2031</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section class="section" aria-labelledby="t-temps">
+    <div class="entete-section">
+      <h2 id="t-temps">Le temps une fois sur les stores</h2>
+      <p>Heures par semaine pour vous deux, une fois le projet sorti.</p>
+    </div>
+    <div class="tableau"><table id="temps"></table></div>
+  </section>
+
+  <section class="section" aria-labelledby="t-hyp">
+    <div class="entete-section"><h2 id="t-hyp">À garder en tête</h2></div>
+    <div class="notes">
+      <p>Ces chiffres sont des estimations : si un projet sort en retard, les dates de départ reculent d'autant. Vérifiez les vrais chiffres du studio chaque trimestre à partir de 2028.</p>
+      <p>Dans une SAS à 50/50, les dividendes sont partagés selon les parts. Pour que Greg parte seul en septembre 2029, il faut des statuts adaptés (actions de préférence, à faire rédiger par un comptable) ou qu'Yvan reprête ses dividendes au studio.</p>
+      <p>Pas de salaire, donc ni retraite, ni chômage, ni indemnités maladie : prévoyez chacun une épargne retraite et une assurance prévoyance.</p>
+      <p>robi : 10 plombiers la première année, 30 en 2029, 60 en 2031, Formule Pro à 39 € HT par mois et 5 % ou 10 % des paiements. À vérifier avec trois mois d'utilisation chez Répacréat.</p>
+      <p>Taux de 2026, à confirmer avec un comptable. Le détail des calculs est dans le document « Priorités et plans de revenus ».</p>
+    </div>
+  </section>
+
+  <footer class="pied">
+    <span>Egg Not Found · Greg &amp; Yvan · 50/50</span>
+    <span class="chiffre">Plan du 30.10.2026</span>
+  </footer>
+</div>
+
+<script>
+const LOGOS = {"tikette": "logos/tikette.png", "shivr": "logos/shivr.png", "robi": "logos/robi.png", "panier-fantome": "logos/panier-fantome.png", "agent-de-foot": "logos/agent-de-foot.png"};
+const PROJETS = [
+  { id: 'tikette', nom: 'Tikette', type: 'Appli', couleur: '#FF6B9A', etat: 'v0.31 · en test', sortie: 'Sortie début 2027', pourquoi: 'Le plus complet : comptes, vrais lieux, vote, IA, abonnement Or.', r: [2000, 15000, 35000], o: [12000, 90000, 200000], c: [300, 3000, 8000] },
+  { id: 'shivr', nom: 'Shivr', type: 'Appli', couleur: '#3FA9F5', etat: 'v0.60 · en test', sortie: 'Sortie début 2027', pourquoi: 'Très avancé, gros public de collectionneurs qui paie déjà ce genre d’appli.', r: [3000, 20000, 45000], o: [15000, 120000, 250000], c: [500, 4000, 10000] },
+  { id: 'robi', nom: 'robi', type: 'Appli', couleur: '#2EC4A6', etat: 'v0.4 · en cours', sortie: 'Sortie printemps 2027', pourquoi: 'Outil pour plombiers : Formule Pro 39 € par mois et 5 ou 10 % des paiements.', r: [4000, 26000, 52000], o: [9000, 95000, 238000], c: [1000, 7000, 14000] },
+  { id: 'panier-fantome', nom: 'Panier Fantôme', type: 'Appli', couleur: '#8A6BD1', etat: 'v0.1 · en cours', sortie: 'Sortie printemps 2027', pourquoi: 'Simple, tout sur le téléphone, presque aucun coût.', r: [1000, 8000, 15000], o: [3600, 36000, 84000], c: [100, 1000, 2000] },
+  { id: 'applinature', nom: 'AppliNature', type: 'Appli', couleur: '#2F9E44', etat: 'v0.10 · en test', sortie: 'Sortie été 2027', pourquoi: 'IA de reconnaissance déjà bonne ; il faut un serveur et choisir le nom.', r: [500, 6000, 15000], o: [4000, 40000, 90000], c: [100, 1000, 3000] },
+  { id: 'braise', nom: 'BRAISE', type: 'Jeu', couleur: '#C0392B', etat: 'prototype zone 1', sortie: 'Sortie fin 2027 sur Steam', pourquoi: 'Le jeu le plus court à finir : 3 à 4 zones suffisent.', r: [2500, 1500, 600], o: [15000, 12000, 5000], c: [300, 150, 50] },
+  { id: 'attends-moi', nom: 'Attends-moi', type: 'Appli', couleur: '#B6FF3B', etat: 'maquettes', sortie: 'Sortie fin 2027', pourquoi: 'Bonne idée, rien n’est encore codé ; nom à valider par Yvan.', r: [0, 5000, 12000], o: [2000, 30000, 70000], c: [0, 500, 1500] },
+  { id: 'hearthaven', nom: 'Hearthaven', type: 'Jeu', couleur: '#B5651D', etat: 'v0.1 · en test sur PC', sortie: 'PC en 2028, iPhone vers 2030', pourquoi: 'Beau mais long : 5 à 6 h d’histoire en 3D.', r: [0, 6000, 15000], o: [0, 60000, 150000], c: [0, 1000, 3000] },
+  { id: 'agent-de-foot', nom: 'Agent de foot', type: 'Jeu', couleur: '#1E7B4A', etat: 'en cours', sortie: 'Steam en 2028 ou 2029', pourquoi: 'Le plus ambitieux, avec un Pass Saison chaque été.', r: [0, 10000, 20000], o: [0, 80000, 150000], c: [0, 1500, 3000] },
+];
+const TEMPS = [
+  ['Tikette', '8 à 10 h', '3 à 5 h', 'Messages, lieux et événements à vérifier, affiliations, robots de nuit, coût de l’IA'],
+  ['Shivr', '8 à 10 h', '4 à 6 h', 'Modération, sorties à saisir, support, frais des sites de vente, rotation Standard en avril'],
+  ['robi', '4 h', '2 à 4 h', 'Inscrire et accompagner les nouveaux plombiers, paiements, corrections'],
+  ['Panier Fantôme', '2 à 3 h', '0,5 à 1 h', 'Avis sur les stores, nouvelles boutiques inventées'],
+  ['AppliNature', '3 à 4 h', '1 à 2 h', 'Retours sur la reconnaissance, plus au printemps et à l’automne'],
+  ['BRAISE', '4 à 6 h (2 mois)', '0,5 h', 'Bugs, avis Steam, soldes'],
+  ['Attends-moi', '3 à 4 h', '1 à 2 h', 'Support, contenus signalés, place prise par les messages'],
+  ['Hearthaven', '4 à 6 h (2 mois)', '1 h', 'Bugs sur les téléphones, avis, petites mises à jour'],
+  ['Agent de foot', '4 à 6 h (2 mois)', '2 à 3 h', '+ 40 à 60 h chaque été pour le Pass Saison'],
+  ['Studio', '—', '1 h', 'Urssaf, livre des recettes, renouvellements, console'],
+];
+const ANS = ['2027', '2029', '2031'];
+const NS = 'http://www.w3.org/2000/svg';
+const euros = (v) => Math.round(v).toLocaleString('fr-FR') + ' €';
+const k = (v) => v >= 1000000 ? (v / 1000000).toLocaleString('fr-FR', { maximumFractionDigits: 2 }) + ' M€' : v >= 1000 ? Math.round(v / 1000).toLocaleString('fr-FR') + ' k€' : Math.round(v) + ' €';
+function el(nom, attrs, parent, texte) {
+  const e = document.createElementNS(NS, nom);
+  for (const [a, v] of Object.entries(attrs)) e.setAttribute(a, v);
+  if (texte !== undefined) e.textContent = texte;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+const total = (cle, i) => PROJETS.reduce((s, p) => s + p[cle][i], 0);
+
+/* Compte à rebours */
+(function () {
+  const auj = new Date();
+  document.querySelectorAll('[data-cible]').forEach((n) => {
+    const c = new Date(n.dataset.cible + 'T00:00:00');
+    let m = (c.getFullYear() - auj.getFullYear()) * 12 + (c.getMonth() - auj.getMonth());
+    if (auj.getDate() > 1) m -= 0;
+    if (m > 0) n.textContent = 'dans ' + m + ' mois';
+    else if (m === 0) n.textContent = 'ce mois-ci';
+    else n.textContent = 'depuis ' + (-m) + ' mois';
+  });
+})();
+
+/* Priorités */
+(function () {
+  const max = Math.max(...PROJETS.map((p) => p.r[2]));
+  const liste = document.getElementById('projets');
+  PROJETS.forEach((p, i) => {
+    const art = document.createElement('article');
+    art.className = 'projet';
+    const logo = LOGOS[p.id]
+      ? '<div class="logo-appli"><img alt="" src="' + LOGOS[p.id] + '"></div>'
+      : '<div class="logo-appli" style="background:' + p.couleur + '">' + p.nom.charAt(0) + '</div>';
+    const barres = p.r.map((v, j) => '<div class="barre"><span>' + ANS[j] + '</span><div class="fond"><div class="plein" style="width:' + Math.max(v ? 2 : 0, (v / max) * 100).toFixed(1) + '%"></div></div><span class="montant">' + (v ? k(v) : '—') + '</span></div>').join('');
+    art.innerHTML = '<div class="rang">' + (i + 1) + '</div>' + logo +
+      '<div class="infos"><div class="nom">' + p.nom + '<span class="badge">' + p.type + '</span><span class="badge">' + p.etat + '</span></div>' +
+      '<p class="pourquoi">' + p.pourquoi + '</p><p class="sortie">' + p.sortie + '</p></div>' +
+      '<div class="barres">' + barres + '</div>';
+    liste.appendChild(art);
+  });
+})();
+
+/* Scénario choisi (le même pour le graphique des départs, les dividendes et « qui fait les revenus ») */
+const NOMS_SCEN = { o: 'Optimiste', r: 'Réaliste', c: 'Pessimiste' };
+const MOIS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+let scen = 'r';
+try { const s = localStorage.getItem('enf-scenario'); if (s && NOMS_SCEN[s]) scen = s; } catch (e) { /* stockage indisponible */ }
+
+/* Encaissé sur 12 mois glissants, mois par mois : points de fin d'année du plan, croissance régulière entre deux */
+function serie(c) {
+  const t = [0, 1, 2].map((i) => total(c, i));
+  const fin = { 2026: Math.max(100, t[0] / 40), 2027: t[0], 2029: t[1], 2031: t[2] };
+  fin[2028] = Math.sqrt(fin[2027] * fin[2029]);
+  fin[2030] = Math.sqrt(fin[2029] * fin[2031]);
+  const mois = [];
+  for (let a = 2027; a <= 2031; a++) {
+    const f = Math.pow(fin[a] / fin[a - 1], 1 / 12);
+    for (let m = 1; m <= 12; m++) mois.push({ a, m, v: fin[a - 1] * Math.pow(f, m) });
+  }
+  return { mois, fin };
+}
+const SEUILS = { greg: 62000, deux: 105000, trois: 155000 };
+/* Mois où le seuil est atteint, plus la marge retenue (2 mois pour Greg, 1 mois ensuite) */
+function depart(mois, seuil, marge) {
+  const i = mois.findIndex((p) => p.v >= seuil);
+  if (i < 0) return null;
+  const j = i + marge;
+  return { i: Math.min(j, mois.length - 1), a: 2027 + Math.floor(j / 12), m: (j % 12) + 1, horsGraphique: j >= mois.length };
+}
+const texteMois = (d) => (d ? MOIS_FR[d.m - 1] + ' ' + d.a : 'après 2031');
+const Texte = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+/* Dividendes nets par personne et par mois pour une année encaissée T (coûts 20 000 €, IS 15 % puis 25 %, PFU 31,4 %, cotisation maladie 6,5 % au-delà de 24 030 €) */
+function netParMois(T) {
+  const p = Math.max(0, T - 20000);
+  const is = p <= 42500 ? p * 0.15 : 6375 + (p - 42500) * 0.25;
+  const brut = (p - is) / 2;
+  const net = brut * 0.686 - Math.max(0, brut - 24030) * 0.065;
+  return net / 12;
+}
+const arrondi = (v) => (v >= 1000 ? Math.round(v / 100) * 100 : Math.round(v / 10) * 10);
+
+function dessinerChoix() {
+  document.querySelectorAll('.choix').forEach((g) => {
+    g.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.s === scen)));
+  });
+  document.querySelectorAll('[data-nom-scen]').forEach((n) => { n.textContent = NOMS_SCEN[scen].toLowerCase(); });
+}
+document.querySelectorAll('.choix').forEach((g) => {
+  g.innerHTML = ['c', 'r', 'o'].map((s) => '<button type="button" data-s="' + s + '">' + NOMS_SCEN[s] + '</button>').join('');
+  g.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    scen = b.dataset.s;
+    try { localStorage.setItem('enf-scenario', scen); } catch (err) { /* rien */ }
+    toutDessiner();
+  });
+});
+
+function dessinerCourbe() {
+  const { mois } = serie(scen);
+  const svg = document.getElementById('courbe');
+  svg.replaceChildren();
+  const g = 76, d = 980, h = 30, b = 380;
+  /* au-delà de 320 k€, la courbe sort du cadre : on garde les seuils de départ lisibles */
+  const haut = Math.min(Math.max(mois[mois.length - 1].v, 170000) * 1.08, 320000);
+  const pas = 50000;
+  const x = (i) => g + (i / (mois.length - 1)) * (d - g);
+  const y = (v) => b - (v / haut) * (b - h);
+  const idx = (a, m) => (a - 2027) * 12 + (m - 1);
+  const axe = el('g', {}, svg);
+  for (let t = 0; t <= haut; t += pas) {
+    el('line', { x1: g, x2: d, y1: y(t), y2: y(t), stroke: 'var(--trait)', 'stroke-width': 1 }, axe);
+    el('text', { x: g - 10, y: y(t) + 4, 'text-anchor': 'end', fill: 'var(--creme-faible)', 'font-size': 12, 'font-family': 'Space Mono, monospace' }, axe, k(t));
+  }
+  for (let a = 2027; a <= 2031; a++) {
+    const xi = x(idx(a, 1));
+    el('line', { x1: xi, x2: xi, y1: b, y2: b + 6, stroke: 'var(--creme-faible)' }, axe);
+    el('text', { x: xi + 4, y: b + 22, fill: 'var(--creme-doux)', 'font-size': 13, 'font-family': 'Space Mono, monospace' }, axe, String(a));
+  }
+  /* objectifs retenus (réaliste) : septembre 2029 et avril 2030 */
+  [['objectif Greg', 2029, 9], ['objectif Yvan', 2030, 4]].forEach(([n, a, m], i) => {
+    const xi = x(idx(a, m));
+    el('line', { x1: xi, x2: xi, y1: h, y2: b, stroke: 'var(--creme-faible)', 'stroke-dasharray': '2 4' }, svg);
+    el('text', { x: xi + 5, y: h + 12 + i * 15, fill: 'var(--creme-faible)', 'font-size': 11 }, svg, n);
+  });
+  [{ v: SEUILS.greg, txt: 'Greg seul · 62 k€' }, { v: SEUILS.deux, txt: 'vous deux à 2 000 € · 105 k€' }, { v: SEUILS.trois, txt: 'vous deux à 3 000 € · 155 k€' }].forEach((s) => {
+    el('line', { x1: g, x2: d, y1: y(s.v), y2: y(s.v), stroke: 'var(--creme-faible)', 'stroke-dasharray': '4 5' }, svg);
+    el('text', { x: g + 8, y: y(s.v) - 7, fill: 'var(--creme-doux)', 'font-size': 12 }, svg, s.txt);
+  });
+  const clip = el('clipPath', { id: 'cadre-courbe' }, el('defs', {}, svg));
+  el('rect', { x: g, y: h - 4, width: d - g, height: b - h + 4 }, clip);
+  const zone = el('g', { 'clip-path': 'url(#cadre-courbe)' }, svg);
+  const pts = mois.map((p, i) => x(i).toFixed(1) + ',' + y(p.v).toFixed(1));
+  el('polygon', { points: g + ',' + b + ' ' + pts.join(' ') + ' ' + d + ',' + b, fill: 'var(--creme)', opacity: 0.06 }, zone);
+  el('polyline', { points: pts.join(' '), fill: 'none', stroke: 'var(--creme)', 'stroke-width': 2.5, class: premierDessin ? 'trace' : '', pathLength: 1, 'stroke-linejoin': 'round' }, zone);
+  [['Tikette · Shivr', 2027, 2], ['robi · Panier F.', 2027, 4], ['BRAISE', 2027, 11]].forEach(([n, a, m], i) => {
+    const xi = x(idx(a, m));
+    el('circle', { cx: xi, cy: b, r: 4, fill: 'var(--creme-faible)' }, svg);
+    el('text', { x: xi + 6, y: b - 10 - i * 16, fill: 'var(--creme-faible)', 'font-size': 11 }, svg, n);
+  });
+  const dg = depart(mois, SEUILS.greg, 2), dy = depart(mois, SEUILS.deux, 1);
+  [['Greg', dg], ['Yvan', dy]].forEach(([qui, dep], i) => {
+    if (!dep || dep.horsGraphique) return;
+    const xi = x(dep.i), yi = y(mois[dep.i].v);
+    el('line', { x1: xi, x2: xi, y1: yi, y2: b, stroke: 'var(--cerise)', 'stroke-width': 2 }, svg);
+    el('circle', { cx: xi, cy: yi, r: 7, fill: 'var(--cerise)', stroke: 'var(--noir)', 'stroke-width': 3 }, svg);
+    const t = i === 0
+      ? el('text', { x: xi - 12, y: yi - 14, 'text-anchor': 'end', fill: 'var(--cerise)', 'font-size': 15, 'font-weight': 700 }, svg, qui + ' part · ' + texteMois(dep))
+      : el('text', { x: xi + 12, y: yi + 24, 'text-anchor': 'start', fill: 'var(--cerise)', 'font-size': 15, 'font-weight': 700 }, svg, qui + ' part · ' + texteMois(dep));
+    el('title', {}, t, qui + ' quitte son emploi en ' + texteMois(dep) + ' : ' + euros(mois[dep.i].v) + ' encaissés sur 12 mois');
+  });
+  const dern = mois[mois.length - 1];
+  const dehors = dern.v > haut;
+  el('text', { x: d, y: dehors ? h + 14 : y(dern.v) - 12, 'text-anchor': 'end', fill: 'var(--creme)', 'font-size': 14, 'font-weight': 700, 'font-family': 'Space Mono, monospace' }, svg, (dehors ? '↑ ' : '') + k(dern.v) + ' fin 2031');
+  const d3 = depart(mois, SEUILS.trois, 1);
+  document.getElementById('resultat-courbe').innerHTML =
+    '<span><span class="etiquette">Greg part</span> <strong>' + Texte(texteMois(dg)) + '</strong></span>' +
+    '<span><span class="etiquette">Yvan part</span> <strong>' + Texte(texteMois(dy)) + '</strong></span>' +
+    '<span><span class="etiquette">3 000 € chacun</span> <strong>' + Texte(texteMois(d3)) + '</strong></span>' +
+    (scen === 'r' ? '' : '<span class="doux">Objectifs retenus : septembre 2029 et avril 2030 (réaliste)</span>');
+}
+
+function dessinerDividendes() {
+  const { mois, fin } = serie(scen);
+  const dg = depart(mois, SEUILS.greg, 2), dy = depart(mois, SEUILS.deux, 1), d3 = depart(mois, SEUILS.trois, 1);
+  const an5 = netParMois(fin[2031]);
+  const rythme = netParMois(fin[2031] * Math.sqrt(fin[2031] / fin[2030]));
+  const tuile = (et, val, txt, fort) => '<div class="tuile"><span class="etiquette">' + et + '</span><span class="valeur' + (fort ? ' fort' : '') + '">' + val + '</span><p>' + txt + '</p></div>';
+  const date = (d) => (d ? Texte(texteMois(d)) : 'Après 2031');
+  document.getElementById('tuiles-div').innerHTML =
+    tuile(date(dg), dg ? '2 000 €' : '—', dg ? 'par mois pour Greg, la première année' : 'Greg ne peut pas partir avant 2032 dans ce scénario') +
+    tuile(date(dy), dy ? '2 000 €' : '—', dy ? 'par mois chacun, vous deux' : 'Yvan ne peut pas partir avant 2032 dans ce scénario') +
+    tuile(date(d3), d3 ? '3 000 €' : '—', d3 ? 'par mois chacun' : 'pas avant 2032 dans ce scénario') +
+    tuile('Année 5 · 2031', '≈&nbsp;' + euros(arrondi(an5)), 'par mois chacun sur 2031 (≈&nbsp;' + euros(arrondi(an5 * 12)) + ' par an), versés en 2032 ; au rythme de décembre 2031, ≈&nbsp;' + euros(arrondi(rythme)), true);
+}
+
+function dessinerEmpile() {
+  const svg = document.getElementById('empile');
+  svg.replaceChildren();
+  const g = 80, d = 880, haut = 20, pas = 90, epaisseur = 46;
+  const max = Math.max(...[0, 1, 2].map((j) => total(scen, j)));
+  ANS.forEach((an, j) => {
+    const yy = haut + j * pas;
+    el('text', { x: g - 14, y: yy + epaisseur / 2 + 5, 'text-anchor': 'end', fill: 'var(--creme-doux)', 'font-size': 14, 'font-family': 'Space Mono, monospace' }, svg, an);
+    let cur = g;
+    PROJETS.forEach((p) => {
+      const v = p[scen][j];
+      if (!v) return;
+      const w = (v / max) * (d - g);
+      const r = el('rect', { x: cur, y: yy, width: Math.max(w - 1.5, 0.5), height: epaisseur, fill: p.couleur, opacity: 0.9 }, svg);
+      el('title', {}, r, p.nom + ' en ' + an + ' : ' + euros(v));
+      if (w > 56) el('text', { x: cur + 6, y: yy + epaisseur / 2 + 4, fill: '#0b0b0b', 'font-size': 11, 'font-weight': 700 }, svg, p.nom.length > 9 ? p.nom.slice(0, 8) + '.' : p.nom);
+      cur += w;
+    });
+    el('text', { x: cur + 10, y: yy + epaisseur / 2 + 5, fill: 'var(--creme)', 'font-size': 14, 'font-weight': 700, 'font-family': 'Space Mono, monospace' }, svg, k(total(scen, j)));
+  });
+  const t2031 = total(scen, 2);
+  const trois = ['tikette', 'shivr', 'robi'].reduce((s, id) => s + PROJETS.find((p) => p.id === id)[scen][2], 0);
+  document.getElementById('part-trois').textContent = Math.round((trois / t2031) * 100) + ' %';
+}
+
+let premierDessin = true;
+function toutDessiner() {
+  dessinerChoix();
+  dessinerCourbe();
+  dessinerDividendes();
+  dessinerEmpile();
+  premierDessin = false;
+}
+toutDessiner();
+const leg = document.getElementById('legende-empile');
+PROJETS.forEach((p) => { const s = document.createElement('span'); s.innerHTML = '<i style="background:' + p.couleur + ';height:10px;width:10px"></i>' + p.nom; leg.appendChild(s); });
+
+/* Tableaux */
+(function () {
+  const t = document.getElementById('scenarios');
+  let html = '<thead><tr><th>Scénario</th>' + ANS.map((a) => '<th class="n">' + a + '</th>').join('') + '</tr></thead><tbody>';
+  [['Optimiste', 'o'], ['Réaliste', 'r'], ['Pessimiste', 'c']].forEach(([n, c]) => {
+    html += '<tr' + (c === 'r' ? ' class="total"' : '') + '><td>' + n + '</td>' + [0, 1, 2].map((i) => '<td class="n">' + euros(total(c, i)) + '</td>').join('') + '</tr>';
+  });
+  t.innerHTML = html + '</tbody>';
+  const tt = document.getElementById('temps');
+  tt.innerHTML = '<thead><tr><th>Projet</th><th>1er mois</th><th>Ensuite</th><th>Ce qui prend du temps</th></tr></thead><tbody>' +
+    TEMPS.map((r) => '<tr><td><strong>' + r[0] + '</strong></td><td class="n">' + r[1] + '</td><td class="n">' + r[2] + '</td><td>' + r[3] + '</td></tr>').join('') + '</tbody>';
+})();
+</script>
+
+</body>
+</html>
