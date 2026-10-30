@@ -763,6 +763,22 @@
    "qui": "Yvan",
    "version": "v0.1",
    "titre": "Plus de ligne nette entre les textures de la montagne"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:40c0c6b9f3",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Plus de ligne droite au sol où une ombre s’arrête net (ombres de palmiers continues)"
+  },
+  {
+   "cle": "recette:hearthaven:v0.1:7e7039968b",
+   "groupe": "recette",
+   "appli": "hearthaven",
+   "qui": "Yvan",
+   "version": "v0.1",
+   "titre": "Les empreintes de pas s’assombrissent à l’ombre, sous les nuages et la nuit"
   }
  ]
 }
