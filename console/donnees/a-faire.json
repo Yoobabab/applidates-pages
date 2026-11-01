@@ -16,11 +16,11 @@
    "titre": "Toutes les applis du studio : mêmes choix de connexion que Tikette (numéro, Apple, Google, Facebook, e-mail) ; projets Google Cloud et Meta au nom d'admin@eggnotfound.fr, une appli par projet"
   },
   {
-   "cle": "demande:tikette:0e8363c8c3",
+   "cle": "demande:tikette:977b13b754",
    "groupe": "demande",
    "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Connexion Facebook : appli « Tikette » sur Meta for Developers (Facebook Login + email), puis fournisseur Facebook dans Supabase"
+   "qui": "Yvan",
+   "titre": "Connexion Facebook (le compte Facebook de Greg est bloqué « appareil inhabituel ») : avec ton Facebook, créer l'appli « Tikette » sur developers.facebook.com (cas d'usage Facebook Login, e-mail de contact admin@eggnotfound.fr, portefeuille business « Egg Not Found » si possible), ajouter Greg en admin, puis prévenir Claude pour la suite (permission email, adresse de retour, mise en ligne, fournisseur dans Supabase) ; bouton Facebook caché dans Tikette en attendant"
   },
   {
    "cle": "demande:tikette:addfdbe169",
