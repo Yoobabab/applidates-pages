@@ -9,11 +9,11 @@
    "titre": "Connexion v0.33 : Supabase › URL Configuration › Redirect URLs exp://** et applidates://** ; Email OTP Length = 6"
   },
   {
-   "cle": "demande:tikette:c81fe9463d",
+   "cle": "demande:studio:c061fe4ec2",
    "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Connexion Google : écran de consentement + identifiant OAuth « Web » dans Google Cloud, puis fournisseur Google dans Supabase"
+   "appli": "studio",
+   "qui": "Tous",
+   "titre": "Toutes les applis du studio : mêmes choix de connexion que Tikette (numéro, Apple, Google, Facebook, e-mail) ; projets Google Cloud et Meta au nom d'admin@eggnotfound.fr, une appli par projet"
   },
   {
    "cle": "demande:tikette:0e8363c8c3",
@@ -23,11 +23,11 @@
    "titre": "Connexion Facebook : appli « Tikette » sur Meta for Developers (Facebook Login + email), puis fournisseur Facebook dans Supabase"
   },
   {
-   "cle": "demande:tikette:1fb369bd2f",
+   "cle": "demande:tikette:addfdbe169",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Greg",
-   "titre": "Connexion Apple : fournisseur Apple dans Supabase avec host.exp.Exponent (Expo Go) ; complet avec le compte développeur"
+   "titre": "Connexion Apple (à faire après Facebook) : fournisseur Apple dans Supabase avec host.exp.Exponent (Expo Go) ; complet avec le compte développeur"
   },
   {
    "cle": "demande:tikette:83e3a37d95",
