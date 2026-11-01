@@ -124,8 +124,8 @@
      "titre": "Thèmes de soirée dans l’appli (couleur + thème)"
     },
     {
-     "etat": "en cours",
-     "titre": "Cagnotte Stripe (3 %, 0 % pour Fête+ annuel) : codée, à brancher sur Stripe (mode test)"
+     "etat": "fait",
+     "titre": "Cagnotte par lien perso (Revolut, PayPal, Lydia), gratuite ; Stripe mis de côté"
     },
     {
      "etat": "en cours",

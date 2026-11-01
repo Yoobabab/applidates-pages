@@ -833,44 +833,44 @@
    "titre": "Fête+ : choisir un thème payant ouvre l’écran Fête+ ; « Activer (test) » puis le thème s’applique"
   },
   {
-   "cle": "recette:guinche:v0.3:9266e6ab31",
+   "cle": "recette:guinche:v0.3:4c0dd975c8",
    "groupe": "recette",
    "appli": "guinche",
    "qui": "Tous",
    "version": "v0.3",
-   "titre": "Créer une soirée avec une cagnotte (nom, objectif, montant conseillé) : le calcul « tu reçois environ » s’affiche"
+   "titre": "Créer une soirée avec cagnotte : choisir Revolut, coller son lien revolut.me/… → « Lien Revolut reconnu »"
   },
   {
-   "cle": "recette:guinche:v0.3:d248a63eba",
+   "cle": "recette:guinche:v0.3:7c5feacfbc",
    "groupe": "recette",
    "appli": "guinche",
    "qui": "Tous",
    "version": "v0.3",
-   "titre": "Cagnotte › « Activer les paiements » : la page Stripe s’ouvre (mode test), on revient dans l’appli à la fin"
+   "titre": "Invité : « Participer 20 € avec Revolut » ouvre Revolut ; puis « J’ai participé » → le montant apparaît chez l’organisateur"
   },
   {
-   "cle": "recette:guinche:v0.3:8c9602a553",
+   "cle": "recette:guinche:v0.3:edbd8a3fdb",
    "groupe": "recette",
    "appli": "guinche",
    "qui": "Tous",
    "version": "v0.3",
-   "titre": "Invité : participer 20 € avec la carte de test 4242 4242 4242 4242 ; le montant apparaît chez l’organisateur"
+   "titre": "Invité : « Cacher mon montant » puis « Je me suis trompé, annuler »"
   },
   {
-   "cle": "recette:guinche:v0.3:b066ad46c5",
+   "cle": "recette:guinche:v0.3:dd358b4c1d",
    "groupe": "recette",
    "appli": "guinche",
    "qui": "Tous",
    "version": "v0.3",
-   "titre": "Invité : « Cacher mon montant » → les autres invités voient le prénom sans le montant"
+   "titre": "Organisateur : retirer une ligne avec ✕, « Changer de lien », clôturer puis rouvrir la cagnotte"
   },
   {
-   "cle": "recette:guinche:v0.3:64fe1b281a",
+   "cle": "recette:guinche:v0.3:a1041d1f38",
    "groupe": "recette",
    "appli": "guinche",
    "qui": "Tous",
    "version": "v0.3",
-   "titre": "Clôturer puis rouvrir la cagnotte ; « Récupérer l’argent » ouvre l’espace Stripe"
+   "titre": "Lien PayPal.me : le montant choisi est déjà rempli dans PayPal"
   },
   {
    "cle": "recette:hearthaven:v0.1:71316a9a98",
