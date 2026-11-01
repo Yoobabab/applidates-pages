@@ -230,7 +230,7 @@
    "moteur": "Expo · React Native",
    "technique": "Appli iPhone et Android en TypeScript (Expo 58) ; les invités répondent et paient la cagnotte depuis une page web sans rien installer ; serveur Supabase ; cagnotte via Stripe, options de fête en achats intégrés",
    "logo": "logos/guinche.png",
-   "version": "0.1",
+   "version": "0.2",
    "depot": "Yoobabab/Guinche"
   }
  ]

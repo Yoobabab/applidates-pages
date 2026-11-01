@@ -116,7 +116,11 @@
      "titre": "Maquettes validées : cagnotte, Fête+, 24 thèmes de soirée (5 gratuits)"
     },
     {
-     "etat": "à faire",
+     "etat": "fait",
+     "titre": "Connexion (e-mail/pseudo, Google, Facebook, Apple), profil, ambiance, invités nommés, calendrier, lieu, rappel WhatsApp et agenda"
+    },
+    {
+     "etat": "fait",
      "titre": "Thèmes de soirée dans l’appli (couleur + thème)"
     },
     {
