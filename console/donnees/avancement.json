@@ -101,35 +101,39 @@
    "jalons": [
     {
      "etat": "fait",
-     "titre": "Nom Guinche, 5 ambiances (Crépuscule par défaut, Nacré, Lagon, Aurore boréale, Aube), logo boule à facettes"
+     "titre": "Nom Guinche, 5 couleurs de base (Crépuscule par défaut), logo boule à facettes"
     },
     {
      "etat": "fait",
-     "titre": "Écrans : Mes soirées, Nouvelle soirée, Partager le lien, vue organisateur"
+     "titre": "Écrans de base : Mes soirées, Nouvelle soirée, Partager, vue organisateur, page invité sans appli"
     },
     {
      "etat": "fait",
-     "titre": "Page invité : répondre sans appli ni compte (je viens / peut-être / non, +1), qui ramène quoi"
+     "titre": "Base Supabase des invitations écrite et testée"
     },
     {
      "etat": "fait",
-     "titre": "Base Supabase écrite et testée (supabase/schema.sql)"
+     "titre": "Maquettes validées : cagnotte, Fête+, 24 thèmes de soirée (5 gratuits)"
     },
     {
      "etat": "à faire",
-     "titre": "Mise en ligne : dépôt GitHub, publication Expo Go, branchement Supabase"
+     "titre": "Thèmes de soirée dans l’appli (couleur + thème)"
     },
     {
      "etat": "à faire",
-     "titre": "Page web des invitations en ligne (guinche.fr à acheter, ~7 €/an)"
+     "titre": "Cagnotte Stripe (3 %, 0 % pour Fête+ annuel) et comptes après la soirée"
     },
     {
      "etat": "à faire",
-     "titre": "Cagnotte dès la V1 (Stripe, 3 % de commission)"
+     "titre": "Fête+, Pass Fêtes, packs Mariage/EVJF, thèmes à l’unité, Guinche Pro"
     },
     {
      "etat": "à faire",
-     "titre": "Options de fête payantes dès la V1 (thèmes premium, Fête+, achats intégrés)"
+     "titre": "Innovations : aperçu WhatsApp vivant, mode surprise, Sam et couchages, liste de courses, playlist, récap story, costumes, lieux Tikette"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Mise en ligne : dépôt GitHub, Expo Go puis TestFlight, page web, guinche.fr"
     }
    ]
   }
