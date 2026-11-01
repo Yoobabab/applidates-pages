@@ -2,6 +2,13 @@
  "maj": "2026-11-01",
  "elements": [
   {
+   "cle": "demande:guinche:699c387875",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Yvan",
+   "titre": "Connexion Facebook de Guinche : avec ton Facebook, créer l’appli « Guinche » sur developers.facebook.com (cas d’usage Facebook Login, e-mail de contact admin@eggnotfound.fr, portefeuille business « Egg Not Found » si possible), ajouter Greg en admin, puis prévenir Claude pour la suite (adresse de retour, fournisseur dans Supabase)"
+  },
+  {
    "cle": "demande:studio:8990a4b693",
    "groupe": "demande",
    "appli": "studio",
@@ -689,6 +696,126 @@
    "qui": "Tous",
    "version": "v0.14",
    "titre": "photo envoyée puis validée qui apparaît sur la fiche le lendemain (après le robot de nuit) ; lancer supabase/photos-annulation.sql puis essayer « Validées récemment »."
+  },
+  {
+   "cle": "recette:guinche:v0.2:d0b5e21ce9",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Créer un compte par e-mail : le code arrive (e-mail aux couleurs de Guinche) et il marche"
+  },
+  {
+   "cle": "recette:guinche:v0.2:94935aa6e8",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Se déconnecter puis se reconnecter avec son pseudo et son mot de passe : les soirées sont toujours là"
+  },
+  {
+   "cle": "recette:guinche:v0.2:59e1539161",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Mot de passe oublié : le code arrive, le nouveau mot de passe est enregistré"
+  },
+  {
+   "cle": "recette:guinche:v0.2:3656c148bf",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Profil : photo, prénom, nom, pseudo, ville ; une date de naissance de moins de 15 ans est refusée"
+  },
+  {
+   "cle": "recette:guinche:v0.2:c1d96635e9",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Ambiance de l’appli : changer de couleur, toute l’appli suit"
+  },
+  {
+   "cle": "recette:guinche:v0.2:6eb78466e3",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Nouvelle soirée : choisir un thème de soirée (ex. Années 80), la carte change en direct avec le bon décor et la bonne police"
+  },
+  {
+   "cle": "recette:guinche:v0.2:3a8bf953e1",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Choisir une date dans 2 mois en quelques appuis (flèches du calendrier) ; heure du soir, puis « Autre heure »"
+  },
+  {
+   "cle": "recette:guinche:v0.2:b4b0ca6b1f",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Lieu : les suggestions d’adresse apparaissent pendant qu’on tape ; « Un lieu public » trouve un bar connu"
+  },
+  {
+   "cle": "recette:guinche:v0.2:6824ba884f",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Qui ramène quoi : les 6 choix et l’ajout à la main"
+  },
+  {
+   "cle": "recette:guinche:v0.2:7fc5933362",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Clavier : le bouton OK au-dessus le ferme ; glisser la page le ferme aussi"
+  },
+  {
+   "cle": "recette:guinche:v0.2:9167505e13",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Mes invités : ajout depuis les contacts (autorisation demandée) et à la main"
+  },
+  {
+   "cle": "recette:guinche:v0.2:bc2af136d9",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Lien personnel ouvert : « Salut [prénom] 👋 », prénom déjà rempli ; la réponse se range sur la bonne ligne"
+  },
+  {
+   "cle": "recette:guinche:v0.2:7f7d5375c3",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "« Envoyer » / « Relancer » ouvre WhatsApp avec le message déjà écrit"
+  },
+  {
+   "cle": "recette:guinche:v0.2:ad67d201ca",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "« Rappeler le groupe sur WhatsApp » ouvre WhatsApp avec le rappel déjà écrit"
+  },
+  {
+   "cle": "recette:guinche:v0.2:774b34be0b",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.2",
+   "titre": "Après avoir répondu : « Ajouter à mon agenda » crée l’événement dans l’agenda du téléphone"
   },
   {
    "cle": "recette:hearthaven:v0.1:71316a9a98",
