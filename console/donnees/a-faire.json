@@ -1,6 +1,34 @@
 {
- "maj": "2026-10-30",
+ "maj": "2026-11-01",
  "elements": [
+  {
+   "cle": "demande:tikette:8e7b3b99cc",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Connexion v0.33 : Supabase › URL Configuration › Redirect URLs exp://** et applidates://** ; Email OTP Length = 6"
+  },
+  {
+   "cle": "demande:tikette:c81fe9463d",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Connexion Google : écran de consentement + identifiant OAuth « Web » dans Google Cloud, puis fournisseur Google dans Supabase"
+  },
+  {
+   "cle": "demande:tikette:0e8363c8c3",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Connexion Facebook : appli « Tikette » sur Meta for Developers (Facebook Login + email), puis fournisseur Facebook dans Supabase"
+  },
+  {
+   "cle": "demande:tikette:1fb369bd2f",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Connexion Apple : fournisseur Apple dans Supabase avec host.exp.Exponent (Expo Go) ; complet avec le compte développeur"
+  },
   {
    "cle": "demande:tikette:83e3a37d95",
    "groupe": "demande",
@@ -133,6 +161,54 @@
    "appli": "shivr",
    "qui": "Tous",
    "titre": "Supabase de Shivr : vérifier que les scripts tournois, messages, contact-id, support, ouvertures, ouvertures-controles et echanges-preuves sont lancés"
+  },
+  {
+   "cle": "recette:tikette:v0.33:a93505f134",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "Profil › Se connecter (ou 1er lancement) : gros bouton numéro, puis 4 petits boutons (Apple, Google, Facebook, e-mail) ; « Créer un compte » ouvre la feuille avec les mêmes choix."
+  },
+  {
+   "cle": "recette:tikette:v0.33:1e9e0acf47",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "Google : la page Google s'ouvre, choisir son compte → retour dans Tikette, prénom déjà rempli → Continuer → connecté."
+  },
+  {
+   "cle": "recette:tikette:v0.33:b26d464b02",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "Facebook : pareil (compte ajouté comme testeur tant que l'appli Meta n'est pas « Live »)."
+  },
+  {
+   "cle": "recette:tikette:v0.33:a91e5380a2",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "E-mail : taper son adresse → code « Ton code Tikette » reçu → connecté."
+  },
+  {
+   "cle": "recette:tikette:v0.33:130309a9bf",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "Apple (iPhone) : fenêtre Apple, Face ID → connecté (si refus « pas encore activée », ça attendra le compte développeur)."
+  },
+  {
+   "cle": "recette:tikette:v0.33:bc73e4a9d1",
+   "groupe": "recette",
+   "appli": "tikette",
+   "qui": "Tous",
+   "version": "v0.33",
+   "titre": "Fermer la page Google sans se connecter → on revient sur l'écran, sans message d'erreur."
   },
   {
    "cle": "recette:tikette:v0.32:21453670cb",
