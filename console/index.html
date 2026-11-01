@@ -538,8 +538,8 @@ async function pageEnsemble() {
   const alertes = [
     ...couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15)
       .map((c) => ['var(--rouge)', `${c.nom} à renouveler le ${dateFr(c.echeance)} (J-${joursAvant(c.echeance)})`, () => aller('couts')]),
-    ...PARTENAIRES.filter((p) => p.etat === 'attente' && joursDepuis(p.depuis) >= 10)
-      .map((p) => ['var(--jaune)', `${p.nom} : pas de réponse depuis ${joursDepuis(p.depuis)} jours`, () => aller('partenaires')]),
+    ...PARTENAIRES.filter((p) => p.etat === 'attente' && (p.relance ? joursAvant(p.relance) <= 0 : joursDepuis(p.depuis) >= 10))
+      .map((p) => ['var(--jaune)', p.relance ? `${p.nom} : à relancer (prévu le ${dateFr(p.relance)})` : `${p.nom} : pas de réponse depuis ${joursDepuis(p.depuis)} jours`, () => aller('partenaires')]),
     ...(robots || []).filter((r) => !r.ok && !r.encours).map((r) => ['var(--rouge)', `Robot « ${r.nom} » en échec (${r.quand})`, null]),
     ...couts.filter((c) => c.montant == null).slice(0, 1).map(() => ['var(--doux)', `${couts.filter((c) => c.montant == null).length} coûts sans montant à compléter`, () => aller('couts')]),
   ];
@@ -859,7 +859,10 @@ async function pagePartenaires() {
       h('thead', {}, h('tr', {}, h('th', {}, 'PARTENAIRE'), h('th', {}, 'POUR'), h('th', {}, 'ÉTAT'), h('th', {}, 'DÉTAIL'), h('th', {}, ''))),
       h('tbody', {}, PARTENAIRES.map((p) => h('tr', {},
         h('td', {}, h('b', {}, p.nom)), h('td', { class: 'doux' }, nomAppli(p.appli)), h('td', {}, etatPartenaire(p)),
-        h('td', { class: 'doux' }, p.detail || '', p.etat === 'attente' && joursDepuis(p.depuis) >= 10 ? h('div', { style: 'color:var(--rouge);font-size:11.5px' }, 'Pas de réponse depuis 10 jours : demandez une relance à Claude.') : ''),
+        h('td', { class: 'doux' }, p.detail || '', p.etat !== 'attente' ? ''
+          : p.relance ? h('div', { style: `color:var(${joursAvant(p.relance) <= 0 ? '--rouge' : '--jaune'});font-size:11.5px` },
+              (joursAvant(p.relance) <= 0 ? 'À relancer maintenant' : 'Relance prévue le ' + dateFr(p.relance)) + (p.comment ? ' · ' + p.comment : ''))
+          : joursDepuis(p.depuis) >= 10 ? h('div', { style: 'color:var(--rouge);font-size:11.5px' }, 'Pas de réponse depuis 10 jours : demandez une relance à Claude.') : ''),
         h('td', {}, p.lien ? h('a', { href: p.lien, target: '_blank', rel: 'noopener', class: 'btn-contour mini', style: 'text-decoration:none' }, 'Ouvrir') : '')))))),
     h('p', { class: 'note-bas' }, 'Les commissions elles-mêmes se lisent dans chaque espace partenaire.'));
 }
