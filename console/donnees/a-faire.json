@@ -2,11 +2,11 @@
  "maj": "2026-11-01",
  "elements": [
   {
-   "cle": "demande:tikette:8e7b3b99cc",
+   "cle": "demande:tikette:385e3ac6d6",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Greg",
-   "titre": "Connexion v0.33 : Supabase › URL Configuration › Redirect URLs exp://** et applidates://** ; Email OTP Length = 6"
+   "titre": "Connexion par e-mail : vérifier Supabase › Email › Email OTP Length = 6, puis tester Profil › Se connecter › e-mail (code « Ton code Tikette »)"
   },
   {
    "cle": "demande:studio:c061fe4ec2",
@@ -23,11 +23,11 @@
    "titre": "Connexion Facebook (le compte Facebook de Greg est bloqué « appareil inhabituel ») : avec ton Facebook, créer l'appli « Tikette » sur developers.facebook.com (cas d'usage Facebook Login, e-mail de contact admin@eggnotfound.fr, portefeuille business « Egg Not Found » si possible), ajouter Greg en admin, puis prévenir Claude pour la suite (permission email, adresse de retour, mise en ligne, fournisseur dans Supabase) ; bouton Facebook caché dans Tikette en attendant"
   },
   {
-   "cle": "demande:tikette:addfdbe169",
+   "cle": "demande:tikette:aec32f1220",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Greg",
-   "titre": "Connexion Apple (à faire après Facebook) : fournisseur Apple dans Supabase avec host.exp.Exponent (Expo Go) ; complet avec le compte développeur"
+   "titre": "Vraie version : dans Supabase › Apple, ajouter l'identifiant de l'appli Tikette à côté de host.exp.Exponent (une fois le compte Apple développeur pris)"
   },
   {
    "cle": "demande:tikette:83e3a37d95",
