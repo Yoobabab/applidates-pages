@@ -124,12 +124,12 @@
      "titre": "Thèmes de soirée dans l’appli (couleur + thème)"
     },
     {
-     "etat": "à faire",
-     "titre": "Cagnotte Stripe (3 %, 0 % pour Fête+ annuel) et comptes après la soirée"
+     "etat": "en cours",
+     "titre": "Cagnotte Stripe (3 %, 0 % pour Fête+ annuel) : codée, à brancher sur Stripe (mode test)"
     },
     {
-     "etat": "à faire",
-     "titre": "Fête+, Pass Fêtes, packs Mariage/EVJF, thèmes à l’unité, Guinche Pro"
+     "etat": "en cours",
+     "titre": "Fête+ (soirée, an, Pass Fêtes, packs) : écran et thèmes payants codés ; achats intégrés à brancher"
     },
     {
      "etat": "à faire",

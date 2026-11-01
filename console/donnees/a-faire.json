@@ -2,6 +2,20 @@
  "maj": "2026-11-01",
  "elements": [
   {
+   "cle": "demande:guinche:f7ea615ebb",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Stripe en mode test pour Guinche : créer le compte Stripe avec admin@eggnotfound.fr, activer Connect, puis suivre le guide de Claude (clé secrète de test dans les secrets Supabase, webhook vers stripe-webhook)"
+  },
+  {
+   "cle": "demande:guinche:013f7d6601",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Tous",
+   "titre": "Avant la sortie de Guinche : retirer « Activer (gratuit pendant les tests) » de Fête+ (fonction fete_plus_test) et brancher les vrais achats (RevenueCat, compte Apple développeur)"
+  },
+  {
    "cle": "demande:guinche:699c387875",
    "groupe": "demande",
    "appli": "guinche",
@@ -816,6 +830,54 @@
    "qui": "Tous",
    "version": "v0.2",
    "titre": "Après avoir répondu : « Ajouter à mon agenda » crée l’événement dans l’agenda du téléphone"
+  },
+  {
+   "cle": "recette:guinche:v0.3:fb148bd8a9",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.3",
+   "titre": "Fête+ : choisir un thème payant ouvre l’écran Fête+ ; « Activer (test) » puis le thème s’applique"
+  },
+  {
+   "cle": "recette:guinche:v0.3:9266e6ab31",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.3",
+   "titre": "Créer une soirée avec une cagnotte (nom, objectif, montant conseillé) : le calcul « tu reçois environ » s’affiche"
+  },
+  {
+   "cle": "recette:guinche:v0.3:d248a63eba",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.3",
+   "titre": "Cagnotte › « Activer les paiements » : la page Stripe s’ouvre (mode test), on revient dans l’appli à la fin"
+  },
+  {
+   "cle": "recette:guinche:v0.3:8c9602a553",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.3",
+   "titre": "Invité : participer 20 € avec la carte de test 4242 4242 4242 4242 ; le montant apparaît chez l’organisateur"
+  },
+  {
+   "cle": "recette:guinche:v0.3:b066ad46c5",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.3",
+   "titre": "Invité : « Cacher mon montant » → les autres invités voient le prénom sans le montant"
+  },
+  {
+   "cle": "recette:guinche:v0.3:64fe1b281a",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.3",
+   "titre": "Clôturer puis rouvrir la cagnotte ; « Récupérer l’argent » ouvre l’espace Stripe"
   },
   {
    "cle": "recette:hearthaven:v0.1:71316a9a98",
