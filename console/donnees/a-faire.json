@@ -2,13 +2,6 @@
  "maj": "2026-11-01",
  "elements": [
   {
-   "cle": "demande:tikette:385e3ac6d6",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Connexion par e-mail : vérifier Supabase › Email › Email OTP Length = 6, puis tester Profil › Se connecter › e-mail (code « Ton code Tikette »)"
-  },
-  {
    "cle": "demande:studio:c061fe4ec2",
    "groupe": "demande",
    "appli": "studio",
@@ -30,11 +23,11 @@
    "titre": "Vraie version : dans Supabase › Apple, ajouter l'identifiant de l'appli Tikette à côté de host.exp.Exponent (une fois le compte Apple développeur pris)"
   },
   {
-   "cle": "demande:tikette:83e3a37d95",
+   "cle": "demande:tikette:8d28667849",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Greg",
-   "titre": "SMS : suivre la validation de l’expéditeur « Tikette » chez Brevo (Paramètres › SMS Sender ID), puis faire le test du vrai SMS de connexion (remis à plus tard le 30 oct.)"
+   "titre": "SMS : Brevo exige un numéro SIREN pour l’expéditeur « Tikette » → dès la micro-entreprise créée, renvoyer la demande (Paramètres › SMS Sender ID) avec le SIREN, puis tester le vrai SMS de connexion"
   },
   {
    "cle": "demande:tikette:eed1f7bdd1",
