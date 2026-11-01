@@ -28,7 +28,7 @@
    "resume": "Cartes Pokémon : collection, cote, échanges",
    "statut": "confirmee",
    "relie": false,
-   "etape": "en test",
+   "etape": "en pause",
    "moteur": "Expo · React Native",
    "technique": "Appli iPhone et Android, testée dans Expo Go ; serveur Supabase ; données des cartes publiées par un robot GitHub (AppliCard-donnees)"
   },
@@ -228,7 +228,7 @@
    "statut": "proposee",
    "relie": false,
    "moteur": "Expo · React Native",
-   "technique": "Appli iPhone et Android en TypeScript (Expo 58), testée dans Expo Go ; les invités répondent depuis une page web sans rien installer ; serveur Supabase (à brancher)",
+   "technique": "Appli iPhone et Android en TypeScript (Expo 58) ; les invités répondent et paient la cagnotte depuis une page web sans rien installer ; serveur Supabase ; cagnotte via Stripe, options de fête en achats intégrés",
    "logo": "logos/guinche.png",
    "version": "0.1"
   }

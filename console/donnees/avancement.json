@@ -96,8 +96,8 @@
    ]
   },
   "guinche": {
-   "maj": "2026-10-30",
-   "note": "V1 codée et testée sur ordinateur (mode démo). En attente : dépôt GitHub Guinche + secret EXPO_TOKEN, choix du projet Supabase, nom de domaine.",
+   "maj": "2026-11-01",
+   "note": "Priorité n° 2 du studio (après Tikette, avant robi ; Shivr en pause). Sortie visée mi-décembre 2026 pour les invitations du Nouvel An. Paiements réels possibles seulement avec le SIRET de la micro-entreprise.",
    "jalons": [
     {
      "etat": "fait",
@@ -125,7 +125,11 @@
     },
     {
      "etat": "à faire",
-     "titre": "V2 : cagnotte et partage des frais (Stripe, ~3 % de commission)"
+     "titre": "Cagnotte dès la V1 (Stripe, 3 % de commission)"
+    },
+    {
+     "etat": "à faire",
+     "titre": "Options de fête payantes dès la V1 (thèmes premium, Fête+, achats intégrés)"
     }
    ]
   }

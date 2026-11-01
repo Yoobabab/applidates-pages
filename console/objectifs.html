@@ -211,7 +211,7 @@ tr.total td { font-weight: 700; background: var(--carte); }
   <section class="section" aria-labelledby="t-prio">
     <div class="entete-section">
       <h2 id="t-prio">Les priorités</h2>
-      <p>Classement du 30 octobre 2026. Les barres montrent ce que chaque projet encaisse sur l'année, en réaliste.</p>
+      <p>Classement du 1er novembre 2026 (Shivr en pause jusqu’à la sortie de Tikette et robi). Les barres montrent ce que chaque projet encaisse sur l'année, en réaliste.</p>
     </div>
     <div class="projets" id="projets"></div>
     <p class="pause">En pause ou à l'état d'idée : Notif!, Ce que tu sèmes, AppliBD, Raconte, Maison connectée.</p>
@@ -263,16 +263,17 @@ tr.total td { font-weight: 700; background: var(--carte); }
 
   <footer class="pied">
     <span>Egg Not Found · Greg &amp; Yvan · 50/50</span>
-    <span class="chiffre">Plan du 30.10.2026</span>
+    <span class="chiffre">Plan du 01.11.2026</span>
   </footer>
 </div>
 
 <script>
-let LOGOS = {"tikette": "logos/tikette.png", "shivr": "logos/shivr.png", "robi": "logos/robi.png", "panier-fantome": "logos/panier-fantome.png", "agent-de-foot": "logos/agent-de-foot.png"};
+let LOGOS = {"tikette": "logos/tikette.png", "shivr": "logos/shivr.png", "robi": "logos/robi.png", "panier-fantome": "logos/panier-fantome.png", "agent-de-foot": "logos/agent-de-foot.png", "guinche": "logos/guinche.png"};
 const PROJETS = [
   { id: 'tikette', nom: 'Tikette', type: 'Appli', couleur: '#FF6B9A', etat: 'v0.31 · en test', sortie: 'Sortie début 2027', pourquoi: 'Le plus complet : comptes, vrais lieux, vote, IA, abonnement Or.', r: [2000, 15000, 35000], o: [12000, 90000, 200000], c: [300, 3000, 8000] },
-  { id: 'shivr', nom: 'Shivr', type: 'Appli', couleur: '#3FA9F5', etat: 'v0.60 · en test', sortie: 'Sortie début 2027', pourquoi: 'Très avancé, gros public de collectionneurs qui paie déjà ce genre d’appli.', r: [3000, 20000, 45000], o: [15000, 120000, 250000], c: [500, 4000, 10000] },
+  { id: 'guinche', nom: 'Guinche', type: 'Appli', couleur: '#E0569A', etat: 'v0.1 · en cours', sortie: 'Sortie mi-décembre 2026', pourquoi: 'La seule appli de saison (invitations du Nouvel An) ; cagnotte à 3 % et options de fête dès la V1, et chaque soirée fait connaître l’appli à 10 ou 20 invités.', r: [1500, 8000, 25000], o: [15000, 80000, 250000], c: [300, 1500, 4000] },
   { id: 'robi', nom: 'robi', type: 'Appli', couleur: '#2EC4A6', etat: 'v0.4 · en cours', sortie: 'Sortie printemps 2027', pourquoi: 'Outil pour plombiers : Formule Pro 39 € par mois et 5 ou 10 % des paiements.', r: [4000, 26000, 52000], o: [9000, 95000, 238000], c: [1000, 7000, 14000] },
+  { id: 'shivr', nom: 'Shivr', type: 'Appli', couleur: '#3FA9F5', etat: 'v0.60 · en pause', sortie: 'Reprise après la sortie de Tikette et robi', pourquoi: 'Très avancé, gros public de collectionneurs qui paie déjà ce genre d’appli.', r: [3000, 20000, 45000], o: [15000, 120000, 250000], c: [500, 4000, 10000] },
   { id: 'panier-fantome', nom: 'Panier Fantôme', type: 'Appli', couleur: '#8A6BD1', etat: 'v0.1 · en cours', sortie: 'Sortie printemps 2027', pourquoi: 'Simple, tout sur le téléphone, presque aucun coût.', r: [1000, 8000, 15000], o: [3600, 36000, 84000], c: [100, 1000, 2000] },
   { id: 'applinature', nom: 'AppliNature', type: 'Appli', couleur: '#2F9E44', etat: 'v0.10 · en test', sortie: 'Sortie été 2027', pourquoi: 'IA de reconnaissance déjà bonne ; il faut un serveur et choisir le nom.', r: [500, 6000, 15000], o: [4000, 40000, 90000], c: [100, 1000, 3000] },
   { id: 'braise', nom: 'BRAISE', type: 'Jeu', couleur: '#C0392B', etat: 'prototype zone 1', sortie: 'Sortie fin 2027 sur Steam', pourquoi: 'Le jeu le plus court à finir : 3 à 4 zones suffisent.', r: [2500, 1500, 600], o: [15000, 12000, 5000], c: [300, 150, 50] },
@@ -283,6 +284,7 @@ const PROJETS = [
 const TEMPS = [
   ['Tikette', '8 à 10 h', '3 à 5 h', 'Messages, lieux et événements à vérifier, affiliations, robots de nuit, coût de l’IA'],
   ['Shivr', '8 à 10 h', '4 à 6 h', 'Modération, sorties à saisir, support, frais des sites de vente, rotation Standard en avril'],
+  ['Guinche', '3 à 4 h', '1 à 3 h', 'Cagnottes contestées, support, nouveaux thèmes avant les fêtes (pic en décembre et en été)'],
   ['robi', '4 h', '2 à 4 h', 'Inscrire et accompagner les nouveaux plombiers, paiements, corrections'],
   ['Panier Fantôme', '2 à 3 h', '0,5 à 1 h', 'Avis sur les stores, nouvelles boutiques inventées'],
   ['AppliNature', '3 à 4 h', '1 à 2 h', 'Retours sur la reconnaissance, plus au printemps et à l’automne'],
