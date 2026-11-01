@@ -2,11 +2,18 @@
  "maj": "2026-11-01",
  "elements": [
   {
-   "cle": "demande:guinche:df7f4f9cb5",
+   "cle": "demande:guinche:2323d59913",
    "groupe": "demande",
    "appli": "guinche",
    "qui": "Greg",
-   "titre": "Guinche : lancer le script SQL version 4 (cagnotte par lien), puis faire les tests de la recette v0.3 (cagnotte par lien perso)"
+   "titre": "Guinche : brancher la connexion Google puis Apple (prévu le 2 nov. 2026)"
+  },
+  {
+   "cle": "demande:guinche:bae4a1b120",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Guinche : faire les tests de la recette v0.3 (cagnotte par lien perso) — script SQL v4 lancé le 1er nov."
   },
   {
    "cle": "demande:guinche:aa27314342",
