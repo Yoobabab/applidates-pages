@@ -2,13 +2,6 @@
  "maj": "2026-11-01",
  "elements": [
   {
-   "cle": "demande:guinche:f7ea615ebb",
-   "groupe": "demande",
-   "appli": "guinche",
-   "qui": "Greg",
-   "titre": "Stripe en mode test pour Guinche : créer le compte Stripe avec admin@eggnotfound.fr, activer Connect, puis suivre le guide de Claude (clé secrète de test dans les secrets Supabase, webhook vers stripe-webhook)"
-  },
-  {
    "cle": "demande:guinche:013f7d6601",
    "groupe": "demande",
    "appli": "guinche",
