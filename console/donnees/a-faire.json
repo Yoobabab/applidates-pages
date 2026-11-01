@@ -9,13 +9,6 @@
    "titre": "Clés SMTP Brevo à renouveler (elles expirent au bout d’un an, sinon les e-mails de connexion ne partent plus) : « supabase » le 9 oct. 2027, « applibd » le 11 oct. 2027, « Applidates » (Tikette) le 12 oct. 2027, « guinche » vers le 1er nov. 2027 → Brevo › SMTP & API › SMTP › nouvelle clé, puis la recoller dans Supabase › Authentication › Emails › SMTP du bon projet"
   },
   {
-   "cle": "demande:guinche:4da55daf5f",
-   "groupe": "demande",
-   "appli": "guinche",
-   "qui": "Greg",
-   "titre": "Supabase de Guinche : finir les réglages (modèles d’e-mail « Confirm signup » et « Magic Link » avec le code, fonction connexion-pseudo avec « Verify JWT » décoché, adresses de retour exp://** et guinche://**, connexion anonyme désactivée), puis créer son compte dans l’appli"
-  },
-  {
    "cle": "demande:studio:c061fe4ec2",
    "groupe": "demande",
    "appli": "studio",
