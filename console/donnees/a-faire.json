@@ -2,6 +2,20 @@
  "maj": "2026-11-01",
  "elements": [
   {
+   "cle": "demande:guinche:df7f4f9cb5",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Guinche : lancer le script SQL version 4 (cagnotte par lien), puis faire les tests de la recette v0.3 (cagnotte par lien perso)"
+  },
+  {
+   "cle": "demande:guinche:aa27314342",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Tous",
+   "titre": "Guinche, revenus en plus de Fête+ (retenus le 1er nov.) : lieux réservés via les partenaires de Tikette, liens affiliés costumes et déco, thèmes de saison à 0,99 €"
+  },
+  {
    "cle": "demande:guinche:013f7d6601",
    "groupe": "demande",
    "appli": "guinche",
