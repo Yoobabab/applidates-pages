@@ -96,7 +96,7 @@
    ]
   },
   "guinche": {
-   "maj": "2026-11-01",
+   "maj": "2026-11-03",
    "note": "Priorité n° 2 du studio (après Tikette, avant robi ; Shivr en pause). Sortie visée mi-décembre 2026 pour les invitations du Nouvel An. Paiements réels possibles seulement avec le SIRET de la micro-entreprise.",
    "jalons": [
     {
@@ -138,6 +138,10 @@
     {
      "etat": "en cours",
      "titre": "Mise en ligne : dépôt GitHub et Expo Go faits (1er nov.) ; reste TestFlight, page web, guinche.fr"
+    },
+    {
+     "titre": "Jeux de la soirée : Killer, Passe le tel, Tu préfères, Je n’ai jamais (gratuits) ; Killer IA, Qui a dit ça, quiz, Action ou vérité (Fête+)",
+     "etat": "à faire"
     }
    ]
   }
