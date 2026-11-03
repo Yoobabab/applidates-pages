@@ -2,11 +2,39 @@
  "maj": "2026-11-01",
  "elements": [
   {
-   "cle": "demande:guinche:2323d59913",
+   "cle": "demande:guinche:f49555e3fc",
    "groupe": "demande",
    "appli": "guinche",
    "qui": "Greg",
-   "titre": "Guinche : brancher la connexion Google puis Apple (prévu le 2 nov. 2026)"
+   "titre": "Guinche : lancer le script SQL version 6 (jeux, Crush, sécurité), puis tester la recette v0.4"
+  },
+  {
+   "cle": "demande:guinche:4b9e315136",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Guinche : recopier la fonction connexion-pseudo (anti-devinette des pseudos) dans Supabase"
+  },
+  {
+   "cle": "demande:guinche:1b8348b9b7",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Tous",
+   "titre": "Avant la sortie de Guinche : retirer crush_achat_test (« Voir qui » gratuit) et brancher l’achat intégré à 1,99 € ; notifications push pour la révélation du Crush à 11 h"
+  },
+  {
+   "cle": "demande:guinche:9c79131ddd",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Tous",
+   "titre": "Guinche : lire régulièrement la table signalements (Crush) dans Supabase"
+  },
+  {
+   "cle": "demande:guinche:78a9f0986a",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Guinche : brancher la connexion Google puis Apple"
   },
   {
    "cle": "demande:guinche:bae4a1b120",
@@ -892,6 +920,86 @@
    "qui": "Tous",
    "version": "v0.3",
    "titre": "Lien PayPal.me : le montant choisi est déjà rempli dans PayPal"
+  },
+  {
+   "cle": "recette:guinche:v0.4:6725e06a92",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Killer : 3 invités « Je viens » (dont toi depuis ton invitation) → Jeux de la soirée › Killer › Lancer"
+  },
+  {
+   "cle": "recette:guinche:v0.4:af7050ab03",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Killer : un joueur ouvre l’invitation › « Jouer au Killer » → voit sa cible et sa mission (touche = cacher)"
+  },
+  {
+   "cle": "recette:guinche:v0.4:88c88c6c2d",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Killer : « Mission réussie » → la cible voit « X dit t’avoir eu » → « C’est vrai » ; le tueur récupère la cible suivante"
+  },
+  {
+   "cle": "recette:guinche:v0.4:29ecd6330c",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Killer : l’organisateur retire un joueur (✕), puis « Terminer la partie » → journal à partager"
+  },
+  {
+   "cle": "recette:guinche:v0.4:c0b37f6117",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Le tel tourne : Passe le tel (compte à rebours 5 s), Tu préfères, Je n’ai jamais"
+  },
+  {
+   "cle": "recette:guinche:v0.4:e0befd01c0",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Crush : répondre « Je viens » connecté → Crush de soirée → cocher les 3 cases → Participer (refusé si moins de 18 ans)"
+  },
+  {
+   "cle": "recette:guinche:v0.4:7050a750f0",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Crush : choisir une personne ; le lendemain 11 h, si c’est réciproque → « C’est un match » et discussion"
+  },
+  {
+   "cle": "recette:guinche:v0.4:a8eaa41408",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Crush : « Voir qui · 1,99 € » (gratuit pendant les tests), bloquer, signaler, quitter le Crush"
+  },
+  {
+   "cle": "recette:guinche:v0.4:710440713a",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Modifier une soirée déjà passée (ajouter une cagnotte) : ça s’enregistre ; une cagnotte clôturée reste clôturée"
+  },
+  {
+   "cle": "recette:guinche:v0.4:01e58d6625",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.4",
+   "titre": "Profil : la date de naissance ne se modifie plus"
   },
   {
    "cle": "recette:hearthaven:v0.1:71316a9a98",

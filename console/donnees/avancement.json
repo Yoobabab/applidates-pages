@@ -140,8 +140,16 @@
      "titre": "Mise en ligne : dépôt GitHub et Expo Go faits (1er nov.) ; reste TestFlight, page web, guinche.fr"
     },
     {
-     "titre": "Jeux de la soirée : Killer, Passe le tel, Tu préfères, Je n’ai jamais (gratuits) ; Killer IA, Qui a dit ça, quiz, Action ou vérité (Fête+)",
-     "etat": "à faire"
+     "titre": "Jeux gratuits (Killer, Passe le tel, Tu préfères, Je n’ai jamais) codés ; jeux Fête+ à faire",
+     "etat": "en cours"
+    },
+    {
+     "titre": "Crush de soirée (18+, choix secrets, match le lendemain, discussion) codé ; achat 1,99 € et notifications à brancher",
+     "etat": "en cours"
+    },
+    {
+     "titre": "Relecture complète « mode debug » (sécurité de la base, erreurs réseau, web)",
+     "etat": "fait"
     }
    ]
   }
