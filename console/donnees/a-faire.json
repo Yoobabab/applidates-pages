@@ -9,11 +9,11 @@
    "titre": "Guinche : lancer le script SQL version 6 (jeux, Crush, sécurité), puis tester la recette v0.4"
   },
   {
-   "cle": "demande:guinche:80bf15f6d3",
+   "cle": "demande:guinche:936628a99d",
    "groupe": "demande",
    "appli": "guinche",
    "qui": "Greg",
-   "titre": "Guinche, Le Dîner de chefs : lancer supabase/diner.sql dans Supabase, ajouter le secret ANTHROPIC_API_KEY et déployer la fonction diner-resume (Verify JWT coché), puis tester la recette v0.5"
+   "titre": "Guinche, Le Dîner de chefs : relancer supabase/diner.sql (version du 4 nov. après-midi : liens perso protégés), puis tester la recette v0.5"
   },
   {
    "cle": "demande:guinche:4b9e315136",
@@ -1126,12 +1126,20 @@
    "titre": "Après la date d’un dîner : « Note le dîner de … » apparaît sur l’accueil et sur la page du chef ; on ne peut pas noter son propre dîner ni un dîner pas encore passé"
   },
   {
-   "cle": "recette:guinche:v0.5:4ae390ad18",
+   "cle": "recette:guinche:v0.5:c5b9574dcf",
    "groupe": "recette",
    "appli": "guinche",
    "qui": "Tous",
    "version": "v0.5",
-   "titre": "L’organisateur ne voit que le nombre de notes reçues, jamais les notes"
+   "titre": "L’organisateur ne voit que le nombre de notes reçues, jamais les notes ; une fois qu’un chef a ouvert son lien, l’organisateur voit « ✓ a ouvert son lien » et l’ancien lien ne marche plus ailleurs"
+  },
+  {
+   "cle": "recette:guinche:v0.5:82740acb19",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "Fluidité : revenir sur un écran déjà vu (accueil, soirée, invitation, saison) l’affiche tout de suite, sans roue de chargement ; relancer l’appli affiche l’accueil sans attendre"
   },
   {
    "cle": "recette:guinche:v0.5:15e1abc611",
