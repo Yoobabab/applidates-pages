@@ -16,11 +16,11 @@
    "titre": "Guinche, Le Dîner de chefs : relancer supabase/diner.sql (version du 4 nov. après-midi : liens perso protégés), puis tester la recette v0.5"
   },
   {
-   "cle": "demande:guinche:4b9e315136",
+   "cle": "demande:guinche:132f5b1f17",
    "groupe": "demande",
    "appli": "guinche",
    "qui": "Greg",
-   "titre": "Guinche : recopier la fonction connexion-pseudo (anti-devinette des pseudos) dans Supabase"
+   "titre": "Guinche, sécurité : lancer supabase/securite.sql (après diner.sql), recopier les fonctions connexion-pseudo et diner-resume, puis les réglages Auth (mot de passe 10 avec lettres et chiffres, e-mail sécurisé, anonymes off) et supprimer les fonctions Stripe inutilisées"
   },
   {
    "cle": "demande:guinche:1b8348b9b7",
@@ -851,6 +851,30 @@
    "qui": "Tous",
    "version": "v0.6",
    "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
+  },
+  {
+   "cle": "recette:guinche:v0.5.1:980f23b9c0",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5.1",
+   "titre": "Créer un compte avec un mot de passe trop simple (azerty123…) : refusé avec une phrase claire"
+  },
+  {
+   "cle": "recette:guinche:v0.5.1:8c2c58e064",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5.1",
+   "titre": "Après la mise à jour, on reste connecté (la session est maintenant chiffrée sur le téléphone)"
+  },
+  {
+   "cle": "recette:guinche:v0.5.1:cc386bc302",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5.1",
+   "titre": "Avec un compte qui n’est pas admin@ ou contact@ : l’achat test Fête+ / Crush affiche « réservé à l’équipe »"
   },
   {
    "cle": "recette:guinche:v0.2:d0b5e21ce9",
