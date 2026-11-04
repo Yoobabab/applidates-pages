@@ -58,6 +58,10 @@
   .btn-contour { background: transparent; border: 1px solid rgba(232,52,78,.6); color: var(--rouge); font-weight: 700; border-radius: 999px; padding: 6px 12px; font-size: 12px; }
   .btn-lien { background: none; border: 0; color: var(--doux); text-decoration: underline; padding: 0; font-size: 13px; }
   .message { font-size: 13px; min-height: 18px; }
+  .qr { background: #fff; border-radius: 14px; padding: 10px; width: 180px; height: 180px; margin: 4px auto; display: block; }
+  .cle-totp { font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: .5px; text-align: center; word-break: break-all; user-select: all; }
+  .champ-code { font-family: 'Space Mono', monospace; font-size: 22px; letter-spacing: 8px; text-align: center; }
+  .etapes-mfa { margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.55; }
   .message.erreur { color: var(--rose); }
   .message.ok { color: var(--vert); }
 
@@ -239,6 +243,28 @@
       <button class="btn" type="submit">Me connecter</button>
       <button class="btn-lien" type="button" id="changer-email">Changer d’adresse</button>
     </form>
+    <form id="form-mfa" class="bloc" hidden>
+      <div style="font-weight:700">Double authentification</div>
+      <div class="doux" style="font-size:13px">Tape le code à 6 chiffres affiché par ton appli d’authentification (Mots de passe de l’iPhone, Google Authenticator…).</div>
+      <input id="code-mfa" class="champ champ-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" required>
+      <button class="btn" type="submit">Entrer dans la console</button>
+      <button class="btn-lien" type="button" data-sortir>Se déconnecter</button>
+    </form>
+    <form id="form-inscription-mfa" class="bloc" hidden>
+      <div style="font-weight:700">Active la double authentification</div>
+      <div class="doux" style="font-size:13px">Obligatoire pour la console : même avec ta boîte mail, personne n’entre sans ton téléphone. Une seule fois, 2 minutes.</div>
+      <ol class="etapes-mfa doux">
+        <li>Sur ton téléphone, ouvre <b>Mots de passe</b> (iPhone) ou <b>Google Authenticator</b>.</li>
+        <li>Scanne ce QR code (ou touche « Ajouter à mon appli » depuis le téléphone, ou recopie la clé).</li>
+        <li>Tape le code à 6 chiffres qui s’affiche.</li>
+      </ol>
+      <img id="qr-mfa" class="qr" alt="QR code à scanner">
+      <a id="lien-mfa" class="btn-lien" style="text-align:center" href="#">Ajouter à mon appli (sur le téléphone)</a>
+      <div class="cle-totp" id="cle-mfa"></div>
+      <input id="code-inscription" class="champ champ-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" required>
+      <button class="btn" type="submit">Activer et entrer</button>
+      <button class="btn-lien" type="button" data-sortir>Se déconnecter</button>
+    </form>
     <div id="message-connexion" class="message"></div>
   </div>
 </section>
@@ -403,6 +429,54 @@ document.getElementById('changer-email').addEventListener('click', () => {
   dire('');
 });
 
+// ───────── Double authentification (code à 6 chiffres de l'appli d'authentification) ─────────
+let facteurMfa = null;
+function montrerSeul(id) {
+  for (const f of ['form-email', 'form-code', 'form-mfa', 'form-inscription-mfa']) document.getElementById(f).hidden = f !== id;
+  document.getElementById('connexion').hidden = false;
+  document.getElementById('console').hidden = true;
+}
+async function doubleAuthFaite() {
+  const { data: niveau } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (niveau?.currentLevel === 'aal2') return true;
+  const { data: liste } = await sb.auth.mfa.listFactors();
+  const tous = (liste?.all || []).filter((x) => x.factor_type === 'totp');
+  const pret = tous.find((x) => x.status === 'verified');
+  if (pret) {
+    facteurMfa = pret.id;
+    montrerSeul('form-mfa');
+    document.getElementById('code-mfa').value = '';
+    document.getElementById('code-mfa').focus();
+    dire('');
+    return false;
+  }
+  for (const x of tous) await sb.auth.mfa.unenroll({ factorId: x.id }); // essais pas terminés
+  const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'Console Egg Not Found', issuer: 'Egg Not Found' });
+  montrerSeul('form-inscription-mfa');
+  if (error) { dire('Double authentification indisponible : ' + error.message); return false; }
+  facteurMfa = data.id;
+  document.getElementById('qr-mfa').src = data.totp.qr_code;
+  document.getElementById('lien-mfa').href = data.totp.uri;
+  document.getElementById('cle-mfa').textContent = data.totp.secret.replace(/(.{4})/g, '$1 ').trim();
+  document.getElementById('code-inscription').value = '';
+  document.getElementById('code-inscription').focus();
+  dire('');
+  return false;
+}
+async function verifierMfa(e, champ) {
+  e.preventDefault();
+  const code = document.getElementById(champ).value.replace(/\D/g, '');
+  if (code.length !== 6) return dire('Le code fait 6 chiffres.');
+  const bouton = e.submitter; if (bouton) bouton.disabled = true; dire('');
+  const { error } = await sb.auth.mfa.challengeAndVerify({ factorId: facteurMfa, code });
+  if (bouton) bouton.disabled = false;
+  if (error) { document.getElementById(champ).select(); return dire('Code incorrect ou expiré : attends le suivant et réessaie.'); }
+  demarrer();
+}
+document.getElementById('form-mfa').addEventListener('submit', (e) => verifierMfa(e, 'code-mfa'));
+document.getElementById('form-inscription-mfa').addEventListener('submit', (e) => verifierMfa(e, 'code-inscription'));
+for (const b of document.querySelectorAll('[data-sortir]')) b.addEventListener('click', async () => { await sb.auth.signOut(); montrerSeul('form-email'); dire(''); });
+
 let email = '';
 async function demarrer() {
   const { data } = await sb.auth.getSession();
@@ -413,14 +487,16 @@ async function demarrer() {
     return;
   }
   let admin = false;
-  try { admin = await rpc('est_admin'); } catch (e) { /* script pas lancé */ }
+  try { admin = await rpc('est_admin_compte'); } catch (e) {
+    try { admin = await rpc('est_admin'); } catch { /* script pas lancé */ } // avant console-mfa.sql
+  }
   if (!admin) {
     await sb.auth.signOut();
     document.getElementById('connexion').hidden = false;
-    document.getElementById('form-email').hidden = false;
-    document.getElementById('form-code').hidden = true;
+    montrerSeul('form-email');
     return dire('Cette adresse n’a pas accès à la console.');
   }
+  if (!(await doubleAuthFaite())) return;
   email = session.user.email || '';
   const [applis, faire, part, av] = await Promise.all([json('donnees/applis.json'), json('donnees/a-faire.json'), json('donnees/partenaires.json'), json('donnees/avancement.json')]);
   AVANCEMENT = av?.applis || {};

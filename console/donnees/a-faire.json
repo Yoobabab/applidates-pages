@@ -93,6 +93,20 @@
    "titre": "Toutes les applis du studio : mêmes choix de connexion que Tikette (numéro, Apple, Google, Facebook, e-mail) ; projets Google Cloud et Meta au nom d'admin@eggnotfound.fr, une appli par projet"
   },
   {
+   "cle": "demande:studio:5373f4dbf4",
+   "groupe": "demande",
+   "appli": "studio",
+   "qui": "Greg",
+   "titre": "Console : activer la double authentification (se connecter à tikette.fr/console/, scanner le QR code avec l'appli Mots de passe de l'iPhone, taper le code), puis lancer supabase/console-mfa.sql dans Supabase"
+  },
+  {
+   "cle": "demande:studio:c055912711",
+   "groupe": "demande",
+   "appli": "studio",
+   "qui": "Yvan",
+   "titre": "Console : activer la double authentification à ta prochaine connexion (QR code à scanner avec Mots de passe de l'iPhone ou Google Authenticator)"
+  },
+  {
    "cle": "demande:tikette:f22ba13e91",
    "groupe": "demande",
    "appli": "tikette",
