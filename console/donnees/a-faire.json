@@ -93,6 +93,20 @@
    "titre": "Toutes les applis du studio : mêmes choix de connexion que Tikette (numéro, Apple, Google, Facebook, e-mail) ; projets Google Cloud et Meta au nom d'admin@eggnotfound.fr, une appli par projet"
   },
   {
+   "cle": "demande:tikette:f22ba13e91",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Recopier la fonction envoyer-email dans Supabase (Edge Functions › envoyer-email › coller le nouveau code de supabase/functions/envoyer-email/index.ts › Deploy) : petit correctif v0.34"
+  },
+  {
+   "cle": "demande:tikette:726267b35f",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Avec le compte Apple développeur : déclarer contact@tikette.fr dans « Sign in with Apple for Email Communication », sinon nos e-mails n'arrivent pas aux adresses relais Apple"
+  },
+  {
    "cle": "demande:tikette:977b13b754",
    "groupe": "demande",
    "appli": "tikette",

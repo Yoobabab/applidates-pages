@@ -59,7 +59,8 @@ PAR_CATEGORIE = [
     ('museum', {'Museum'}),
     ('parc', {'ParkAndGarden'}),
     ('nature', {'NaturalHeritage'}),
-    ('visite', {'Visit', 'RemarkableBuilding', 'Castle', 'CityHeritage'}),
+    # Pas « RemarkableBuilding » ni « CityHeritage » seuls : ministères, fontaines, villages entiers… ne sont pas des visites.
+    ('visite', {'Visit', 'Castle'}),
 ]
 
 # Rien à faire pour un date : hébergements, commerces, lieux de culte, services, stages et cours longs.
@@ -71,6 +72,13 @@ EXCLURE = {
 }
 # Gardés malgré EXCLURE quand c'est un vrai prestataire (un domaine qui fait aussi gîte, par exemple).
 SAUVER = {'TastingProvider', 'ActivityProvider', 'LeisureSportActivityProvider', 'EquestrianCenter', 'Museum'}
+
+# Faux amis repérés sur les vraies données (nov. 2026).
+FAUX_AMIS = {
+    'visite': r"\b(ministere|fontaine|passage|rive|quartier|ville de|palais de l.elysee|hotel de (ville|brienne))",
+    'bains': r"\bpiscine",
+    'atelier': r"\b(galerie|ateliers d.artistes|theatre)",
+}
 
 ENFANTS = r"\b(jeune public|enfants?|tout[- ]petits|bebes?|p.tits|kids|anniversaire enfant)\b"
 
@@ -105,6 +113,8 @@ def genre(nom, categories):
         return None
     for g, motif in PAR_MOTS:
         if re.search(motif, texte):
+            if g in FAUX_AMIS and re.search(FAUX_AMIS[g], texte):
+                return None
             # « Domaine » ou « château » seuls ne suffisent pas : il faut que ce soit un lieu qui fait déguster.
             if g == 'winery' and not (noms & {'TastingProvider', 'Tasting', 'Producer', 'LocalProductsShop'}) and not re.search(r'degustation|caveau|cave|vigneron|vignoble', texte):
                 continue
@@ -113,6 +123,8 @@ def genre(nom, categories):
             return g
     for g, liste in PAR_CATEGORIE:
         if noms & liste:
+            if g in FAUX_AMIS and re.search(FAUX_AMIS[g], texte):
+                return None
             return g
     return None
 
