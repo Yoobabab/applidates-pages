@@ -93,6 +93,13 @@
    "titre": "Toutes les applis du studio : mêmes choix de connexion que Tikette (numéro, Apple, Google, Facebook, e-mail) ; projets Google Cloud et Meta au nom d'admin@eggnotfound.fr, une appli par projet"
   },
   {
+   "cle": "demande:tikette:5246e91d16",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Lancer supabase/protections.sql dans Supabase (SQL Editor) : parrainage récompensé après un vrai date, clics plafonnés"
+  },
+  {
    "cle": "demande:tikette:f22ba13e91",
    "groupe": "demande",
    "appli": "tikette",
