@@ -1,5 +1,5 @@
 {
- "maj": "2026-11-01",
+ "maj": "2026-11-04",
  "elements": [
   {
    "cle": "demande:guinche:f49555e3fc",
@@ -7,6 +7,13 @@
    "appli": "guinche",
    "qui": "Greg",
    "titre": "Guinche : lancer le script SQL version 6 (jeux, Crush, sécurité), puis tester la recette v0.4"
+  },
+  {
+   "cle": "demande:guinche:80bf15f6d3",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Guinche, Le Dîner de chefs : lancer supabase/diner.sql dans Supabase, ajouter le secret ANTHROPIC_API_KEY et déployer la fonction diner-resume (Verify JWT coché), puis tester la recette v0.5"
   },
   {
    "cle": "demande:guinche:4b9e315136",
@@ -72,6 +79,13 @@
    "titre": "Clés SMTP Brevo à renouveler (elles expirent au bout d’un an, sinon les e-mails de connexion ne partent plus) : « supabase » le 9 oct. 2027, « applibd » le 11 oct. 2027, « Applidates » (Tikette) le 12 oct. 2027, « guinche » vers le 1er nov. 2027 → Brevo › SMTP & API › SMTP › nouvelle clé, puis la recoller dans Supabase › Authentication › Emails › SMTP du bon projet"
   },
   {
+   "cle": "demande:guinche:4da55daf5f",
+   "groupe": "demande",
+   "appli": "guinche",
+   "qui": "Greg",
+   "titre": "Supabase de Guinche : finir les réglages (modèles d’e-mail « Confirm signup » et « Magic Link » avec le code, fonction connexion-pseudo avec « Verify JWT » décoché, adresses de retour exp://** et guinche://**, connexion anonyme désactivée), puis créer son compte dans l’appli"
+  },
+  {
    "cle": "demande:studio:c061fe4ec2",
    "groupe": "demande",
    "appli": "studio",
@@ -86,11 +100,11 @@
    "titre": "Connexion Facebook (le compte Facebook de Greg est bloqué « appareil inhabituel ») : avec ton Facebook, créer l'appli « Tikette » sur developers.facebook.com (cas d'usage Facebook Login, e-mail de contact admin@eggnotfound.fr, portefeuille business « Egg Not Found » si possible), ajouter Greg en admin, puis prévenir Claude pour la suite (permission email, adresse de retour, mise en ligne, fournisseur dans Supabase) ; bouton Facebook caché dans Tikette en attendant"
   },
   {
-   "cle": "demande:tikette:aec32f1220",
+   "cle": "demande:tikette:8e24eaa5f9",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Greg",
-   "titre": "Vraie version : dans Supabase › Apple, ajouter l'identifiant de l'appli Tikette à côté de host.exp.Exponent (une fois le compte Apple développeur pris)"
+   "titre": "Vraie version : dans Supabase › Apple, ajouter l’identifiant de l’appli Tikette à côté de host.exp.Exponent (une fois le compte Apple développeur pris)"
   },
   {
    "cle": "demande:tikette:8d28667849",
@@ -234,36 +248,36 @@
    "titre": "Profil › Se connecter (ou 1er lancement) : gros bouton numéro, puis 4 petits boutons (Apple, Google, Facebook, e-mail) ; « Créer un compte » ouvre la feuille avec les mêmes choix."
   },
   {
-   "cle": "recette:tikette:v0.33:1e9e0acf47",
+   "cle": "recette:tikette:v0.33:51d01cc276",
    "groupe": "recette",
    "appli": "tikette",
    "qui": "Tous",
    "version": "v0.33",
-   "titre": "Google : la page Google s'ouvre, choisir son compte → retour dans Tikette, prénom déjà rempli → Continuer → connecté."
+   "titre": "Google (OK le 1er nov. 2026) : la page Google s'ouvre, choisir son compte → retour dans Tikette, prénom déjà rempli → Continuer → connecté."
   },
   {
-   "cle": "recette:tikette:v0.33:b26d464b02",
+   "cle": "recette:tikette:v0.33:442a60832d",
    "groupe": "recette",
    "appli": "tikette",
    "qui": "Tous",
    "version": "v0.33",
-   "titre": "Facebook : pareil (compte ajouté comme testeur tant que l'appli Meta n'est pas « Live »)."
+   "titre": "Facebook (bouton caché tant qu'Yvan n'a pas créé l'appli Meta) : pareil (compte ajouté comme testeur tant que l'appli Meta n'est pas « Live »)."
   },
   {
-   "cle": "recette:tikette:v0.33:a91e5380a2",
+   "cle": "recette:tikette:v0.33:7d2a9a760e",
    "groupe": "recette",
    "appli": "tikette",
    "qui": "Tous",
    "version": "v0.33",
-   "titre": "E-mail : taper son adresse → code « Ton code Tikette » reçu → connecté."
+   "titre": "E-mail (OK le 1er nov. 2026) : taper son adresse → code « Ton code Tikette » reçu → connecté."
   },
   {
-   "cle": "recette:tikette:v0.33:130309a9bf",
+   "cle": "recette:tikette:v0.33:4dfdf012f9",
    "groupe": "recette",
    "appli": "tikette",
    "qui": "Tous",
    "version": "v0.33",
-   "titre": "Apple (iPhone) : fenêtre Apple, Face ID → connecté (si refus « pas encore activée », ça attendra le compte développeur)."
+   "titre": "Apple (iPhone, OK le 1er nov. 2026) : fenêtre Apple, Face ID → connecté (si refus « pas encore activée », ça attendra le compte développeur)."
   },
   {
    "cle": "recette:tikette:v0.33:bc73e4a9d1",
@@ -754,6 +768,70 @@
    "titre": "photo envoyée puis validée qui apparaît sur la fiche le lendemain (après le robot de nuit) ; lancer supabase/photos-annulation.sql puis essayer « Validées récemment »."
   },
   {
+   "cle": "recette:applinature:v0.10.1:2356b8090a",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10.1",
+   "titre": "l'appli s'ouvre à nouveau dans Expo Go (passage à Expo SDK 58)"
+  },
+  {
+   "cle": "recette:applinature:v0.10:9e7adc5c9a",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10",
+   "titre": "Aujourd'hui : la balade du jour se prépare toute seule, choisir 1 h / 2 h / 3 h, « Partir » ouvre l'aperçu (carte, relief, étapes)"
+  },
+  {
+   "cle": "recette:applinature:v0.10:838086beb9",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10",
+   "titre": "bouton rond « Partir » au centre de la barre : 3 balades prêtes, mes boucles, « Choisir mes envies »"
+  },
+  {
+   "cle": "recette:applinature:v0.10:dbddc5b006",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10",
+   "titre": "balade en cours : carte plein écran, guidage, « J'ai trouvé quelque chose », « Retour au départ », « Terminer »"
+  },
+  {
+   "cle": "recette:applinature:v0.10:452321b871",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10",
+   "titre": "onglet Mes balades : refaire une boucle, « Autre chemin », journal des balades"
+  },
+  {
+   "cle": "recette:applinature:v0.10:0c2ff06435",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10",
+   "titre": "carte : tracé avec flèches de sens, bornes kilométriques, étapes en pastilles"
+  },
+  {
+   "cle": "recette:applinature:v0.10:7ec8dc7386",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.10",
+   "titre": "police Figtree : lisible et en accord avec les couleurs"
+  },
+  {
+   "cle": "recette:applinature:v0.6:0ef6bf522f",
+   "groupe": "recette",
+   "appli": "applinature",
+   "qui": "Tous",
+   "version": "v0.6",
+   "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
+  },
+  {
    "cle": "recette:guinche:v0.2:d0b5e21ce9",
    "groupe": "recette",
    "appli": "guinche",
@@ -1002,6 +1080,54 @@
    "titre": "Profil : la date de naissance ne se modifie plus"
   },
   {
+   "cle": "recette:guinche:v0.5:9c2510ac37",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "Accueil › « Créer un événement » : la carte « Le Dîner de chefs » est en tête, les tuiles Anniversaire / Soirée / Crémaillère / Autre ouvrent la création de soirée"
+  },
+  {
+   "cle": "recette:guinche:v0.5:71e1abb3c9",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "Lancer une saison avec 3 chefs ou plus (deux prénoms identiques refusés) ; choisir des dates"
+  },
+  {
+   "cle": "recette:guinche:v0.5:5bcee5e227",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "Envoyer son lien à un chef par WhatsApp : sa page s’ouvre dans le navigateur sans compte, il peut choisir sa date et son lieu"
+  },
+  {
+   "cle": "recette:guinche:v0.5:46a1e8c824",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "Après la date d’un dîner : « Note le dîner de … » apparaît sur l’accueil et sur la page du chef ; on ne peut pas noter son propre dîner ni un dîner pas encore passé"
+  },
+  {
+   "cle": "recette:guinche:v0.5:4ae390ad18",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "L’organisateur ne voit que le nombre de notes reçues, jamais les notes"
+  },
+  {
+   "cle": "recette:guinche:v0.5:15e1abc611",
+   "groupe": "recette",
+   "appli": "guinche",
+   "qui": "Tous",
+   "version": "v0.5",
+   "titre": "Finale : classement révélé à tous, récap voix off écrit par l’IA, « Écouter » le lit à voix haute, « Partager le classement »"
+  },
+  {
    "cle": "recette:hearthaven:v0.1:71316a9a98",
    "groupe": "recette",
    "appli": "hearthaven",
@@ -1112,70 +1238,6 @@
    "qui": "Yvan",
    "version": "v0.1",
    "titre": "Carnet : il s’ouvre comme un vrai livre (la couverture se rabat), seule la feuille de papier tourne, sans trous"
-  },
-  {
-   "cle": "recette:applinature:v0.10.1:2356b8090a",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10.1",
-   "titre": "l'appli s'ouvre à nouveau dans Expo Go (passage à Expo SDK 58)"
-  },
-  {
-   "cle": "recette:applinature:v0.10:9e7adc5c9a",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10",
-   "titre": "Aujourd'hui : la balade du jour se prépare toute seule, choisir 1 h / 2 h / 3 h, « Partir » ouvre l'aperçu (carte, relief, étapes)"
-  },
-  {
-   "cle": "recette:applinature:v0.10:838086beb9",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10",
-   "titre": "bouton rond « Partir » au centre de la barre : 3 balades prêtes, mes boucles, « Choisir mes envies »"
-  },
-  {
-   "cle": "recette:applinature:v0.10:dbddc5b006",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10",
-   "titre": "balade en cours : carte plein écran, guidage, « J'ai trouvé quelque chose », « Retour au départ », « Terminer »"
-  },
-  {
-   "cle": "recette:applinature:v0.10:452321b871",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10",
-   "titre": "onglet Mes balades : refaire une boucle, « Autre chemin », journal des balades"
-  },
-  {
-   "cle": "recette:applinature:v0.10:0c2ff06435",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10",
-   "titre": "carte : tracé avec flèches de sens, bornes kilométriques, étapes en pastilles"
-  },
-  {
-   "cle": "recette:applinature:v0.10:7ec8dc7386",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.10",
-   "titre": "police Figtree : lisible et en accord avec les couleurs"
-  },
-  {
-   "cle": "recette:applinature:v0.6:0ef6bf522f",
-   "groupe": "recette",
-   "appli": "applinature",
-   "qui": "Tous",
-   "version": "v0.6",
-   "titre": "IA : photo en gros plan d'une feuille, d'une fleur ou d'un champignon (choisir le groupe) : la bonne espèce est-elle dans les 3 idées ?"
   }
  ]
 }

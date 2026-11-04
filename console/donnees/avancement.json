@@ -96,7 +96,7 @@
    ]
   },
   "guinche": {
-   "maj": "2026-11-03",
+   "maj": "2026-11-04",
    "note": "Priorité n° 2 du studio (après Tikette, avant robi ; Shivr en pause). Sortie visée mi-décembre 2026 pour les invitations du Nouvel An. Paiements réels possibles seulement avec le SIRET de la micro-entreprise.",
    "jalons": [
     {
@@ -150,6 +150,10 @@
     {
      "titre": "Relecture complète « mode debug » (sécurité de la base, erreurs réseau, web)",
      "etat": "fait"
+    },
+    {
+     "etat": "en cours",
+     "titre": "Le Dîner de chefs (concours de dîners, notes secrètes, finale avec voix off) : codé le 4 nov., script diner.sql et fonction diner-resume à installer"
     }
    ]
   }
