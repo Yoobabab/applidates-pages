@@ -430,6 +430,8 @@ document.getElementById('changer-email').addEventListener('click', () => {
 });
 
 // ───────── Double authentification (code à 6 chiffres de l'appli d'authentification) ─────────
+// Mise en pause le 5 nov. 2026 (demande de Greg : souci avec Bitwarden). Repasser à true pour la remettre.
+const MFA_OBLIGATOIRE = false;
 let facteurMfa = null;
 function montrerSeul(id) {
   for (const f of ['form-email', 'form-code', 'form-mfa', 'form-inscription-mfa']) document.getElementById(f).hidden = f !== id;
@@ -437,6 +439,7 @@ function montrerSeul(id) {
   document.getElementById('console').hidden = true;
 }
 async function doubleAuthFaite() {
+  if (!MFA_OBLIGATOIRE) return true;
   const { data: niveau } = await sb.auth.mfa.getAuthenticatorAssuranceLevel();
   if (niveau?.currentLevel === 'aal2') return true;
   const { data: liste } = await sb.auth.mfa.listFactors();
