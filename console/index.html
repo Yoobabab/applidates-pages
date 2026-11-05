@@ -117,6 +117,15 @@
   .etiquette.attente { background: rgba(242,193,78,.14); color: var(--jaune); }
   .etiquette.gris { background: rgba(138,133,124,.14); color: var(--doux); }
   .etiquette.alerte { background: rgba(232,52,78,.16); color: var(--rouge); }
+  .retour { border-top: 1px solid var(--ligne); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
+  .retour:first-of-type { border-top: 0; }
+  .retour .tete { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .retour .tete .etiquette { margin-left: 0; }
+  .retour .texte { white-space: pre-wrap; line-height: 1.45; overflow-wrap: anywhere; }
+  .retour .meta { font-size: 11.5px; color: var(--doux); }
+  .retour .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .retour .reponse { font-size: 12.5px; color: var(--vert); }
+  .retour select.champ { width: auto; padding: 4px 8px; font-size: 12px; }
   form.bloc { display: flex; flex-direction: column; gap: 10px; }
   .ligne-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
   label.lab { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--doux); font-weight: 700; }
@@ -516,7 +525,7 @@ async function demarrer() {
 }
 
 // ───────── Navigation ─────────
-const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres };
+const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres, retours: pageRetours };
 let courant = { nom: 'ensemble', app: null };
 let cochesCache = null;
 let tachesCache = [];
@@ -560,6 +569,7 @@ function dessinerNav() {
     onglet('Partenaires', 'partenaires'),
     onglet('Avances de frais', 'avances'),
     onglet('Offres et abonnements', 'offres'),
+    onglet('Retours testeurs', 'retours'),
     h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
 }
 function aller(nom, app, depuisHistorique) {
@@ -973,7 +983,7 @@ async function pageTikette() {
   const clics = Object.entries(t.clics).sort((a, b) => b[1] - a[1]);
   const notes = t.notes.repartition || {};
   afficherPour(g, 
-    entete('Tikette', 'Chiffres en direct · ' + mots[periode], choix),
+    entete('Tikette', 'Chiffres en direct · ' + mots[periode], h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center' }, choix, h('button', { class: 'btn-contour', onclick: () => { filtreRetoursApp = 'tikette'; aller('retours'); } }, 'Retours testeurs'))),
     h('div', { class: 'kpis' },
       kpi('Nouveaux comptes', nombre(t.comptes.nouveaux), evoComptes.t + ' · ' + nombre(t.comptes.total) + ' en tout', null, evoComptes.c),
       kpi('Abonnés (Tikette Or)', nombre(abonnes(t).payants), nombre(abonnes(t).offerts) + ' offert' + (abonnes(t).offerts > 1 ? 's' : '') + ' · comptes du studio non comptés', 'var(--jaune)'),
@@ -1081,6 +1091,134 @@ async function pageOffres() {
           h('p', { class: 'note-bas', style: 'margin:8px 0 0' }, '1 mois d’abonnement offert à chacun ; compte de moins de 14 jours ; 12 filleuls par an au plus.')))));
 }
 
+
+
+// ───────── Retours des testeurs ─────────
+let filtreRetours = 'ouverts';
+let filtreRetoursApp = 'tikette';
+let captureRetour = null; // chemin de la capture envoyée pour le nouveau retour
+const GENRES = { bug: 'Bug', idee: 'Idée', remarque: 'Remarque' };
+const GRAVITES = { bloquant: 'Bloquant', genant: 'Gênant', mineur: 'Mineur' };
+const STATUTS = { a_traiter: 'À traiter', en_cours: 'En cours', corrige: 'Corrigé', refuse: 'Pas retenu' };
+const estOuvert = (r) => r.statut === 'a_traiter' || r.statut === 'en_cours';
+function texteRetours(liste) {
+  return liste.map((r, i) => (i + 1) + '. [' + GENRES[r.genre] + (r.genre === 'bug' ? ' · ' + GRAVITES[r.gravite] : '') + '] '
+    + [r.ecran, r.version, r.appareil].filter(Boolean).join(' · ') + ' (' + r.testeur + ', ' + dateFr(r.le) + ')\n' + r.texte
+    + (r.capture ? '\n(capture dans la console)' : '')).join('\n\n');
+}
+async function pageRetours() {
+  const g = generation;
+  const tous = await rpc('console_retours', { p_appli: filtreRetoursApp }).catch((e) => {
+    if (/console_retours/.test(String(e?.message))) return null; throw e;
+  });
+  if (!tous) {
+    afficherPour(g, entete('Retours testeurs', 'Tout ce que les testeurs remontent, au même endroit'),
+      h('div', { class: 'panneau' }, 'Il faut d’abord lancer ', h('b', {}, 'supabase/retours.sql'), ' dans Supabase (projet Tikette).'));
+    return;
+  }
+  captureRetour = null;
+  const visibles = tous.filter((r) => filtreRetours === 'tous' || (filtreRetours === 'ouverts' ? estOuvert(r) : !estOuvert(r)));
+  const ouverts = tous.filter(estOuvert);
+  const bloquants = ouverts.filter((r) => r.genre === 'bug' && r.gravite === 'bloquant');
+  const versions = [...new Set(tous.map((r) => r.version).filter(Boolean))];
+  const testeurs = [...new Set(['Greg', 'Yvan', ...tous.map((r) => r.testeur)])];
+  const applis = CATALOGUE.filter(estConfirmee);
+
+  const etat = h('div', { class: 'message' });
+  const champ = (nom, attrs) => h('input', { class: 'champ', name: nom, ...attrs });
+  const choixListe = (nom, objet, defaut) => h('select', { class: 'champ', name: nom }, Object.entries(objet).map(([v, l]) => h('option', { value: v, selected: v === defaut }, l)));
+  const form = h('form', { class: 'bloc' },
+    h('div', { class: 'ligne-form' },
+      h('label', { class: 'lab' }, 'Testeur', champ('testeur', { required: true, maxlength: 60, list: 'liste-testeurs', placeholder: 'Yvan' })),
+      h('label', { class: 'lab' }, 'Date', champ('le', { type: 'date', value: aujourdhui() }))),
+    h('datalist', { id: 'liste-testeurs' }, testeurs.map((t) => h('option', { value: t }))),
+    h('div', { class: 'ligne-form' },
+      h('label', { class: 'lab' }, 'Type', choixListe('genre', GENRES, 'bug')),
+      h('label', { class: 'lab' }, 'Gravité', choixListe('gravite', GRAVITES, 'genant'))),
+    h('label', { class: 'lab' }, 'Où dans l’appli', champ('ecran', { maxlength: 80, placeholder: 'Ticket mystère, connexion, carnet…' })),
+    h('label', { class: 'lab' }, 'Ce qui se passe', h('textarea', { class: 'champ', name: 'texte', required: true, maxlength: 2000, rows: 5, style: 'font-family:inherit;font-size:14px;resize:vertical', placeholder: 'Ce que tu as fait, ce qui s’est passé, ce que tu attendais.' })),
+    h('div', { class: 'ligne-form' },
+      h('label', { class: 'lab' }, 'Version', champ('version', { maxlength: 40, list: 'liste-versions', value: versions[0] || 'TestFlight 1.0.0 (2)' })),
+      h('label', { class: 'lab' }, 'Téléphone', champ('appareil', { maxlength: 60, placeholder: 'iPhone 15, iOS 26' }))),
+    h('datalist', { id: 'liste-versions' }, versions.map((v) => h('option', { value: v }))),
+    h('div', { class: 'depot', id: 'depot-retour' },
+      h('span', { class: 'gros' }, '⇪'), h('b', { id: 'depot-retour-titre' }, 'Capture d’écran (facultatif)'),
+      h('input', { type: 'file', accept: 'image/*', id: 'fichier-retour' })),
+    etat,
+    h('button', { class: 'btn', type: 'submit' }, 'Enregistrer le retour'));
+  form.querySelector('#fichier-retour').addEventListener('change', async (e) => {
+    const fichier = e.target.files[0]; if (!fichier) return;
+    etat.className = 'message'; etat.textContent = 'Envoi de la capture…';
+    try {
+      const { blob, ext, type } = await preparerFichier(fichier);
+      const { data: s } = await sb.auth.getSession();
+      const chemin = s.session.user.id + '/' + crypto.randomUUID() + '.' + ext;
+      const { error } = await sb.storage.from('justificatifs').upload(chemin, blob, { contentType: type });
+      if (error) throw error;
+      if (captureRetour) sb.storage.from('justificatifs').remove([captureRetour]).catch(() => {});
+      captureRetour = chemin;
+      document.getElementById('depot-retour-titre').textContent = '✓ ' + fichier.name;
+      etat.className = 'message ok'; etat.textContent = 'Capture enregistrée.';
+    } catch (err) { etat.className = 'message erreur'; etat.textContent = erreur(err); }
+  });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    try {
+      await rpc('console_retour_enregistrer', { p: { appli: filtreRetoursApp, le: f.get('le'), testeur: f.get('testeur'), version: f.get('version'), appareil: f.get('appareil'),
+        ecran: f.get('ecran'), genre: f.get('genre'), gravite: f.get('gravite'), texte: f.get('texte'), capture: captureRetour } });
+      filtreRetours = 'ouverts'; aller('retours');
+    } catch (err) { etat.className = 'message erreur'; etat.textContent = erreur(err); }
+  });
+
+  const maj = async (r, changes) => { await rpc('console_retour_enregistrer', { p: { id: r.id, ...changes } }); aller('retours'); };
+  const classeGravite = { bloquant: 'alerte', genant: 'attente', mineur: 'gris' };
+  const classeStatut = { a_traiter: 'alerte', en_cours: 'attente', corrige: 'direct', refuse: 'gris' };
+  const carte = (r) => h('div', { class: 'retour' },
+    h('div', { class: 'tete' },
+      h('span', { class: 'etiquette ' + (r.genre === 'bug' ? classeGravite[r.gravite] : 'gris') }, GENRES[r.genre] + (r.genre === 'bug' ? ' · ' + GRAVITES[r.gravite] : '')),
+      h('span', { class: 'etiquette ' + classeStatut[r.statut] }, STATUTS[r.statut]),
+      r.ecran ? h('b', {}, r.ecran) : ''),
+    h('div', { class: 'texte' }, r.texte),
+    h('div', { class: 'meta' }, [r.testeur, dateFr(r.le), r.version, r.appareil].filter(Boolean).join(' · ')),
+    r.reponse ? h('div', { class: 'reponse' }, '↳ ' + r.reponse) : '',
+    h('div', { class: 'actions' },
+      h('select', { class: 'champ', 'aria-label': 'Statut', onchange: (e) => maj(r, { statut: e.target.value }) },
+        Object.entries(STATUTS).map(([v, l]) => h('option', { value: v, selected: v === r.statut }, l))),
+      r.capture ? h('button', { class: 'btn-contour mini', onclick: () => voirJustificatif(r.capture) }, 'Capture') : '',
+      h('button', { class: 'btn-contour mini', onclick: () => {
+        const t = prompt('Note (ex. « corrigé en 1.0.0 (3) ») :', r.reponse || '');
+        if (t !== null) maj(r, { reponse: t.slice(0, 500) });
+      } }, r.reponse ? 'Modifier la note' : 'Ajouter une note'),
+      h('button', { class: 'btn-lien', onclick: async () => {
+        if (!confirm('Supprimer ce retour ?')) return;
+        const fichier = await rpc('console_retour_supprimer', { p_id: r.id });
+        if (fichier) await sb.storage.from('justificatifs').remove([fichier]);
+        aller('retours');
+      } }, 'Supprimer')));
+
+  const copier = h('button', { class: 'btn-contour', onclick: async () => {
+    const t = texteRetours(ouverts);
+    try { await navigator.clipboard.writeText(t || 'Aucun retour ouvert.'); copier.textContent = 'Copié !'; }
+    catch { prompt('Copie ce texte :', t); }
+    setTimeout(() => (copier.textContent = 'Copier les retours ouverts'), 1800);
+  } }, 'Copier les retours ouverts');
+
+  afficherPour(g,
+    entete('Retours testeurs', 'Tout ce que les testeurs remontent, au même endroit', copier),
+    h('div', { class: 'periodes' }, applis.map((a) => h('button', { class: 'periode' + (filtreRetoursApp === a.id ? ' actif' : ''), onclick: () => { filtreRetoursApp = a.id; aller('retours'); } }, a.nom))),
+    h('div', { class: 'kpis' },
+      kpi('À traiter', String(tous.filter((r) => r.statut === 'a_traiter').length), ouverts.length + ' ouvert' + (ouverts.length > 1 ? 's' : '') + ' en tout'),
+      kpi('Bugs bloquants', String(bloquants.length), bloquants.length ? 'à corriger avant la sortie' : 'aucun en ce moment', bloquants.length ? 'var(--rouge)' : 'var(--vert)'),
+      kpi('Corrigés', String(tous.filter((r) => r.statut === 'corrige').length), tous.length + ' retour' + (tous.length > 1 ? 's' : '') + ' en tout', 'var(--vert)')),
+    h('div', { class: 'grille' },
+      h('div', { class: 'panneau' },
+        h('div', { class: 'periodes', style: 'margin-top:0' }, [['ouverts', 'Ouverts'], ['fermes', 'Corrigés ou pas retenus'], ['tous', 'Tous']].map(([v, l]) =>
+          h('button', { class: 'periode' + (filtreRetours === v ? ' actif' : ''), onclick: () => { filtreRetours = v; aller('retours'); } }, l))),
+        visibles.length ? visibles.map(carte) : h('div', { class: 'vide' }, filtreRetours === 'ouverts' ? 'Aucun retour ouvert. Ajoute le premier à droite.' : 'Rien ici pour l’instant.'),
+        h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, '« Copier les retours ouverts » met la liste dans le presse-papiers : colle-la à Claude pour qu’il corrige.')),
+      h('div', { class: 'panneau' }, h('h2', {}, 'Nouveau retour'), form)));
+}
 
 // ───────── Avances de frais ─────────
 let justificatif = null; // chemin du fichier envoyé pour la nouvelle avance
