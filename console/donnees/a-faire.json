@@ -93,13 +93,6 @@
    "titre": "Toutes les applis du studio : mêmes choix de connexion que Tikette (numéro, Apple, Google, Facebook, e-mail) ; projets Google Cloud et Meta au nom d'admin@eggnotfound.fr, une appli par projet"
   },
   {
-   "cle": "demande:tikette:f22ba13e91",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Recopier la fonction envoyer-email dans Supabase (Edge Functions › envoyer-email › coller le nouveau code de supabase/functions/envoyer-email/index.ts › Deploy) : petit correctif v0.34"
-  },
-  {
    "cle": "demande:tikette:726267b35f",
    "groupe": "demande",
    "appli": "tikette",
@@ -121,11 +114,11 @@
    "titre": "Vraie version : dans Supabase › Apple, ajouter l’identifiant de l’appli Tikette à côté de host.exp.Exponent (une fois le compte Apple développeur pris)"
   },
   {
-   "cle": "demande:tikette:8d28667849",
+   "cle": "demande:tikette:3426d38687",
    "groupe": "demande",
    "appli": "tikette",
    "qui": "Greg",
-   "titre": "SMS : Brevo exige un numéro SIREN pour l’expéditeur « Tikette » → dès la micro-entreprise créée, renvoyer la demande (Paramètres › SMS Sender ID) avec le SIREN, puis tester le vrai SMS de connexion"
+   "titre": "Tikette : tester le vrai SMS de connexion (expéditeur « Tikette » vérifié chez Brevo le 5 nov.) avec un numéro qui n'est pas un numéro de test"
   },
   {
    "cle": "demande:tikette:eed1f7bdd1",
@@ -140,13 +133,6 @@
    "appli": "studio",
    "qui": "Tous",
    "titre": "Décider ensemble la proposition d’Yvan : contact@eggnotfound.fr comme adresse de contact unique de toutes les applis (Tikette l’utilise déjà ; Shivr encore sur contact@shivr.fr)"
-  },
-  {
-   "cle": "demande:tikette:62d14644b1",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Pages légales : donner à Claude nom, adresse et SIRET de la micro-entreprise dès l’immatriculation (bandeau « version provisoire » jusque-là)"
   },
   {
    "cle": "demande:tikette:92580e8afc",
