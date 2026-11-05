@@ -1277,13 +1277,6 @@
    "appli": "tikette",
    "qui": "Greg",
    "titre": "Tikette : avant la fin de l'essai gratuit de 7 jours (date de fin choisie dans App Store Connect, vers fin 2027), créer une nouvelle offre de lancement sur les abonnements Or mensuel et annuel, sinon plus d'essai pour les nouveaux"
-  },
-  {
-   "cle": "demande:tikette:9089cf4314",
-   "groupe": "demande",
-   "appli": "tikette",
-   "qui": "Greg",
-   "titre": "Tikette Or : lancer supabase/revenuecat.sql, créer la fonction « revenuecat » (Verify JWT désactivé), le secret REVENUECAT_WEBHOOK_SECRET et le webhook dans RevenueCat (Integrations › Webhooks)"
   }
  ]
 }
