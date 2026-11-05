@@ -32,20 +32,20 @@
    "appli": "tikette",
    "etat": "attente",
    "depuis": "2026-10-14",
-   "detail": "≈ 0,70 € par réservation · formulaire envoyé le 29 oct.",
+   "detail": "≈ 0,70 € par réservation · formulaire envoyé le 29 oct. · relance du 5 nov. (formulaire de contact Kwanko)",
    "lien": "https://www.kwanko.com",
-   "relance": "2026-11-05",
-   "comment": "Répondre au formulaire de contact Kwanko ou écrire au support éditeurs pour faire valider le compte"
+   "relance": "2026-11-12",
+   "comment": "Si toujours rien : passer à autre chose (bouton TheFork par recherche Google en attendant), revenir après la sortie avec des chiffres"
   },
   {
    "nom": "Indoleads",
    "appli": "tikette",
    "etat": "attente",
    "depuis": "2026-10-29",
-   "detail": "offre FunBooker introuvable · ticket ouvert",
+   "detail": "offre FunBooker introuvable · ticket du 29 oct. · relance du 5 nov. à support@indoleads.com",
    "lien": "https://app.indoleads.com",
-   "relance": "2026-11-05",
-   "comment": "Relancer le ticket à support@indoleads.com (offre FunBooker introuvable)"
+   "relance": "2026-11-12",
+   "comment": "Si toujours rien : fermer cette piste (Funbooker est déjà relancé en direct)"
   }
  ]
 }
