@@ -1270,6 +1270,13 @@
    "qui": "Yvan",
    "version": "v0.1",
    "titre": "Carnet : il s’ouvre comme un vrai livre (la couverture se rabat), seule la feuille de papier tourne, sans trous"
+  },
+  {
+   "cle": "demande:tikette:6e761ea930",
+   "groupe": "demande",
+   "appli": "tikette",
+   "qui": "Greg",
+   "titre": "Tikette : avant la fin de l'essai gratuit de 7 jours (date de fin choisie dans App Store Connect, vers fin 2027), créer une nouvelle offre de lancement sur les abonnements Or mensuel et annuel, sinon plus d'essai pour les nouveaux"
   }
  ]
 }
