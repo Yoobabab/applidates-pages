@@ -34,6 +34,8 @@ PAR_CATEGORIE = [
 
 # Mots-clés du nom (sans accents, minuscules) : priment sur les catégories.
 PAR_MOTS = [
+    # Sport à regarder (tous sports, demande de Greg, 6 nov. 2026) ; les « SportsEvent » seuls restent écartés.
+    ('sport', r"\b(match(s)? (de |d.)?(rugby|handball|hand|basket(ball)?|volley(ball)?|hockey|football|foot|water-polo)|rencontre (de |d.)?(rugby|handball|basket|volley|hockey)|courses? (camarguaises?|landaises?|hippiques?|de trot|de galop|de taureaux)|reunion hippique|hippodrome|gala de boxe|combats? de (boxe|mma|catch)|meeting d.athletisme|jumping|concours (de saut d.obstacles|hippique|complet)|tournoi (international )?de (tennis|rugby|basket|volley|handball|padel)|open de tennis|championnat de france|coupe de france|catch|roller derby|joutes? nautiques?|joutes languedociennes|pelote basque|cesta punta|top 14|pro d2|starligue|betclic elite|ligue magnus)\b"),
     ('auto', r"\b(voitures?|automobiles?|salon auto|bourse auto|moto(s|rs)?|tuning|car ?meet|rassemblement (de |d.)?(vehicules|voitures|motos|vespa|2cv|youngtimers?|americaines?)|retromobile|salon de l.auto|rallye auto|vehicules anciens|belles mecaniques|us cars?)\b"),
     ('fete', r"\b(fete foraine|foire|feria|bodega|abrivado|bandido|fete votive|fete du village|carnaval|corso|fete locale|fete patronale|fete de la (biere|musique)|festivites|guinguette|bal\b)"),
     ('concert', r"\b(concerts?|festival|dj set|live music|musique live|orchestre)\b"),
@@ -64,6 +66,9 @@ def lire_periodes(texte, debut, fin):
     return periodes
 
 
+# Sport qu'on pratique soi-même (cours, stages…) : pas un spectacle sportif.
+SPORT_PRATIQUE = r"\b(initiation|stage|cours|entrainement|ecole de|decouverte du|portes ouvertes|inscriptions?)\b"
+
 # Sorties pour enfants : pas pour un date.
 ENFANTS = r"\b(jeune public|enfants?|tout[- ]petits|bebes?|p.tits|des \d+ ?ans|kids)\b"
 
@@ -74,6 +79,8 @@ def genre(nom, categories):
         return None
     for g, motif in PAR_MOTS:
         if re.search(motif, texte):
+            if g == 'sport' and re.search(SPORT_PRATIQUE, texte):
+                return None
             return g
     noms = {c.split('#')[-1] for c in categories.split('|') if c.startswith(CORE)}
     if noms & EXCLURE:
@@ -165,6 +172,20 @@ def ajouter_en_avant(tuiles, chemin, aujourdhui):
     return n
 
 
+def ajouter_grands(tuiles, compte, chemin, aujourdhui):
+    """Grands événements sportifs recopiés à la main chaque année (tennis…) : seulement les 60 prochains jours."""
+    if not os.path.exists(chemin):
+        return
+    fin = (aujourdhui + dt.timedelta(days=HORIZON_JOURS)).isoformat()
+    debut = aujourdhui.isoformat()
+    for e in json.load(open(chemin, encoding='utf-8')):
+        periodes = [[max(a, debut), min(b, fin)] for a, b in e['periodes'] if b >= debut and a <= fin]
+        if not periodes:
+            continue
+        tuiles.setdefault(tuile(e['lat'], e['lon']), []).append({**e, 'periodes': periodes})
+        compte[e['genre']] = compte.get(e['genre'], 0) + 1
+
+
 def publier(tuiles, compte, dossier, aujourdhui, en_avant):
     sortie = os.path.join(dossier, 'evenements', 'v1')
     os.makedirs(sortie, exist_ok=True)
@@ -189,6 +210,7 @@ if __name__ == '__main__':
     chemin, dossier = sys.argv[1], sys.argv[2]
     jour = dt.date.fromisoformat(sys.argv[3]) if len(sys.argv) > 3 else dt.date.today()
     t, c = construire(chemin, jour)
+    ajouter_grands(t, c, os.path.join(os.path.dirname(__file__), 'grands-evenements.json'), jour)
     n = ajouter_en_avant(t, os.path.join(os.path.dirname(__file__), 'en-avant.json'), jour)
     i = publier(t, c, dossier, jour, n)
     if i['total'] < 1000:

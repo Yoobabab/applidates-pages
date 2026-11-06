@@ -1,0 +1,6 @@
+[
+  {"id": "tennis-montpellier-2027", "nom": "Open Occitanie (tennis ATP 250)", "genre": "sport", "lat": 43.5713, "lon": 3.9469, "commune": "Pérols", "adresse": "Sud de France Arena", "periodes": [["2027-02-01", "2027-02-07"]], "description": "Tournoi de tennis ATP 250 de Montpellier.", "lien": "https://www.opensuddefrance.com"},
+  {"id": "tennis-montecarlo-2027", "nom": "Rolex Monte-Carlo Masters (tennis ATP 1000)", "genre": "sport", "lat": 43.7509, "lon": 7.4398, "commune": "Roquebrune-Cap-Martin", "adresse": "Monte-Carlo Country Club", "periodes": [["2027-04-11", "2027-04-18"]], "description": "Tournoi de tennis Masters 1000 sur terre battue.", "lien": "https://montecarlotennismasters.com"},
+  {"id": "tennis-rolandgarros-2027", "nom": "Roland-Garros (tennis Grand Chelem)", "genre": "sport", "lat": 48.8460, "lon": 2.2530, "commune": "Paris", "adresse": "Stade Roland-Garros", "periodes": [["2027-05-23", "2027-06-06"]], "description": "Le Grand Chelem sur terre battue.", "lien": "https://www.rolandgarros.com"},
+  {"id": "tennis-parismasters-2027", "nom": "Rolex Paris Masters (tennis ATP 1000)", "genre": "sport", "lat": 48.8957, "lon": 2.2296, "commune": "Nanterre", "adresse": "Paris La Défense Arena", "periodes": [["2027-11-01", "2027-11-07"]], "description": "Tournoi de tennis Masters 1000 en salle.", "lien": "https://www.rolexparismasters.com"}
+]
