@@ -8,7 +8,10 @@ Sorties :
 - lieux/v1/comptes/{lat}_{lon}.json (tuile de 1°) = {"i_j": [n par rubrique]} et lieux/v1/index.json (accueil) ;
 - les lieux eux-mêmes, pour composer les programmes :
   lieux/v1/t/{i}_{j}.json (restos, sur le pouce, bars, cafés ; carrés de 0,05°, i = floor(lat × 20)) et
-  lieux/v1/s/{i}_{j}.json (tout le reste ; carrés de 0,1°, i = floor(lat × 10)). Chaque lieu = [id, lat, lon, {étiquettes abrégées}].
+  lieux/v1/s/{i}_{j}.json (tout le reste ; carrés de 0,1°, i = floor(lat × 10)). Chaque lieu = [id, lat, lon, {étiquettes abrégées}] ;
+- une sélection légère pour les grands rayons (jusqu'à 50 km) : lieux/v1/r/{i}_{j}.json (carrés de 0,1°, au plus
+  quelques lieux par rubrique et par carré, ceux qui ont des horaires d'abord), pour que l'appli propose des adresses
+  dans toute la zone choisie sans télécharger toute une région (demande de Greg, 6 nov. 2026).
 
 Usage : python3 outils/lieux.py france-filtre.osm.pbf dossier_sortie
 """
@@ -30,6 +33,10 @@ RANG = {r: i for i, r in enumerate(RUBRIQUES)}
 
 # Rubriques « à table » (fichiers t/, lus dans un petit rayon) ; les autres vont dans s/.
 TABLE = {'restos', 'pouce', 'bars', 'cafes'}
+
+# Sélection légère (grands rayons) : nombre maximal de lieux gardés par rubrique dans un carré de 0,1°.
+SELECTION = {'restos': 10, 'pouce': 3, 'bars': 6, 'cafes': 3}
+SELECTION_AUTRES = 5
 
 # Étiquettes gardées pour l'appli, sous un nom court (longueur maximale).
 ETIQUETTES = {
@@ -101,6 +108,7 @@ class Compteur(osmium.SimpleHandler):
         self.tuiles = {}
         self.total = [0] * len(RUBRIQUES)
         self.lieux = {}
+        self.selection = {}
 
     def garder(self, r, ident, lat, lon, tags):
         if r is None:
@@ -110,7 +118,9 @@ class Compteur(osmium.SimpleHandler):
             cle = f't/{math.floor(lat * 20)}_{math.floor(lon * 20)}'
         else:
             cle = f's/{math.floor(lat * 10)}_{math.floor(lon * 10)}'
-        self.lieux.setdefault(cle, []).append([ident, round(lat, 5), round(lon, 5), abreger(tags)])
+        lieu = [ident, round(lat, 5), round(lon, 5), abreger(tags)]
+        self.lieux.setdefault(cle, []).append(lieu)
+        self.selection.setdefault(f'r/{math.floor(lat * 10)}_{math.floor(lon * 10)}', {}).setdefault(r, []).append(lieu)
 
     def ajouter(self, r, lat, lon):
         if r is None or not (-90 <= lat <= 90 and -180 <= lon <= 180):
@@ -159,6 +169,15 @@ def main():
         os.makedirs(os.path.join(sortie, os.path.dirname(cle)), exist_ok=True)
         with open(os.path.join(sortie, f'{cle}.json'), 'w', encoding='utf-8') as f:
             json.dump(liste, f, ensure_ascii=False, separators=(',', ':'))
+    for cle, par_rubrique in c.selection.items():
+        garde = []
+        for r, liste in par_rubrique.items():
+            # Ceux qui ont des horaires puis une adresse passent devant (plus sûrs pour un programme).
+            liste.sort(key=lambda l: (not l[3].get('oh'), not l[3].get('st'), l[0]))
+            garde += liste[: SELECTION.get(r, SELECTION_AUTRES)]
+        os.makedirs(os.path.join(sortie, 'r'), exist_ok=True)
+        with open(os.path.join(sortie, f'{cle}.json'), 'w', encoding='utf-8') as f:
+            json.dump(garde, f, ensure_ascii=False, separators=(',', ':'))
     index = {
         'source': 'OpenStreetMap (contributeurs, licence ODbL), extrait Geofabrik',
         'pas': PAS,
@@ -166,6 +185,7 @@ def main():
         'totaux': dict(zip(RUBRIQUES, c.total)),
         'tuiles': sorted(c.tuiles),
         'carres_lieux': len(c.lieux),
+        'carres_selection': len(c.selection),
     }
     with open(os.path.join(sortie, 'index.json'), 'w', encoding='utf-8') as f:
         json.dump(index, f, ensure_ascii=False, indent=1)
