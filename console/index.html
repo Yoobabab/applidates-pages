@@ -1101,6 +1101,25 @@ const GENRES = { bug: 'Bug', idee: 'Idée', remarque: 'Remarque' };
 const GRAVITES = { bloquant: 'Bloquant', genant: 'Gênant', mineur: 'Mineur' };
 const STATUTS = { a_traiter: 'À traiter', en_cours: 'En cours', corrige: 'Corrigé', refuse: 'Pas retenu' };
 const estOuvert = (r) => r.statut === 'a_traiter' || r.statut === 'en_cours';
+let importTestflight = 0; // heure du dernier import TestFlight (une fois toutes les 10 min au plus)
+async function importerTestflight(forcer) {
+  if (!forcer && Date.now() - importTestflight < 10 * 60 * 1000) return null;
+  importTestflight = Date.now();
+  const { data, error } = await sb.functions.invoke('testflight-retours', { body: {} });
+  if (error) {
+    let code = '';
+    try { code = (await error.context.json()).erreur; } catch {}
+    throw new Error(code === 'cle-absente' ? 'La clé App Store Connect n’est pas encore rangée dans Supabase.'
+      : code === 'apple' ? 'Apple n’a pas répondu, réessaie dans un moment.'
+      : /not found|404/i.test(String(error.message)) || error.name === 'FunctionsRelayError' ? 'La fonction testflight-retours n’est pas encore créée dans Supabase.'
+      : erreur(error));
+  }
+  return data;
+}
+function lienReponse(r) {
+  const corps = (r.reponse ? r.reponse + '\n\n' : '') + '—\nTon retour : « ' + r.texte.slice(0, 300) + ' »\n\nMerci pour ton aide !\nGreg et Yvan · Egg Not Found';
+  return 'mailto:' + encodeURIComponent(r.email) + '?subject=' + encodeURIComponent('Ton retour sur Tikette') + '&body=' + encodeURIComponent(corps);
+}
 function texteRetours(liste) {
   return liste.map((r, i) => (i + 1) + '. [' + GENRES[r.genre] + (r.genre === 'bug' ? ' · ' + GRAVITES[r.gravite] : '') + '] '
     + [r.ecran, r.version, r.appareil].filter(Boolean).join(' · ') + ' (' + r.testeur + ', ' + dateFr(r.le) + ')\n' + r.texte
@@ -1117,6 +1136,10 @@ async function pageRetours() {
     return;
   }
   captureRetour = null;
+  // Retours TestFlight : récupérés tout seuls à l'ouverture (au plus toutes les 10 min).
+  if (filtreRetoursApp === 'tikette' && Date.now() - importTestflight > 10 * 60 * 1000) {
+    importerTestflight(false).then((res) => { if (res?.ajoutes && generation === g) aller('retours'); }).catch(() => {});
+  }
   const visibles = tous.filter((r) => filtreRetours === 'tous' || (filtreRetours === 'ouverts' ? estOuvert(r) : !estOuvert(r)));
   const ouverts = tous.filter(estOuvert);
   const bloquants = ouverts.filter((r) => r.genre === 'bug' && r.gravite === 'bloquant');
@@ -1131,6 +1154,7 @@ async function pageRetours() {
     h('div', { class: 'ligne-form' },
       h('label', { class: 'lab' }, 'Testeur', champ('testeur', { required: true, maxlength: 60, list: 'liste-testeurs', placeholder: 'Yvan' })),
       h('label', { class: 'lab' }, 'Date', champ('le', { type: 'date', value: aujourdhui() }))),
+    h('label', { class: 'lab' }, 'E-mail du testeur (pour lui répondre, facultatif)', champ('email', { type: 'email', maxlength: 120, placeholder: 'prenom@exemple.fr' })),
     h('datalist', { id: 'liste-testeurs' }, testeurs.map((t) => h('option', { value: t }))),
     h('div', { class: 'ligne-form' },
       h('label', { class: 'lab' }, 'Type', choixListe('genre', GENRES, 'bug')),
@@ -1166,7 +1190,7 @@ async function pageRetours() {
     const f = new FormData(form);
     try {
       await rpc('console_retour_enregistrer', { p: { appli: filtreRetoursApp, le: f.get('le'), testeur: f.get('testeur'), version: f.get('version'), appareil: f.get('appareil'),
-        ecran: f.get('ecran'), genre: f.get('genre'), gravite: f.get('gravite'), texte: f.get('texte'), capture: captureRetour } });
+        ecran: f.get('ecran'), genre: f.get('genre'), gravite: f.get('gravite'), texte: f.get('texte'), email: f.get('email'), capture: captureRetour } });
       filtreRetours = 'ouverts'; aller('retours');
     } catch (err) { etat.className = 'message erreur'; etat.textContent = erreur(err); }
   });
@@ -1178,18 +1202,20 @@ async function pageRetours() {
     h('div', { class: 'tete' },
       h('span', { class: 'etiquette ' + (r.genre === 'bug' ? classeGravite[r.gravite] : 'gris') }, GENRES[r.genre] + (r.genre === 'bug' ? ' · ' + GRAVITES[r.gravite] : '')),
       h('span', { class: 'etiquette ' + classeStatut[r.statut] }, STATUTS[r.statut]),
+      r.source === 'testflight' ? h('span', { class: 'etiquette gris' }, 'TestFlight') : '',
       r.ecran ? h('b', {}, r.ecran) : ''),
     h('div', { class: 'texte' }, r.texte),
-    h('div', { class: 'meta' }, [r.testeur, dateFr(r.le), r.version, r.appareil].filter(Boolean).join(' · ')),
-    r.reponse ? h('div', { class: 'reponse' }, '↳ ' + r.reponse) : '',
+    h('div', { class: 'meta' }, [r.testeur, r.email && r.email !== r.testeur ? r.email : '', dateFr(r.le), r.version, r.appareil].filter(Boolean).join(' · ')),
+    r.reponse ? h('div', { class: 'reponse' }, '↳ Réponse' + (r.reponse_le ? ' du ' + dateFr(r.reponse_le.slice(0, 10)) : '') + ' : ' + r.reponse) : '',
     h('div', { class: 'actions' },
       h('select', { class: 'champ', 'aria-label': 'Statut', onchange: (e) => maj(r, { statut: e.target.value }) },
         Object.entries(STATUTS).map(([v, l]) => h('option', { value: v, selected: v === r.statut }, l))),
       r.capture ? h('button', { class: 'btn-contour mini', onclick: () => voirJustificatif(r.capture) }, 'Capture') : '',
       h('button', { class: 'btn-contour mini', onclick: () => {
-        const t = prompt('Note (ex. « corrigé en 1.0.0 (3) ») :', r.reponse || '');
+        const t = prompt('Réponse au testeur ou note (ex. « corrigé dans la version 1.0.0 (7) ») :', r.reponse || '');
         if (t !== null) maj(r, { reponse: t.slice(0, 500) });
-      } }, r.reponse ? 'Modifier la note' : 'Ajouter une note'),
+      } }, r.reponse ? 'Modifier la réponse' : 'Répondre'),
+      r.email ? h('a', { class: 'btn-contour mini', style: 'text-decoration:none', href: lienReponse(r), title: 'Ouvre ta messagerie avec la réponse déjà écrite' }, 'Envoyer par e-mail') : '',
       h('button', { class: 'btn-lien', onclick: async () => {
         if (!confirm('Supprimer ce retour ?')) return;
         const fichier = await rpc('console_retour_supprimer', { p_id: r.id });
@@ -1204,8 +1230,19 @@ async function pageRetours() {
     setTimeout(() => (copier.textContent = 'Copier les retours ouverts'), 1800);
   } }, 'Copier les retours ouverts');
 
+  const etatTf = h('span', { class: 'note-bas', style: 'margin:0' });
+  const boutonTf = h('button', { class: 'btn-contour', onclick: async () => {
+    boutonTf.disabled = true; etatTf.textContent = 'Lecture de TestFlight…';
+    try {
+      const res = await importerTestflight(true);
+      etatTf.textContent = res.ajoutes ? res.ajoutes + ' nouveau' + (res.ajoutes > 1 ? 'x' : '') + ' retour' + (res.ajoutes > 1 ? 's' : '') + ' TestFlight' : 'Aucun nouveau retour TestFlight';
+      if (res.ajoutes) setTimeout(() => aller('retours'), 900);
+    } catch (e) { etatTf.textContent = e.message; }
+    boutonTf.disabled = false;
+  } }, 'Récupérer TestFlight');
   afficherPour(g,
-    entete('Retours testeurs', 'Tout ce que les testeurs remontent, au même endroit', copier),
+    entete('Retours testeurs', 'Tout ce que les testeurs remontent, au même endroit', h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center' }, filtreRetoursApp === 'tikette' ? boutonTf : '', copier)),
+    etatTf,
     h('div', { class: 'periodes' }, applis.map((a) => h('button', { class: 'periode' + (filtreRetoursApp === a.id ? ' actif' : ''), onclick: () => { filtreRetoursApp = a.id; aller('retours'); } }, a.nom))),
     h('div', { class: 'kpis' },
       kpi('À traiter', String(tous.filter((r) => r.statut === 'a_traiter').length), ouverts.length + ' ouvert' + (ouverts.length > 1 ? 's' : '') + ' en tout'),
@@ -1216,7 +1253,7 @@ async function pageRetours() {
         h('div', { class: 'periodes', style: 'margin-top:0' }, [['ouverts', 'Ouverts'], ['fermes', 'Corrigés ou pas retenus'], ['tous', 'Tous']].map(([v, l]) =>
           h('button', { class: 'periode' + (filtreRetours === v ? ' actif' : ''), onclick: () => { filtreRetours = v; aller('retours'); } }, l))),
         visibles.length ? visibles.map(carte) : h('div', { class: 'vide' }, filtreRetours === 'ouverts' ? 'Aucun retour ouvert. Ajoute le premier à droite.' : 'Rien ici pour l’instant.'),
-        h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, '« Copier les retours ouverts » met la liste dans le presse-papiers : colle-la à Claude pour qu’il corrige.')),
+        h('p', { class: 'note-bas', style: 'margin:10px 0 0' }, 'Les retours envoyés depuis TestFlight (capture d’écran puis « Envoyer un commentaire », ou après un plantage) arrivent tout seuls ici. « Copier les retours ouverts » met la liste dans le presse-papiers : colle-la à Claude pour qu’il corrige.')),
       h('div', { class: 'panneau' }, h('h2', {}, 'Nouveau retour'), form)));
 }
 
