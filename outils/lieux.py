@@ -51,7 +51,13 @@ ETIQUETTES = {
 
 
 def abreger(tags):
-    return {court: tags.get(long)[:maxi] for long, (court, maxi) in ETIQUETTES.items() if tags.get(long)}
+    court = {c: tags.get(long)[:maxi] for long, (c, maxi) in ETIQUETTES.items() if tags.get(long)}
+    # Site du lieu (bouton « Site du lieu » de l'appli) : beaucoup de lieux le rangent dans contact:website.
+    if 'w' not in court:
+        site = tags.get('contact:website') or tags.get('url')
+        if site:
+            court['w'] = site[:160]
+    return court
 
 
 def rubrique(t):
