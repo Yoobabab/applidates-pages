@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Espace pro Tikette</title>
+<link rel="icon" href="/favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<style>
+:root{--fond:#1E1433;--carte:#2A1D45;--carte2:#33244F;--bord:#3B2A5C;--texte:#F7F1FF;--doux:#C9BCE3;--lueur:#FFD166;--rose:#FF6B9A;--violet:#7A3BC4;--vert:#2EC4A6;--rouge:#FF6B6B;
+--ft:"Bricolage Grotesque",system-ui,sans-serif;--fx:"DM Sans",Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--fx);font-size:15px;line-height:1.5}
+h1,h2,h3{font-family:var(--ft);margin:0;letter-spacing:-.02em}button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--lueur)}
+.cache{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:99px;padding:10px 18px;font-weight:700;cursor:pointer;background:var(--carte2);color:var(--texte);white-space:nowrap}
+.btn.j{background:var(--lueur);color:#1E1433}.btn.v{background:var(--vert);color:#06372E}.btn.r{background:transparent;border:1.5px solid var(--rouge);color:var(--rouge)}.btn.c{background:transparent;border:1.5px solid var(--bord)}
+.btn.p{padding:6px 12px;font-size:13px}.btn:disabled{opacity:.5;cursor:default}
+input,select,textarea{background:#170F29;border:1px solid var(--bord);border-radius:12px;padding:10px 12px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--lueur)}
+label.l{display:block;font-size:13px;color:var(--doux);margin:12px 0 5px;font-weight:500}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:20px;padding:20px}
+.grille{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.puce{display:inline-block;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--carte2);color:var(--doux)}
+.puce.demandee{background:#4A3A10;color:var(--lueur)}.puce.confirmee,.puce.venue{background:#0E3B33;color:var(--vert)}.puce.refusee,.puce.expiree,.puce.annulee_pro,.puce.annulee_client,.puce.absente{background:#3B1E2A;color:#FF9DB0}
+.note{font-size:13px;color:var(--doux)}
+/* Connexion */
+#connexion{min-height:100vh;display:grid;place-items:center;padding:20px}
+#connexion .carte{width:100%;max-width:420px;padding:30px}
+.marque{display:flex;align-items:center;gap:8px;font-family:var(--ft);font-weight:800;font-size:22px}.marque img{width:30px;height:30px;border-radius:8px}
+.marque small{font-family:var(--fx);font-size:11px;background:var(--lueur);color:#1E1433;padding:2px 8px;border-radius:99px;letter-spacing:.06em}
+/* Mise en page */
+#appli{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+nav.cote{background:#170F29;border-right:1px solid var(--bord);padding:20px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
+nav.cote .marque{margin:0 6px 20px}
+nav.cote button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:12px;cursor:pointer;color:var(--doux);font-weight:500}
+nav.cote button.actif{background:var(--carte2);color:var(--texte)}
+nav.cote button .bulle{margin-left:auto;background:var(--rose);color:#fff;font-size:11px;font-weight:700;border-radius:99px;padding:1px 7px}
+nav.cote .bas{margin-top:auto;font-size:13px;color:var(--doux);padding:8px 12px}
+main{padding:26px 30px 60px;max-width:1180px;width:100%}
+.titre{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}.titre h1{font-size:30px}
+.bandeau{border-radius:16px;padding:14px 18px;margin-bottom:18px;font-weight:500}.bandeau.att{background:#4A3A10;color:#FFE3A0}.bandeau.ok{background:#0E3B33;color:#BFF5E8}
+.kpi{background:var(--carte);border:1px solid var(--bord);border-radius:18px;padding:16px}.kpi small{color:var(--doux);font-size:12px}.kpi b{display:block;font-family:var(--ft);font-size:28px;margin-top:2px}
+.resa{display:grid;grid-template-columns:92px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--bord)}.resa:last-child{border:0}
+.resa .h{font-family:var(--ft);font-size:20px;font-weight:800}.resa .h small{display:block;font-family:var(--fx);font-size:12px;color:var(--doux);font-weight:500}
+.resa .act{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.vide{color:var(--doux);padding:24px;text-align:center}
+/* Planning */
+.plan{overflow:auto;border:1px solid var(--bord);border-radius:16px;background:var(--carte)}
+.plan table{border-collapse:collapse;width:100%;min-width:760px}.plan th,.plan td{border-bottom:1px solid var(--bord);border-right:1px solid var(--bord);padding:6px;vertical-align:top;font-size:13px}
+.plan th{background:#241840;position:sticky;top:0;font-weight:700}.plan td.heure{font-family:var(--ft);font-weight:800;white-space:nowrap;width:64px}
+.case{border-radius:10px;padding:5px 7px;margin:2px 0;cursor:pointer;font-size:12px;line-height:1.3}
+.case.libre{border:1px dashed #5A4785;color:var(--doux)}.case.libre:hover{border-color:var(--lueur);color:var(--lueur)}
+.case.demandee{background:#4A3A10;color:#FFE3A0}.case.confirmee,.case.venue{background:#0E3B33;color:#BFF5E8}.case.ferme{background:#3B1E2A;color:#FF9DB0}.case.agenda{background:#23304F;color:#AFC4FF}
+/* Activités */
+.offre{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--bord);border-radius:16px;margin-bottom:10px;background:var(--carte)}
+.offre .ph{width:64px;height:64px;border-radius:12px;background:var(--carte2) center/cover}
+.choix{display:flex;gap:8px;flex-wrap:wrap}.choix label{display:flex;gap:8px;align-items:center;border:1.5px solid var(--bord);border-radius:14px;padding:10px 12px;cursor:pointer;flex:1;min-width:180px}
+.choix input{width:auto}.choix label:has(input:checked){border-color:var(--lueur);background:#2E2340}
+.ligne{display:grid;gap:8px;align-items:center;margin-bottom:8px}
+.photos{display:flex;gap:8px;flex-wrap:wrap}.photos div{width:90px;height:90px;border-radius:12px;background:var(--carte2) center/cover;position:relative}.photos button{position:absolute;top:4px;right:4px;border:0;border-radius:99px;background:#000a;color:#fff;cursor:pointer;width:22px;height:22px}
+.modale{position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:16px;z-index:20}.modale .carte{width:100%;max-width:820px;max-height:90vh;overflow:auto}
+.copie{display:flex;gap:8px}.copie input{font-size:12px}
+.barres{display:flex;align-items:flex-end;gap:3px;height:140px;padding-top:10px}.barres div{flex:1;background:linear-gradient(var(--lueur),#FFB84D);border-radius:4px 4px 0 0;min-height:2px;position:relative}
+.barres div span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--doux)}
+.logiciel{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--bord)}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--texte);color:#1E1433;font-weight:700;border-radius:99px;padding:10px 18px;z-index:30}
+@media(max-width:820px){#appli{grid-template-columns:1fr}nav.cote{position:fixed;bottom:0;top:auto;height:auto;width:100%;flex-direction:row;overflow-x:auto;padding:6px;z-index:10;border-right:0;border-top:1px solid var(--bord)}
+nav.cote .marque,nav.cote .bas{display:none}nav.cote button{flex-direction:column;gap:2px;font-size:11px;padding:6px 10px;width:auto;white-space:nowrap}main{padding:18px 16px 90px}.g3,.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.resa{grid-template-columns:70px 1fr}.resa .act{grid-column:1/-1;justify-content:flex-start}}
+</style>
+</head>
+<body>
+<!-- Connexion par code e-mail (même compte que pour l'inscription) -->
+<section id="connexion" class="cache"><div class="carte">
+  <div class="marque"><img src="/mail/tikette.png" alt="">tikette <small>PRO</small></div>
+  <h1 style="font-size:26px;margin:22px 0 6px">Espace pro</h1>
+  <p class="note">Connectez-vous avec l'adresse e-mail de votre inscription : on vous envoie un code.</p>
+  <form id="f-mail"><label class="l" for="mail">E-mail</label><input id="mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr">
+  <button class="btn j" style="width:100%;margin-top:14px">Recevoir mon code</button></form>
+  <form id="f-code" class="cache"><label class="l" for="code">Code reçu par e-mail</label><input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456">
+  <button class="btn j" style="width:100%;margin-top:14px">Me connecter</button><p class="note" style="margin-top:10px"><a href="#" id="autre-mail">Changer d'adresse</a></p></form>
+  <p id="err-connexion" class="note" style="color:var(--rouge)"></p>
+  <p class="note" style="margin-top:20px">Pas encore partenaire ? <a href="/pro/#inscription">Inscrire mon activité</a></p>
+</div></section>
+
+<div id="appli" class="cache">
+  <nav class="cote">
+    <div class="marque"><img src="/mail/tikette.png" alt="">tikette <small>PRO</small></div>
+    <button data-vue="accueil">🏠 <span>Accueil</span><span class="bulle cache" id="bulle-valider"></span></button>
+    <button data-vue="reservations">🎟️ <span>Réservations</span></button>
+    <button data-vue="planning">🗓️ <span>Planning</span></button>
+    <button data-vue="activites">✨ <span>Activités</span></button>
+    <button data-vue="agenda">🔗 <span>Agenda et logiciels</span></button>
+    <button data-vue="stats">📊 <span>Statistiques</span></button>
+    <button data-vue="entreprise">🏢 <span>Mon entreprise</span></button>
+    <div class="bas"><span id="nom-ent"></span><br><a href="#" id="deco">Se déconnecter</a></div>
+  </nav>
+  <main id="vue"></main>
+</div>
+<div id="toast" class="cache"></div>
+
+<script>
+const URL_SUPABASE = 'https://mmoyrhyimcalnztwpydi.supabase.co';
+const CLE_PUBLIQUE = 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH';
+const sb = window.supabase.createClient(URL_SUPABASE, CLE_PUBLIQUE, { auth: { persistSession: true, storageKey: 'tikette-pro' } });
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const euros = (c) => ((c || 0) / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: (c % 100) ? 2 : 0 });
+const fmt = (iso, o) => new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', ...o }).format(new Date(iso));
+const heure = (iso) => fmt(iso, { hour: '2-digit', minute: '2-digit' });
+const jourTxt = (iso) => fmt(iso, { weekday: 'short', day: 'numeric', month: 'short' });
+const STATUTS = { demandee: 'À valider', confirmee: 'Confirmée', refusee: 'Refusée', expiree: 'Expirée', annulee_client: 'Annulée par le client', annulee_pro: 'Annulée par vous', venue: 'Venue', absente: 'Absente' };
+const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+const GENRES = [['escape','Escape game'],['laser_tag','Laser game'],['karting','Karting'],['bowling_alley','Bowling'],['canoe','Canoë / kayak / paddle'],['eaux_vives','Rafting / canyoning'],['aerien','Montgolfière / parapente / ULM'],['climbing_adventure','Accrobranche / via ferrata'],['atelier','Atelier / cours'],['winery','Domaine / dégustation'],['brasserie','Brasserie / distillerie'],['usine','Visite d\'atelier / savoir-faire'],['vr','Réalité virtuelle'],['hache','Lancer de hache'],['trampoline_park','Trampoline'],['paintball','Paintball'],['horse_riding','Équitation'],['bains','Spa / bien-être'],['bateau','Bateau / croisière'],['cabaret','Cabaret / dîner-spectacle'],['resto','Restaurant'],['bar','Bar'],['insolite','Activité insolite'],['autre','Autre']];
+const AMBIANCES = [['romantique','Romantique'],['potes','Entre potes'],['girlpower','Entre copines'],['loufoque','Insolite'],['match','Avant / après un match']];
+let espace = null, vueActuelle = 'accueil';
+
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.remove('cache'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.add('cache'), 2600); }
+async function rpc(nom, args = {}) { const { data, error } = await sb.rpc(nom, args); if (error) { toast(error.message); throw error; } return data; }
+
+// ───── Connexion ─────
+let mailEnCours = '';
+$('#f-mail').onsubmit = async (e) => {
+  e.preventDefault(); mailEnCours = $('#mail').value.trim();
+  const { error } = await sb.auth.signInWithOtp({ email: mailEnCours, options: { shouldCreateUser: false } });
+  if (error) { $('#err-connexion').textContent = /not found|Signups/i.test(error.message) ? 'Aucun compte avec cette adresse. Inscrivez d’abord votre activité.' : error.message; return; }
+  $('#f-mail').classList.add('cache'); $('#f-code').classList.remove('cache'); $('#code').focus(); $('#err-connexion').textContent = '';
+};
+$('#f-code').onsubmit = async (e) => {
+  e.preventDefault();
+  const { error } = await sb.auth.verifyOtp({ email: mailEnCours, token: $('#code').value.trim(), type: 'email' });
+  if (error) { $('#err-connexion').textContent = 'Code incorrect ou expiré.'; return; }
+  demarrer();
+};
+$('#autre-mail').onclick = (e) => { e.preventDefault(); $('#f-code').classList.add('cache'); $('#f-mail').classList.remove('cache'); };
+$('#deco').onclick = async (e) => { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
+
+async function demarrer() {
+  const { data } = await sb.auth.getSession();
+  if (!data.session) { $('#connexion').classList.remove('cache'); $('#appli').classList.add('cache'); return; }
+  espace = await rpc('pro_mon_espace');
+  if (!espace) { location.href = '/pro/?inscription=1#inscription'; return; }
+  $('#connexion').classList.add('cache'); $('#appli').classList.remove('cache');
+  $('#nom-ent').textContent = espace.entreprise.nom;
+  document.querySelectorAll('nav.cote button').forEach((b) => b.onclick = () => aller(b.dataset.vue));
+  aller(location.hash.slice(1) || 'accueil');
+  window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (v && v !== vueActuelle) aller(v); });
+}
+async function recharger() { espace = await rpc('pro_mon_espace'); majBulle(); }
+function majBulle() { const n = +espace.entreprise.a_valider || 0; const b = $('#bulle-valider'); b.textContent = n; b.classList.toggle('cache', !n); }
+function aller(v) {
+  vueActuelle = v; location.hash = v;
+  document.querySelectorAll('nav.cote button').forEach((b) => b.classList.toggle('actif', b.dataset.vue === v));
+  majBulle(); window.scrollTo(0, 0);
+  ({ accueil, reservations, planning, activites, agenda, stats, entreprise }[v] || accueil)();
+}
+
+// ───── Réservations : une ligne ─────
+function ligneResa(r, actions = true) {
+  const passee = new Date(r.debut) < new Date();
+  let act = '';
+  if (actions) {
+    if (r.statut === 'demandee') act = `<button class="btn v p" data-a="accepter" data-id="${r.id}">Accepter</button><button class="btn r p" data-a="refuser" data-id="${r.id}">Refuser</button>`;
+    else if (r.statut === 'confirmee' && !passee) act = `<button class="btn c p" data-a="annuler" data-id="${r.id}">Annuler</button>`;
+    else if (r.statut === 'confirmee' && passee) act = `<button class="btn v p" data-a="venue" data-id="${r.id}">Venu</button><button class="btn r p" data-a="absente" data-id="${r.id}">Absent</button>`;
+  }
+  const limite = r.statut === 'demandee' && r.repondre_avant ? `<div class="note">À répondre avant ${jourTxt(r.repondre_avant)} ${heure(r.repondre_avant)}</div>` : '';
+  return `<div class="resa"><div class="h">${heure(r.debut)}<small>${jourTxt(r.debut)}</small></div>
+    <div><b>${esc(r.prenom || 'Client')} · ${r.personnes} pers.</b> <span class="puce ${r.statut}">${STATUTS[r.statut]}</span>
+    <div class="note">${esc(r.offre)} · ${esc(r.ressource)} · ${euros(r.prix_cents)} · ${esc(r.code)}</div>
+    ${r.message ? `<div class="note">« ${esc(r.message)} »</div>` : ''}${r.motif ? `<div class="note">Motif : ${esc(r.motif)}</div>` : ''}${limite}</div>
+    <div class="act">${act}</div></div>`;
+}
+function brancherActions(racine, apres) {
+  racine.querySelectorAll('[data-a]').forEach((b) => b.onclick = async () => {
+    const a = b.dataset.a; let motif = '';
+    if (a === 'refuser' || a === 'annuler') { motif = prompt(a === 'refuser' ? 'Motif du refus (le client le verra) :' : 'Motif de l’annulation (le client le verra) :', a === 'refuser' ? 'Complet à cette heure' : ''); if (motif === null) return; }
+    b.disabled = true;
+    const r = await rpc('pro_repondre', { p_id: b.dataset.id, p_action: a, p_motif: motif });
+    if (!r.ok) toast('Impossible : la réservation a changé.'); else toast({ accepter: 'Réservation confirmée, le client est prévenu.', refuser: 'Refusée, le client est prévenu.', annuler: 'Annulée, le client est prévenu.', venue: 'Noté : client venu.', absente: 'Noté : client absent, pas de commission.' }[a]);
+    await recharger(); apres();
+  });
+}
+
+// ───── Accueil ─────
+async function accueil() {
+  const e = espace.entreprise;
+  const debutMois = new Date(); debutMois.setDate(1); debutMois.setHours(0, 0, 0, 0);
+  const finMois = new Date(debutMois); finMois.setMonth(finMois.getMonth() + 1);
+  const [liste, st] = await Promise.all([
+    rpc('pro_reservations_liste', { p_du: new Date(Date.now() - 864e5).toISOString(), p_au: new Date(Date.now() + 60 * 864e5).toISOString() }),
+    rpc('pro_stats', { p_du: debutMois.toISOString(), p_au: finMois.toISOString() })]);
+  const aValider = liste.filter((r) => r.statut === 'demandee');
+  const auj = new Date().toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' });
+  const duJour = liste.filter((r) => new Date(r.debut).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }) === auj && ['confirmee', 'venue'].includes(r.statut));
+  const taux = Math.round(e.taux_actuel * 100);
+  const sansHoraires = espace.offres.filter((o) => o.actif && !o.horaires.length).length;
+  $('#vue').innerHTML = `
+  <div class="titre"><h1>Bonjour 👋</h1>${e.fondateur ? '<span class="puce" style="background:var(--lueur);color:#1E1433">Partenaire fondateur</span>' : ''}</div>
+  ${e.statut === 'en_attente' ? '<div class="bandeau att">Votre inscription est en cours de vérification (48 h au plus). Préparez déjà vos activités et vos horaires : elles apparaîtront dans Tikette dès la validation.</div>' : ''}
+  ${e.statut === 'suspendu' ? '<div class="bandeau att">Votre compte est suspendu : vos activités ne sont plus proposées. Écrivez-nous à contact@tikette.fr.</div>' : ''}
+  ${!espace.offres.length ? '<div class="bandeau ok">Première étape : créez votre activité (prix, salles ou places, horaires). <a href="#activites">Créer mon activité →</a></div>' : ''}
+  ${sansHoraires ? `<div class="bandeau att">${sansHoraires} activité(s) sans horaires : elles ne peuvent pas être réservées.</div>` : ''}
+  <div class="grille g4" style="margin-bottom:18px">
+    <div class="kpi"><small>Réservations ce mois</small><b>${st.reservations}</b></div>
+    <div class="kpi"><small>Personnes</small><b>${st.personnes}</b></div>
+    <div class="kpi"><small>Chiffre d'affaires apporté</small><b>${euros(st.ca_cents)}</b></div>
+    <div class="kpi"><small>Commission (${taux} %)</small><b>${euros(st.commission_cents)}</b></div>
+  </div>
+  <div class="grille g2">
+    <div class="carte"><h2 style="font-size:20px;margin-bottom:6px">À valider ${aValider.length ? `<span class="puce demandee">${aValider.length}</span>` : ''}</h2><div id="l-valider">${aValider.map((r) => ligneResa(r)).join('') || '<div class="vide">Aucune demande en attente.</div>'}</div></div>
+    <div class="carte"><h2 style="font-size:20px;margin-bottom:6px">Aujourd'hui</h2><div id="l-jour">${duJour.map((r) => ligneResa(r)).join('') || '<div class="vide">Aucune réservation aujourd’hui.</div>'}</div></div>
+  </div>`;
+  brancherActions($('#vue'), accueil);
+}
+
+// ───── Réservations ─────
+let filtreResa = 'avenir';
+async function reservations() {
+  const du = filtreResa === 'passees' ? new Date(Date.now() - 365 * 864e5) : new Date(Date.now() - 864e5);
+  const au = filtreResa === 'passees' ? new Date() : new Date(Date.now() + 366 * 864e5);
+  let liste = await rpc('pro_reservations_liste', { p_du: du.toISOString(), p_au: au.toISOString() });
+  if (filtreResa === 'valider') liste = liste.filter((r) => r.statut === 'demandee');
+  if (filtreResa === 'passees') liste.reverse();
+  $('#vue').innerHTML = `<div class="titre"><h1>Réservations</h1><div style="display:flex;gap:8px;flex-wrap:wrap">
+    ${[['valider', 'À valider'], ['avenir', 'À venir'], ['passees', 'Passées']].map(([k, t]) => `<button class="btn ${filtreResa === k ? 'j' : 'c'} p" data-f="${k}">${t}</button>`).join('')}
+    <button class="btn c p" id="exp">⬇ Export Excel</button></div></div>
+    <div class="carte">${liste.map((r) => ligneResa(r)).join('') || '<div class="vide">Rien ici pour l’instant.</div>'}</div>`;
+  document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filtreResa = b.dataset.f; reservations(); });
+  $('#exp').onclick = () => exporter(liste, 'reservations');
+  brancherActions($('#vue'), reservations);
+}
+function exporter(liste, nom) {
+  const col = ['Code', 'Date', 'Heure', 'Activité', 'Salle / places', 'Client', 'Personnes', 'Montant (€)', 'Statut', 'Commission Tikette (€)', 'Message', 'Motif'];
+  const lignes = liste.map((r) => [r.code, fmt(r.debut, { day: '2-digit', month: '2-digit', year: 'numeric' }), heure(r.debut), r.offre, r.ressource, r.prenom, r.personnes,
+    (r.prix_cents / 100).toFixed(2).replace('.', ','), STATUTS[r.statut], (r.commission_cents / 100).toFixed(2).replace('.', ','), r.message, r.motif]);
+  const csv = '﻿' + [col, ...lignes].map((l) => l.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';')).join('\r\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  a.download = `tikette-${nom}-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+}
+
+// ───── Planning (semaine, par activité) ─────
+let planOffre = null, planLundi = null;
+function lundiDe(d) { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+function dateParis(jourISO, hhmm) { // « 2026-11-20 » + « 14:00 » heure de Paris → Date
+  const essai = new Date(`${jourISO}T${hhmm}:00Z`);
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Paris', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(essai).map((x) => [x.type, x.value]));
+  const vu = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute);
+  return new Date(essai.getTime() - (vu - essai.getTime()));
+}
+async function planning() {
+  const offres = espace.offres.filter((o) => o.actif);
+  if (!offres.length) { $('#vue').innerHTML = '<div class="titre"><h1>Planning</h1></div><div class="carte vide">Créez d’abord une activité avec ses horaires.</div>'; return; }
+  planOffre = offres.find((o) => o.id === planOffre?.id) || offres[0];
+  planLundi = planLundi || lundiDe(new Date());
+  const fin = new Date(planLundi); fin.setDate(fin.getDate() + 7);
+  const [liste, fermetures] = [await rpc('pro_reservations_liste', { p_du: planLundi.toISOString(), p_au: fin.toISOString() }), planOffre.fermetures];
+  const jours = [...Array(7)].map((_, i) => { const d = new Date(planLundi); d.setDate(d.getDate() + i); return d.toLocaleDateString('fr-CA'); });
+  // Toutes les heures de début possibles de la semaine
+  const heures = new Set();
+  planOffre.horaires.forEach((h) => { let [a, b] = h.debut.split(':').map(Number); let t = a * 60 + b; const [c, d] = h.fin.split(':').map(Number); const f = c * 60 + d - planOffre.duree_min;
+    for (; t <= f; t += h.pas_min) heures.add(String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0')); });
+  const hs = [...heures].sort();
+  const res = planOffre.ressources.filter((r) => r.actif);
+  const cellule = (jour, hhmm, ji) => {
+    const ouvert = planOffre.horaires.some((h) => h.jour === ji + 1 && h.debut <= hhmm && hhmm <= h.fin);
+    if (!ouvert) return '<td style="background:#170F29"></td>';
+    const debut = dateParis(jour, hhmm), finC = new Date(debut.getTime() + planOffre.duree_min * 6e4);
+    let html = '';
+    for (const r of res) {
+      const ici = liste.filter((x) => x.ressource_id === r.id && ['demandee', 'confirmee', 'venue'].includes(x.statut) && new Date(x.debut) < finC && new Date(x.fin) > debut);
+      const ferm = fermetures.find((f) => (!f.ressource_id || f.ressource_id === r.id) && new Date(f.debut) < finC && new Date(f.fin) > debut);
+      const nom = res.length > 1 ? esc(r.nom) + ' · ' : '';
+      if (ici.length) {
+        const pers = ici.reduce((s, x) => s + x.personnes, 0);
+        html += ici.map((x) => `<div class="case ${x.statut}" title="${esc(x.code)}">${nom}${esc(x.prenom || 'Client')} · ${x.personnes} p.${planOffre.mode === 'places' ? ` (${pers}/${r.capacite})` : ''}</div>`).join('');
+      } else if (ferm) html += `<div class="case ferme" data-rouvrir="${ferm.id}">${nom}Fermé · rouvrir</div>`;
+      else html += `<div class="case libre" data-fermer="${r.id}" data-debut="${debut.toISOString()}">${nom}Libre · fermer</div>`;
+    }
+    return `<td>${html}</td>`;
+  };
+  $('#vue').innerHTML = `<div class="titre"><h1>Planning</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    <select id="p-offre" style="width:auto">${offres.map((o) => `<option value="${o.id}" ${o.id === planOffre.id ? 'selected' : ''}>${esc(o.titre)}</option>`).join('')}</select>
+    <button class="btn c p" id="p-av">←</button><b>${planLundi.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</b><button class="btn c p" id="p-ap">→</button></div></div>
+    <p class="note" style="margin:-8px 0 12px">Touchez un créneau libre pour le fermer (complet, réservé par téléphone…), un créneau fermé pour le rouvrir. Les créneaux pris dans votre agenda relié apparaissent tout seuls.</p>
+    <div class="plan"><table><thead><tr><th></th>${jours.map((j, i) => `<th>${JOURS[i].slice(0, 3)} ${j.slice(8)}/${j.slice(5, 7)}</th>`).join('')}</tr></thead>
+    <tbody>${hs.map((hh) => `<tr><td class="heure">${hh}</td>${jours.map((j, i) => cellule(j, hh, i)).join('')}</tr>`).join('') || '<tr><td class="vide" colspan="8">Aucun horaire pour cette activité.</td></tr>'}</tbody></table></div>`;
+  $('#p-offre').onchange = (e) => { planOffre = offres.find((o) => o.id === e.target.value); planning(); };
+  $('#p-av').onclick = () => { planLundi.setDate(planLundi.getDate() - 7); planning(); };
+  $('#p-ap').onclick = () => { planLundi.setDate(planLundi.getDate() + 7); planning(); };
+  document.querySelectorAll('[data-fermer]').forEach((c) => c.onclick = async () => {
+    const d = new Date(c.dataset.debut);
+    await rpc('pro_fermer', { p_offre: planOffre.id, p_debut: d.toISOString(), p_fin: new Date(d.getTime() + planOffre.duree_min * 6e4).toISOString(), p_motif: 'complet', p_ressource: c.dataset.fermer });
+    toast('Créneau fermé.'); await recharger(); planning();
+  });
+  document.querySelectorAll('[data-rouvrir]').forEach((c) => c.onclick = async () => { await rpc('pro_rouvrir', { p_fermeture: c.dataset.rouvrir }); toast('Créneau rouvert.'); await recharger(); planning(); });
+}
+
+// ───── Activités ─────
+function activites() {
+  $('#vue').innerHTML = `<div class="titre"><h1>Activités</h1><button class="btn j" id="nouv">+ Nouvelle activité</button></div>
+  ${espace.offres.map((o) => `<div class="offre"><div class="ph" style="background-image:url('${esc((o.photos || [])[0] || (espace.entreprise.photos || [])[0] || '')}')"></div>
+    <div style="flex:1"><b>${esc(o.titre)}</b> ${o.actif ? '' : '<span class="puce">En pause</span>'}<div class="note">${o.mode === 'privatise' ? `${o.ressources.filter((r) => r.actif).length} salle(s) privatisée(s)` : `${o.ressources.reduce((s, r) => s + (r.actif ? r.capacite : 0), 0)} places`} · ${o.duree_min} min · ${euros(o.prix_cents)} ${o.prix_par === 'personne' ? '/ pers.' : 'le groupe'} · ${o.horaires.length ? o.horaires.length + ' plage(s) horaire(s)' : '<span style="color:var(--lueur)">pas d’horaires</span>'} · ${o.confirmation === 'immediate' ? 'confirmation immédiate' : 'vous validez'}</div></div>
+    <button class="btn c p" data-modif="${o.id}">Modifier</button></div>`).join('') || '<div class="carte vide">Aucune activité pour l’instant.</div>'}`;
+  $('#nouv').onclick = () => editeur(null);
+  document.querySelectorAll('[data-modif]').forEach((b) => b.onclick = () => editeur(espace.offres.find((o) => o.id === b.dataset.modif)));
+}
+function editeur(o) {
+  o = o || { titre: '', description: '', genre: '', ambiances: [], mode: 'privatise', duree_min: 60, battement_min: 15, prix_cents: 2500, prix_par: 'personne', min_personnes: 2, max_personnes: 6,
+    confirmation: 'manuelle', annulation_h: 24, delai_reponse_h: 12, reservable_jours: 60, preavis_h: 2, photos: [], actif: true, ressources: [{ nom: 'Salle 1', capacite: 6, ical_url: '' }],
+    horaires: [1, 2, 3, 4, 5, 6, 7].map((j) => ({ jour: j, debut: '14:00', fin: '22:00', pas_min: 90 })).filter((h) => h.jour >= 3) };
+  const m = document.createElement('div'); m.className = 'modale';
+  m.innerHTML = `<div class="carte"><div class="titre"><h2>${o.id ? 'Modifier l’activité' : 'Nouvelle activité'}</h2><button class="btn c p" data-fermer-m>✕</button></div>
+  <div class="grille g2"><div><label class="l">Nom de l’activité (vu par les clients)</label><input id="e-titre" maxlength="90" value="${esc(o.titre)}" placeholder="Escape game « Le Manoir »"></div>
+  <div><label class="l">Type d’activité</label><select id="e-genre">${GENRES.map(([k, t]) => `<option value="${k}" ${o.genre === k ? 'selected' : ''}>${t}</option>`).join('')}</select></div></div>
+  <label class="l">Description (ce qui est compris, à prévoir…)</label><textarea id="e-desc" rows="3" maxlength="1500">${esc(o.description)}</textarea>
+  <label class="l">Pour quelles sorties ?</label><div class="choix">${AMBIANCES.map(([k, t]) => `<label><input type="checkbox" value="${k}" ${o.ambiances.includes(k) ? 'checked' : ''} data-amb> ${t}</label>`).join('')}</div>
+  <label class="l">Comment se réserve-t-elle ?</label><div class="choix">
+    <label><input type="radio" name="mode" value="privatise" ${o.mode === 'privatise' ? 'checked' : ''}> <span><b>Une salle = un groupe</b><br><span class="note">Escape game, salle VR, jacuzzi privatif : chaque salle ne reçoit qu’un groupe par créneau.</span></span></label>
+    <label><input type="radio" name="mode" value="places" ${o.mode === 'places' ? 'checked' : ''}> <span><b>Des places partagées</b><br><span class="note">Canoë, atelier, dégustation, restaurant (couverts) : plusieurs groupes jusqu’à la capacité.</span></span></label></div>
+  <div class="grille g4"><div><label class="l">Durée (min)</label><input type="number" id="e-duree" min="10" max="720" value="${o.duree_min}"></div>
+  <div><label class="l">Battement entre 2 groupes (min)</label><input type="number" id="e-batt" min="0" max="180" value="${o.battement_min}"></div>
+  <div><label class="l">Prix (€)</label><input type="number" id="e-prix" min="0" step="0.5" value="${o.prix_cents / 100}"></div>
+  <div><label class="l">Prix</label><select id="e-par"><option value="personne" ${o.prix_par === 'personne' ? 'selected' : ''}>par personne</option><option value="groupe" ${o.prix_par === 'groupe' ? 'selected' : ''}>pour le groupe</option></select></div>
+  <div><label class="l">Personnes min. par réservation</label><input type="number" id="e-min" min="1" value="${o.min_personnes}"></div>
+  <div><label class="l">Personnes max. par réservation</label><input type="number" id="e-max" min="1" value="${o.max_personnes}"></div>
+  <div><label class="l">Réservable jusqu’à (jours à l’avance)</label><input type="number" id="e-jours" min="1" max="365" value="${o.reservable_jours}"></div>
+  <div><label class="l">Au plus tard (heures avant)</label><input type="number" id="e-preavis" min="0" max="72" value="${o.preavis_h}"></div></div>
+  <h3 style="margin:20px 0 4px" id="t-res">${o.mode === 'privatise' ? 'Vos salles' : 'Vos places'}</h3><p class="note">Pour relier votre agenda (Google, Outlook, logiciel de réservation), collez son lien iCal : les créneaux déjà pris y seront fermés tout seuls dans Tikette, toutes les 10 minutes.</p>
+  <div id="e-res"></div><button class="btn c p" id="e-plus-res">+ Ajouter</button>
+  <h3 style="margin:20px 0 4px">Horaires</h3><p class="note">Un créneau commence toutes les « X min » entre l’ouverture et la fermeture (dernier départ = fermeture − durée).</p>
+  <div id="e-hor"></div><button class="btn c p" id="e-plus-hor">+ Ajouter une plage</button>
+  <h3 style="margin:20px 0 4px">Confirmation</h3><div class="choix">
+    <label><input type="radio" name="conf" value="manuelle" ${o.confirmation === 'manuelle' ? 'checked' : ''}> <span><b>Je valide chaque réservation</b><br><span class="note">Le client attend votre réponse.</span></span></label>
+    <label><input type="radio" name="conf" value="immediate" ${o.confirmation === 'immediate' ? 'checked' : ''}> <span><b>Confirmation immédiate</b><br><span class="note">Recommandé si votre planning est à jour : les clients préfèrent.</span></span></label></div>
+  <div class="grille g2"><div><label class="l">Délai pour répondre (heures, sinon refusée automatiquement)</label><input type="number" id="e-delai" min="1" max="72" value="${o.delai_reponse_h}"></div>
+  <div><label class="l">Annulation gratuite par le client jusqu’à (heures avant)</label><input type="number" id="e-annul" min="0" max="168" value="${o.annulation_h}"></div></div>
+  <h3 style="margin:20px 0 4px">Photos</h3><div class="photos" id="e-photos"></div><input type="file" id="e-fichier" accept="image/jpeg,image/png,image/webp" multiple style="margin-top:8px">
+  <label class="l" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="e-actif" style="width:auto" ${o.actif ? 'checked' : ''}> Proposée dans Tikette (décochez pour mettre en pause)</label>
+  <div style="display:flex;gap:10px;justify-content:space-between;margin-top:20px;flex-wrap:wrap">${o.id ? '<button class="btn r" id="e-suppr">Supprimer</button>' : '<span></span>'}<div style="display:flex;gap:10px"><button class="btn c" data-fermer-m>Annuler</button><button class="btn j" id="e-ok">Enregistrer</button></div></div></div>`;
+  document.body.appendChild(m);
+  let ressources = o.ressources.filter((r) => r.actif !== false).map((r) => ({ ...r })), horaires = o.horaires.map((h) => ({ ...h })), photos = [...(o.photos || [])];
+  const dessinerRes = () => {
+    const priv = $('input[name=mode]:checked', m).value === 'privatise';
+    $('#t-res', m).textContent = priv ? 'Vos salles' : 'Vos places';
+    $('#e-res', m).innerHTML = ressources.map((r, i) => `<div class="ligne" style="grid-template-columns:1.2fr .6fr 2fr auto"><input data-r="${i}" data-k="nom" value="${esc(r.nom)}" placeholder="${priv ? 'Salle 1' : 'Places'}">
+      <input type="number" data-r="${i}" data-k="capacite" value="${r.capacite}" min="1" title="${priv ? 'Joueurs max. dans la salle' : 'Nombre de places'}" placeholder="${priv ? 'Joueurs max.' : 'Places'}">
+      <input data-r="${i}" data-k="ical_url" value="${esc(r.ical_url || '')}" placeholder="Lien iCal de votre agenda (facultatif)"><button class="btn c p" data-rm="${i}">✕</button></div>`).join('');
+    $('#e-res', m).querySelectorAll('[data-r]').forEach((x) => x.oninput = () => { ressources[x.dataset.r][x.dataset.k] = x.type === 'number' ? +x.value : x.value; });
+    $('#e-res', m).querySelectorAll('[data-rm]').forEach((x) => x.onclick = () => { if (ressources.length > 1) { ressources.splice(+x.dataset.rm, 1); dessinerRes(); } });
+  };
+  const dessinerHor = () => {
+    $('#e-hor', m).innerHTML = horaires.map((h, i) => `<div class="ligne" style="grid-template-columns:1.2fr 1fr 1fr 1fr auto"><select data-h="${i}" data-k="jour">${JOURS.map((j, k) => `<option value="${k + 1}" ${h.jour === k + 1 ? 'selected' : ''}>${j}</option>`).join('')}</select>
+      <input type="time" data-h="${i}" data-k="debut" value="${h.debut}"><input type="time" data-h="${i}" data-k="fin" value="${h.fin}">
+      <select data-h="${i}" data-k="pas_min">${[15, 30, 45, 60, 75, 90, 120, 180, 240].map((p) => `<option value="${p}" ${+h.pas_min === p ? 'selected' : ''}>toutes les ${p} min</option>`).join('')}</select><button class="btn c p" data-rh="${i}">✕</button></div>`).join('') || '<p class="note">Aucune plage : l’activité ne peut pas être réservée.</p>';
+    $('#e-hor', m).querySelectorAll('[data-h]').forEach((x) => x.onchange = () => { horaires[x.dataset.h][x.dataset.k] = ['jour', 'pas_min'].includes(x.dataset.k) ? +x.value : x.value; });
+    $('#e-hor', m).querySelectorAll('[data-rh]').forEach((x) => x.onclick = () => { horaires.splice(+x.dataset.rh, 1); dessinerHor(); });
+  };
+  const dessinerPhotos = () => {
+    $('#e-photos', m).innerHTML = photos.map((p, i) => `<div style="background-image:url('${esc(p)}')"><button data-rp="${i}">✕</button></div>`).join('');
+    $('#e-photos', m).querySelectorAll('[data-rp]').forEach((x) => x.onclick = () => { photos.splice(+x.dataset.rp, 1); dessinerPhotos(); });
+  };
+  dessinerRes(); dessinerHor(); dessinerPhotos();
+  m.querySelectorAll('input[name=mode]').forEach((x) => x.onchange = dessinerRes);
+  $('#e-plus-res', m).onclick = () => { ressources.push({ nom: `Salle ${ressources.length + 1}`, capacite: ressources[0]?.capacite || 6, ical_url: '' }); dessinerRes(); };
+  $('#e-plus-hor', m).onclick = () => { const d = horaires[horaires.length - 1] || { jour: 0, debut: '14:00', fin: '22:00', pas_min: 60 }; horaires.push({ ...d, jour: (d.jour % 7) + 1 }); dessinerHor(); };
+  $('#e-fichier', m).onchange = async (ev) => {
+    for (const f of ev.target.files) {
+      if (f.size > 5e6) { toast('Photo trop lourde (5 Mo max).'); continue; }
+      const chemin = `${espace.entreprise.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${(f.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg')}`;
+      const { error } = await sb.storage.from('pro-photos').upload(chemin, f, { contentType: f.type });
+      if (error) { toast('Envoi impossible : ' + error.message); continue; }
+      photos.push(sb.storage.from('pro-photos').getPublicUrl(chemin).data.publicUrl);
+    }
+    dessinerPhotos();
+  };
+  const fermer = () => m.remove();
+  m.querySelectorAll('[data-fermer-m]').forEach((x) => x.onclick = fermer);
+  if ($('#e-suppr', m)) $('#e-suppr', m).onclick = async () => { if (!confirm('Supprimer cette activité ? (mise en pause si elle a déjà des réservations)')) return; await rpc('pro_supprimer_offre', { p_offre: o.id }); fermer(); await recharger(); activites(); };
+  $('#e-ok', m).onclick = async () => {
+    const titre = $('#e-titre', m).value.trim();
+    if (titre.length < 2) return toast('Donnez un nom à l’activité.');
+    if (+$('#e-min', m).value > +$('#e-max', m).value) return toast('Le minimum de personnes dépasse le maximum.');
+    if (horaires.some((h) => h.debut >= h.fin)) return toast('Une plage horaire finit avant de commencer.');
+    if (ressources.some((r) => r.ical_url && !/^https:\/\//.test(r.ical_url.replace(/^webcal:/, 'https:')))) return toast('Le lien d’agenda doit commencer par https://');
+    ressources.forEach((r) => { r.ical_url = (r.ical_url || '').replace(/^webcal:/, 'https:'); });
+    $('#e-ok', m).disabled = true;
+    try {
+      await rpc('pro_enregistrer_offre', { p: {
+        id: o.id || null, titre, description: $('#e-desc', m).value, genre: $('#e-genre', m).value,
+        ambiances: [...m.querySelectorAll('[data-amb]:checked')].map((x) => x.value), mode: $('input[name=mode]:checked', m).value,
+        duree_min: +$('#e-duree', m).value, battement_min: +$('#e-batt', m).value, prix_cents: Math.round(+$('#e-prix', m).value * 100), prix_par: $('#e-par', m).value,
+        min_personnes: +$('#e-min', m).value, max_personnes: +$('#e-max', m).value, confirmation: $('input[name=conf]:checked', m).value,
+        annulation_h: +$('#e-annul', m).value, delai_reponse_h: +$('#e-delai', m).value, reservable_jours: +$('#e-jours', m).value, preavis_h: +$('#e-preavis', m).value,
+        photos, actif: $('#e-actif', m).checked, ressources, horaires } });
+      toast('Activité enregistrée.'); fermer(); await recharger(); activites();
+    } catch { $('#e-ok', m).disabled = false; }
+  };
+}
+
+// ───── Agenda et logiciels ─────
+const LOGICIELS = ['Bookeo', 'Regiondo', 'Guidap', 'FareHarbor', 'Rezdy', 'Ventrata', 'Checkfront', 'TrekkSoft', 'Peek Pro', 'Weezevent', 'Zenchef (restaurants)', 'Autre'];
+function agenda() {
+  const lien = `${URL_SUPABASE}/functions/v1/pro-ical?jeton=${espace.entreprise.ical_jeton}`;
+  const relies = espace.offres.flatMap((o) => o.ressources.filter((r) => r.ical_url).map((r) => `${esc(o.titre)} · ${esc(r.nom)}`));
+  $('#vue').innerHTML = `<div class="titre"><h1>Agenda et logiciels</h1></div>
+  <div class="grille g2">
+  <div class="carte"><h2 style="font-size:19px">1. Vos réservations Tikette dans votre agenda</h2>
+    <p class="note" style="margin:8px 0 12px">Ajoutez ce lien à Google Agenda (« Autres agendas » › « À partir de l’URL »), Outlook, Apple Calendrier ou votre logiciel de réservation. Vos réservations Tikette y apparaissent et se mettent à jour toutes seules.</p>
+    <div class="copie"><input readonly value="${esc(lien)}" id="lien-ical"><button class="btn j p" id="copier">Copier</button></div>
+    <p class="note" style="margin-top:8px">Ce lien est secret : ne le publiez pas.</p></div>
+  <div class="carte"><h2 style="font-size:19px">2. Votre agenda dans Tikette</h2>
+    <p class="note" style="margin:8px 0 12px">Vous prenez aussi des réservations par téléphone ou sur votre site ? Dans <a href="#activites">Activités</a>, collez le lien iCal de votre agenda sur chaque salle : toutes les 10 minutes, Tikette ferme les créneaux déjà pris. Personne ne peut réserver deux fois la même salle.</p>
+    ${relies.length ? `<p><b>Reliés :</b> ${relies.join(', ')}</p>` : '<p class="note">Aucun agenda relié pour l’instant.</p>'}</div></div>
+  <div class="carte" style="margin-top:14px"><h2 style="font-size:19px">3. Connexion directe à votre logiciel de réservation</h2>
+    <p class="note" style="margin:8px 0 6px">La disponibilité en temps réel et les réservations Tikette directement dans votre logiciel. On les branche un par un, en commençant par ceux de nos partenaires : dites-nous lequel vous utilisez.</p>
+    ${LOGICIELS.map((l) => `<div class="logiciel"><span>${l}</span>${espace.entreprise.connecteur_demande.includes(l) ? '<span class="puce confirmee">Demandé</span>' : `<button class="btn c p" data-log="${esc(l)}">Je l’utilise</button>`}</div>`).join('')}</div>`;
+  $('#copier').onclick = () => { navigator.clipboard.writeText(lien); toast('Lien copié.'); };
+  document.querySelectorAll('[data-log]').forEach((b) => b.onclick = async () => {
+    const v = (espace.entreprise.connecteur_demande ? espace.entreprise.connecteur_demande + ', ' : '') + b.dataset.log;
+    await rpc('pro_modifier_entreprise', { p: { connecteur_demande: v } }); toast('Merci ! On vous recontacte dès que la connexion est prête.'); await recharger(); agenda();
+  });
+}
+
+// ───── Statistiques ─────
+let periode = 'mois';
+async function stats() {
+  const fin = new Date(), debut = new Date();
+  if (periode === 'mois') { debut.setDate(1); fin.setMonth(fin.getMonth() + 1, 1); } else if (periode === '3mois') debut.setMonth(debut.getMonth() - 3); else { debut.setMonth(0, 1); fin.setFullYear(fin.getFullYear() + 1, 0, 1); }
+  debut.setHours(0, 0, 0, 0); fin.setHours(0, 0, 0, 0);
+  const [st, liste] = await Promise.all([rpc('pro_stats', { p_du: debut.toISOString(), p_au: fin.toISOString() }), rpc('pro_reservations_liste', { p_du: debut.toISOString(), p_au: fin.toISOString() })]);
+  const acc = st.demandes ? Math.round(100 * st.acceptees / st.demandes) : 0;
+  const jours = Object.entries(st.par_jour).sort();
+  const max = Math.max(1, ...jours.map(([, n]) => n));
+  $('#vue').innerHTML = `<div class="titre"><h1>Statistiques</h1><div style="display:flex;gap:8px">${[['mois', 'Ce mois'], ['3mois', '3 derniers mois'], ['annee', 'Cette année']].map(([k, t]) => `<button class="btn ${periode === k ? 'j' : 'c'} p" data-p="${k}">${t}</button>`).join('')}
+    <button class="btn c p" id="exp2">⬇ Export Excel</button></div></div>
+  <div class="grille g4" style="margin-bottom:14px">
+    <div class="kpi"><small>Réservations</small><b>${st.reservations}</b></div><div class="kpi"><small>Personnes</small><b>${st.personnes}</b></div>
+    <div class="kpi"><small>Chiffre d'affaires apporté</small><b>${euros(st.ca_cents)}</b></div><div class="kpi"><small>Commission Tikette</small><b>${euros(st.commission_cents)}</b></div>
+    <div class="kpi"><small>Demandes reçues</small><b>${st.demandes}</b></div><div class="kpi"><small>Taux d'acceptation</small><b>${acc} %</b></div>
+    <div class="kpi"><small>Refusées ou sans réponse</small><b>${st.refusees}</b></div><div class="kpi"><small>Clients absents</small><b>${st.absents}</b></div></div>
+  <div class="grille g2"><div class="carte"><h2 style="font-size:18px">Réservations par jour</h2>${jours.length ? `<div class="barres">${jours.map(([j, n]) => `<div style="height:${100 * n / max}%" title="${j} : ${n}"><span>${j.slice(8)}</span></div>`).join('')}</div><div style="height:16px"></div>` : '<div class="vide">Pas encore de réservation sur la période.</div>'}</div>
+  <div class="carte"><h2 style="font-size:18px">Par activité</h2>${Object.entries(st.par_offre).map(([t, n]) => `<div class="logiciel"><span>${esc(t)}</span><b>${n}</b></div>`).join('') || '<div class="vide">—</div>'}</div></div>`;
+  document.querySelectorAll('[data-p]').forEach((b) => b.onclick = () => { periode = b.dataset.p; stats(); });
+  $('#exp2').onclick = () => exporter(liste, 'statistiques');
+}
+
+// ───── Mon entreprise ─────
+function entreprise() {
+  const e = espace.entreprise;
+  $('#vue').innerHTML = `<div class="titre"><h1>Mon entreprise</h1><span class="puce ${e.statut === 'valide' ? 'confirmee' : 'demandee'}">${{ valide: 'Validée', en_attente: 'En vérification', suspendu: 'Suspendue', refuse: 'Refusée' }[e.statut]}</span></div>
+  <div class="grille g2"><div class="carte">
+    <label class="l">Nom affiché</label><input id="m-nom" value="${esc(e.nom)}">
+    <label class="l">Présentation</label><textarea id="m-desc" rows="4">${esc(e.description)}</textarea>
+    <div class="grille g2"><div><label class="l">Adresse</label><input id="m-adr" value="${esc(e.adresse)}"></div><div><label class="l">Commune</label><input id="m-com" value="${esc(e.commune)}"></div>
+    <div><label class="l">E-mail des réservations</label><input id="m-mail" type="email" value="${esc(e.email)}"></div><div><label class="l">Téléphone</label><input id="m-tel" value="${esc(e.telephone)}"></div></div>
+    <label class="l">Site</label><input id="m-site" value="${esc(e.site)}">
+    <button class="btn j" style="margin-top:16px" id="m-ok">Enregistrer</button></div>
+  <div class="carte"><h2 style="font-size:19px">Commission</h2>
+    <p style="margin-top:8px">${e.fondateur ? '<b>Partenaire fondateur</b> : 0 % jusqu’au 31 mars 2027, puis 8 % à vie.' : '10 % du montant des réservations venues de Tikette.'}</p>
+    <p class="note" style="margin-top:8px">Taux actuel : <b>${Math.round(e.taux_actuel * 100)} %</b>. Facture une fois par mois, sur les clients venus. Un client absent (marqué « Absent ») ne compte pas.</p>
+    <p class="note" style="margin-top:8px">SIRET : ${esc(e.siret || '—')}</p>
+    <h2 style="font-size:19px;margin-top:20px">Besoin d’aide ?</h2><p class="note" style="margin-top:6px">contact@tikette.fr — on peut aussi créer vos activités pour vous.</p></div></div>`;
+  $('#m-ok').onclick = async () => {
+    await rpc('pro_modifier_entreprise', { p: { nom: $('#m-nom').value, description: $('#m-desc').value, adresse: $('#m-adr').value, commune: $('#m-com').value,
+      email: $('#m-mail').value, telephone: $('#m-tel').value, site: $('#m-site').value } });
+    toast('Enregistré.'); await recharger(); $('#nom-ent').textContent = espace.entreprise.nom;
+  };
+}
+
+// Nouvelles demandes : vérifiées toutes les minutes, avec le titre de l'onglet.
+setInterval(async () => {
+  if (!espace) return;
+  const avant = +espace.entreprise.a_valider || 0;
+  await recharger();
+  const n = +espace.entreprise.a_valider || 0;
+  document.title = (n ? `(${n}) ` : '') + 'Espace pro Tikette';
+  if (n > avant) { toast('Nouvelle demande de réservation !'); if (vueActuelle === 'accueil') accueil(); }
+}, 60000);
+
+demarrer();
+</script>
+</body>
+</html>

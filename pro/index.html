@@ -1,0 +1,172 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tikette pour les pros</title>
+<meta name="description" content="Inscrivez votre activité sur Tikette : des réservations en 2 clics, 10 % de commission seulement quand le client vient. Partenaire fondateur : 0 % jusqu’au 31 mars 2027.">
+<link rel="icon" href="/favicon.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{--fond:#1E1433;--carte:#2A1D45;--bord:#3B2A5C;--texte:#F7F1FF;--doux:#C9BCE3;--lueur:#FFD166;--rose:#FF6B9A;--violet:#7A3BC4;--papier:#F7F1FF;--encre:#1E1433;--encre2:#5B4E78;--vert:#2EC4A6;
+--ft:"Bricolage Grotesque",system-ui,sans-serif;--fx:"DM Sans",Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--fx);font-size:17px;line-height:1.55}
+h1,h2,h3{font-family:var(--ft);margin:0;letter-spacing:-.03em;text-wrap:balance}p{margin:0}
+.page{max-width:1120px;margin:0 auto;padding:0 20px}
+.saut { animation: saut 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+.oeil { animation: cligne 4.6s infinite; transform-box: fill-box; transform-origin: center; }
+.oeil-d { animation: clin-oeil 9.2s infinite; }
+.clin { opacity: 0; animation: clin-trait 9.2s infinite; }
+.bras { animation: coucou 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: right bottom; }
+@keyframes saut { 0%,100% { transform: translateY(0) scale(1,1); } 40% { transform: translateY(-14px) scale(.98,1.03); } 58% { transform: translateY(0) scale(1.04,.96); } 68% { transform: translateY(-3px); } }
+@keyframes cligne { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
+@keyframes clin-oeil { 0%,45%,52%,90%,100% { transform: scaleY(1); } 47%,50% { transform: scaleY(0); } 94% { transform: scaleY(.1); } }
+@keyframes clin-trait { 0%,46%,51%,100% { opacity: 0; } 47%,50% { opacity: 1; } }
+@keyframes coucou { 0%,55%,100% { transform: translateY(0); } 65% { transform: translateY(-14px); } 75% { transform: translateY(-4px); } 85% { transform: translateY(-14px); } }
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.marque{display:flex;align-items:center;gap:8px;font-family:var(--ft);font-weight:800;font-size:26px}.marque svg{width:34px;height:34px}
+.marque small{font-family:var(--fx);font-size:12px;font-weight:700;background:var(--lueur);color:var(--encre);padding:3px 9px;border-radius:99px;letter-spacing:.06em;margin-left:4px}
+.liens a{color:inherit;text-decoration:none}.liens{display:flex;gap:22px;align-items:center;font-weight:500;color:var(--doux);font-size:15px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:99px;padding:15px 26px;font:700 16px var(--fx);cursor:pointer;text-decoration:none}
+.btn.j{background:var(--lueur);color:var(--encre);box-shadow:0 10px 30px rgba(255,209,102,.3)}.btn.c{background:transparent;color:var(--texte);border:1.5px solid rgba(255,255,255,.35)}
+.hero{position:relative;overflow:hidden;border-radius:32px;padding:56px 48px;display:grid;grid-template-columns:1.25fr .75fr;gap:30px;align-items:center;
+background:radial-gradient(circle at 85% 8%,rgba(255,209,102,.5),transparent 38%),linear-gradient(135deg,#FF6B9A,#B04CC8 45%,#5B2AA8 75%,#3B2470)}
+.hero h1{font-size:64px;line-height:1;font-weight:800}.hero h1 em{font-style:normal;color:var(--lueur)}
+.hero .chapo{margin-top:20px;font-size:20px;max-width:34ch;opacity:.95}
+.hero .actions{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap}
+.tikette{width:100%;max-width:300px;justify-self:center;overflow:visible;filter:drop-shadow(0 30px 40px rgba(20,8,40,.4))}
+.pastille{display:inline-block;background:rgba(30,20,51,.55);border-radius:99px;padding:8px 16px;font-weight:700;font-size:14px;margin-bottom:18px}
+section{margin-top:84px}.sur{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--lueur);margin-bottom:10px}
+section h2{font-size:44px;line-height:1.05}
+.comm{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;margin-top:30px}
+.gros{font-family:var(--ft);font-weight:800;font-size:150px;line-height:.9;color:var(--lueur);letter-spacing:-.05em}.gros span{font-size:70px}
+.barres{background:var(--carte);border-radius:24px;padding:26px}
+.barre{display:grid;grid-template-columns:120px 1fr 64px;align-items:center;gap:14px;margin:14px 0;font-weight:700}
+.barre .b{height:22px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}.barre .b i{display:block;height:100%;border-radius:99px;background:rgba(255,255,255,.45)}
+.barre.t .b i{background:linear-gradient(90deg,var(--lueur),#FFB84D)}.barre.t{color:var(--lueur)}
+.note{font-size:13px;color:var(--doux);margin-top:10px}
+.etapes{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.etape{background:var(--carte);border-radius:24px;padding:26px;border:1px solid var(--bord)}.etape b{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--rose);font-family:var(--ft);font-size:20px;margin-bottom:14px}
+.etape h3{font-size:22px;margin-bottom:6px}.etape p{color:var(--doux);font-size:15px}
+.fondateur{border-radius:28px;padding:40px;background:linear-gradient(135deg,#FFD166,#FFB38A 60%,#FF8FB1);color:var(--encre);display:grid;grid-template-columns:1.3fr .7fr;gap:24px;align-items:center}
+.fondateur h2{font-size:40px}.fondateur p{margin-top:12px;font-size:17px;color:#3B2A5C}
+.places{text-align:center;background:rgba(30,20,51,.9);color:var(--texte);border-radius:24px;padding:24px}.places .n{font-family:var(--ft);font-weight:800;font-size:64px;color:var(--lueur);line-height:1}
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:30px}
+.carte{background:var(--carte);border-radius:24px;padding:28px;border:1px solid var(--bord)}
+.champ{margin-bottom:16px}.champ label{display:block;font-size:14px;color:var(--doux);margin-bottom:6px;font-weight:500}
+.champ .v{background:#1E1433;border:1px solid var(--bord);border-radius:14px;padding:13px 16px;font-weight:700}
+.res{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bord)}.res:last-child{border:0}.res b{font-family:var(--ft);font-size:22px}.res.g b{color:var(--vert)}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form .champ.l{grid-column:1/-1}input,select{font:500 16px var(--fx);color:var(--texte);background:#1E1433;border:1px solid var(--bord);border-radius:14px;padding:13px 16px;width:100%;outline:none}input:focus,select:focus{border-color:var(--lueur)}.aide{font-size:13px;color:var(--doux);margin-top:6px}.aide.ok{color:var(--vert)}.aide.ko{color:#FF8F8F}.err{color:#FF8F8F;font-size:14px;margin-top:10px;min-height:1em}.coche{display:flex!important;gap:10px;align-items:flex-start;color:var(--texte)!important;font-size:15px!important}.coche input{width:auto;margin-top:4px}.coche a,.faq a{color:var(--lueur)}.propos{position:absolute;left:0;right:0;top:78px;z-index:5;background:#2E2148;border:1px solid var(--bord);border-radius:14px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,.4)}.propos button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--texte);padding:11px 16px;font:15px var(--fx);cursor:pointer}.propos button:hover{background:#3B2A5C}.cache{display:none!important}
+.faq details{background:var(--carte);border-radius:18px;padding:18px 22px;margin-top:10px}.faq summary{font-weight:700;cursor:pointer}
+footer{margin:90px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-content:space-between}
+.ecrans3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:30px}.ecrans3 .tel{width:100%;max-width:300px}.ecrans3 .ec{min-height:500px}.etq{font-weight:700;color:var(--lueur);font-size:14px}.papier.vous{outline:3px solid var(--lueur);outline-offset:2px}.badge{display:inline-block;margin-top:8px;background:var(--lueur);color:var(--encre);font-weight:700;font-size:12px;border-radius:99px;padding:3px 10px}.mini{font-size:13px;color:var(--doux);text-align:center}.notif{background:rgba(247,241,255,.95);color:var(--encre);border-radius:18px;padding:12px 14px;font-size:14px;display:grid;grid-template-columns:1fr auto}.notif span{color:var(--encre2);font-size:12px}.notif p{grid-column:1/-1;margin-top:4px}
+.tableau{background:#F7F1FF;color:var(--encre);border-radius:20px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.tableau .haut{background:var(--encre);color:var(--texte);display:flex;justify-content:space-between;padding:14px 20px;font-weight:700;font-size:14px}
+.tableau .corps{padding:20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.kpi{background:#fff;border-radius:14px;padding:14px}.kpi small{color:var(--encre2);font-size:12px}.kpi b{display:block;font-family:var(--ft);font-size:28px}
+.liste{grid-column:1/-1;background:#fff;border-radius:14px;padding:6px 14px}
+.resa{display:grid;grid-template-columns:70px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid #EDE6F7;font-size:14px;align-items:center}.resa:last-child{border:0}
+.ok{background:#DFF7F1;color:#13866F;font-weight:700;font-size:12px;padding:4px 10px;border-radius:99px}
+.tel{width:300px;justify-self:center;background:#120B20;border-radius:42px;padding:12px;box-shadow:0 30px 60px rgba(0,0,0,.45);border:2px solid #3B2A5C}
+.tel .ec{background:linear-gradient(170deg,#2A1D45,#1E1433);border-radius:32px;padding:20px 16px;min-height:560px;display:flex;flex-direction:column;gap:12px}
+.papier{background:var(--papier);color:var(--encre);border-radius:18px;padding:16px}.papier h4{margin:0;font-family:var(--ft);font-size:19px}.papier small{color:var(--encre2)}
+.cren{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.cren span{border:1.5px solid #D9CCEB;border-radius:12px;padding:7px 11px;font-weight:700;font-size:14px}.cren span.on{background:var(--encre);color:var(--lueur);border-color:var(--encre)}
+.gbtn{background:var(--lueur);color:var(--encre);border-radius:99px;padding:15px;text-align:center;font-weight:800;font-size:17px;margin-top:auto}
+.conf{background:var(--vert);color:#06372E;border-radius:18px;padding:14px;font-weight:700;text-align:center}
+@media(max-width:760px){.hero{grid-template-columns:1fr;padding:34px 22px}.hero h1{font-size:42px}.tikette{max-width:180px;order:-1}.comm,.etapes,.fondateur,.calc,.form,.ecrans3{grid-template-columns:1fr}.gros{font-size:110px}section h2{font-size:34px}.liens a:not(.btn){display:none}.fondateur{padding:26px}.tableau .corps{grid-template-columns:1fr 1fr}}
+</style></head><body><div class="page">
+<nav><div class="marque"><svg class="logo" viewBox="68 70 164 176" aria-hidden="true"><defs><linearGradient id="lc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
+<radialGradient id="lr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="lm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(0 7)" fill="#0B0618" opacity=".35"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lr)"/>
+<path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".5" stroke-width="2.5"/>
+<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/><path transform="translate(150 190) scale(2.1)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/></svg> tikette<small>PRO</small></div><div class="liens"><a href="#comment">Comment ça marche</a><a href="#commission">Commission</a><a href="#faq">Questions</a><a class="btn c" style="padding:10px 18px" href="/pro/espace/">Se connecter</a></div></nav>
+<div class="hero"><div><div class="pastille">Gard · Vaucluse · Bouches-du-Rhône · Hérault</div>
+<h1>Des clients qui sortent <em>ce soir</em>, chez vous.</h1>
+<p class="chapo">Tikette, l’appli qui organise une sortie complète en 1 minute pour les couples et les bandes de potes, sort le 14 décembre. Inscrivez votre activité : on vous envoie des réservations, et vous ne payez que <b>10 %</b> quand un client vient.</p>
+<div class="actions"><a class="btn j" href="#inscription">Inscrire mon activité, c’est gratuit</a><a class="btn c" href="#comment">Voir comment ça marche</a></div></div><svg class="tikette" viewBox="36 50 228 220" role="img" aria-label="Tikette, le petit ticket mascotte, fait coucou"><defs><linearGradient id="tc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
+<radialGradient id="tr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="tm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs>
+<ellipse cx="150" cy="258" rx="62" ry="7" fill="#000" opacity=".22"/>
+<g class="saut">
+<g class="bras"><circle cx="60" cy="182" r="16" fill="url(#tm)"/></g><circle cx="240" cy="194" r="16" fill="url(#tm)"/>
+<path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(0 7)" fill="#0B0618" opacity=".35"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tr)"/>
+<path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".5" stroke-width="2.5"/>
+<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/>
+<ellipse cx="106" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/><ellipse cx="194" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/>
+<g class="oeil"><ellipse cx="124" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="128" cy="177" r="4" fill="#fff"/><circle cx="121" cy="187" r="2" fill="#fff"/></g>
+<g class="oeil oeil-d"><ellipse cx="176" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="180" cy="177" r="4" fill="#fff"/><circle cx="173" cy="187" r="2" fill="#fff"/></g>
+<path class="clin" d="M165 184 q11 -12 22 0" fill="none" stroke="#1E1433" stroke-width="5.5" stroke-linecap="round"/>
+<path d="M139 206 q11 13 22 0" fill="none" stroke="#1E1433" stroke-width="5" stroke-linecap="round"/>
+</g></svg></div>
+
+<section id="commission"><div class="sur">La commission</div><h2>10 %. Pas 25. Pas 30.</h2>
+<div class="comm"><div><div class="gros">10<span>%</span></div><p style="margin-top:14px;color:var(--doux);max-width:38ch">Seulement sur les réservations qui viennent de Tikette. Pas d’abonnement, pas de frais d’inscription, pas de frais cachés. Vous arrêtez quand vous voulez.</p></div>
+<div class="barres"><div class="barre t"><span>Tikette</span><div class="b"><i style="width:33%"></i></div><span>10 %</span></div>
+<div class="barre"><span>Viator</span><div class="b"><i style="width:77%"></i></div><span>20-27 %</span></div>
+<div class="barre"><span>GetYourGuide</span><div class="b"><i style="width:100%"></i></div><span>20-30 %</span></div>
+<p class="note">Commissions publiques des plateformes, relevées en novembre 2026.</p></div></div></section>
+
+<section><div class="fondateur"><div><div class="sur" style="color:#7A3BC4">Offre de lancement</div><h2>Partenaire fondateur : 0 % jusqu’au 31 mars 2027, puis 8 % à vie.</h2>
+<p>Pour les 50 premières entreprises inscrites. Vous êtes en avant dans l’appli dès la sortie, le 14 décembre, avec le badge « Partenaire fondateur ».</p></div>
+<div class="places"><div class="n">50</div>places au départ<br><b style="color:var(--lueur)" id="reste">il en reste 50</b></div></div></section>
+
+<section id="comment"><div class="sur">Comment ça marche</div><h2>Inscrit en 10 minutes. Réservé en 2 clics.</h2>
+<div class="etapes"><div class="etape"><b>1</b><h3>Vous créez votre fiche</h3><p>Photos, prix, ce qui est compris. On la relit et on la met en ligne sous 48 h.</p></div>
+<div class="etape"><b>2</b><h3>Vous ouvrez vos créneaux</h3><p>Jours, heures, nombre de places. Vous les fermez d’un geste quand c’est complet.</p></div>
+<div class="etape"><b>3</b><h3>Les clients arrivent</h3><p>Tikette vous place dans les sorties qui collent à votre activité. Chaque réservation arrive dans votre espace pro (et par e-mail) : vous la validez d’un clic, le client est prévenu dans l’appli.</p></div></div></section>
+
+<section><div class="sur">Ce que vos clients voient</div><h2>Une sortie complète, et votre activité dedans.</h2>
+<div class="ecrans3">
+<div class="tel"><div class="ec"><div class="etq">1 · Leur programme</div>
+<div class="papier"><small>19:00 · Apéro</small><h4>Verre en terrasse</h4><small>Le Patio · Uzès</small></div>
+<div class="papier vous"><small>20:30 · Activité</small><h4>Escape game « Le Manoir »</h4><small>Votre activité · Uzès</small><div class="badge">Partenaire Tikette</div></div>
+<div class="papier"><small>22:00 · Dîner</small><h4>Pizzeria du coin</h4><small>Uzès</small></div></div></div>
+<div class="tel"><div class="ec"><div class="etq">2 · Ils choisissent l’heure</div>
+<div class="papier"><h4>Escape game « Le Manoir »</h4><small>60 min · 2 à 6 joueurs · annulation gratuite 24 h avant</small>
+<div class="cren"><span>18:00</span><span class="on">20:30</span><span>22:00</span></div><div style="margin-top:12px;font-weight:700">4 personnes · 25 € / pers.</div></div>
+<div class="gbtn">Réserver · 100 €</div><p class="mini">Paiement sur place, chez vous.</p></div></div>
+<div class="tel"><div class="ec"><div class="etq">3 · C’est réservé</div>
+<div class="notif"><b>Tikette</b><span>maintenant</span><p>Ta réservation est confirmée 🎉 Escape game « Le Manoir », samedi à 20:30.</p></div>
+<div class="conf">Réservé ! N° TK-48213<br><span style="font-weight:500">Rendez-vous samedi à 20:30.</span></div>
+<div class="papier"><small>Dans leur carnet</small><h4>Samedi soir</h4><small>Itinéraire, horaires et rappel le jour J</small></div></div></div>
+</div></section>
+
+<section><div class="sur">Le calcul</div><h2>Ce que vous gardez vraiment.</h2>
+<div class="calc"><div class="carte"><div class="champ"><label for="c-prix">Prix par personne (€)</label><input id="c-prix" type="number" min="0" value="25"></div><div class="champ"><label for="c-pers">Personnes par réservation</label><input id="c-pers" type="number" min="1" value="4"></div><div class="champ"><label for="c-nb">Réservations par mois via Tikette</label><input id="c-nb" type="number" min="0" value="20"></div></div>
+<div class="carte"><div class="res"><span>Chiffre d’affaires apporté</span><b id="r-ca">2 000 €</b></div><div class="res"><span>Commission Tikette (10 %)</span><b id="r-com">200 €</b></div><div class="res g"><span>Vous gardez</span><b id="r-garde">1 800 €</b></div><div class="res"><span>Avec une plateforme à 25 %</span><b style="color:var(--doux)" id="r-autre">1 500 €</b></div><p class="note">Partenaire fondateur : 0 % jusqu’au 31 mars 2027, puis 8 %.</p></div></div></section>
+
+<section id="inscription"><div class="sur">Inscription</div><h2>Inscrire mon activité</h2>
+<div class="carte" style="margin-top:26px">
+<form id="f-insc" class="form" novalidate>
+<div class="champ"><label for="i-nom">Nom de l’activité</label><input id="i-nom" required maxlength="90" placeholder="Canoë du Pont du Gard" autocomplete="organization"></div>
+<div class="champ"><label for="i-siret">SIRET</label><input id="i-siret" inputmode="numeric" maxlength="17" placeholder="812 345 678 00019"><div class="aide" id="a-siret">Vérifié automatiquement dans l’annuaire officiel des entreprises.</div></div>
+<div class="champ"><label for="i-type">Type d’activité</label><select id="i-type"></select></div>
+<div class="champ" style="position:relative"><label for="i-adr">Adresse de l’activité</label><input id="i-adr" required autocomplete="off" placeholder="Commencez à taper l’adresse"><div class="propos cache" id="propos"></div><div class="aide" id="a-adr">Choisissez l’adresse dans la liste : c’est là que Tikette envoie les clients.</div></div>
+<div class="champ"><label for="i-mail">E-mail (connexion et réservations)</label><input id="i-mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr"></div>
+<div class="champ"><label for="i-tel">Téléphone (jamais montré aux clients)</label><input id="i-tel" type="tel" maxlength="20" autocomplete="tel" placeholder="06 12 34 56 78"></div>
+<div class="champ l"><label for="i-site">Site internet (facultatif)</label><input id="i-site" type="url" placeholder="https://"></div>
+<div class="champ l"><label class="coche"><input type="checkbox" id="i-ok"> J’accepte les <a href="#conditions">conditions partenaires</a> (10 %, ou 0 % puis 8 % pour les partenaires fondateurs, facturé une fois par mois sur les clients venus).</label></div>
+<div class="champ l"><button class="btn j" id="i-go">Créer mon espace pro</button> <span style="color:var(--doux);font-size:14px;margin-left:10px">Gratuit · sans engagement · code de connexion par e-mail</span><p class="err" id="i-err"></p></div>
+</form>
+<form id="f-code" class="cache"><h3 style="font-size:24px">Vérifiez vos e-mails</h3><p style="color:var(--doux);margin:8px 0 16px">On vient d’envoyer un code à 6 chiffres à <b id="c-mail"></b>.</p>
+<div class="champ" style="max-width:260px"><input id="c-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></div>
+<button class="btn j">Valider et ouvrir mon espace</button> <a href="#inscription" id="c-retour" style="margin-left:12px;color:var(--doux)">Modifier mes informations</a><p class="err" id="c-err"></p></form>
+</div></section>
+
+<section class="faq" id="faq"><div class="sur">Questions</div><h2>Ce qu’on nous demande</h2>
+<details open><summary>Quand est-ce que je paie la commission ?</summary><p style="margin-top:8px;color:var(--doux)">Une fois par mois, sur les clients venus par Tikette. Facture envoyée le 1er, rien à payer si personne n’est venu.</p></details>
+<details><summary>Le client paie comment ?</summary><p>Chez vous, comme d’habitude.</p></details>
+<details><summary>Et si un client ne vient pas ?</summary><p>Vous le signalez en un clic : pas de commission.</p></details>
+<details><summary>Je suis déjà sur GetYourGuide ou Viator.</summary><p>Aucun problème, Tikette s’ajoute à côté.</p></details>
+<details><summary>Comment éviter qu’un créneau soit réservé deux fois ?</summary><p>Une salle ne reçoit qu’un groupe par créneau, Tikette bloque le reste tout seul. Vous prenez aussi des réservations ailleurs ? Reliez votre agenda (Google, Outlook ou votre logiciel de réservation, par un lien iCal) : les créneaux pris y sont fermés dans Tikette toutes les 10 minutes. Et vous pouvez toujours refuser une demande.</p></details>
+<details><summary>Restaurant, escape game, canoë : ça marche pour tout le monde ?</summary><p>Oui. Une salle par groupe (escape game, VR, spa privatif) ou des places partagées (canoë, atelier, dégustation, couverts d’un restaurant). Vous choisissez à la création de l’activité.</p></details>
+<details><summary>Je dois valider chaque réservation ?</summary><p>Comme vous voulez : validation à la main (le client attend votre réponse, 12 h au plus par défaut) ou confirmation immédiate si votre planning est à jour.</p></details>
+<details><summary>Vous pouvez créer ma fiche pour moi ?</summary><p>Oui, écrivez-nous à <a href="mailto:contact@tikette.fr">contact@tikette.fr</a> avec vos photos et vos horaires.</p></details></section>
+<section id="conditions" class="faq"><div class="sur">Conditions partenaires</div><h2>En bref, et sans petites lignes.</h2>
+<details open><summary>Ce que vous payez</summary><p>10 % du prix des réservations faites par Tikette, seulement pour les clients venus. Partenaires fondateurs (les 50 premiers inscrits) : 0 % jusqu’au 31 mars 2027, puis 8 % tant que vous restez partenaire. Pas d’abonnement, pas de frais d’inscription. Facture le 1er de chaque mois, payable sous 30 jours.</p></details>
+<details><summary>Ce que vous vous engagez à faire</summary><p>Garder vos prix, horaires et photos exacts ; ne pas facturer plus cher un client venu par Tikette ; répondre aux demandes dans le délai choisi ; honorer les réservations confirmées ; signaler honnêtement les clients absents.</p></details>
+<details><summary>Ce que Tikette fait</summary><p>Vérifie votre inscription sous 48 h, vous place dans les programmes qui collent à votre activité, transmet les réservations, prévient les clients dans l’appli. Le client paie chez vous : Tikette ne touche pas à votre argent.</p></details>
+<details><summary>Arrêter</summary><p>Quand vous voulez, sans frais : mettez vos activités en pause ou écrivez-nous. Les réservations déjà confirmées restent dues. Tikette peut retirer une fiche trompeuse ou en cas de plaintes répétées.</p></details>
+<p class="note">Version du 8 novembre 2026. Éditeur : Egg Not Found (EI Gregory Hubert), 68 rue de la Combe, 30126 Tavel — SIRET 132 417 650 00018.</p></section>
+<footer><span>Tikette · Egg Not Found · Tavel (30)</span><span><a href="mailto:contact@tikette.fr" style="color:inherit">contact@tikette.fr</a> · <a href="/mentions-legales/" style="color:inherit">Mentions légales</a></span></footer>
+</div>
+<script src="app.js"></script></body></html>
