@@ -2,14 +2,14 @@
 # plus les lieux d'activités des offices de tourisme (DATAtourisme, outils/datatourisme.py),
 # par carrés de ≈ 5 km, publiés sur la branche « lieux » (réécrite à chaque fois en un seul commit).
 # L'appli lit : https://raw.githubusercontent.com/Yoobabab/applidates-pages/lieux/lieux/v1/…
-name: Lieux de France
+name: Lieux (France, Belgique, Suisse, Luxembourg, Monaco)
 on:
   schedule:
     - cron: '15 3 * * 1'
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ['outils/lieux.py', 'outils/datatourisme.py', '.github/workflows/lieux.yml']
+    paths: ['outils/lieux.py', 'outils/villes.py', 'outils/datatourisme.py', '.github/workflows/lieux.yml']
 permissions:
   contents: write
 concurrency:
@@ -25,19 +25,33 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq osmium-tool
           pip install --quiet osmium
-      - name: Télécharger la France (OpenStreetMap)
-        run: curl -sSL --fail --retry 3 -o /tmp/france.osm.pbf https://download.geofabrik.de/europe/france-latest.osm.pbf && ls -lh /tmp/france.osm.pbf
+      - name: Télécharger la France, la Belgique, la Suisse, le Luxembourg et Monaco (OpenStreetMap)
+        run: |
+          for p in france belgium switzerland luxembourg monaco; do
+            curl -sSL --fail --retry 3 -o /tmp/$p.osm.pbf https://download.geofabrik.de/europe/$p-latest.osm.pbf
+          done
+          ls -lh /tmp/*.osm.pbf
+      - name: Villes des pays voisins (recherche de ville de l'appli)
+        run: |
+          for p in belgium:BE switzerland:CH luxembourg:LU monaco:MC; do
+            f=${p%%:*}
+            osmium tags-filter /tmp/$f.osm.pbf n/place=city,town,village,municipality -o /tmp/villes-$f.osm.pbf --overwrite
+          done
+          python3 outils/villes.py /tmp/sortie BE:/tmp/villes-belgium.osm.pbf CH:/tmp/villes-switzerland.osm.pbf LU:/tmp/villes-luxembourg.osm.pbf MC:/tmp/villes-monaco.osm.pbf
       - name: Garder les lieux utiles
         run: |
-          osmium tags-filter /tmp/france.osm.pbf \
+          for p in france belgium switzerland luxembourg monaco; do
+          osmium tags-filter /tmp/$p.osm.pbf \
             nw/amenity=restaurant,fast_food,bar,pub,cafe,nightclub,cinema,theatre,arts_centre,music_venue,karaoke_box,planetarium,public_bath \
             nw/leisure=bowling_alley,escape_game,amusement_arcade,miniature_golf,water_park,trampoline_park,park,garden,stadium,ice_rink,horse_riding,sauna \
             nw/sport=laser_tag,karting,paintball,climbing_adventure,climbing,canoe,kayak,billiards,darts,axe_throwing \
             nw/tourism=museum,gallery,viewpoint,theme_park,zoo,aquarium \
             nw/craft=winery,brewery,distillery nw/shop=wine \
             nw/natural=beach \
-            -o /tmp/filtre.osm.pbf --overwrite
-          rm /tmp/france.osm.pbf
+            -o /tmp/filtre-$p.osm.pbf --overwrite
+          rm /tmp/$p.osm.pbf
+          done
+          osmium merge /tmp/filtre-*.osm.pbf -o /tmp/filtre.osm.pbf --overwrite
           ls -lh /tmp/filtre.osm.pbf
       - name: Compter par carrés
         run: python3 outils/lieux.py /tmp/filtre.osm.pbf /tmp/sortie
