@@ -124,6 +124,8 @@
   .retour .texte { white-space: pre-wrap; line-height: 1.45; overflow-wrap: anywhere; }
   .retour .meta { font-size: 11.5px; color: var(--doux); }
   .retour .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .retour .edition-reponse { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--ligne); border-radius: 10px; padding: 10px 12px; }
+  .retour .edition-reponse .actions { align-items: center; }
   .retour .reponse { font-size: 12.5px; color: var(--vert); }
   .retour .proposee { border: 1px dashed var(--rouge); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
   .retour .proposee .qui { font-size: 11.5px; color: var(--doux); }
@@ -1214,23 +1216,36 @@ async function pageRetours() {
     } catch (err) { etat.className = 'message erreur'; etat.textContent = erreur(err); }
   });
 
+  // « Confier à Claude » : 1er appui = demande de confirmation dans le bouton, 2e appui = lancement ; erreurs écrites dans la carte.
   const confier = async (r, bouton) => {
-    if (!confirm('Confier ce retour à Claude ? Une conversation dédiée va chercher et corriger le problème dans Tikette, puis le résultat reviendra ici.')) return;
-    bouton.disabled = true; bouton.textContent = 'Lancement…';
+    const carteEl = bouton.closest('.retour');
+    const msg = carteEl.querySelector('.message-claude') || carteEl.querySelector(':scope > .actions').after(h('div', { class: 'message-claude note-bas', style: 'margin:0' })) || carteEl.querySelector('.message-claude');
+    if (!bouton.dataset.pret) {
+      bouton.dataset.pret = '1'; bouton.textContent = 'Confirmer : lancer Claude';
+      msg.className = 'message-claude note-bas'; msg.textContent = 'Une conversation Claude dédiée va chercher et corriger le problème dans Tikette ; le résultat reviendra ici.';
+      setTimeout(() => { if (bouton.dataset.pret && !bouton.disabled) { delete bouton.dataset.pret; bouton.textContent = r.claude_etat ? '✦ Relancer Claude' : '✦ Confier à Claude'; msg.textContent = ''; } }, 8000);
+      return;
+    }
+    bouton.disabled = true; bouton.textContent = 'Lancement…'; msg.textContent = '';
     try {
       const { data, error } = await sb.functions.invoke('testflight-retours', { body: { confier: r.id } });
       if (error) {
-        let code = '';
-        try { code = (await error.context.json()).erreur; } catch {}
+        let code = '', detail = '';
+        try { const j = await error.context.json(); code = j.erreur || ''; detail = j.detail || ''; } catch {}
+        const statut = error.context?.status ? ' (' + error.context.status + ')' : '';
         throw new Error(code === 'routine-absente' ? 'La tâche Claude n’est pas encore reliée (secrets CLAUDE_ROUTINE_URL et CLAUDE_ROUTINE_TOKEN dans Supabase).'
-          : code === 'jeton' ? 'Le jeton de la tâche Claude est refusé : regénère-le et remplace CLAUDE_ROUTINE_TOKEN.'
+          : code === 'jeton' ? 'Le jeton de la tâche Claude est refusé : regénère-le sur la page de la tâche et remplace CLAUDE_ROUTINE_TOKEN dans Supabase.'
           : code === 'limite' ? 'Trop de lancements cette heure-ci, réessaie plus tard.'
           : code === 'deja' ? 'Claude travaille déjà sur ce retour.'
-          : erreur(error));
+          : code === 'studio' || code === 'connexion' ? 'Connexion à la console expirée : déconnecte-toi puis reconnecte-toi.'
+          : 'Erreur' + statut + (code ? ' « ' + code + ' »' : '') + (detail ? ' : ' + detail : ' : ' + erreur(error)));
       }
       if (data?.session) window.open(data.session, '_blank');
       aller('retours');
-    } catch (e) { alert(e.message); bouton.disabled = false; bouton.textContent = '✦ Confier à Claude'; }
+    } catch (e) {
+      msg.className = 'message-claude message erreur'; msg.textContent = e.message;
+      bouton.disabled = false; delete bouton.dataset.pret; bouton.textContent = r.claude_etat ? '✦ Relancer Claude' : '✦ Confier à Claude';
+    }
   };
   const heure = (d) => new Date(d).toLocaleString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
   const blocClaude = (r) => {
@@ -1240,6 +1255,30 @@ async function pageRetours() {
     if (r.claude_etat === 'a_decider') return h('div', { class: 'claude decider' }, '✦ Claude a besoin de vous' + (r.claude_resume ? ' : ' + r.claude_resume : '') + ' ·', lien);
     return '';
   };
+  // Zone de réponse dans la carte (plus de fenêtre surgissante).
+  const zoneReponse = (r, initial, libelleOk, surOk) => {
+    const zone = h('div', { class: 'edition-reponse' });
+    const champ = h('textarea', { class: 'champ', rows: 4, maxlength: 500, style: 'font-family:inherit;font-size:14px;resize:vertical',
+      placeholder: 'Ta réponse au testeur (tutoiement), ou une note pour vous deux.' });
+    champ.value = initial || '';
+    const compte = h('span', { class: 'note-bas', style: 'margin:0' });
+    const majCompte = () => { compte.textContent = champ.value.length + ' / 500'; };
+    champ.addEventListener('input', majCompte); majCompte();
+    const occupe = (b, fn) => async () => { b.disabled = true; try { await fn(); } catch (e) { compte.textContent = erreur(e); b.disabled = false; } };
+    const ok = h('button', { class: 'btn mini' }, libelleOk);
+    ok.onclick = occupe(ok, () => surOk(champ.value.trim().slice(0, 500), false));
+    const envoyer = r.email ? h('button', { class: 'btn-contour mini' }, libelleOk + ' et envoyer par e-mail') : '';
+    if (envoyer) envoyer.onclick = occupe(envoyer, () => surOk(champ.value.trim().slice(0, 500), true));
+    zone.append(champ, h('div', { class: 'actions' }, ok, envoyer,
+      h('button', { class: 'btn-lien', onclick: () => zone.remove() }, 'Annuler'), compte));
+    setTimeout(() => champ.focus(), 0);
+    return zone;
+  };
+  const ouvrirZone = (carteEl, zone) => {
+    carteEl.querySelector('.edition-reponse')?.remove();
+    carteEl.querySelector(':scope > .actions').before(zone);
+  };
+  const envoyerMail = (r, texte) => { window.location.href = lienReponse({ ...r, reponse: texte }); };
   const proposition = async (r, action, texte) => { await rpc('console_retour_proposition', { p_id: r.id, p_action: action, p_texte: texte ?? null }); aller('retours'); };
   const maj = async (r, changes) => { await rpc('console_retour_enregistrer', { p: { id: r.id, ...changes } }); aller('retours'); };
   const classeGravite = { bloquant: 'alerte', genant: 'attente', mineur: 'gris' };
@@ -1259,9 +1298,13 @@ async function pageRetours() {
       h('div', { class: 'texte' }, r.proposition),
       h('div', { class: 'actions' },
         h('button', { class: 'btn mini', onclick: () => proposition(r, 'valider') }, 'Valider'),
-        h('button', { class: 'btn-contour mini', onclick: () => {
-          const t = prompt('Modifie la réponse avant de la valider :', r.proposition);
-          if (t !== null && t.trim()) proposition(r, 'valider', t.slice(0, 500));
+        h('button', { class: 'btn-contour mini', onclick: (e) => {
+          ouvrirZone(e.target.closest('.retour'), zoneReponse(r, r.proposition, 'Valider', async (t, mail) => {
+            if (!t) return;
+            await rpc('console_retour_proposition', { p_id: r.id, p_action: 'valider', p_texte: t });
+            if (mail) envoyerMail(r, t);
+            aller('retours');
+          }));
         } }, 'Modifier puis valider'),
         h('button', { class: 'btn-lien', onclick: () => proposition(r, 'ignorer') }, 'Ignorer')),
       h('div', { class: 'qui' }, 'Valider marque le retour « Corrigé » et garde la réponse ; rien n’est envoyé au testeur tant que tu n’as pas touché « Envoyer par e-mail ».')) : '',
@@ -1274,9 +1317,12 @@ async function pageRetours() {
         const b = h('button', { class: 'btn mini' }, r.claude_etat ? '✦ Relancer Claude' : '✦ Confier à Claude');
         b.onclick = () => confier(r, b); return b;
       })() : '',
-      h('button', { class: 'btn-contour mini', onclick: () => {
-        const t = prompt('Réponse au testeur ou note (ex. « corrigé dans la version 1.0.0 (7) ») :', r.reponse || '');
-        if (t !== null) maj(r, { reponse: t.slice(0, 500) });
+      h('button', { class: 'btn-contour mini', onclick: (e) => {
+        ouvrirZone(e.target.closest('.retour'), zoneReponse(r, r.reponse, 'Enregistrer', async (t, mail) => {
+          await rpc('console_retour_enregistrer', { p: { id: r.id, reponse: t } });
+          if (mail && t) envoyerMail(r, t);
+          aller('retours');
+        }));
       } }, r.reponse ? 'Modifier la réponse' : 'Répondre'),
       r.email ? h('a', { class: 'btn-contour mini', style: 'text-decoration:none', href: lienReponse(r), title: 'Ouvre ta messagerie avec la réponse déjà écrite' }, 'Envoyer par e-mail') : '',
       h('button', { class: 'btn-lien', onclick: async () => {
