@@ -27,6 +27,7 @@ ACTIVITES = {
     'water_park': 'Parc aquatique', 'zoo': 'Parc animalier', 'aquarium': 'Aquarium', 'planetarium': 'Planétarium',
     'bains': 'Spa / bien-être', 'atelier': 'Atelier / cours', 'winery': 'Domaine / dégustation',
 }
+EXEMPLES = []
 MAIL = re.compile(r'[\w.+-]+@[\w-]+(?:\.[\w-]+)+')
 TEL = re.compile(r'(?:\+33\s?|0)[1-9](?:[\s.-]?\d{2}){4}')
 
@@ -34,6 +35,7 @@ TEL = re.compile(r'(?:\+33\s?|0)[1-9](?:[\s.-]?\d{2}){4}')
 def main():
     sortie, deps = sys.argv[1], [d.strip() for d in sys.argv[2].split(',')]
     lignes, vus = [], set()
+    global EXEMPLES
     csv.field_size_limit(10**9)
     for chemin in sys.argv[3:]:
         with open(chemin, encoding='utf-8', newline='') as f:
@@ -47,6 +49,8 @@ def main():
                 if g not in ACTIVITES:
                     continue
                 contacts = l.get('Contacts_du_POI') or ''
+                if len(EXEMPLES) < 6 and contacts:
+                    EXEMPLES.append(contacts[:300])
                 mails = sorted({m.lower().rstrip('.') for m in MAIL.findall(contacts)})
                 tels = sorted({re.sub(r'[\s.-]', '', t) for t in TEL.findall(contacts)})
                 site = premier_lien(contacts) or ''
@@ -69,6 +73,11 @@ def main():
     par = {}
     for x in lignes:
         par[x['Activité']] = par.get(x['Activité'], 0) + 1
+    import base64, gzip
+    print('EXEMPLES_CONTACTS', EXEMPLES[:6])
+    print('DEBUT_CSV')
+    print(base64.b64encode(gzip.compress(open(sortie, 'rb').read())).decode())
+    print('FIN_CSV')
     print(len(lignes), 'entreprises,', sum(1 for x in lignes if x['E-mail']), 'avec e-mail')
     print(sorted(par.items(), key=lambda kv: -kv[1]))
 
