@@ -91,6 +91,10 @@ def rubrique(t):
         return 'musees'
     if leisure == 'sauna' or (amenity == 'public_bath' and t.get('bath:type') in ('thermal', 'hammam', 'onsen')):
         return 'detente'
+    if t.get('craft') in ('brewery', 'distillery'):
+        return 'domaines'
+    if sport in ('billiards', 'darts', 'axe_throwing') and amenity not in ('bar', 'pub', 'restaurant'):
+        return 'jeux'
     if t.get('craft') == 'winery' or (t.get('shop') == 'wine' and t.get('tasting') == 'yes'):
         return 'domaines'
     if leisure in ('park', 'garden') and t.get('access') != 'private':

@@ -22,6 +22,17 @@ CORE = 'https://www.datatourisme.fr/ontology/core#'
 
 # Le nom d'abord (sans accents, minuscules) : c'est lui qui dit le mieux ce qu'on va faire.
 PAR_MOTS = [
+    # Ajoutés le 8 nov. 2026 (plus de variété, demande de Greg) : placés avant les genres plus larges qui les englobaient.
+    ('vr', r"\b(realite virtuelle|virtual reality|vr (arena|park|game)|casque vr)"),
+    ('hache', r"\b(lancer de haches?|lancer de hache|axe throwing)"),
+    ('tir_arc', r"\b(tir a l.arc|archery|archerie)"),
+    ('labyrinthe', r"\blabyrinthe"),
+    ('cabaret', r"\b(cabaret|diner[- ]spectacle|comedy club|cafe[- ]theatre)"),
+    ('billard', r"\b(billard|flechettes|bar a jeux)"),
+    ('brasserie', r"\b(brasserie artisanale|micro[- ]?brasserie|brasseur|distillerie|rhumerie|cidrerie|biere artisanale)"),
+    ('grotte', r"\b(grotte|gouffre|aven\b|souterrain|carriere de lumieres|cave cathedrale)"),
+    ('observatoire', r"\bobservatoire"),
+    ('ferme', r"\b(ferme pedagogique|ferme decouverte|cueillette|chevrerie|miellerie)"),
     ('aerien', r"\b(montgolfiere|parapente|ulm|parachut|bapteme de l.air|helicoptere|deltaplane|vol libre)"),
     ('eaux_vives', r"\b(rafting|canyoning|hydrospeed|eaux vives|nage en eaux)"),
     ('canoe', r"\b(canoe|kayak|paddle|stand up|pedalo)"),
@@ -42,12 +53,12 @@ PAR_MOTS = [
     ('velo', r"\b(location de velos?|velo ?rail|velorail|rosalie|trottinette|segway|gyropode|cyclo)"),
     ('theme_park', r"\b(parc d.attractions|parc de loisirs|parc a theme|fete foraine permanente)"),
     ('water_park', r"\b(parc aquatique|aquaparc|toboggans)"),
-    ('zoo', r"\b(zoo|parc animalier|reserve africaine|safari|ferme pedagogique|volerie|rapaces)"),
+    ('zoo', r"\b(zoo|parc animalier|reserve africaine|safari|volerie|rapaces)"),
     ('aquarium', r"\baquarium\b"),
-    ('planetarium', r"\b(planetarium|observatoire)"),
+    ('planetarium', r"\b(planetarium)"),
     ('bains', r"\b(spa|hammam|thermes|thalasso|bains|sauna|bien[- ]etre|balneo)"),
     ('atelier', r"\b(atelier|cours de cuisine|poterie|ceramique|souffleur de verre|initiation a)"),
-    ('winery', r"\b(degustation|caveau|cave|domaine|vignoble|vigneron|chateau .{0,30}(vin|cru)|oenolog|brasserie|distillerie|cidrerie|champagne)"),
+    ('winery', r"\b(degustation|caveau|cave|domaine|vignoble|vigneron|chateau .{0,30}(vin|cru)|oenolog|champagne)"),
     ('museum', r"\b(musee|museum|ecomusee)"),
     ('visite', r"\b(visite guidee|visite insolite|chateau|abbaye|citadelle|fort\b|grotte|gouffre|aven\b|souterrain)"),
 ]
@@ -78,6 +89,9 @@ FAUX_AMIS = {
     'visite': r"\b(ministere|fontaine|passage|rive|quartier|ville de|palais de l.elysee|hotel de (ville|brienne))",
     'bains': r"\bpiscine",
     'atelier': r"\b(galerie|ateliers d.artistes|theatre)",
+    # Clubs de tir à l'arc : réservés aux licenciés, pas une sortie.
+    'tir_arc': r"\b(club|compagnie d.arc|association|archers)\b",
+    'billard': r"\b(club|association|academie)\b",
 }
 
 ENFANTS = r"\b(jeune public|enfants?|tout[- ]petits|bebes?|p.tits|kids|anniversaire enfant)\b"
