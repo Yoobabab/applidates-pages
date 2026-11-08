@@ -1240,8 +1240,10 @@ async function pageRetours() {
           : code === 'studio' || code === 'connexion' ? 'Connexion à la console expirée : déconnecte-toi puis reconnecte-toi.'
           : 'Erreur' + statut + (code ? ' « ' + code + ' »' : '') + (detail ? ' : ' + detail : ' : ' + erreur(error)));
       }
-      if (data?.session) window.open(data.session, '_blank');
-      aller('retours');
+      // Pas d'onglet du navigateur : la conversation apparaît dans l'appli Claude (sessions Code), avec une notification.
+      msg.className = 'message-claude message ok';
+      msg.textContent = 'Claude a commencé : la conversation est dans ton appli Claude (Code). Le résultat reviendra ici.';
+      setTimeout(() => aller('retours'), 2500);
     } catch (e) {
       msg.className = 'message-claude message erreur'; msg.textContent = e.message;
       bouton.disabled = false; delete bouton.dataset.pret; bouton.textContent = r.claude_etat ? '✦ Relancer Claude' : '✦ Confier à Claude';
