@@ -125,6 +125,9 @@
   .retour .meta { font-size: 11.5px; color: var(--doux); }
   .retour .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
   .retour .reponse { font-size: 12.5px; color: var(--vert); }
+  .retour .proposee { border: 1px dashed var(--rouge); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+  .retour .proposee .qui { font-size: 11.5px; color: var(--doux); }
+  .retour .proposee .texte { font-size: 13.5px; }
   .retour select.champ { width: auto; padding: 4px 8px; font-size: 12px; }
   form.bloc { display: flex; flex-direction: column; gap: 10px; }
   .ligne-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
@@ -528,11 +531,21 @@ async function demarrer() {
 const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres, retours: pageRetours };
 let courant = { nom: 'ensemble', app: null };
 let cochesCache = null;
+let retoursBadge = 0; // retours à traiter + réponses à valider, toutes applis
+let retoursBadgeLu = false;
+async function compterRetours() {
+  try {
+    const l = await rpc('console_retours', { p_appli: null });
+    retoursBadge = (l || []).filter((r) => r.statut === 'a_traiter' || r.proposition).length;
+    dessinerNav();
+  } catch {}
+}
 let tachesCache = [];
 const estConfirmee = (a) => a.statut === 'confirmee' || CONFIRMEES.has(a.id);
 
 function dessinerNav() {
   const nav = document.getElementById('nav');
+  if (!retoursBadgeLu) { retoursBadgeLu = true; compterRetours(); }
   const onglet = (libelle, nom, app, debut, badge) => h('button', {
     class: 'onglet' + (courant.nom === nom && (courant.app || null) === (app || null) ? ' actif' : ''),
     onclick: () => aller(nom, app),
@@ -546,6 +559,7 @@ function dessinerNav() {
     h('div', { class: 'qui' }, 'Console · ' + email),
     h('button', { class: 'bouton-liens', onclick: ouvrirLiens }, '↗', h('span', {}, 'Liens rapides')),
     onglet('Vue d’ensemble', 'ensemble'),
+    onglet('Retours testeurs', 'retours', null, '', retoursBadge ? String(retoursBadge) : ''),
     h('button', { class: 'bouton-objectifs' + (courant.nom === 'objectifs' ? ' actif' : ''), onclick: () => aller('objectifs') },
       h('span', { class: 'cible', 'aria-hidden': 'true' }),
       h('span', { class: 'textes' }, h('span', { class: 'nom' }, 'Objectifs'), h('span', { class: 'dates' }, 'Greg 09/2029 · Yvan 04/2030'))),
@@ -569,7 +583,6 @@ function dessinerNav() {
     onglet('Partenaires', 'partenaires'),
     onglet('Avances de frais', 'avances'),
     onglet('Offres et abonnements', 'offres'),
-    onglet('Retours testeurs', 'retours'),
     h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
 }
 function aller(nom, app, depuisHistorique) {
@@ -983,7 +996,7 @@ async function pageTikette() {
   const clics = Object.entries(t.clics).sort((a, b) => b[1] - a[1]);
   const notes = t.notes.repartition || {};
   afficherPour(g, 
-    entete('Tikette', 'Chiffres en direct · ' + mots[periode], h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center' }, choix, h('button', { class: 'btn-contour', onclick: () => { filtreRetoursApp = 'tikette'; aller('retours'); } }, 'Retours testeurs'))),
+    entete('Tikette', 'Chiffres en direct · ' + mots[periode], choix),
     h('div', { class: 'kpis' },
       kpi('Nouveaux comptes', nombre(t.comptes.nouveaux), evoComptes.t + ' · ' + nombre(t.comptes.total) + ' en tout', null, evoComptes.c),
       kpi('Abonnés (Tikette Or)', nombre(abonnes(t).payants), nombre(abonnes(t).offerts) + ' offert' + (abonnes(t).offerts > 1 ? 's' : '') + ' · comptes du studio non comptés', 'var(--jaune)'),
@@ -1136,9 +1149,10 @@ async function pageRetours() {
     return;
   }
   captureRetour = null;
+  compterRetours();
   // Retours TestFlight : récupérés tout seuls à l'ouverture (au plus toutes les 10 min).
   if (filtreRetoursApp === 'tikette' && Date.now() - importTestflight > 10 * 60 * 1000) {
-    importerTestflight(false).then((res) => { if (res?.ajoutes && generation === g) aller('retours'); }).catch(() => {});
+    importerTestflight(false).then((res) => { if ((res?.ajoutes || res?.propositions) && generation === g) aller('retours'); }).catch(() => {});
   }
   const visibles = tous.filter((r) => filtreRetours === 'tous' || (filtreRetours === 'ouverts' ? estOuvert(r) : !estOuvert(r)));
   const ouverts = tous.filter(estOuvert);
@@ -1195,6 +1209,7 @@ async function pageRetours() {
     } catch (err) { etat.className = 'message erreur'; etat.textContent = erreur(err); }
   });
 
+  const proposition = async (r, action, texte) => { await rpc('console_retour_proposition', { p_id: r.id, p_action: action, p_texte: texte ?? null }); aller('retours'); };
   const maj = async (r, changes) => { await rpc('console_retour_enregistrer', { p: { id: r.id, ...changes } }); aller('retours'); };
   const classeGravite = { bloquant: 'alerte', genant: 'attente', mineur: 'gris' };
   const classeStatut = { a_traiter: 'alerte', en_cours: 'attente', corrige: 'direct', refuse: 'gris' };
@@ -1206,6 +1221,17 @@ async function pageRetours() {
       r.ecran ? h('b', {}, r.ecran) : ''),
     h('div', { class: 'texte' }, r.texte),
     h('div', { class: 'meta' }, [r.testeur, r.email && r.email !== r.testeur ? r.email : '', dateFr(r.le), r.version, r.appareil].filter(Boolean).join(' · ')),
+    r.proposition ? h('div', { class: 'proposee' },
+      h('div', { class: 'qui' }, '✦ Réponse proposée par Claude · d’après la modification « ' + r.proposition_commit + ' »'),
+      h('div', { class: 'texte' }, r.proposition),
+      h('div', { class: 'actions' },
+        h('button', { class: 'btn mini', onclick: () => proposition(r, 'valider') }, 'Valider'),
+        h('button', { class: 'btn-contour mini', onclick: () => {
+          const t = prompt('Modifie la réponse avant de la valider :', r.proposition);
+          if (t !== null && t.trim()) proposition(r, 'valider', t.slice(0, 500));
+        } }, 'Modifier puis valider'),
+        h('button', { class: 'btn-lien', onclick: () => proposition(r, 'ignorer') }, 'Ignorer')),
+      h('div', { class: 'qui' }, 'Valider marque le retour « Corrigé » et garde la réponse ; rien n’est envoyé au testeur tant que tu n’as pas touché « Envoyer par e-mail ».')) : '',
     r.reponse ? h('div', { class: 'reponse' }, '↳ Réponse' + (r.reponse_le ? ' du ' + dateFr(r.reponse_le.slice(0, 10)) : '') + ' : ' + r.reponse) : '',
     h('div', { class: 'actions' },
       h('select', { class: 'champ', 'aria-label': 'Statut', onchange: (e) => maj(r, { statut: e.target.value }) },
@@ -1231,12 +1257,18 @@ async function pageRetours() {
   } }, 'Copier les retours ouverts');
 
   const etatTf = h('span', { class: 'note-bas', style: 'margin:0' });
+  if (filtreRetoursApp === 'tikette') rpc('console_retours_passage').then((d) => {
+    if (d && !etatTf.textContent) etatTf.textContent = 'Vérification automatique toutes les 5 h · dernière le ' + new Date(d).toLocaleString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+  }).catch(() => {});
   const boutonTf = h('button', { class: 'btn-contour', onclick: async () => {
     boutonTf.disabled = true; etatTf.textContent = 'Lecture de TestFlight…';
     try {
       const res = await importerTestflight(true);
-      etatTf.textContent = res.ajoutes ? res.ajoutes + ' nouveau' + (res.ajoutes > 1 ? 'x' : '') + ' retour' + (res.ajoutes > 1 ? 's' : '') + ' TestFlight' : 'Aucun nouveau retour TestFlight';
-      if (res.ajoutes) setTimeout(() => aller('retours'), 900);
+      const morceaux = [res.ajoutes ? res.ajoutes + ' nouveau' + (res.ajoutes > 1 ? 'x' : '') + ' retour' + (res.ajoutes > 1 ? 's' : '') + ' TestFlight' : 'Aucun nouveau retour TestFlight'];
+      if (res.propositions) morceaux.push(res.propositions + ' réponse' + (res.propositions > 1 ? 's' : '') + ' à valider');
+      if (res.note === 'github-absent') morceaux.push('réponses proposées : il manque le secret GITHUB_LECTURE');
+      etatTf.textContent = morceaux.join(' · ');
+      if (res.ajoutes || res.propositions) setTimeout(() => aller('retours'), 900);
     } catch (e) { etatTf.textContent = e.message; }
     boutonTf.disabled = false;
   } }, 'Récupérer TestFlight');
@@ -1247,6 +1279,7 @@ async function pageRetours() {
     h('div', { class: 'kpis' },
       kpi('À traiter', String(tous.filter((r) => r.statut === 'a_traiter').length), ouverts.length + ' ouvert' + (ouverts.length > 1 ? 's' : '') + ' en tout'),
       kpi('Bugs bloquants', String(bloquants.length), bloquants.length ? 'à corriger avant la sortie' : 'aucun en ce moment', bloquants.length ? 'var(--rouge)' : 'var(--vert)'),
+      kpi('Réponses à valider', String(tous.filter((r) => r.proposition).length), 'proposées d’après nos modifications', tous.some((r) => r.proposition) ? 'var(--rouge)' : undefined),
       kpi('Corrigés', String(tous.filter((r) => r.statut === 'corrige').length), tous.length + ' retour' + (tous.length > 1 ? 's' : '') + ' en tout', 'var(--vert)')),
     h('div', { class: 'grille' },
       h('div', { class: 'panneau' },
