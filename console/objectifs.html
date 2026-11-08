@@ -147,7 +147,7 @@ tr.total td { font-weight: 700; background: var(--carte); }
     <div class="meta">
       <span class="etiquette">Plan du studio · scénario réaliste</span>
       <strong>Priorités, revenus et départs</strong>
-      <span class="chiffre" style="color:var(--creme-doux);font-size:13px">mis à jour le 30 octobre 2026</span>
+      <span class="chiffre" style="color:var(--creme-doux);font-size:13px">mis à jour le 8 novembre 2026</span>
     </div>
   </header>
 
@@ -162,7 +162,7 @@ tr.total td { font-weight: 700; background: var(--carte); }
         <div class="date">Septembre 2029</div>
         <div class="reste" data-cible="2029-09-01">dans 35 mois</div>
         <ul>
-          <li>Le studio a encaissé ≈ 62 000 € sur 12 mois (seuil vers juillet 2029, deux mois de marge)</li>
+          <li>Il faut ≈ 62 000 € encaissés sur 12 mois : atteints vers octobre 2029 depuis le plan du 8 nov. (seuls Tikette, Guinche et robi sortent en 2027), soit ≈ 3 mois de retard à rattraper</li>
           <li>24 000 € nets la première année, soit 2 000 € par mois</li>
           <li>24 000 € de côté : le premier dividende arrive après la clôture des comptes</li>
           <li>Statuts qui permettent de lui verser plus qu'à Yvan jusqu'en avril 2030</li>
@@ -173,16 +173,16 @@ tr.total td { font-weight: 700; background: var(--carte); }
         <div class="date">Avril 2030</div>
         <div class="reste" data-cible="2030-04-01">dans 42 mois</div>
         <ul>
-          <li>Le studio a encaissé ≈ 105 000 € sur 12 mois (seuil vers mars 2030)</li>
+          <li>Il faut ≈ 105 000 € encaissés sur 12 mois : atteints vers juillet 2030 dans le plan du 8 nov.</li>
           <li>Vous deux à 24 000 € nets par an, soit 2 000 € par mois chacun</li>
           <li>24 000 € de côté au moment de partir</li>
-          <li>Tikette, Shivr et robi font à eux trois près des deux tiers des revenus</li>
+          <li>Tikette, Guinche et robi font à eux trois ≈ 60 % des revenus de 2029</li>
         </ul>
       </article>
     </div>
     <div class="suite">
       <span><span class="etiquette">Ensuite</span>&nbsp;&nbsp;<strong>3 000 € nets par mois chacun à partir de 2031</strong></span>
-      <span class="chiffre" style="color:var(--creme-doux)">≈ 155 000 € encaissés sur 12 mois, atteints vers mars 2031</span>
+      <span class="chiffre" style="color:var(--creme-doux)">≈ 155 000 € encaissés sur 12 mois, atteints vers mai 2031</span>
     </div>
   </section>
 
@@ -263,21 +263,21 @@ tr.total td { font-weight: 700; background: var(--carte); }
 
   <footer class="pied">
     <span>Egg Not Found · Greg &amp; Yvan · 50/50</span>
-    <span class="chiffre">Plan du 01.11.2026</span>
+    <span class="chiffre">Plan du 08.11.2026</span>
   </footer>
 </div>
 
 <script>
 let LOGOS = {"tikette": "logos/tikette.png", "shivr": "logos/shivr.png", "robi": "logos/robi.png", "panier-fantome": "logos/panier-fantome.png", "agent-de-foot": "logos/agent-de-foot.png", "guinche": "logos/guinche.png"};
 const PROJETS = [
-  { id: 'tikette', nom: 'Tikette', type: 'Appli', couleur: '#FF6B9A', etat: 'v0.31 · en test', sortie: 'Sortie début 2027', pourquoi: 'Le plus complet : comptes, vrais lieux, vote, IA, abonnement Or.', r: [2000, 15000, 35000], o: [12000, 90000, 200000], c: [300, 3000, 8000] },
-  { id: 'guinche', nom: 'Guinche', type: 'Appli', couleur: '#E0569A', etat: 'v0.1 · en cours', sortie: 'Sortie mi-décembre 2026', pourquoi: 'La seule appli de saison (invitations du Nouvel An) ; cagnotte à 3 % et options de fête dès la V1, et chaque soirée fait connaître l’appli à 10 ou 20 invités.', r: [1500, 8000, 25000], o: [15000, 80000, 250000], c: [300, 1500, 4000] },
-  { id: 'robi', nom: 'robi', type: 'Appli', couleur: '#2EC4A6', etat: 'v0.4 · en cours', sortie: 'Sortie printemps 2027', pourquoi: 'Outil pour plombiers : Formule Pro 39 € par mois et 5 ou 10 % des paiements.', r: [4000, 26000, 52000], o: [9000, 95000, 238000], c: [1000, 7000, 14000] },
-  { id: 'shivr', nom: 'Shivr', type: 'Appli', couleur: '#3FA9F5', etat: 'v0.60 · en pause', sortie: 'Reprise après la sortie de Tikette et robi', pourquoi: 'Très avancé, gros public de collectionneurs qui paie déjà ce genre d’appli.', r: [3000, 20000, 45000], o: [15000, 120000, 250000], c: [500, 4000, 10000] },
-  { id: 'panier-fantome', nom: 'Panier Fantôme', type: 'Appli', couleur: '#8A6BD1', etat: 'v0.1 · en cours', sortie: 'Sortie printemps 2027', pourquoi: 'Simple, tout sur le téléphone, presque aucun coût.', r: [1000, 8000, 15000], o: [3600, 36000, 84000], c: [100, 1000, 2000] },
-  { id: 'applinature', nom: 'AppliNature', type: 'Appli', couleur: '#2F9E44', etat: 'v0.10 · en test', sortie: 'Sortie été 2027', pourquoi: 'IA de reconnaissance déjà bonne ; il faut un serveur et choisir le nom.', r: [500, 6000, 15000], o: [4000, 40000, 90000], c: [100, 1000, 3000] },
-  { id: 'braise', nom: 'BRAISE', type: 'Jeu', couleur: '#C0392B', etat: 'prototype zone 1', sortie: 'Sortie fin 2027 sur Steam', pourquoi: 'Le jeu le plus court à finir : 3 à 4 zones suffisent.', r: [2500, 1500, 600], o: [15000, 12000, 5000], c: [300, 150, 50] },
-  { id: 'attends-moi', nom: 'Attends-moi', type: 'Appli', couleur: '#B6FF3B', etat: 'maquettes', sortie: 'Sortie fin 2027', pourquoi: 'Bonne idée, rien n’est encore codé ; nom à valider par Yvan.', r: [0, 5000, 12000], o: [2000, 30000, 70000], c: [0, 500, 1500] },
+  { id: 'tikette', nom: 'Tikette', type: 'Appli', couleur: '#FF6B9A', etat: 'v0.43 · TestFlight', sortie: 'Sortie lundi 14 décembre 2026', pourquoi: 'Le plus complet : comptes, vrais lieux, vote, IA, abonnement Or.', r: [2000, 15000, 35000], o: [12000, 90000, 200000], c: [300, 3000, 8000] },
+  { id: 'guinche', nom: 'Guinche', type: 'Appli', couleur: '#E0569A', etat: 'v0.1 · en cours', sortie: 'Sortie décembre 2026 / janvier 2027', pourquoi: 'La seule appli de saison (invitations du Nouvel An) ; cagnotte à 3 % et options de fête dès la V1, et chaque soirée fait connaître l’appli à 10 ou 20 invités.', r: [1500, 8000, 25000], o: [15000, 80000, 250000], c: [300, 1500, 4000] },
+  { id: 'robi', nom: 'robi', type: 'Appli', couleur: '#2EC4A6', etat: 'v0.4 · en cours', sortie: 'Sortie en 2027', pourquoi: 'Outil pour plombiers : Formule Pro 39 € par mois et 5 ou 10 % des paiements.', r: [4000, 26000, 52000], o: [9000, 95000, 238000], c: [1000, 7000, 14000] },
+  { id: 'shivr', nom: 'Shivr', type: 'Appli', couleur: '#3FA9F5', etat: 'v0.60 · en pause', sortie: 'Reprise en 2028, après Tikette, Guinche et robi', pourquoi: 'Très avancé, gros public de collectionneurs qui paie déjà ce genre d’appli.', r: [0, 7700, 30000], o: [0, 43100, 168000], c: [0, 1700, 6600] },
+  { id: 'panier-fantome', nom: 'Panier Fantôme', type: 'Appli', couleur: '#8A6BD1', etat: 'v0.1 · en cours', sortie: 'Sortie en 2028', pourquoi: 'Simple, tout sur le téléphone, presque aucun coût.', r: [0, 2800, 11000], o: [0, 15700, 61600], c: [0, 400, 1400] },
+  { id: 'applinature', nom: 'AppliNature', type: 'Appli', couleur: '#2F9E44', etat: 'v0.10 · en test', sortie: 'Sortie en 2028', pourquoi: 'IA de reconnaissance déjà bonne ; il faut un serveur et choisir le nom.', r: [0, 1700, 9500], o: [0, 10200, 57000], c: [0, 300, 1900] },
+  { id: 'braise', nom: 'BRAISE', type: 'Jeu', couleur: '#C0392B', etat: 'prototype zone 1', sortie: 'Sortie en 2028 sur Steam', pourquoi: 'Le jeu le plus court à finir : 3 à 4 zones suffisent.', r: [0, 2000, 1000], o: [0, 12000, 6000], c: [0, 200, 100] },
+  { id: 'attends-moi', nom: 'Attends-moi', type: 'Appli', couleur: '#B6FF3B', etat: 'maquettes', sortie: 'Sortie en 2028 au plus tôt', pourquoi: 'Bonne idée, rien n’est encore codé ; nom à valider par Yvan.', r: [0, 1500, 8000], o: [0, 8700, 46400], c: [0, 200, 1000] },
   { id: 'hearthaven', nom: 'Hearthaven', type: 'Jeu', couleur: '#B5651D', etat: 'v0.1 · en test sur PC', sortie: 'PC en 2028, iPhone vers 2030', pourquoi: 'Beau mais long : 5 à 6 h d’histoire en 3D.', r: [0, 6000, 15000], o: [0, 60000, 150000], c: [0, 1000, 3000] },
   { id: 'agent-de-foot', nom: 'Agent de foot', type: 'Jeu', couleur: '#1E7B4A', etat: 'en cours', sortie: 'Steam en 2028 ou 2029', pourquoi: 'Le plus ambitieux, avec un Pass Saison chaque été.', r: [0, 10000, 20000], o: [0, 80000, 150000], c: [0, 1500, 3000] },
 ];
@@ -438,7 +438,7 @@ function dessinerCourbe() {
   const pts = mois.map((p, i) => x(i).toFixed(1) + ',' + y(p.v).toFixed(1));
   el('polygon', { points: g + ',' + b + ' ' + pts.join(' ') + ' ' + d + ',' + b, fill: 'var(--creme)', opacity: 0.06 }, zone);
   el('polyline', { points: pts.join(' '), fill: 'none', stroke: 'var(--creme)', 'stroke-width': 2.5, class: premierDessin ? 'trace' : '', pathLength: 1, 'stroke-linejoin': 'round' }, zone);
-  [['Tikette · Shivr', 2027, 2], ['robi · Panier F.', 2027, 4], ['BRAISE', 2027, 11]].forEach(([n, a, m], i) => {
+  [['Tikette · Guinche', 2027, 1], ['robi', 2027, 4], ['Les autres projets', 2028, 1]].forEach(([n, a, m], i) => {
     const xi = x(idx(a, m));
     el('circle', { cx: xi, cy: b, r: 4, fill: 'var(--creme-faible)' }, svg);
     el('text', { x: xi + 6, y: b - 10 - i * 16, fill: 'var(--creme-faible)', 'font-size': 11 }, svg, n);
