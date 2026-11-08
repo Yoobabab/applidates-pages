@@ -1,5 +1,5 @@
 # Liste d'entreprises à contacter (espace pro Tikette) : lancement à la main, ≈ 1 min.
-# Le CSV est seulement un artefact gardé 1 jour, jamais publié dans le dépôt.
+# Données publiques (DATAtourisme + sites des entreprises) ; rien n'est publié dans le dépôt.
 name: Prospects espace pro
 on:
   workflow_dispatch:
@@ -9,7 +9,7 @@ on:
         default: '30,84,13,34'
   push:
     branches: [main]
-    paths: ['outils/prospects.py', '.github/workflows/prospects.yml']
+    paths: ['outils/prospects.py', 'outils/contacts_sites.py', '.github/workflows/prospects.yml']
 jobs:
   liste:
     runs-on: ubuntu-latest
@@ -22,8 +22,5 @@ jobs:
           curl -sSL --fail --retry 3 -o /tmp/product.csv "https://www.data.gouv.fr/api/1/datasets/r/0254ad40-3d26-472e-a628-bd9233f22ee0"
       - name: Liste
         run: python3 outils/prospects.py /tmp/prospects.csv "${{ inputs.departements || '30,84,13,34' }}" /tmp/place.csv /tmp/product.csv
-      - uses: actions/upload-artifact@v4
-        with:
-          name: prospects
-          path: /tmp/prospects.csv
-          retention-days: 1
+      - name: E-mails et téléphones publiés sur les sites
+        run: python3 outils/contacts_sites.py /tmp/prospects.csv /tmp/prospects-complet.csv

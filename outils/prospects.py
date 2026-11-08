@@ -73,11 +73,6 @@ def main():
     par = {}
     for x in lignes:
         par[x['Activité']] = par.get(x['Activité'], 0) + 1
-    import base64, gzip
-    print('EXEMPLES_CONTACTS', EXEMPLES[:6])
-    print('DEBUT_CSV')
-    print(base64.b64encode(gzip.compress(open(sortie, 'rb').read())).decode())
-    print('FIN_CSV')
     print(len(lignes), 'entreprises,', sum(1 for x in lignes if x['E-mail']), 'avec e-mail')
     print(sorted(par.items(), key=lambda kv: -kv[1]))
 
