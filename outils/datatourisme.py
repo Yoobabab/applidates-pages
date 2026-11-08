@@ -25,6 +25,12 @@ PAR_MOTS = [
     # Ajoutés le 8 nov. 2026 (plus de variété, demande de Greg) : placés avant les genres plus larges qui les englobaient.
     ('vr', r"\b(realite virtuelle|virtual reality|vr (arena|park|game)|casque vr)"),
     ('hache', r"\b(lancer de haches?|lancer de hache|axe throwing)"),
+    # Insolite (retour de Greg, 8 nov. 2026 : montgolfière, stand de tir, visite d'usine).
+    ('tir', r"\b(stand de tir|ball[- ]trap|tir sportif|tir aux pigeons|tir a la carabine|pas de tir|tir de loisir)"),
+    ('soufflerie', r"\b(soufflerie|chute libre indoor|simulateur de chute|indoor skydiving|wind ?tunnel)"),
+    ('velorail', r"\b(velo ?rail|draisine|cyclorail)"),
+    ('usine', r"\b(visite d.(entreprise|usine)|usine|manufacture|fabrique (de|artisanale)|savonnerie|confiserie|biscuiterie|nougaterie|calissonnerie|berlingots?|chocolaterie|verrerie|cristallerie|faiencerie|porcelaine|coutellerie|tannerie|ganterie|santonn|moulin a (huile|papier)|huilerie|filature|tissage|parfumerie|distillerie de lavande|mine (de|d.)|ecomusee de la mine)"),
+    ('insolite', r"\b(insolite|chiens? de traineau|cani[- ]?(rando|kart|trottinette)|char a voile|flyboard|zorb|bubble ?foot|flottaison|catacombes|phare\b|sous[- ]marin|scaphandr|fauconn|spectacle de rapaces|alpagas?|lamas?\b|autruches?|bisons?|segway|gyropode|trottinette (tout[- ]terrain|electrique)|swin ?golf|foot ?golf|disc ?golf|ecole de cirque|trapeze volant|murder party|soiree enquete|diner dans le noir|train touristique a vapeur|train a vapeur)"),
     ('tir_arc', r"\b(tir a l.arc|archery|archerie)"),
     ('labyrinthe', r"\blabyrinthe"),
     ('cabaret', r"\b(cabaret|diner[- ]spectacle|comedy club|cafe[- ]theatre)"),
@@ -50,7 +56,7 @@ PAR_MOTS = [
     ('miniature_golf', r"\b(mini[- ]?golf|golf miniature|aventure golf)"),
     ('golf', r"\bgolf\b"),
     ('horse_riding', r"\b(equitation|equestre|balade a cheval|randonnee a cheval|poney|ranch|attelage)"),
-    ('velo', r"\b(location de velos?|velo ?rail|velorail|rosalie|trottinette|segway|gyropode|cyclo)"),
+    ('velo', r"\b(location de velos?|rosalie|trottinette|cyclo)"),
     ('theme_park', r"\b(parc d.attractions|parc de loisirs|parc a theme|fete foraine permanente)"),
     ('water_park', r"\b(parc aquatique|aquaparc|toboggans)"),
     ('zoo', r"\b(zoo|parc animalier|reserve africaine|safari|volerie|rapaces)"),
@@ -92,6 +98,9 @@ FAUX_AMIS = {
     # Clubs de tir à l'arc : réservés aux licenciés, pas une sortie.
     'tir_arc': r"\b(club|compagnie d.arc|association|archers)\b",
     'billard': r"\b(club|association|academie)\b",
+    # Stands de tir des clubs : réservés aux licenciés.
+    'tir': r"\b(club|association|federation|ligue|societe de tir|gendarmerie|police|militaire)\b",
+    'usine': r"\b(magasin|boutique|outlet|restaurant|zone|parc d.activites|depot)\b",
 }
 
 ENFANTS = r"\b(jeune public|enfants?|tout[- ]petits|bebes?|p.tits|kids|anniversaire enfant)\b"

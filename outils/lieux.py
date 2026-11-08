@@ -18,6 +18,7 @@ Usage : python3 outils/lieux.py france-filtre.osm.pbf dossier_sortie
 
 import json
 import math
+import re
 import os
 import sys
 
@@ -95,6 +96,8 @@ def rubrique(t):
         return 'domaines'
     if sport in ('billiards', 'darts', 'axe_throwing') and amenity not in ('bar', 'pub', 'restaurant'):
         return 'jeux'
+    if sport == 'shooting' and not re.search(r'club|association|f[ée]d[ée]ration|ligue|soci[ée]t[ée] de tir|gendarmerie|police|militaire', t.get('name', ''), re.I):
+        return 'sensations'
     if t.get('craft') == 'winery' or (t.get('shop') == 'wine' and t.get('tasting') == 'yes'):
         return 'domaines'
     if leisure in ('park', 'garden') and t.get('access') != 'private':
