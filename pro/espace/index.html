@@ -2,12 +2,15 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8XGKHe3ozUNKMHqxJbwcubo8a7i2AkmwopLVewhvkfU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Espace pro · Tikette</title>
 <link rel="icon" href="/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/js/garde.js"></script>
+<script src="/js/supabase-2.45.4.js"></script>
 <script src="/pro/types.js"></script>
 <style>
 :root{--fond:#F5F3F9;--carte:#fff;--bord:#E7E2F0;--bord2:#D9D2E6;--texte:#1E1433;--doux:#6B6283;--pale:#9A92AE;
@@ -374,11 +377,11 @@ async function accueil() {
    </div>
    <div class="grille">
     ${etapes.some((x) => !x[1]) ? `<div class="carte"><h2>${ic('activite')}Bien démarrer</h2>${etapes.map(([t, f]) => `<div class="logiciel"><span style="display:flex;gap:10px;align-items:center;${f ? 'color:var(--pale);text-decoration:line-through' : ''}">${f ? ic('ok', 'style="color:var(--vert)"') : ic('info', 'style="color:var(--pale)"')}${t}</span></div>`).join('')}
-      <button class="btn prim" style="margin-top:12px" onclick="aller('${suite}')">Continuer${ic('fleche')}</button></div>` : ''}
+      <button class="btn prim" style="margin-top:12px" data-aller="${suite}">Continuer${ic('fleche')}</button></div>` : ''}
     <div class="carte"><h2>${ic('calendrier')}Prochaines réservations</h2>${prochaines.map((r) => `<div class="logiciel" data-ouvrir="${r.id}" style="cursor:pointer"><span><b>${nomClient(r)}</b><br><span class="note">${esc(r.offre)} · ${r.personnes} pers.</span></span><span class="note" style="text-align:right">${jourCourt(r.debut)}<br>${heure(r.debut)}</span></div>`).join('') || '<div class="vide">Rien de prévu pour l’instant.</div>'}</div>
     ${av?.nombre ? `<div class="carte"><h2>${ic('etoile')}Avis clients <span style="margin-left:auto;font-family:var(--ft);font-size:22px">${noteTxt(av.moyenne)}</span></h2>${etoiles(+av.moyenne)} <span class="note">${av.nombre} avis · ${av.recommandent ?? 0} % le recommandent</span>
       ${av.avis.slice(0, 2).map((x) => `<div class="avis" style="padding:12px 0 0;margin-top:12px">${etoiles(x.note)} <span class="note">${esc(x.salle || x.offre)} · ${jourCourt(x.debut)}</span>${x.mot ? `<blockquote style="font-size:13.5px">${esc(x.mot)}</blockquote>` : ''}</div>`).join('')}
-      <button class="btn p" style="margin-top:14px" onclick="aller('avis')">Voir tous les avis${ic('fleche')}</button></div>` : ''}
+      <button class="btn p" style="margin-top:14px" data-aller="avis">Voir tous les avis${ic('fleche')}</button></div>` : ''}
    </div></div>`;
   brancherResas($('#vue'), liste, accueil);
 }
@@ -423,7 +426,7 @@ let plan = { offre: null, jour: null, mode: 'jour' };
 const PX = 1.15;
 async function planning() {
   const offres = espace.offres.filter((o) => o.actif);
-  if (!offres.length) { $('#vue').innerHTML = entete('Planning') + `<div class="carte vide">Créez d’abord une activité avec ses horaires.<br><br><button class="btn prim" onclick="aller('activites')">${ic('plus')}Créer une activité</button></div>`; return; }
+  if (!offres.length) { $('#vue').innerHTML = entete('Planning') + `<div class="carte vide">Créez d’abord une activité avec ses horaires.<br><br><button class="btn prim" data-aller="activites">${ic('plus')}Créer une activité</button></div>`; return; }
   const o = plan.offre = offres.find((x) => x.id === plan.offre?.id) || offres[0];
   plan.jour = plan.jour || jourISO(new Date());
   const res = o.ressources.filter((r) => r.actif), auj = jourISO(new Date());
@@ -525,7 +528,7 @@ function activites() {
     return `<div class="offre"><div class="ph" style="${ph ? `background-image:url('${esc(ph)}')` : ''}">${ph ? '' : ic('image')}</div>
     <div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b style="font-size:16px">${esc(o.titre)}</b>${o.actif ? '<span class="etat confirmee">Proposée</span>' : '<span class="etat">En pause</span>'}${!o.horaires.length ? '<span class="etat demandee">Sans horaires</span>' : ''}</div>
     <div class="note" style="margin-top:3px"><span data-types="${esc((o.genres || []).join(','))}"></span>${o.mode === 'privatise' ? `${o.ressources.filter((r) => r.actif).length} salle(s), un groupe à la fois` : `${o.ressources.reduce((s, r) => s + (r.actif ? r.capacite : 0), 0)} places partagées`} · ${o.duree_min} min · ${euros(o.prix_cents)} ${o.prix_par === 'personne' ? 'par personne' : 'le groupe'} · ${o.min_personnes} à ${o.max_personnes} pers. · ${o.confirmation === 'immediate' ? 'confirmation immédiate' : 'vous validez'}${o.demander_prenoms ? ' · prénoms demandés' : ''}</div></div>
-    <button class="btn p" data-modif="${o.id}">${ic('crayon')}Modifier</button></div>`; }).join('') || `<div class="carte vide">Aucune activité pour l’instant.<br><br><button class="btn prim" onclick="editeur(null)">${ic('plus')}Créer ma première activité</button></div>`);
+    <button class="btn p" data-modif="${o.id}">${ic('crayon')}Modifier</button></div>`; }).join('') || `<div class="carte vide">Aucune activité pour l’instant.<br><br><button class="btn prim" data-nouvelle-activite>${ic('plus')}Créer ma première activité</button></div>`);
   $$('[data-types]').forEach(async (x) => { const n = await nomsTypes(x.dataset.types.split(',')); x.textContent = n.length ? n.join(', ') + ' · ' : ''; });
   $('#nouv').onclick = () => editeur(null);
   $$('[data-modif]').forEach((b) => b.onclick = () => editeur(espace.offres.find((o) => o.id === b.dataset.modif)));
@@ -665,6 +668,11 @@ async function stats() {
   $('#exp2').onclick = () => exporter(liste, 'statistiques');
 }
 
+// Boutons écrits dans les pages (pas de onclick dans le HTML : interdit par les règles de sécurité).
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('[data-aller]'); if (a) { e.preventDefault(); aller(a.dataset.aller); return; }
+  if (e.target.closest('[data-nouvelle-activite]')) editeur(null);
+});
 // ───── Avis clients ─────
 const NEGATIFS = ['Trop cher', 'Trop court', 'Trop d’attente', 'Matériel fatigué', 'Difficile à trouver', 'Trop de monde'];
 const REACTIONS = { adore: 'Adoré', bien: 'Bien', bof: 'Bof' };
@@ -745,7 +753,7 @@ function agenda() {
     <div class="copie"><input readonly value="${esc(lien)}"><button class="btn prim p" id="copier">${ic('copier')}Copier</button></div><p class="note" style="margin:8px 0 0">${icp('cadenas')} Lien personnel : ne le publiez pas.</p></div>
   <div class="carte"><h2>${ic('lien')}Votre agenda dans Tikette</h2><p class="note" style="margin:0 0 12px">Vous prenez aussi des réservations ailleurs ? Collez le lien iCal de votre agenda sur chaque salle, dans Activités. Toutes les 10 minutes, Tikette ferme les créneaux déjà pris.</p>
     ${relies.length ? relies.map((r) => `<div class="logiciel"><span>${r}</span><span class="etat confirmee">Relié</span></div>`).join('') : '<p class="note">Aucun agenda relié.</p>'}
-    <button class="btn p" style="margin-top:10px" onclick="aller('activites')">Relier une salle${ic('fleche')}</button></div></div>
+    <button class="btn p" style="margin-top:10px" data-aller="activites">Relier une salle${ic('fleche')}</button></div></div>
   <div class="carte" style="margin-top:16px"><h2>${ic('reglages')}Connexion directe à votre logiciel de réservation</h2><p class="note" style="margin:0 0 6px">Disponibilités en temps réel et réservations Tikette directement dans votre logiciel. Nous les branchons un par un : dites-nous lequel vous utilisez.</p>
     <div class="grille g2" style="gap:0 30px">${LOGICIELS.map((l) => `<div class="logiciel"><span>${l}</span>${e.connecteur_demande.includes(l) ? '<span class="etat confirmee">Demandé</span>' : `<button class="btn p" data-log="${esc(l)}">Je l’utilise</button>`}</div>`).join('')}</div></div>`;
   $('#copier').onclick = () => { navigator.clipboard.writeText(lien); toast('Lien copié.'); };
