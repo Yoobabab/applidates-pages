@@ -4,482 +4,777 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Espace pro Tikette</title>
+<title>Espace pro · Tikette</title>
 <link rel="icon" href="/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
-:root{--fond:#1E1433;--carte:#2A1D45;--carte2:#33244F;--bord:#3B2A5C;--texte:#F7F1FF;--doux:#C9BCE3;--lueur:#FFD166;--rose:#FF6B9A;--violet:#7A3BC4;--vert:#2EC4A6;--rouge:#FF6B6B;
---ft:"Bricolage Grotesque",system-ui,sans-serif;--fx:"DM Sans",Arial,sans-serif;color-scheme:dark}
-*{box-sizing:border-box}html,body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--fx);font-size:15px;line-height:1.5}
-h1,h2,h3{font-family:var(--ft);margin:0;letter-spacing:-.02em}button,input,select,textarea{font:inherit;color:inherit}
-a{color:var(--lueur)}
+:root{--fond:#F5F3F9;--carte:#fff;--bord:#E7E2F0;--bord2:#D9D2E6;--texte:#1E1433;--doux:#6B6283;--pale:#9A92AE;
+--violet:#5B2AA8;--violet2:#EFE8FB;--nuit:#1E1433;--nuit2:#2C1F48;--lueur:#FFD166;--rose:#FF6B9A;
+--vert:#0F8A6D;--vert2:#E2F4EE;--ambre:#9A6A00;--ambre2:#FFF3D1;--rouge:#C93C3C;--rouge2:#FCEBEB;--bleu:#2F5FC4;--bleu2:#E7EEFB;
+--ft:"Bricolage Grotesque",system-ui,sans-serif;--fx:"DM Sans",system-ui,Arial,sans-serif;--ombre:0 1px 2px rgba(30,20,51,.05),0 4px 14px rgba(30,20,51,.05)}
+*{box-sizing:border-box}html,body{margin:0;background:var(--fond);color:var(--texte);font:15px/1.5 var(--fx)}
+h1,h2,h3{font-family:var(--ft);margin:0;letter-spacing:-.015em;font-weight:800}h1{font-size:28px}h2{font-size:18px}h3{font-size:15px}
+button,input,select,textarea{font:inherit;color:inherit}a{color:var(--violet)}
 .cache{display:none!important}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:99px;padding:10px 18px;font-weight:700;cursor:pointer;background:var(--carte2);color:var(--texte);white-space:nowrap}
-.btn.j{background:var(--lueur);color:#1E1433}.btn.v{background:var(--vert);color:#06372E}.btn.r{background:transparent;border:1.5px solid var(--rouge);color:var(--rouge)}.btn.c{background:transparent;border:1.5px solid var(--bord)}
-.btn.p{padding:6px 12px;font-size:13px}.btn:disabled{opacity:.5;cursor:default}
-input,select,textarea{background:#170F29;border:1px solid var(--bord);border-radius:12px;padding:10px 12px;width:100%;outline:none}
-input:focus,select:focus,textarea:focus{border-color:var(--lueur)}
-label.l{display:block;font-size:13px;color:var(--doux);margin:12px 0 5px;font-weight:500}
-.carte{background:var(--carte);border:1px solid var(--bord);border-radius:20px;padding:20px}
-.grille{display:grid;gap:14px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
-.puce{display:inline-block;border-radius:99px;padding:3px 10px;font-size:12px;font-weight:700;background:var(--carte2);color:var(--doux)}
-.puce.demandee{background:#4A3A10;color:var(--lueur)}.puce.confirmee,.puce.venue{background:#0E3B33;color:var(--vert)}.puce.refusee,.puce.expiree,.puce.annulee_pro,.puce.annulee_client,.puce.absente{background:#3B1E2A;color:#FF9DB0}
-.note{font-size:13px;color:var(--doux)}
-/* Connexion */
-#connexion{min-height:100vh;display:grid;place-items:center;padding:20px}
-#connexion .carte{width:100%;max-width:420px;padding:30px}
-.marque{display:flex;align-items:center;gap:8px;font-family:var(--ft);font-weight:800;font-size:22px}.marque img{width:30px;height:30px;border-radius:8px}
-.marque small{font-family:var(--fx);font-size:11px;background:var(--lueur);color:#1E1433;padding:2px 8px;border-radius:99px;letter-spacing:.06em}
-/* Mise en page */
-#appli{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
-nav.cote{background:#170F29;border-right:1px solid var(--bord);padding:20px 14px;display:flex;flex-direction:column;gap:4px;position:sticky;top:0;height:100vh}
-nav.cote .marque{margin:0 6px 20px}
-nav.cote button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;padding:10px 12px;border-radius:12px;cursor:pointer;color:var(--doux);font-weight:500}
-nav.cote button.actif{background:var(--carte2);color:var(--texte)}
-nav.cote button .bulle{margin-left:auto;background:var(--rose);color:#fff;font-size:11px;font-weight:700;border-radius:99px;padding:1px 7px}
-nav.cote .bas{margin-top:auto;font-size:13px;color:var(--doux);padding:8px 12px}
-main{padding:26px 30px 60px;max-width:1180px;width:100%}
-.titre{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}.titre h1{font-size:30px}
-.bandeau{border-radius:16px;padding:14px 18px;margin-bottom:18px;font-weight:500}.bandeau.att{background:#4A3A10;color:#FFE3A0}.bandeau.ok{background:#0E3B33;color:#BFF5E8}
-.kpi{background:var(--carte);border:1px solid var(--bord);border-radius:18px;padding:16px}.kpi small{color:var(--doux);font-size:12px}.kpi b{display:block;font-family:var(--ft);font-size:28px;margin-top:2px}
-.resa{display:grid;grid-template-columns:92px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--bord)}.resa:last-child{border:0}
-.resa .h{font-family:var(--ft);font-size:20px;font-weight:800}.resa .h small{display:block;font-family:var(--fx);font-size:12px;color:var(--doux);font-weight:500}
-.resa .act{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.vide{color:var(--doux);padding:24px;text-align:center}
-/* Planning */
-.plan{overflow:auto;border:1px solid var(--bord);border-radius:16px;background:var(--carte)}
-.plan table{border-collapse:collapse;width:100%;min-width:760px}.plan th,.plan td{border-bottom:1px solid var(--bord);border-right:1px solid var(--bord);padding:6px;vertical-align:top;font-size:13px}
-.plan th{background:#241840;position:sticky;top:0;font-weight:700}.plan td.heure{font-family:var(--ft);font-weight:800;white-space:nowrap;width:64px}
-.case{border-radius:10px;padding:5px 7px;margin:2px 0;cursor:pointer;font-size:12px;line-height:1.3}
-.case.libre{border:1px dashed #5A4785;color:var(--doux)}.case.libre:hover{border-color:var(--lueur);color:var(--lueur)}
-.case.demandee{background:#4A3A10;color:#FFE3A0}.case.confirmee,.case.venue{background:#0E3B33;color:#BFF5E8}.case.ferme{background:#3B1E2A;color:#FF9DB0}.case.agenda{background:#23304F;color:#AFC4FF}
-/* Activités */
-.offre{display:flex;gap:14px;align-items:center;padding:14px;border:1px solid var(--bord);border-radius:16px;margin-bottom:10px;background:var(--carte)}
-.offre .ph{width:64px;height:64px;border-radius:12px;background:var(--carte2) center/cover}
-.choix{display:flex;gap:8px;flex-wrap:wrap}.choix label{display:flex;gap:8px;align-items:center;border:1.5px solid var(--bord);border-radius:14px;padding:10px 12px;cursor:pointer;flex:1;min-width:180px}
-.choix input{width:auto}.choix label:has(input:checked){border-color:var(--lueur);background:#2E2340}
+svg.i{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--bord2);border-radius:10px;padding:9px 14px;font-weight:700;font-size:14px;cursor:pointer;background:#fff;color:var(--texte);white-space:nowrap;line-height:1.2}
+.btn:hover{border-color:var(--violet)}.btn.prim{background:var(--violet);border-color:var(--violet);color:#fff}.btn.prim:hover{background:#4A2290}
+.btn.ok{background:var(--vert);border-color:var(--vert);color:#fff}.btn.non{color:var(--rouge);border-color:#EBC7C7}.btn.non:hover{border-color:var(--rouge)}
+.btn.lien{border:0;background:none;padding:6px 8px;color:var(--doux)}.btn.p{padding:6px 10px;font-size:13px}.btn:disabled{opacity:.5;cursor:default}
+input,select,textarea{background:#fff;border:1px solid var(--bord2);border-radius:10px;padding:9px 12px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--violet);box-shadow:0 0 0 3px var(--violet2)}
+input[type=checkbox],input[type=radio]{width:auto;accent-color:var(--violet)}
+label.l{display:block;font-size:13px;color:var(--doux);margin:14px 0 5px;font-weight:500}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:14px;padding:20px;box-shadow:var(--ombre)}
+.carte>h2{margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.grille{display:grid;gap:16px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.etat{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:2px 9px;font-size:12px;font-weight:700;background:#F0EDF5;color:var(--doux)}
+.etat::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.etat.demandee{background:var(--ambre2);color:var(--ambre)}.etat.confirmee,.etat.venue{background:var(--vert2);color:var(--vert)}
+.etat.refusee,.etat.expiree,.etat.annulee_pro,.etat.annulee_client,.etat.absente{background:var(--rouge2);color:var(--rouge)}
+.note{font-size:13px;color:var(--doux)}.sep{height:1px;background:var(--bord);margin:16px 0}
+.ecran-seul{min-height:100vh;display:grid;place-items:center;padding:20px;background:radial-gradient(1200px 600px at 80% -10%,#3A2470,transparent),var(--nuit)}
+.ecran-seul .carte{width:100%;max-width:410px;padding:32px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--ft);font-weight:800;font-size:21px;letter-spacing:-.02em}.logo img{width:30px;height:30px;border-radius:8px}
+.logo b{font-family:var(--fx);font-size:11px;letter-spacing:.08em;background:var(--lueur);color:var(--nuit);padding:2px 7px;border-radius:6px}
+#appli{display:grid;grid-template-columns:236px 1fr;min-height:100vh}
+nav.cote{background:var(--nuit);color:#D9D0EC;padding:18px 12px;display:flex;flex-direction:column;gap:2px;position:sticky;top:0;height:100vh}
+nav.cote .logo{color:#fff;margin:2px 8px 22px}
+nav.cote button{display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:0;background:transparent;padding:9px 11px;border-radius:9px;cursor:pointer;color:#CFC5E4;font-weight:500;font-size:14px;position:relative}
+nav.cote button:hover{background:var(--nuit2);color:#fff}nav.cote button.actif{background:var(--nuit2);color:#fff}
+nav.cote button.actif::before{content:"";position:absolute;left:-12px;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--lueur)}
+nav.cote .compteur{margin-left:auto;background:var(--rose);color:#fff;font-size:11px;font-weight:700;border-radius:99px;padding:0 7px;line-height:18px}
+nav.cote .bas{margin-top:auto;border-top:1px solid #3A2B5C;padding:12px 8px 0;font-size:13px}
+nav.cote .bas b{display:block;color:#fff;font-size:14px}nav.cote .bas span{color:#A79CC2}
+main{padding:28px 34px 70px;width:100%;max-width:1240px}
+.entete{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.entete p{margin:4px 0 0;color:var(--doux)}.outils{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bandeau{display:flex;gap:12px;align-items:flex-start;border-radius:12px;padding:13px 16px;margin-bottom:18px;font-size:14px;border:1px solid}
+.bandeau.att{background:var(--ambre2);border-color:#F2DCA0;color:#5E4300}.bandeau.info{background:var(--violet2);border-color:#DDD0F5;color:#3D1F73}
+.kpi{background:#fff;border:1px solid var(--bord);border-radius:14px;padding:16px 18px;box-shadow:var(--ombre)}
+.kpi small{display:flex;align-items:center;gap:7px;color:var(--doux);font-size:13px}.kpi b{display:block;font-family:var(--ft);font-size:27px;margin-top:6px;letter-spacing:-.02em}
+.kpi i{font-style:normal;font-size:12px;color:var(--pale)}
+.resa{display:grid;grid-template-columns:78px 1fr auto;gap:14px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--bord);cursor:pointer}
+.resa:last-child{border:0}.resa:hover{background:#FBFAFD}
+.resa .h{font-family:var(--ft);font-size:19px;font-weight:800;line-height:1.1}.resa .h small{display:block;font-family:var(--fx);font-size:12px;color:var(--doux);font-weight:500;margin-top:3px}
+.resa .qui{font-weight:700;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.resa .act{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.vide{color:var(--pale);padding:26px;text-align:center;font-size:14px}
+.onglets{display:inline-flex;background:#ECE8F3;border-radius:10px;padding:3px;gap:2px}.onglets button{border:0;background:none;padding:7px 13px;border-radius:8px;font-weight:700;font-size:13px;color:var(--doux);cursor:pointer}
+.onglets button.on{background:#fff;color:var(--texte);box-shadow:0 1px 3px rgba(30,20,51,.12)}
+.agenda{background:#fff;border:1px solid var(--bord);border-radius:14px;overflow:auto;box-shadow:var(--ombre)}
+.ag-tete{display:grid;position:sticky;top:0;z-index:3;background:#fff;border-bottom:1px solid var(--bord)}
+.ag-tete div{padding:10px 8px;font-weight:700;font-size:13px;text-align:center;border-left:1px solid var(--bord)}.ag-tete div small{display:block;color:var(--doux);font-weight:500}
+.ag-tete div.auj{color:var(--violet)}.ag-corps{display:grid;position:relative}
+.ag-heures{position:relative;border-right:1px solid var(--bord)}.ag-heures span{position:absolute;right:8px;transform:translateY(-50%);font-size:11px;color:var(--pale);font-weight:500}
+.ag-col{position:relative;border-left:1px solid var(--bord);background:repeating-linear-gradient(135deg,#F6F4F9 0 6px,#EFECF4 6px 12px)}
+.ag-ouvert{position:absolute;left:0;right:0;background:#fff;cursor:copy}
+.ag-ligne{position:absolute;left:0;right:0;border-top:1px solid #F0EDF5;pointer-events:none}
+.ag-bloc{position:absolute;border-radius:8px;padding:5px 8px;font-size:12px;line-height:1.3;overflow:hidden;cursor:pointer;border-left:3px solid;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.ag-bloc b{display:block;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ag-bloc span{opacity:.8;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag-bloc.demandee{background:var(--ambre2);border-color:#E3A82B;color:#5E4300}.ag-bloc.confirmee,.ag-bloc.venue{background:var(--vert2);border-color:var(--vert);color:#0B4D3D}
+.ag-bloc.ferme{background:repeating-linear-gradient(135deg,#FBEAEA 0 6px,#F7E0E0 6px 12px);border-color:var(--rouge);color:#7A2424}
+.ag-bloc.agenda{background:var(--bleu2);border-color:var(--bleu);color:#1C3C80}.ag-bloc.hors{background:#EEE9F7;border-color:var(--violet);color:#3D1F73}
+.ag-maintenant{position:absolute;left:0;right:0;height:2px;background:var(--rose);z-index:2;pointer-events:none}.ag-maintenant::before{content:"";position:absolute;left:-4px;top:-3px;width:8px;height:8px;border-radius:50%;background:var(--rose)}
+.legende{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--doux);margin-top:10px}.legende span{display:inline-flex;gap:6px;align-items:center}.legende i{width:12px;height:12px;border-radius:3px;border-left:3px solid}
+.offre{display:grid;grid-template-columns:64px 1fr auto;gap:16px;align-items:center;padding:14px;border:1px solid var(--bord);border-radius:14px;margin-bottom:10px;background:#fff;box-shadow:var(--ombre)}
+.offre .ph{width:64px;height:64px;border-radius:10px;background:var(--violet2) center/cover;display:grid;place-items:center;color:var(--violet)}
+.choix{display:flex;gap:8px;flex-wrap:wrap}.choix label{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--bord2);border-radius:12px;padding:11px 13px;cursor:pointer;flex:1;min-width:200px;font-size:14px}
+.choix label:has(input:checked){border-color:var(--violet);background:#FAF7FF;box-shadow:0 0 0 3px var(--violet2)}.choix input{margin-top:4px}
+.puces label{min-width:0;flex:none;padding:7px 12px;border-radius:99px}.puces label input{margin-top:3px}
 .ligne{display:grid;gap:8px;align-items:center;margin-bottom:8px}
-.photos{display:flex;gap:8px;flex-wrap:wrap}.photos div{width:90px;height:90px;border-radius:12px;background:var(--carte2) center/cover;position:relative}.photos button{position:absolute;top:4px;right:4px;border:0;border-radius:99px;background:#000a;color:#fff;cursor:pointer;width:22px;height:22px}
-.modale{position:fixed;inset:0;background:#0009;display:grid;place-items:center;padding:16px;z-index:20}.modale .carte{width:100%;max-width:820px;max-height:90vh;overflow:auto}
-.copie{display:flex;gap:8px}.copie input{font-size:12px}
-.barres{display:flex;align-items:flex-end;gap:3px;height:140px;padding-top:10px}.barres div{flex:1;background:linear-gradient(var(--lueur),#FFB84D);border-radius:4px 4px 0 0;min-height:2px;position:relative}
-.barres div span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--doux)}
-.logiciel{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--bord)}
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--texte);color:#1E1433;font-weight:700;border-radius:99px;padding:10px 18px;z-index:30}
-@media(max-width:820px){#appli{grid-template-columns:1fr}nav.cote{position:fixed;bottom:0;top:auto;height:auto;width:100%;flex-direction:row;overflow-x:auto;padding:6px;z-index:10;border-right:0;border-top:1px solid var(--bord)}
-nav.cote .marque,nav.cote .bas{display:none}nav.cote button{flex-direction:column;gap:2px;font-size:11px;padding:6px 10px;width:auto;white-space:nowrap}main{padding:18px 16px 90px}.g3,.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.resa{grid-template-columns:70px 1fr}.resa .act{grid-column:1/-1;justify-content:flex-start}}
+.photos{display:flex;gap:8px;flex-wrap:wrap}.photos div{width:88px;height:88px;border-radius:10px;background:var(--violet2) center/cover;position:relative}
+.photos button{position:absolute;top:4px;right:4px;border:0;border-radius:99px;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;width:22px;height:22px;display:grid;place-items:center}
+.photos button svg.i{width:13px;height:13px}
+.voile{position:fixed;inset:0;background:rgba(20,13,36,.45);z-index:20;display:grid;place-items:center;padding:16px}
+.fenetre{background:#fff;border-radius:16px;width:100%;max-width:820px;max-height:92vh;overflow:auto;box-shadow:0 30px 80px rgba(20,13,36,.35)}
+.fenetre.petite{max-width:440px}.fenetre .tete{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--bord);position:sticky;top:0;background:#fff;z-index:1}
+.fenetre .corps{padding:6px 22px 22px}.fenetre .pied{display:flex;gap:10px;justify-content:flex-end;padding:14px 22px;border-top:1px solid var(--bord);position:sticky;bottom:0;background:#fff;flex-wrap:wrap}
+.tiroir{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:100%;background:#fff;z-index:21;box-shadow:-20px 0 60px rgba(20,13,36,.2);display:flex;flex-direction:column}
+.tiroir .corps{padding:18px 22px;overflow:auto;flex:1}.tiroir .tete{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--bord)}
+.tiroir .pied{padding:14px 22px;border-top:1px solid var(--bord);display:flex;gap:8px;flex-wrap:wrap}
+.champs{display:grid;grid-template-columns:130px 1fr;gap:9px 12px;font-size:14px;margin:4px 0}.champs dt{color:var(--doux)}.champs dd{margin:0;font-weight:500}
+.prenoms{display:flex;gap:6px;flex-wrap:wrap}.prenoms span{background:var(--violet2);color:#3D1F73;border-radius:99px;padding:2px 10px;font-size:13px;font-weight:500}
+.copie{display:flex;gap:8px}.copie input{font-size:12.5px;color:var(--doux)}
+.barres{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:10px}.barres div{flex:1;background:var(--violet);opacity:.85;border-radius:4px 4px 0 0;min-height:2px;position:relative}
+.barres div span{position:absolute;bottom:-19px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--pale)}
+.tableau{width:100%;border-collapse:collapse;font-size:14px}.tableau th{text-align:left;font-size:12px;color:var(--doux);font-weight:500;padding:8px;border-bottom:1px solid var(--bord)}
+.tableau td{padding:10px 8px;border-bottom:1px solid var(--bord)}.tableau tr:last-child td{border:0}.tableau td.n{text-align:right;font-variant-numeric:tabular-nums}
+.reglage{display:flex;justify-content:space-between;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--bord)}.reglage:last-child{border:0}
+.reglage p{margin:2px 0 0;font-size:13px;color:var(--doux)}
+.interrupteur{position:relative;width:42px;height:24px;flex:none}.interrupteur input{opacity:0;position:absolute;inset:0;cursor:pointer;z-index:1}
+.interrupteur span{position:absolute;inset:0;border-radius:99px;background:#D6D0E2;transition:.2s}.interrupteur span::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.interrupteur input:checked+span{background:var(--violet)}.interrupteur input:checked+span::after{left:21px}
+.sous-nav{display:flex;flex-direction:column;gap:2px}.sous-nav button{display:flex;gap:10px;align-items:center;border:0;background:none;text-align:left;padding:9px 12px;border-radius:9px;cursor:pointer;font-weight:500;color:var(--doux)}
+.sous-nav button.on{background:#fff;color:var(--texte);font-weight:700;box-shadow:var(--ombre)}
+.logiciel{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--bord);font-size:14px}.logiciel:last-child{border:0}
+.qr{background:#fff;border:1px solid var(--bord);border-radius:12px;padding:10px;width:180px;height:180px}.qr img{width:100%;height:100%}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--nuit);color:#fff;font-weight:500;border-radius:10px;padding:11px 18px;z-index:40;display:flex;gap:9px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+@media(max-width:860px){#appli{grid-template-columns:1fr}nav.cote{position:fixed;bottom:0;top:auto;height:auto;width:100%;flex-direction:row;overflow-x:auto;padding:6px;z-index:10;gap:0}
+nav.cote .logo,nav.cote .bas,nav.cote button.actif::before{display:none}nav.cote button{flex-direction:column;gap:3px;font-size:10.5px;padding:7px 9px;width:auto;white-space:nowrap}
+nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96px}.g3,.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}
+.resa{grid-template-columns:62px 1fr}.resa .act{grid-column:1/-1;justify-content:flex-start}h1{font-size:24px}.colonnes{grid-template-columns:1fr!important}}
 </style>
 </head>
 <body>
-<!-- Connexion par code e-mail (même compte que pour l'inscription) -->
-<section id="connexion" class="cache"><div class="carte">
-  <div class="marque"><img src="/mail/tikette.png" alt="">tikette <small>PRO</small></div>
-  <h1 style="font-size:26px;margin:22px 0 6px">Espace pro</h1>
-  <p class="note">Connectez-vous avec l'adresse e-mail de votre inscription : on vous envoie un code.</p>
+<section id="connexion" class="ecran-seul cache"><div class="carte">
+  <div class="logo"><img src="/mail/tikette.png" alt="">tikette <b>PRO</b></div>
+  <div id="etape-mail"><h1 style="margin:24px 0 6px">Connexion</h1>
+  <p class="note">Adresse e-mail de votre inscription : vous recevez un code à 6 chiffres.</p>
   <form id="f-mail"><label class="l" for="mail">E-mail</label><input id="mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr">
-  <button class="btn j" style="width:100%;margin-top:14px">Recevoir mon code</button></form>
-  <form id="f-code" class="cache"><label class="l" for="code">Code reçu par e-mail</label><input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456">
-  <button class="btn j" style="width:100%;margin-top:14px">Me connecter</button><p class="note" style="margin-top:10px"><a href="#" id="autre-mail">Changer d'adresse</a></p></form>
-  <p id="err-connexion" class="note" style="color:var(--rouge)"></p>
-  <p class="note" style="margin-top:20px">Pas encore partenaire ? <a href="/pro/#inscription">Inscrire mon activité</a></p>
+  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Recevoir mon code</button></form></div>
+  <div id="etape-code" class="cache"><h1 style="margin:24px 0 6px">Vérifiez vos e-mails</h1><p class="note">Code envoyé à <b id="mail-envoye"></b>.</p>
+  <form id="f-code"><label class="l" for="code">Code</label><input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" style="letter-spacing:.3em;font-size:18px">
+  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Se connecter</button></form><p class="note" style="margin-top:12px"><a href="#" id="autre-mail">Changer d'adresse</a></p></div>
+  <div id="etape-mfa" class="cache"><h1 style="margin:24px 0 6px">Double authentification</h1><p class="note">Code à 6 chiffres affiché dans votre appli d'authentification.</p>
+  <form id="f-mfa"><input id="code-mfa" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" style="letter-spacing:.3em;font-size:18px;margin-top:14px">
+  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Valider</button></form></div>
+  <p id="err-connexion" class="note" style="color:var(--rouge);min-height:1em"></p>
+  <div class="sep"></div><p class="note">Pas encore partenaire ? <a href="/pro/#inscription">Inscrire mon activité</a></p>
 </div></section>
 
 <div id="appli" class="cache">
-  <nav class="cote">
-    <div class="marque"><img src="/mail/tikette.png" alt="">tikette <small>PRO</small></div>
-    <button data-vue="accueil">🏠 <span>Accueil</span><span class="bulle cache" id="bulle-valider"></span></button>
-    <button data-vue="reservations">🎟️ <span>Réservations</span></button>
-    <button data-vue="planning">🗓️ <span>Planning</span></button>
-    <button data-vue="activites">✨ <span>Activités</span></button>
-    <button data-vue="agenda">🔗 <span>Agenda et logiciels</span></button>
-    <button data-vue="stats">📊 <span>Statistiques</span></button>
-    <button data-vue="entreprise">🏢 <span>Mon entreprise</span></button>
-    <div class="bas"><span id="nom-ent"></span><br><a href="#" id="deco">Se déconnecter</a></div>
-  </nav>
+  <nav class="cote" id="menu"></nav>
   <main id="vue"></main>
 </div>
+<div id="couche"></div>
 <div id="toast" class="cache"></div>
 
 <script>
 const URL_SUPABASE = 'https://mmoyrhyimcalnztwpydi.supabase.co';
-const CLE_PUBLIQUE = 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH';
-const sb = window.supabase.createClient(URL_SUPABASE, CLE_PUBLIQUE, { auth: { persistSession: true, storageKey: 'tikette-pro' } });
-const $ = (s, r = document) => r.querySelector(s);
+const sb = window.supabase.createClient(URL_SUPABASE, 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH', { auth: { persistSession: true, storageKey: 'tikette-pro' } });
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = (t) => String(t ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const euros = (c) => ((c || 0) / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: (c % 100) ? 2 : 0 });
-const fmt = (iso, o) => new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', ...o }).format(new Date(iso));
-const heure = (iso) => fmt(iso, { hour: '2-digit', minute: '2-digit' });
-const jourTxt = (iso) => fmt(iso, { weekday: 'short', day: 'numeric', month: 'short' });
+const euros = (c) => ((c || 0) / 100).toLocaleString('fr-FR', { style: 'currency', currency: 'EUR', minimumFractionDigits: (c || 0) % 100 ? 2 : 0 });
+const TZ = 'Europe/Paris';
+const fmt = (d, o) => new Intl.DateTimeFormat('fr-FR', { timeZone: TZ, ...o }).format(new Date(d));
+const heure = (d) => fmt(d, { hour: '2-digit', minute: '2-digit' });
+const jourCourt = (d) => fmt(d, { weekday: 'short', day: 'numeric', month: 'short' });
+const jourLong = (d) => fmt(d, { weekday: 'long', day: 'numeric', month: 'long' }).replace(/^./, (c) => c.toUpperCase());
+const jourISO = (d) => new Date(d).toLocaleDateString('fr-CA', { timeZone: TZ });
+const minutesParis = (d) => { const [h, m] = heure(d).split(':').map(Number); return h * 60 + m; };
+const hhmm = (m) => String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(Math.round(m) % 60).padStart(2, '0');
+const enMin = (t) => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+function dateParis(jour, t) {
+  const essai = new Date(`${jour}T${t}:00Z`);
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: TZ, hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(essai).map((x) => [x.type, x.value]));
+  return new Date(essai.getTime() - (Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute) - essai.getTime()));
+}
+const ajouterJours = (iso, n) => { const d = new Date(iso + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const jourSemaine = (iso) => ((new Date(iso + 'T12:00:00Z').getUTCDay() + 6) % 7) + 1;
+const midi = (iso) => iso + 'T12:00:00Z';
+
+const P = {
+  tableau: '<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+  ticket: '<path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2.5"/>',
+  calendrier: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  activite: '<path d="M12 3l2.4 5 5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8z"/>',
+  boutique: '<path d="M4 10v10h16V10M3 6l1.5-3h15L21 6v2a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0z"/><path d="M10 20v-5h4v5"/>',
+  stats: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  lien: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  reglages: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+  sortie: '<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 17l5-5-5-5M15 12H3"/>',
+  ok: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  gauche: '<path d="M15 5l-7 7 7 7"/>', droite: '<path d="M9 5l7 7-7 7"/>', plus: '<path d="M12 5v14M5 12h14"/>',
+  telecharger: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>', gens: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/>',
+  horloge: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', cadenas: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/>', bouclier: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
+  poubelle: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', crayon: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/>',
+  info: '<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/>', cloche: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+  soleil: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M5 19l1.4-1.4M17.6 6.4L19 5"/>',
+  recu: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>', euro: '<path d="M17 6a7 7 0 1 0 0 12M4 10h9M4 14h9"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
+  copier: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', note: '<path d="M5 4h14v12l-4 4H5z"/><path d="M15 20v-4h4M8 9h8M8 13h5"/>',
+  fleche: '<path d="M5 12h14M13 6l6 6-6 6"/>', alerte: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17v.01"/>',
+};
+const ic = (n, s = '') => `<svg class="i" viewBox="0 0 24 24" ${s}>${P[n] || ''}</svg>`;
+const icp = (n) => ic(n, 'style="width:13px;height:13px;vertical-align:-2px"');
+
 const STATUTS = { demandee: 'À valider', confirmee: 'Confirmée', refusee: 'Refusée', expiree: 'Expirée', annulee_client: 'Annulée par le client', annulee_pro: 'Annulée par vous', venue: 'Venue', absente: 'Absente' };
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-const GENRES = [['escape','Escape game'],['laser_tag','Laser game'],['karting','Karting'],['bowling_alley','Bowling'],['canoe','Canoë / kayak / paddle'],['eaux_vives','Rafting / canyoning'],['aerien','Montgolfière / parapente / ULM'],['climbing_adventure','Accrobranche / via ferrata'],['atelier','Atelier / cours'],['winery','Domaine / dégustation'],['brasserie','Brasserie / distillerie'],['usine','Visite d\'atelier / savoir-faire'],['vr','Réalité virtuelle'],['hache','Lancer de hache'],['trampoline_park','Trampoline'],['paintball','Paintball'],['horse_riding','Équitation'],['bains','Spa / bien-être'],['bateau','Bateau / croisière'],['cabaret','Cabaret / dîner-spectacle'],['resto','Restaurant'],['bar','Bar'],['insolite','Activité insolite'],['autre','Autre']];
+const GENRES = [['escape','Escape game'],['laser_tag','Laser game'],['karting','Karting'],['bowling_alley','Bowling'],['canoe','Canoë / kayak / paddle'],['eaux_vives','Rafting / canyoning'],['aerien','Montgolfière / parapente / ULM'],['climbing_adventure','Accrobranche / via ferrata'],['atelier','Atelier / cours'],['winery','Domaine / dégustation'],['brasserie','Brasserie / distillerie'],['usine','Visite de savoir-faire'],['vr','Réalité virtuelle'],['hache','Lancer de hache'],['trampoline_park','Trampoline'],['paintball','Paintball'],['horse_riding','Équitation'],['bains','Spa / bien-être'],['bateau','Bateau / croisière'],['cabaret','Cabaret / dîner-spectacle'],['resto','Restaurant'],['bar','Bar'],['insolite','Activité insolite'],['autre','Autre']];
 const AMBIANCES = [['romantique','Romantique'],['potes','Entre potes'],['girlpower','Entre copines'],['loufoque','Insolite'],['match','Avant / après un match']];
+const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
 let espace = null, vueActuelle = 'accueil';
+const proprio = () => espace?.entreprise.role === 'proprietaire';
 
-function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.remove('cache'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.add('cache'), 2600); }
-async function rpc(nom, args = {}) { const { data, error } = await sb.rpc(nom, args); if (error) { toast(error.message); throw error; } return data; }
+function toast(t, icone = 'ok') { const e = $('#toast'); e.innerHTML = ic(icone) + esc(t); e.classList.remove('cache'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.add('cache'), 2800); }
+async function rpc(nom, args = {}) { const { data, error } = await sb.rpc(nom, args); if (error) { toast(error.message, 'alerte'); throw error; } return data; }
+function fenetre({ titre, corps, pied = '', petite = false }) {
+  const v = document.createElement('div'); v.className = 'voile';
+  v.innerHTML = `<div class="fenetre ${petite ? 'petite' : ''}"><div class="tete"><h2>${titre}</h2><button class="btn lien" data-fermer aria-label="Fermer">${ic('x')}</button></div><div class="corps">${corps}</div>${pied ? `<div class="pied">${pied}</div>` : ''}</div>`;
+  const fermer = () => v.remove();
+  v.addEventListener('mousedown', (e) => { if (e.target === v) fermer(); });
+  $('#couche').appendChild(v); $$('[data-fermer]', v).forEach((b) => b.addEventListener('click', fermer));
+  return { v, fermer };
+}
+function demander({ titre, texte = '', champ = null, valeur = '', bouton = 'Valider', danger = false }) {
+  return new Promise((ok) => {
+    const { v, fermer } = fenetre({ titre, petite: true,
+      corps: `<p style="margin:12px 0 0">${texte}</p>${champ ? `<label class="l">${champ}</label><input id="d-champ" value="${esc(valeur)}" maxlength="200">` : ''}`,
+      pied: `<button class="btn" data-fermer>Annuler</button><button class="btn ${danger ? 'non' : 'prim'}" id="d-ok">${bouton}</button>` });
+    $$('[data-fermer]', v).forEach((b) => b.addEventListener('click', () => ok(null)));
+    $('#d-ok', v).onclick = () => { const r = champ ? $('#d-champ', v).value : true; fermer(); ok(r); };
+    $('#d-champ', v)?.focus();
+  });
+}
 
 // ───── Connexion ─────
 let mailEnCours = '';
+const etape = (n) => ['mail', 'code', 'mfa'].forEach((k) => $('#etape-' + k).classList.toggle('cache', k !== n));
 $('#f-mail').onsubmit = async (e) => {
-  e.preventDefault(); mailEnCours = $('#mail').value.trim();
+  e.preventDefault(); mailEnCours = $('#mail').value.trim(); $('#err-connexion').textContent = '';
   const { error } = await sb.auth.signInWithOtp({ email: mailEnCours, options: { shouldCreateUser: false } });
-  if (error) { $('#err-connexion').textContent = /not found|Signups/i.test(error.message) ? 'Aucun compte avec cette adresse. Inscrivez d’abord votre activité.' : error.message; return; }
-  $('#f-mail').classList.add('cache'); $('#f-code').classList.remove('cache'); $('#code').focus(); $('#err-connexion').textContent = '';
+  if (error) { $('#err-connexion').textContent = /not found|signups/i.test(error.message) ? 'Aucun compte avec cette adresse. Inscrivez d’abord votre activité.' : error.message; return; }
+  $('#mail-envoye').textContent = mailEnCours; etape('code'); $('#code').focus();
 };
 $('#f-code').onsubmit = async (e) => {
   e.preventDefault();
   const { error } = await sb.auth.verifyOtp({ email: mailEnCours, token: $('#code').value.trim(), type: 'email' });
   if (error) { $('#err-connexion').textContent = 'Code incorrect ou expiré.'; return; }
-  demarrer();
+  $('#err-connexion').textContent = ''; demarrer();
 };
-$('#autre-mail').onclick = (e) => { e.preventDefault(); $('#f-code').classList.add('cache'); $('#f-mail').classList.remove('cache'); };
-$('#deco').onclick = async (e) => { e.preventDefault(); await sb.auth.signOut(); location.reload(); };
+$('#autre-mail').onclick = (e) => { e.preventDefault(); etape('mail'); };
+$('#f-mfa').onsubmit = async (e) => {
+  e.preventDefault();
+  const { data } = await sb.auth.mfa.listFactors(); const f = data?.totp?.find((x) => x.status === 'verified');
+  const { error } = await sb.auth.mfa.challengeAndVerify({ factorId: f?.id, code: $('#code-mfa').value.trim() });
+  if (error) { $('#err-connexion').textContent = 'Code incorrect.'; return; }
+  $('#err-connexion').textContent = ''; demarrer();
+};
 
 async function demarrer() {
   const { data } = await sb.auth.getSession();
-  if (!data.session) { $('#connexion').classList.remove('cache'); $('#appli').classList.add('cache'); return; }
+  const montrerConnexion = (n) => { $('#connexion').classList.remove('cache'); $('#appli').classList.add('cache'); etape(n); };
+  if (!data.session) return montrerConnexion('mail');
+  const niv = await sb.auth.mfa.getAuthenticatorAssuranceLevel().catch(() => ({ data: null }));
+  if (niv?.data?.nextLevel === 'aal2' && niv.data.currentLevel !== 'aal2') { montrerConnexion('mfa'); $('#code-mfa').focus(); return; }
   espace = await rpc('pro_mon_espace');
-  if (!espace) { location.href = '/pro/?inscription=1#inscription'; return; }
+  if (!espace && await rpc('pro_accepter_invitation').catch(() => false)) espace = await rpc('pro_mon_espace');
+  if (!espace) { location.href = '/pro/#inscription'; return; }
   $('#connexion').classList.add('cache'); $('#appli').classList.remove('cache');
-  $('#nom-ent').textContent = espace.entreprise.nom;
-  document.querySelectorAll('nav.cote button').forEach((b) => b.onclick = () => aller(b.dataset.vue));
   aller(location.hash.slice(1) || 'accueil');
-  window.addEventListener('hashchange', () => { const v = location.hash.slice(1); if (v && v !== vueActuelle) aller(v); });
+  window.onhashchange = () => { const v = location.hash.slice(1); if (v && v !== vueActuelle) aller(v); };
 }
-async function recharger() { espace = await rpc('pro_mon_espace'); majBulle(); }
-function majBulle() { const n = +espace.entreprise.a_valider || 0; const b = $('#bulle-valider'); b.textContent = n; b.classList.toggle('cache', !n); }
+function dessinerMenu() {
+  const n = +espace.entreprise.a_valider || 0;
+  $('#menu').innerHTML = `<div class="logo"><img src="/mail/tikette.png" alt="">tikette <b>PRO</b></div>`
+    + MENU.map(([k, i, t]) => `<button data-vue="${k}" class="${k === vueActuelle ? 'actif' : ''}">${ic(i)}<span>${t}</span>${k === 'reservations' && n ? `<span class="compteur">${n}</span>` : ''}</button>`).join('')
+    + `<div class="bas"><b>${esc(espace.entreprise.nom)}</b><span>${esc(espace.entreprise.commune || '')}</span><br><button id="deco" style="padding:8px 0;margin-top:6px">${ic('sortie')}<span>Se déconnecter</span></button></div>`;
+  $$('#menu [data-vue]').forEach((b) => b.onclick = () => aller(b.dataset.vue));
+  $('#deco').onclick = async () => { await sb.auth.signOut(); location.reload(); };
+  document.title = (n ? `(${n}) ` : '') + 'Espace pro · Tikette';
+}
+async function recharger() { espace = await rpc('pro_mon_espace'); dessinerMenu(); }
 function aller(v) {
-  vueActuelle = v; location.hash = v;
-  document.querySelectorAll('nav.cote button').forEach((b) => b.classList.toggle('actif', b.dataset.vue === v));
-  majBulle(); window.scrollTo(0, 0);
-  ({ accueil, reservations, planning, activites, agenda, stats, entreprise }[v] || accueil)();
+  if (!MENU.some((m) => m[0] === v)) v = 'accueil';
+  vueActuelle = v; if (location.hash.slice(1) !== v) history.replaceState(null, '', '#' + v);
+  dessinerMenu(); window.scrollTo(0, 0); $('#couche').innerHTML = '';
+  ({ accueil, reservations, planning, activites, fiche, stats, agenda, parametres }[v])();
 }
+const entete = (titre, sous = '', outils = '') => `<div class="entete"><div><h1>${titre}</h1>${sous ? `<p>${sous}</p>` : ''}</div><div class="outils">${outils}</div></div>`;
 
-// ───── Réservations : une ligne ─────
-function ligneResa(r, actions = true) {
+// ───── Réservations ─────
+const nomClient = (r) => r.groupe ? `${esc(r.groupe)}${r.prenom ? ` <span class="note" style="font-weight:500">(${esc(r.prenom)})</span>` : ''}` : esc(r.prenom || 'Client');
+function boutonsResa(r) {
   const passee = new Date(r.debut) < new Date();
-  let act = '';
-  if (actions) {
-    if (r.statut === 'demandee') act = `<button class="btn v p" data-a="accepter" data-id="${r.id}">Accepter</button><button class="btn r p" data-a="refuser" data-id="${r.id}">Refuser</button>`;
-    else if (r.statut === 'confirmee' && !passee) act = `<button class="btn c p" data-a="annuler" data-id="${r.id}">Annuler</button>`;
-    else if (r.statut === 'confirmee' && passee) act = `<button class="btn v p" data-a="venue" data-id="${r.id}">Venu</button><button class="btn r p" data-a="absente" data-id="${r.id}">Absent</button>`;
-  }
-  const limite = r.statut === 'demandee' && r.repondre_avant ? `<div class="note">À répondre avant ${jourTxt(r.repondre_avant)} ${heure(r.repondre_avant)}</div>` : '';
-  return `<div class="resa"><div class="h">${heure(r.debut)}<small>${jourTxt(r.debut)}</small></div>
-    <div><b>${esc(r.prenom || 'Client')} · ${r.personnes} pers.</b> <span class="puce ${r.statut}">${STATUTS[r.statut]}</span>
-    <div class="note">${esc(r.offre)} · ${esc(r.ressource)} · ${euros(r.prix_cents)} · ${esc(r.code)}</div>
-    ${r.message ? `<div class="note">« ${esc(r.message)} »</div>` : ''}${r.motif ? `<div class="note">Motif : ${esc(r.motif)}</div>` : ''}${limite}</div>
-    <div class="act">${act}</div></div>`;
+  if (r.statut === 'demandee') return `<button class="btn ok p" data-a="accepter" data-id="${r.id}">${ic('ok')}Accepter</button><button class="btn non p" data-a="refuser" data-id="${r.id}">Refuser</button>`;
+  if (r.statut === 'confirmee' && passee) return `<button class="btn ok p" data-a="venue" data-id="${r.id}">${ic('ok')}Venu</button><button class="btn non p" data-a="absente" data-id="${r.id}">Absent</button>`;
+  if (r.statut === 'confirmee') return `<button class="btn p" data-a="annuler" data-id="${r.id}">Annuler</button>`;
+  return '';
 }
-function brancherActions(racine, apres) {
-  racine.querySelectorAll('[data-a]').forEach((b) => b.onclick = async () => {
-    const a = b.dataset.a; let motif = '';
-    if (a === 'refuser' || a === 'annuler') { motif = prompt(a === 'refuser' ? 'Motif du refus (le client le verra) :' : 'Motif de l’annulation (le client le verra) :', a === 'refuser' ? 'Complet à cette heure' : ''); if (motif === null) return; }
-    b.disabled = true;
-    const r = await rpc('pro_repondre', { p_id: b.dataset.id, p_action: a, p_motif: motif });
-    if (!r.ok) toast('Impossible : la réservation a changé.'); else toast({ accepter: 'Réservation confirmée, le client est prévenu.', refuser: 'Refusée, le client est prévenu.', annuler: 'Annulée, le client est prévenu.', venue: 'Noté : client venu.', absente: 'Noté : client absent, pas de commission.' }[a]);
-    await recharger(); apres();
-  });
+function ligneResa(r) {
+  return `<div class="resa" data-ouvrir="${r.id}"><div class="h">${heure(r.debut)}<small>${jourCourt(r.debut)}</small></div>
+    <div><div class="qui">${nomClient(r)} <span class="note" style="font-weight:500">· ${r.personnes} pers.</span> <span class="etat ${r.statut}">${STATUTS[r.statut]}</span></div>
+    <div class="note">${esc(r.offre)} · ${esc(r.ressource)} · ${euros(r.prix_cents)}${r.participants?.length ? ` · ${icp('gens')} ${r.participants.length} prénoms` : ''}${r.message || r.note_pro ? ` · ${icp('note')} note` : ''}</div>
+    ${r.statut === 'demandee' && r.repondre_avant ? `<div class="note" style="color:var(--ambre)">${icp('horloge')} Réponse avant ${jourCourt(r.repondre_avant)}, ${heure(r.repondre_avant)}</div>` : ''}</div>
+    <div class="act">${boutonsResa(r)}</div></div>`;
+}
+function brancherResas(racine, liste, apres) {
+  $$('[data-ouvrir]', racine).forEach((l) => l.onclick = (e) => { if (!e.target.closest('[data-a]')) detailResa(liste.find((r) => r.id === l.dataset.ouvrir), apres); });
+  $$('[data-a]', racine).forEach((b) => b.onclick = () => agir(b.dataset.id, b.dataset.a, apres));
+}
+async function agir(id, a, apres) {
+  let motif = '';
+  if (a === 'refuser' || a === 'annuler') {
+    motif = await demander({ titre: a === 'refuser' ? 'Refuser la demande' : 'Annuler la réservation', texte: 'Le client est prévenu dans l’appli avec ce motif.', champ: 'Motif', valeur: a === 'refuser' ? 'Complet à cette heure' : '', bouton: a === 'refuser' ? 'Refuser' : 'Annuler la réservation', danger: true });
+    if (motif === null) return;
+  }
+  const r = await rpc('pro_repondre', { p_id: id, p_action: a, p_motif: motif });
+  if (!r.ok) toast('Impossible : la réservation a changé entre-temps.', 'alerte');
+  else toast({ accepter: 'Confirmée, le client est prévenu.', refuser: 'Refusée, le client est prévenu.', annuler: 'Annulée, le client est prévenu.', venue: 'Noté : client venu.', absente: 'Noté : client absent, aucune commission.' }[a]);
+  $('#couche').innerHTML = ''; await recharger(); apres();
+}
+function detailResa(r, apres) {
+  if (!r) return;
+  const t = document.createElement('div'); t.className = 'voile'; t.style.cssText = 'place-items:stretch end;padding:0';
+  t.innerHTML = `<aside class="tiroir"><div class="tete"><div><h2>${nomClient(r)}</h2><span class="note">Réservation ${esc(r.code)}</span></div><button class="btn lien" data-fermer aria-label="Fermer">${ic('x')}</button></div>
+  <div class="corps"><span class="etat ${r.statut}">${STATUTS[r.statut]}</span>
+  <dl class="champs" style="margin-top:16px"><dt>Quand</dt><dd>${jourLong(r.debut)}, ${heure(r.debut)} – ${heure(r.fin)}</dd><dt>Activité</dt><dd>${esc(r.offre)}</dd>
+  <dt>Salle / places</dt><dd>${esc(r.ressource)}</dd><dt>Personnes</dt><dd>${r.personnes}</dd><dt>Montant</dt><dd>${euros(r.prix_cents)} <span class="note">payé sur place</span></dd>
+  ${r.groupe ? `<dt>Nom de la bande</dt><dd>${esc(r.groupe)}</dd>` : ''}<dt>Réservé par</dt><dd>${esc(r.prenom || '—')}</dd></dl>
+  ${r.participants?.length ? `<h3 style="margin-top:18px">Participants</h3><div class="prenoms" style="margin-top:8px">${r.participants.map((p) => `<span>${esc(p)}</span>`).join('')}</div>` : ''}
+  ${r.message ? `<h3 style="margin-top:18px">Message du client</h3><p style="margin:6px 0 0;background:#F7F5FA;border-radius:10px;padding:10px 12px">${esc(r.message)}</p>` : ''}
+  ${r.motif ? `<h3 style="margin-top:18px">Motif</h3><p class="note">${esc(r.motif)}</p>` : ''}
+  <h3 style="margin-top:18px">Note interne</h3><p class="note" style="margin:2px 0 6px">Visible seulement par votre équipe.</p>
+  <textarea id="t-note" rows="3" maxlength="300" placeholder="Ex. anniversaire, prévoir la bougie">${esc(r.note_pro || '')}</textarea>
+  <button class="btn p" id="t-noter" style="margin-top:8px">Enregistrer la note</button></div>
+  ${boutonsResa(r) ? `<div class="pied">${boutonsResa(r)}</div>` : ''}</aside>`;
+  $('#couche').appendChild(t);
+  t.addEventListener('mousedown', (e) => { if (e.target === t) t.remove(); }); $('[data-fermer]', t).onclick = () => t.remove();
+  $$('[data-a]', t).forEach((b) => b.onclick = () => agir(b.dataset.id, b.dataset.a, apres));
+  $('#t-noter', t).onclick = async () => { await rpc('pro_annoter', { p_id: r.id, p_note: $('#t-note', t).value }); r.note_pro = $('#t-note', t).value; toast('Note enregistrée.'); };
 }
 
-// ───── Accueil ─────
+// ───── Tableau de bord ─────
 async function accueil() {
-  const e = espace.entreprise;
-  const debutMois = new Date(); debutMois.setDate(1); debutMois.setHours(0, 0, 0, 0);
-  const finMois = new Date(debutMois); finMois.setMonth(finMois.getMonth() + 1);
+  const e = espace.entreprise, auj = jourISO(new Date());
+  const debutMois = dateParis(auj.slice(0, 8) + '01', '00:00'), finMois = dateParis(ajouterJours(auj.slice(0, 8) + '01', 32).slice(0, 8) + '01', '00:00');
   const [liste, st] = await Promise.all([
-    rpc('pro_reservations_liste', { p_du: new Date(Date.now() - 864e5).toISOString(), p_au: new Date(Date.now() + 60 * 864e5).toISOString() }),
+    rpc('pro_reservations_liste', { p_du: new Date(Date.now() - 864e5).toISOString(), p_au: new Date(Date.now() + 90 * 864e5).toISOString() }),
     rpc('pro_stats', { p_du: debutMois.toISOString(), p_au: finMois.toISOString() })]);
   const aValider = liste.filter((r) => r.statut === 'demandee');
-  const auj = new Date().toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' });
-  const duJour = liste.filter((r) => new Date(r.debut).toLocaleDateString('fr-CA', { timeZone: 'Europe/Paris' }) === auj && ['confirmee', 'venue'].includes(r.statut));
-  const taux = Math.round(e.taux_actuel * 100);
-  const sansHoraires = espace.offres.filter((o) => o.actif && !o.horaires.length).length;
-  $('#vue').innerHTML = `
-  <div class="titre"><h1>Bonjour 👋</h1>${e.fondateur ? '<span class="puce" style="background:var(--lueur);color:#1E1433">Partenaire fondateur</span>' : ''}</div>
-  ${e.statut === 'en_attente' ? '<div class="bandeau att">Votre inscription est en cours de vérification (48 h au plus). Préparez déjà vos activités et vos horaires : elles apparaîtront dans Tikette dès la validation.</div>' : ''}
-  ${e.statut === 'suspendu' ? '<div class="bandeau att">Votre compte est suspendu : vos activités ne sont plus proposées. Écrivez-nous à contact@tikette.fr.</div>' : ''}
-  ${!espace.offres.length ? '<div class="bandeau ok">Première étape : créez votre activité (prix, salles ou places, horaires). <a href="#activites">Créer mon activité →</a></div>' : ''}
-  ${sansHoraires ? `<div class="bandeau att">${sansHoraires} activité(s) sans horaires : elles ne peuvent pas être réservées.</div>` : ''}
-  <div class="grille g4" style="margin-bottom:18px">
-    <div class="kpi"><small>Réservations ce mois</small><b>${st.reservations}</b></div>
-    <div class="kpi"><small>Personnes</small><b>${st.personnes}</b></div>
-    <div class="kpi"><small>Chiffre d'affaires apporté</small><b>${euros(st.ca_cents)}</b></div>
-    <div class="kpi"><small>Commission (${taux} %)</small><b>${euros(st.commission_cents)}</b></div>
-  </div>
-  <div class="grille g2">
-    <div class="carte"><h2 style="font-size:20px;margin-bottom:6px">À valider ${aValider.length ? `<span class="puce demandee">${aValider.length}</span>` : ''}</h2><div id="l-valider">${aValider.map((r) => ligneResa(r)).join('') || '<div class="vide">Aucune demande en attente.</div>'}</div></div>
-    <div class="carte"><h2 style="font-size:20px;margin-bottom:6px">Aujourd'hui</h2><div id="l-jour">${duJour.map((r) => ligneResa(r)).join('') || '<div class="vide">Aucune réservation aujourd’hui.</div>'}</div></div>
-  </div>`;
-  brancherActions($('#vue'), accueil);
+  const duJour = liste.filter((r) => jourISO(r.debut) === auj && ['confirmee', 'venue', 'absente'].includes(r.statut));
+  const prochaines = liste.filter((r) => r.statut === 'confirmee' && jourISO(r.debut) > auj).slice(0, 6);
+  const relie = espace.offres.some((o) => o.ressources.some((r) => r.ical_url));
+  const etapes = [['Inscription envoyée', true], ['Première activité créée', espace.offres.length > 0], ['Horaires renseignés', espace.offres.some((o) => o.horaires.length)],
+    ['Photos ajoutées', espace.offres.some((o) => o.photos?.length) || e.photos?.length], ['Agenda relié', relie], ['Compte validé par Tikette', e.statut === 'valide']];
+  const suite = !espace.offres.length ? 'activites' : !relie ? 'agenda' : 'activites';
+  $('#vue').innerHTML = entete('Tableau de bord', jourLong(new Date()).replace(/^./, (c) => c.toUpperCase()), e.fondateur ? '<span class="etat" style="background:#FFF3D1;color:#7A5600">Partenaire fondateur</span>' : '')
+  + (e.statut === 'en_attente' ? `<div class="bandeau att">${ic('horloge')}<div><b>Inscription en cours de vérification</b> (48 h au plus). Préparez déjà vos activités et vos horaires : elles seront proposées dans Tikette dès la validation.</div></div>` : '')
+  + (e.statut === 'suspendu' ? `<div class="bandeau att">${ic('alerte')}<div><b>Compte suspendu</b> : vos activités ne sont plus proposées. Écrivez-nous à contact@tikette.fr.</div></div>` : '')
+  + `<div class="grille g4" style="margin-bottom:16px">
+    <div class="kpi"><small>${ic('ticket')}Réservations du mois</small><b>${st.reservations}</b><i>${st.demandes} demandes reçues</i></div>
+    <div class="kpi"><small>${ic('gens')}Personnes accueillies</small><b>${st.personnes}</b><i>ce mois-ci</i></div>
+    <div class="kpi"><small>${ic('euro')}Chiffre d’affaires apporté</small><b>${euros(st.ca_cents)}</b><i>payé chez vous</i></div>
+    <div class="kpi"><small>${ic('recu')}Commission</small><b>${euros(st.commission_cents)}</b><i>taux actuel ${Math.round(e.taux_actuel * 100)} %</i></div></div>
+  <div class="grille colonnes" style="grid-template-columns:1.45fr 1fr;align-items:start">
+   <div class="grille">
+    <div class="carte"><h2>${ic('cloche')}À valider ${aValider.length ? `<span class="etat demandee">${aValider.length}</span>` : ''}</h2>${aValider.map(ligneResa).join('') || '<div class="vide">Aucune demande en attente.</div>'}</div>
+    <div class="carte"><h2>${ic('horloge')}Aujourd’hui</h2>${duJour.map(ligneResa).join('') || '<div class="vide">Aucune réservation aujourd’hui.</div>'}</div>
+   </div>
+   <div class="grille">
+    ${etapes.some((x) => !x[1]) ? `<div class="carte"><h2>${ic('activite')}Bien démarrer</h2>${etapes.map(([t, f]) => `<div class="logiciel"><span style="display:flex;gap:10px;align-items:center;${f ? 'color:var(--pale);text-decoration:line-through' : ''}">${f ? ic('ok', 'style="color:var(--vert)"') : ic('info', 'style="color:var(--pale)"')}${t}</span></div>`).join('')}
+      <button class="btn prim" style="margin-top:12px" onclick="aller('${suite}')">Continuer${ic('fleche')}</button></div>` : ''}
+    <div class="carte"><h2>${ic('calendrier')}Prochaines réservations</h2>${prochaines.map((r) => `<div class="logiciel" data-ouvrir="${r.id}" style="cursor:pointer"><span><b>${nomClient(r)}</b><br><span class="note">${esc(r.offre)} · ${r.personnes} pers.</span></span><span class="note" style="text-align:right">${jourCourt(r.debut)}<br>${heure(r.debut)}</span></div>`).join('') || '<div class="vide">Rien de prévu pour l’instant.</div>'}</div>
+   </div></div>`;
+  brancherResas($('#vue'), liste, accueil);
 }
 
 // ───── Réservations ─────
-let filtreResa = 'avenir';
+let filtreResa = 'valider', rechercheResa = '';
 async function reservations() {
-  const du = filtreResa === 'passees' ? new Date(Date.now() - 365 * 864e5) : new Date(Date.now() - 864e5);
-  const au = filtreResa === 'passees' ? new Date() : new Date(Date.now() + 366 * 864e5);
+  const passees = filtreResa === 'passees';
+  const du = passees ? new Date(Date.now() - 365 * 864e5) : new Date(Date.now() - 864e5), au = passees ? new Date() : new Date(Date.now() + 366 * 864e5);
   let liste = await rpc('pro_reservations_liste', { p_du: du.toISOString(), p_au: au.toISOString() });
   if (filtreResa === 'valider') liste = liste.filter((r) => r.statut === 'demandee');
-  if (filtreResa === 'passees') liste.reverse();
-  $('#vue').innerHTML = `<div class="titre"><h1>Réservations</h1><div style="display:flex;gap:8px;flex-wrap:wrap">
-    ${[['valider', 'À valider'], ['avenir', 'À venir'], ['passees', 'Passées']].map(([k, t]) => `<button class="btn ${filtreResa === k ? 'j' : 'c'} p" data-f="${k}">${t}</button>`).join('')}
-    <button class="btn c p" id="exp">⬇ Export Excel</button></div></div>
-    <div class="carte">${liste.map((r) => ligneResa(r)).join('') || '<div class="vide">Rien ici pour l’instant.</div>'}</div>`;
-  document.querySelectorAll('[data-f]').forEach((b) => b.onclick = () => { filtreResa = b.dataset.f; reservations(); });
+  if (filtreResa === 'avenir') liste = liste.filter((r) => ['confirmee', 'demandee'].includes(r.statut));
+  if (passees) liste.reverse();
+  const dessiner = () => {
+    const q = rechercheResa.toLowerCase();
+    const l = q ? liste.filter((r) => [r.code, r.prenom, r.groupe, r.offre, ...(r.participants || [])].join(' ').toLowerCase().includes(q)) : liste;
+    const parJour = {}; l.forEach((r) => (parJour[jourISO(r.debut)] ||= []).push(r));
+    $('#r-liste').innerHTML = Object.entries(parJour).map(([j, rs]) => `<div class="note" style="font-weight:700;margin:14px 4px 2px">${jourLong(midi(j))}</div>${rs.map(ligneResa).join('')}`).join('') || '<div class="vide">Aucune réservation ici.</div>';
+    brancherResas($('#r-liste'), l, reservations);
+  };
+  $('#vue').innerHTML = entete('Réservations', 'Toutes les réservations venues de Tikette.', `<button class="btn" id="exp">${ic('telecharger')}Exporter (Excel)</button>`)
+  + `<div class="outils" style="margin-bottom:12px;justify-content:space-between"><div class="onglets">${[['valider', 'À valider'], ['avenir', 'À venir'], ['passees', 'Historique']].map(([k, t]) => `<button class="${filtreResa === k ? 'on' : ''}" data-f="${k}">${t}</button>`).join('')}</div>
+    <input id="r-q" placeholder="Rechercher un nom, une bande, un code…" value="${esc(rechercheResa)}" style="max-width:300px"></div><div class="carte" style="padding:6px 16px" id="r-liste"></div>`;
+  $$('[data-f]').forEach((b) => b.onclick = () => { filtreResa = b.dataset.f; reservations(); });
+  $('#r-q').oninput = (e) => { rechercheResa = e.target.value; dessiner(); };
   $('#exp').onclick = () => exporter(liste, 'reservations');
-  brancherActions($('#vue'), reservations);
+  dessiner();
 }
-function exporter(liste, nom) {
-  const col = ['Code', 'Date', 'Heure', 'Activité', 'Salle / places', 'Client', 'Personnes', 'Montant (€)', 'Statut', 'Commission Tikette (€)', 'Message', 'Motif'];
-  const lignes = liste.map((r) => [r.code, fmt(r.debut, { day: '2-digit', month: '2-digit', year: 'numeric' }), heure(r.debut), r.offre, r.ressource, r.prenom, r.personnes,
-    (r.prix_cents / 100).toFixed(2).replace('.', ','), STATUTS[r.statut], (r.commission_cents / 100).toFixed(2).replace('.', ','), r.message, r.motif]);
+function telechargerCsv(col, lignes, nom) {
   const csv = '﻿' + [col, ...lignes].map((l) => l.map((v) => `"${String(v ?? '').replace(/"/g, '""')}"`).join(';')).join('\r\n');
-  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
-  a.download = `tikette-${nom}-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' })); a.download = `tikette-${nom}-${jourISO(new Date())}.csv`; a.click();
+}
+const virgule = (c) => ((c || 0) / 100).toFixed(2).replace('.', ',');
+function exporter(liste, nom) {
+  telechargerCsv(['Code', 'Date', 'Heure', 'Activité', 'Salle / places', 'Réservé par', 'Bande', 'Participants', 'Personnes', 'Montant (€)', 'Statut', 'Commission (€)', 'Message', 'Note interne', 'Motif'],
+    liste.map((r) => [r.code, fmt(r.debut, { day: '2-digit', month: '2-digit', year: 'numeric' }), heure(r.debut), r.offre, r.ressource, r.prenom, r.groupe, (r.participants || []).join(', '), r.personnes,
+      virgule(r.prix_cents), STATUTS[r.statut], virgule(r.commission_cents), r.message, r.note_pro, r.motif]), nom);
 }
 
-// ───── Planning (semaine, par activité) ─────
-let planOffre = null, planLundi = null;
-function lundiDe(d) { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
-function dateParis(jourISO, hhmm) { // « 2026-11-20 » + « 14:00 » heure de Paris → Date
-  const essai = new Date(`${jourISO}T${hhmm}:00Z`);
-  const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Paris', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).formatToParts(essai).map((x) => [x.type, x.value]));
-  const vu = Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute);
-  return new Date(essai.getTime() - (vu - essai.getTime()));
-}
+// ───── Planning ─────
+let plan = { offre: null, jour: null, mode: 'jour' };
+const PX = 1.15;
 async function planning() {
   const offres = espace.offres.filter((o) => o.actif);
-  if (!offres.length) { $('#vue').innerHTML = '<div class="titre"><h1>Planning</h1></div><div class="carte vide">Créez d’abord une activité avec ses horaires.</div>'; return; }
-  planOffre = offres.find((o) => o.id === planOffre?.id) || offres[0];
-  planLundi = planLundi || lundiDe(new Date());
-  const fin = new Date(planLundi); fin.setDate(fin.getDate() + 7);
-  const [liste, fermetures] = [await rpc('pro_reservations_liste', { p_du: planLundi.toISOString(), p_au: fin.toISOString() }), planOffre.fermetures];
-  const jours = [...Array(7)].map((_, i) => { const d = new Date(planLundi); d.setDate(d.getDate() + i); return d.toLocaleDateString('fr-CA'); });
-  // Toutes les heures de début possibles de la semaine
-  const heures = new Set();
-  planOffre.horaires.forEach((h) => { let [a, b] = h.debut.split(':').map(Number); let t = a * 60 + b; const [c, d] = h.fin.split(':').map(Number); const f = c * 60 + d - planOffre.duree_min;
-    for (; t <= f; t += h.pas_min) heures.add(String(Math.floor(t / 60)).padStart(2, '0') + ':' + String(t % 60).padStart(2, '0')); });
-  const hs = [...heures].sort();
-  const res = planOffre.ressources.filter((r) => r.actif);
-  const cellule = (jour, hhmm, ji) => {
-    const ouvert = planOffre.horaires.some((h) => h.jour === ji + 1 && h.debut <= hhmm && hhmm <= h.fin);
-    if (!ouvert) return '<td style="background:#170F29"></td>';
-    const debut = dateParis(jour, hhmm), finC = new Date(debut.getTime() + planOffre.duree_min * 6e4);
-    let html = '';
-    for (const r of res) {
-      const ici = liste.filter((x) => x.ressource_id === r.id && ['demandee', 'confirmee', 'venue'].includes(x.statut) && new Date(x.debut) < finC && new Date(x.fin) > debut);
-      const ferm = fermetures.find((f) => (!f.ressource_id || f.ressource_id === r.id) && new Date(f.debut) < finC && new Date(f.fin) > debut);
-      const nom = res.length > 1 ? esc(r.nom) + ' · ' : '';
-      if (ici.length) {
-        const pers = ici.reduce((s, x) => s + x.personnes, 0);
-        html += ici.map((x) => `<div class="case ${x.statut}" title="${esc(x.code)}">${nom}${esc(x.prenom || 'Client')} · ${x.personnes} p.${planOffre.mode === 'places' ? ` (${pers}/${r.capacite})` : ''}</div>`).join('');
-      } else if (ferm) html += `<div class="case ferme" data-rouvrir="${ferm.id}">${nom}Fermé · rouvrir</div>`;
-      else html += `<div class="case libre" data-fermer="${r.id}" data-debut="${debut.toISOString()}">${nom}Libre · fermer</div>`;
-    }
-    return `<td>${html}</td>`;
+  if (!offres.length) { $('#vue').innerHTML = entete('Planning') + `<div class="carte vide">Créez d’abord une activité avec ses horaires.<br><br><button class="btn prim" onclick="aller('activites')">${ic('plus')}Créer une activité</button></div>`; return; }
+  const o = plan.offre = offres.find((x) => x.id === plan.offre?.id) || offres[0];
+  plan.jour = plan.jour || jourISO(new Date());
+  const res = o.ressources.filter((r) => r.actif), auj = jourISO(new Date());
+  const jours = plan.mode === 'jour' ? [plan.jour] : [...Array(7)].map((_, i) => ajouterJours(plan.jour, i - (jourSemaine(plan.jour) - 1)));
+  const du = dateParis(jours[0], '00:00'), au = dateParis(ajouterJours(jours[jours.length - 1], 1), '00:00');
+  const [liste, ferm] = await Promise.all([rpc('pro_reservations_liste', { p_du: du.toISOString(), p_au: au.toISOString() }), rpc('pro_fermetures_periode', { p_du: du.toISOString(), p_au: au.toISOString() })]);
+  const resas = liste.filter((r) => r.offre_id === o.id && ['demandee', 'confirmee', 'venue'].includes(r.statut));
+  const fermes = ferm.filter((f) => f.offre_id === o.id);
+  const hVus = o.horaires.filter((h) => jours.some((j) => jourSemaine(j) === h.jour));
+  let min = hVus.length ? Math.min(...hVus.map((h) => enMin(h.debut))) : 600, max = hVus.length ? Math.max(...hVus.map((h) => enMin(h.fin))) : 1200;
+  min = Math.floor(min / 60) * 60 - 30; max = Math.ceil(max / 60) * 60 + 30; const H = (max - min) * PX, y = (m) => (m - min) * PX;
+  const maj = (t) => t.replace(/^./, (x) => x.toUpperCase());
+  const colonnes = plan.mode === 'jour' ? res.map((r) => ({ jour: plan.jour, res: [r], titre: esc(r.nom), sous: `${r.capacite} ${o.mode === 'privatise' ? 'pers. max.' : 'places'}${r.ical_url ? ' · agenda relié' : ''}` }))
+    : jours.map((j) => ({ jour: j, res, titre: maj(fmt(midi(j), { weekday: 'long' })), sous: fmt(midi(j), { day: 'numeric', month: 'short' }) }));
+  const grille = `64px repeat(${colonnes.length},${plan.mode === 'jour' ? 'minmax(170px,1fr)' : 'minmax(118px,1fr)'})`;
+  const titrePeriode = plan.mode === 'jour' ? maj(jourLong(midi(plan.jour))) : `Semaine du ${fmt(midi(jours[0]), { day: 'numeric', month: 'long' })}`;
+  const colonne = (c) => {
+    const js = jourSemaine(c.jour); let h = '';
+    o.horaires.filter((x) => x.jour === js).forEach((x) => { h += `<div class="ag-ouvert" style="top:${y(enMin(x.debut))}px;height:${(enMin(x.fin) - enMin(x.debut)) * PX}px"></div>`; });
+    for (let m = Math.ceil(min / 60) * 60; m < max; m += 60) h += `<div class="ag-ligne" style="top:${y(m)}px"></div>`;
+    const ids = c.res.map((r) => r.id), plusieurs = res.length > 1 && plan.mode === 'semaine';
+    const nomRes = (id) => res.find((r) => r.id === id)?.nom || '';
+    const items = [];
+    fermes.filter((f) => (!f.ressource_id || ids.includes(f.ressource_id)) && jourISO(f.debut) <= c.jour && jourISO(f.fin) >= c.jour).forEach((f) => {
+      const a = jourISO(f.debut) < c.jour ? min : Math.max(min, minutesParis(f.debut)), b = jourISO(f.fin) > c.jour ? max : Math.min(max, minutesParis(f.fin));
+      if (b <= a) return;
+      const cls = f.source === 'ical' ? 'agenda' : f.motif === 'hors_tikette' ? 'hors' : 'ferme';
+      const lib = f.source === 'ical' ? 'Pris dans votre agenda' : f.motif === 'hors_tikette' ? 'Réservé hors Tikette' : f.motif === 'complet' ? 'Complet' : 'Fermé';
+      const sous = [plusieurs ? (f.ressource_id ? nomRes(f.ressource_id) : 'Toutes les salles') : '', f.note].filter(Boolean).map(esc).join(' · ');
+      items.push({ a, b, html: (st) => `<div class="ag-bloc ${cls}" data-ferm="${f.id}" data-source="${f.source}" style="${st}"><b>${lib}</b><span>${sous}</span></div>` });
+    });
+    resas.filter((x) => ids.includes(x.ressource_id) && jourISO(x.debut) === c.jour).forEach((x) => {
+      const a = minutesParis(x.debut);
+      items.push({ a, b: a + o.duree_min, html: (st) => `<div class="ag-bloc ${x.statut}" data-ouvrir="${x.id}" style="${st}"><b>${hhmm(a)} · ${esc(x.groupe || x.prenom || 'Client')}</b><span>${x.personnes} pers.${x.statut === 'demandee' ? ' · à valider' : ''}</span>${plusieurs ? `<span>${esc(x.ressource)}</span>` : ''}</div>` });
+    });
+    // Placement : les blocs qui se chevauchent se partagent la largeur
+    items.sort((p, q) => p.a - q.a || q.b - p.b);
+    let groupe = [], finGroupe = -1;
+    const poser = () => { const voies = []; groupe.forEach((it) => { let v = voies.findIndex((f) => f <= it.a); if (v < 0) { v = voies.length; voies.push(0); } voies[v] = it.b; it.v = v; });
+      groupe.forEach((it) => { const w = 100 / voies.length; h += it.html(`top:${y(it.a)}px;height:${Math.max(28, (it.b - it.a) * PX - 2)}px;left:calc(${it.v * w}% + 3px);width:calc(${w}% - 6px)`); }); groupe = []; };
+    items.forEach((it) => { if (it.a >= finGroupe && groupe.length) poser(); groupe.push(it); finGroupe = Math.max(finGroupe, it.b); });
+    if (groupe.length) poser();
+    if (c.jour === auj) { const m = minutesParis(new Date()); if (m > min && m < max) h += `<div class="ag-maintenant" style="top:${y(m)}px"></div>`; }
+    return `<div class="ag-col" style="height:${H}px" data-jour="${c.jour}" data-res="${c.res.length === 1 ? c.res[0].id : ''}">${h}</div>`;
   };
-  $('#vue').innerHTML = `<div class="titre"><h1>Planning</h1><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-    <select id="p-offre" style="width:auto">${offres.map((o) => `<option value="${o.id}" ${o.id === planOffre.id ? 'selected' : ''}>${esc(o.titre)}</option>`).join('')}</select>
-    <button class="btn c p" id="p-av">←</button><b>${planLundi.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' })}</b><button class="btn c p" id="p-ap">→</button></div></div>
-    <p class="note" style="margin:-8px 0 12px">Touchez un créneau libre pour le fermer (complet, réservé par téléphone…), un créneau fermé pour le rouvrir. Les créneaux pris dans votre agenda relié apparaissent tout seuls.</p>
-    <div class="plan"><table><thead><tr><th></th>${jours.map((j, i) => `<th>${JOURS[i].slice(0, 3)} ${j.slice(8)}/${j.slice(5, 7)}</th>`).join('')}</tr></thead>
-    <tbody>${hs.map((hh) => `<tr><td class="heure">${hh}</td>${jours.map((j, i) => cellule(j, hh, i)).join('')}</tr>`).join('') || '<tr><td class="vide" colspan="8">Aucun horaire pour cette activité.</td></tr>'}</tbody></table></div>`;
-  $('#p-offre').onchange = (e) => { planOffre = offres.find((o) => o.id === e.target.value); planning(); };
-  $('#p-av').onclick = () => { planLundi.setDate(planLundi.getDate() - 7); planning(); };
-  $('#p-ap').onclick = () => { planLundi.setDate(planLundi.getDate() + 7); planning(); };
-  document.querySelectorAll('[data-fermer]').forEach((c) => c.onclick = async () => {
-    const d = new Date(c.dataset.debut);
-    await rpc('pro_fermer', { p_offre: planOffre.id, p_debut: d.toISOString(), p_fin: new Date(d.getTime() + planOffre.duree_min * 6e4).toISOString(), p_motif: 'complet', p_ressource: c.dataset.fermer });
-    toast('Créneau fermé.'); await recharger(); planning();
+  const heuresAxe = []; for (let m = Math.ceil(min / 60) * 60; m < max; m += 60) heuresAxe.push(`<span style="top:${y(m)}px">${hhmm(m)}</span>`);
+  $('#vue').innerHTML = entete('Planning', 'Cliquez sur une plage libre pour la bloquer, sur un bloc pour l’ouvrir.',
+    `<select id="p-offre" style="width:auto">${offres.map((x) => `<option value="${x.id}" ${x.id === o.id ? 'selected' : ''}>${esc(x.titre)}</option>`).join('')}</select>
+     <div class="onglets"><button data-m="jour" class="${plan.mode === 'jour' ? 'on' : ''}">Jour</button><button data-m="semaine" class="${plan.mode === 'semaine' ? 'on' : ''}">Semaine</button></div>`)
+  + `<div class="outils" style="margin-bottom:12px"><button class="btn p" id="p-auj">Aujourd’hui</button><button class="btn p" id="p-av" aria-label="Précédent">${ic('gauche')}</button><button class="btn p" id="p-ap" aria-label="Suivant">${ic('droite')}</button>
+     <h2 style="margin-left:6px">${titrePeriode}</h2></div>
+  <div class="agenda"><div class="ag-tete" style="grid-template-columns:${grille}"><div style="border:0"></div>${colonnes.map((c) => `<div class="${c.jour === auj && plan.mode === 'semaine' ? 'auj' : ''}">${c.titre}<small>${c.sous}</small></div>`).join('')}</div>
+  <div class="ag-corps" style="grid-template-columns:${grille}"><div class="ag-heures" style="height:${H}px">${heuresAxe.join('')}</div>${colonnes.map(colonne).join('')}</div></div>
+  <div class="legende"><span><i style="background:var(--vert2);border-color:var(--vert)"></i>Confirmée</span><span><i style="background:var(--ambre2);border-color:#E3A82B"></i>À valider</span>
+  <span><i style="background:var(--bleu2);border-color:var(--bleu)"></i>Pris dans votre agenda</span><span><i style="background:#EEE9F7;border-color:var(--violet)"></i>Réservé hors Tikette</span><span><i style="background:var(--rouge2);border-color:var(--rouge)"></i>Fermé / complet</span><span><i style="background:#EFECF4;border-color:#D6D0E2"></i>Hors horaires</span></div>`;
+  $('#p-offre').onchange = (e) => { plan.offre = offres.find((x) => x.id === e.target.value); planning(); };
+  $$('[data-m]').forEach((b) => b.onclick = () => { plan.mode = b.dataset.m; planning(); });
+  const pas = plan.mode === 'jour' ? 1 : 7;
+  $('#p-auj').onclick = () => { plan.jour = auj; planning(); };
+  $('#p-av').onclick = () => { plan.jour = ajouterJours(plan.jour, -pas); planning(); };
+  $('#p-ap').onclick = () => { plan.jour = ajouterJours(plan.jour, pas); planning(); };
+  brancherResas($('#vue'), resas, planning);
+  $$('[data-ferm]').forEach((b) => b.onclick = async (ev) => {
+    ev.stopPropagation();
+    if (b.dataset.source === 'ical') return toast('Ce créneau vient de votre agenda : libérez-le dans votre agenda.', 'info');
+    if (await demander({ titre: 'Rouvrir ce créneau ?', texte: 'Il pourra de nouveau être réservé dans Tikette.', bouton: 'Rouvrir' })) { await rpc('pro_rouvrir', { p_fermeture: b.dataset.ferm }); toast('Créneau rouvert.'); planning(); }
   });
-  document.querySelectorAll('[data-rouvrir]').forEach((c) => c.onclick = async () => { await rpc('pro_rouvrir', { p_fermeture: c.dataset.rouvrir }); toast('Créneau rouvert.'); await recharger(); planning(); });
+  $$('.ag-col').forEach((col) => col.addEventListener('click', (ev) => {
+    if (ev.target.closest('.ag-bloc') || !ev.target.closest('.ag-ouvert')) return;
+    const rect = col.getBoundingClientRect(), m = min + (ev.clientY - rect.top) / PX, js = jourSemaine(col.dataset.jour);
+    let debut = null;
+    o.horaires.filter((x) => x.jour === js).forEach((x) => { for (let t = enMin(x.debut); t + o.duree_min <= enMin(x.fin); t += x.pas_min) if (m >= t && m < t + Math.max(x.pas_min, 15)) debut = t; });
+    if (debut === null) return toast('Aucun départ à cette heure-là.', 'info');
+    let resId = col.dataset.res;
+    if (!resId) resId = res[Math.min(res.length - 1, Math.floor((ev.clientX - rect.left) / (rect.width / res.length)))].id;
+    bloquer(o, res.find((r) => r.id === resId), col.dataset.jour, debut);
+  }));
+}
+function bloquer(o, r, jour, debut) {
+  const { v, fermer } = fenetre({ titre: 'Bloquer ce créneau', petite: true,
+    corps: `<p style="margin:12px 0 4px"><b>${esc(o.titre)} · ${esc(r.nom)}</b><br><span class="note">${jourLong(midi(jour))}, ${hhmm(debut)} – ${hhmm(debut + o.duree_min)}</span></p>
+      <div class="choix" style="flex-direction:column;margin-top:12px"><label><input type="radio" name="b-motif" value="hors_tikette" checked><span><b>Réservé hors Tikette</b><br><span class="note">Téléphone, votre site, sur place…</span></span></label>
+      <label><input type="radio" name="b-motif" value="complet"><span><b>Complet</b></span></label><label><input type="radio" name="b-motif" value="ferme"><span><b>Fermé</b><br><span class="note">Pour toute une période : Paramètres › Congés et fermetures.</span></span></label></div>
+      <label class="l">Note (facultatif)</label><input id="b-note" maxlength="120" placeholder="Ex. Famille Martin, 5 pers.">
+      <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px"><input type="checkbox" id="b-tout"> Toutes les salles de cette activité</label>`,
+    pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="b-ok">Bloquer</button>` });
+  $('#b-ok', v).onclick = async () => {
+    const d = dateParis(jour, hhmm(debut));
+    await rpc('pro_fermer', { p_offre: o.id, p_debut: d.toISOString(), p_fin: new Date(d.getTime() + o.duree_min * 6e4).toISOString(), p_motif: $('input[name=b-motif]:checked', v).value,
+      p_ressource: $('#b-tout', v).checked ? null : r.id, p_note: $('#b-note', v).value });
+    fermer(); toast('Créneau bloqué.'); planning();
+  };
 }
 
 // ───── Activités ─────
 function activites() {
-  $('#vue').innerHTML = `<div class="titre"><h1>Activités</h1><button class="btn j" id="nouv">+ Nouvelle activité</button></div>
-  ${espace.offres.map((o) => `<div class="offre"><div class="ph" style="background-image:url('${esc((o.photos || [])[0] || (espace.entreprise.photos || [])[0] || '')}')"></div>
-    <div style="flex:1"><b>${esc(o.titre)}</b> ${o.actif ? '' : '<span class="puce">En pause</span>'}<div class="note">${o.mode === 'privatise' ? `${o.ressources.filter((r) => r.actif).length} salle(s) privatisée(s)` : `${o.ressources.reduce((s, r) => s + (r.actif ? r.capacite : 0), 0)} places`} · ${o.duree_min} min · ${euros(o.prix_cents)} ${o.prix_par === 'personne' ? '/ pers.' : 'le groupe'} · ${o.horaires.length ? o.horaires.length + ' plage(s) horaire(s)' : '<span style="color:var(--lueur)">pas d’horaires</span>'} · ${o.confirmation === 'immediate' ? 'confirmation immédiate' : 'vous validez'}</div></div>
-    <button class="btn c p" data-modif="${o.id}">Modifier</button></div>`).join('') || '<div class="carte vide">Aucune activité pour l’instant.</div>'}`;
+  $('#vue').innerHTML = entete('Activités', 'Ce que les clients peuvent réserver chez vous.', `<button class="btn prim" id="nouv">${ic('plus')}Nouvelle activité</button>`)
+  + (espace.offres.map((o) => { const ph = (o.photos || [])[0] || (espace.entreprise.photos || [])[0];
+    return `<div class="offre"><div class="ph" style="${ph ? `background-image:url('${esc(ph)}')` : ''}">${ph ? '' : ic('image')}</div>
+    <div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b style="font-size:16px">${esc(o.titre)}</b>${o.actif ? '<span class="etat confirmee">Proposée</span>' : '<span class="etat">En pause</span>'}${!o.horaires.length ? '<span class="etat demandee">Sans horaires</span>' : ''}</div>
+    <div class="note" style="margin-top:3px">${o.mode === 'privatise' ? `${o.ressources.filter((r) => r.actif).length} salle(s), un groupe à la fois` : `${o.ressources.reduce((s, r) => s + (r.actif ? r.capacite : 0), 0)} places partagées`} · ${o.duree_min} min · ${euros(o.prix_cents)} ${o.prix_par === 'personne' ? 'par personne' : 'le groupe'} · ${o.min_personnes} à ${o.max_personnes} pers. · ${o.confirmation === 'immediate' ? 'confirmation immédiate' : 'vous validez'}${o.demander_prenoms ? ' · prénoms demandés' : ''}</div></div>
+    <button class="btn p" data-modif="${o.id}">${ic('crayon')}Modifier</button></div>`; }).join('') || `<div class="carte vide">Aucune activité pour l’instant.<br><br><button class="btn prim" onclick="editeur(null)">${ic('plus')}Créer ma première activité</button></div>`);
   $('#nouv').onclick = () => editeur(null);
-  document.querySelectorAll('[data-modif]').forEach((b) => b.onclick = () => editeur(espace.offres.find((o) => o.id === b.dataset.modif)));
+  $$('[data-modif]').forEach((b) => b.onclick = () => editeur(espace.offres.find((o) => o.id === b.dataset.modif)));
 }
 function editeur(o) {
-  o = o || { titre: '', description: '', genre: '', ambiances: [], mode: 'privatise', duree_min: 60, battement_min: 15, prix_cents: 2500, prix_par: 'personne', min_personnes: 2, max_personnes: 6,
-    confirmation: 'manuelle', annulation_h: 24, delai_reponse_h: 12, reservable_jours: 60, preavis_h: 2, photos: [], actif: true, ressources: [{ nom: 'Salle 1', capacite: 6, ical_url: '' }],
-    horaires: [1, 2, 3, 4, 5, 6, 7].map((j) => ({ jour: j, debut: '14:00', fin: '22:00', pas_min: 90 })).filter((h) => h.jour >= 3) };
-  const m = document.createElement('div'); m.className = 'modale';
-  m.innerHTML = `<div class="carte"><div class="titre"><h2>${o.id ? 'Modifier l’activité' : 'Nouvelle activité'}</h2><button class="btn c p" data-fermer-m>✕</button></div>
-  <div class="grille g2"><div><label class="l">Nom de l’activité (vu par les clients)</label><input id="e-titre" maxlength="90" value="${esc(o.titre)}" placeholder="Escape game « Le Manoir »"></div>
-  <div><label class="l">Type d’activité</label><select id="e-genre">${GENRES.map(([k, t]) => `<option value="${k}" ${o.genre === k ? 'selected' : ''}>${t}</option>`).join('')}</select></div></div>
-  <label class="l">Description (ce qui est compris, à prévoir…)</label><textarea id="e-desc" rows="3" maxlength="1500">${esc(o.description)}</textarea>
-  <label class="l">Pour quelles sorties ?</label><div class="choix">${AMBIANCES.map(([k, t]) => `<label><input type="checkbox" value="${k}" ${o.ambiances.includes(k) ? 'checked' : ''} data-amb> ${t}</label>`).join('')}</div>
-  <label class="l">Comment se réserve-t-elle ?</label><div class="choix">
-    <label><input type="radio" name="mode" value="privatise" ${o.mode === 'privatise' ? 'checked' : ''}> <span><b>Une salle = un groupe</b><br><span class="note">Escape game, salle VR, jacuzzi privatif : chaque salle ne reçoit qu’un groupe par créneau.</span></span></label>
-    <label><input type="radio" name="mode" value="places" ${o.mode === 'places' ? 'checked' : ''}> <span><b>Des places partagées</b><br><span class="note">Canoë, atelier, dégustation, restaurant (couverts) : plusieurs groupes jusqu’à la capacité.</span></span></label></div>
-  <div class="grille g4"><div><label class="l">Durée (min)</label><input type="number" id="e-duree" min="10" max="720" value="${o.duree_min}"></div>
-  <div><label class="l">Battement entre 2 groupes (min)</label><input type="number" id="e-batt" min="0" max="180" value="${o.battement_min}"></div>
-  <div><label class="l">Prix (€)</label><input type="number" id="e-prix" min="0" step="0.5" value="${o.prix_cents / 100}"></div>
-  <div><label class="l">Prix</label><select id="e-par"><option value="personne" ${o.prix_par === 'personne' ? 'selected' : ''}>par personne</option><option value="groupe" ${o.prix_par === 'groupe' ? 'selected' : ''}>pour le groupe</option></select></div>
-  <div><label class="l">Personnes min. par réservation</label><input type="number" id="e-min" min="1" value="${o.min_personnes}"></div>
-  <div><label class="l">Personnes max. par réservation</label><input type="number" id="e-max" min="1" value="${o.max_personnes}"></div>
-  <div><label class="l">Réservable jusqu’à (jours à l’avance)</label><input type="number" id="e-jours" min="1" max="365" value="${o.reservable_jours}"></div>
-  <div><label class="l">Au plus tard (heures avant)</label><input type="number" id="e-preavis" min="0" max="72" value="${o.preavis_h}"></div></div>
-  <h3 style="margin:20px 0 4px" id="t-res">${o.mode === 'privatise' ? 'Vos salles' : 'Vos places'}</h3><p class="note">Pour relier votre agenda (Google, Outlook, logiciel de réservation), collez son lien iCal : les créneaux déjà pris y seront fermés tout seuls dans Tikette, toutes les 10 minutes.</p>
-  <div id="e-res"></div><button class="btn c p" id="e-plus-res">+ Ajouter</button>
-  <h3 style="margin:20px 0 4px">Horaires</h3><p class="note">Un créneau commence toutes les « X min » entre l’ouverture et la fermeture (dernier départ = fermeture − durée).</p>
-  <div id="e-hor"></div><button class="btn c p" id="e-plus-hor">+ Ajouter une plage</button>
-  <h3 style="margin:20px 0 4px">Confirmation</h3><div class="choix">
-    <label><input type="radio" name="conf" value="manuelle" ${o.confirmation === 'manuelle' ? 'checked' : ''}> <span><b>Je valide chaque réservation</b><br><span class="note">Le client attend votre réponse.</span></span></label>
-    <label><input type="radio" name="conf" value="immediate" ${o.confirmation === 'immediate' ? 'checked' : ''}> <span><b>Confirmation immédiate</b><br><span class="note">Recommandé si votre planning est à jour : les clients préfèrent.</span></span></label></div>
-  <div class="grille g2"><div><label class="l">Délai pour répondre (heures, sinon refusée automatiquement)</label><input type="number" id="e-delai" min="1" max="72" value="${o.delai_reponse_h}"></div>
-  <div><label class="l">Annulation gratuite par le client jusqu’à (heures avant)</label><input type="number" id="e-annul" min="0" max="168" value="${o.annulation_h}"></div></div>
-  <h3 style="margin:20px 0 4px">Photos</h3><div class="photos" id="e-photos"></div><input type="file" id="e-fichier" accept="image/jpeg,image/png,image/webp" multiple style="margin-top:8px">
-  <label class="l" style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="e-actif" style="width:auto" ${o.actif ? 'checked' : ''}> Proposée dans Tikette (décochez pour mettre en pause)</label>
-  <div style="display:flex;gap:10px;justify-content:space-between;margin-top:20px;flex-wrap:wrap">${o.id ? '<button class="btn r" id="e-suppr">Supprimer</button>' : '<span></span>'}<div style="display:flex;gap:10px"><button class="btn c" data-fermer-m>Annuler</button><button class="btn j" id="e-ok">Enregistrer</button></div></div></div>`;
-  document.body.appendChild(m);
+  o = o || { titre: '', description: '', genre: 'escape', ambiances: [], mode: 'privatise', duree_min: 60, battement_min: 15, prix_cents: 2500, prix_par: 'personne', min_personnes: 2, max_personnes: 6,
+    confirmation: 'manuelle', annulation_h: 24, delai_reponse_h: 12, reservable_jours: 60, preavis_h: 2, photos: [], actif: true, demander_prenoms: false, consignes: '',
+    ressources: [{ nom: 'Salle 1', capacite: 6, ical_url: '' }], horaires: [3, 4, 5, 6, 7].map((j) => ({ jour: j, debut: '14:00', fin: '22:00', pas_min: 90 })) };
+  const champ = (id, lab, val, attrs = '') => `<div><label class="l" for="${id}">${lab}</label><input id="${id}" value="${esc(val)}" ${attrs}></div>`;
+  const { v: m, fermer } = fenetre({ titre: o.id ? 'Modifier l’activité' : 'Nouvelle activité', corps: `
+  <h3 style="margin-top:14px">Présentation</h3>
+  <div class="grille g2" style="gap:0 16px">${champ('e-titre', 'Nom vu par les clients', o.titre, 'maxlength="90" placeholder="Escape game « Le Manoir »"')}
+  <div><label class="l" for="e-genre">Type d’activité</label><select id="e-genre">${GENRES.map(([k, t]) => `<option value="${k}" ${o.genre === k ? 'selected' : ''}>${t}</option>`).join('')}</select></div></div>
+  <label class="l" for="e-desc">Description</label><textarea id="e-desc" rows="3" maxlength="1500" placeholder="Ce qui est compris, l’ambiance, à partir de quel âge…">${esc(o.description)}</textarea>
+  <label class="l">Pour quelles sorties ?</label><div class="choix puces">${AMBIANCES.map(([k, t]) => `<label><input type="checkbox" value="${k}" ${o.ambiances.includes(k) ? 'checked' : ''} data-amb>${t}</label>`).join('')}</div>
+  <div class="sep"></div><h3>Fonctionnement</h3>
+  <div class="choix" style="margin-top:10px"><label><input type="radio" name="mode" value="privatise" ${o.mode === 'privatise' ? 'checked' : ''}><span><b>Une salle = un groupe</b><br><span class="note">Escape game, salle VR, spa privatif : un seul groupe par salle et par créneau.</span></span></label>
+  <label><input type="radio" name="mode" value="places" ${o.mode === 'places' ? 'checked' : ''}><span><b>Des places partagées</b><br><span class="note">Canoë, atelier, dégustation, couverts d’un restaurant : plusieurs groupes jusqu’à la capacité.</span></span></label></div>
+  <div class="grille g4" style="gap:0 14px">${champ('e-duree', 'Durée (min)', o.duree_min, 'type="number" min="10" max="720"')}${champ('e-batt', 'Battement (min)', o.battement_min, 'type="number" min="0" max="180" title="Remise en place entre deux groupes"')}
+  ${champ('e-prix', 'Prix (€)', o.prix_cents / 100, 'type="number" min="0" step="0.5"')}<div><label class="l" for="e-par">Le prix est</label><select id="e-par"><option value="personne" ${o.prix_par === 'personne' ? 'selected' : ''}>par personne</option><option value="groupe" ${o.prix_par === 'groupe' ? 'selected' : ''}>pour le groupe</option></select></div>
+  ${champ('e-min', 'Personnes min.', o.min_personnes, 'type="number" min="1"')}${champ('e-max', 'Personnes max.', o.max_personnes, 'type="number" min="1"')}
+  ${champ('e-jours', 'Réservable jusqu’à (jours)', o.reservable_jours, 'type="number" min="1" max="365"')}${champ('e-preavis', 'Au plus tard (h avant)', o.preavis_h, 'type="number" min="0" max="72"')}</div>
+  <div class="sep"></div><h3 id="t-res">Salles</h3><p class="note" style="margin:2px 0 10px">Lien iCal facultatif : les créneaux pris dans votre agenda ou votre logiciel sont fermés dans Tikette toutes les 10 minutes.</p>
+  <div id="e-res"></div><button class="btn p" id="e-plus-res">${ic('plus')}Ajouter</button>
+  <div class="sep"></div><h3>Horaires</h3><p class="note" style="margin:2px 0 10px">Un départ toutes les « X min » entre l’ouverture et la fermeture (dernier départ = fermeture − durée).</p>
+  <div id="e-hor"></div><button class="btn p" id="e-plus-hor">${ic('plus')}Ajouter une plage</button>
+  <div class="sep"></div><h3>Réservations</h3>
+  <div class="choix" style="margin-top:10px"><label><input type="radio" name="conf" value="manuelle" ${o.confirmation === 'manuelle' ? 'checked' : ''}><span><b>Je valide chaque demande</b><br><span class="note">Le client attend votre réponse.</span></span></label>
+  <label><input type="radio" name="conf" value="immediate" ${o.confirmation === 'immediate' ? 'checked' : ''}><span><b>Confirmation immédiate</b><br><span class="note">Conseillé si votre planning est à jour.</span></span></label></div>
+  <div class="grille g2" style="gap:0 16px">${champ('e-delai', 'Délai de réponse (h), sinon refusée', o.delai_reponse_h, 'type="number" min="1" max="72"')}${champ('e-annul', 'Annulation gratuite jusqu’à (h avant)', o.annulation_h, 'type="number" min="0" max="168"')}</div>
+  <div class="reglage" style="margin-top:6px"><div><b>Demander le prénom de chaque participant</b><p>Laser game, lancer de hache, quiz : les prénoms arrivent avec la réservation.</p></div><label class="interrupteur"><input type="checkbox" id="e-prenoms" ${o.demander_prenoms ? 'checked' : ''}><span></span></label></div>
+  <label class="l" for="e-consignes">Consignes envoyées au client</label><textarea id="e-consignes" rows="2" maxlength="500" placeholder="Arrivez 15 minutes avant. Chaussures fermées obligatoires.">${esc(o.consignes || '')}</textarea>
+  <div class="sep"></div><h3>Photos</h3><p class="note" style="margin:2px 0 10px">Format paysage, 5 Mo au plus. La première est la photo principale.</p>
+  <div class="photos" id="e-photos"></div><label class="btn p" style="margin-top:10px">${ic('image')}Ajouter des photos<input type="file" id="e-fichier" accept="image/jpeg,image/png,image/webp" multiple style="display:none"></label>
+  <div class="reglage" style="margin-top:12px"><div><b>Proposée dans Tikette</b><p>Désactivez pour la mettre en pause.</p></div><label class="interrupteur"><input type="checkbox" id="e-actif" ${o.actif ? 'checked' : ''}><span></span></label></div>`,
+  pied: `${o.id ? `<button class="btn non" id="e-suppr" style="margin-right:auto">${ic('poubelle')}Supprimer</button>` : ''}<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="e-ok">Enregistrer</button>` });
   let ressources = o.ressources.filter((r) => r.actif !== false).map((r) => ({ ...r })), horaires = o.horaires.map((h) => ({ ...h })), photos = [...(o.photos || [])];
   const dessinerRes = () => {
     const priv = $('input[name=mode]:checked', m).value === 'privatise';
-    $('#t-res', m).textContent = priv ? 'Vos salles' : 'Vos places';
-    $('#e-res', m).innerHTML = ressources.map((r, i) => `<div class="ligne" style="grid-template-columns:1.2fr .6fr 2fr auto"><input data-r="${i}" data-k="nom" value="${esc(r.nom)}" placeholder="${priv ? 'Salle 1' : 'Places'}">
-      <input type="number" data-r="${i}" data-k="capacite" value="${r.capacite}" min="1" title="${priv ? 'Joueurs max. dans la salle' : 'Nombre de places'}" placeholder="${priv ? 'Joueurs max.' : 'Places'}">
-      <input data-r="${i}" data-k="ical_url" value="${esc(r.ical_url || '')}" placeholder="Lien iCal de votre agenda (facultatif)"><button class="btn c p" data-rm="${i}">✕</button></div>`).join('');
-    $('#e-res', m).querySelectorAll('[data-r]').forEach((x) => x.oninput = () => { ressources[x.dataset.r][x.dataset.k] = x.type === 'number' ? +x.value : x.value; });
-    $('#e-res', m).querySelectorAll('[data-rm]').forEach((x) => x.onclick = () => { if (ressources.length > 1) { ressources.splice(+x.dataset.rm, 1); dessinerRes(); } });
+    $('#t-res', m).textContent = priv ? 'Salles' : 'Places';
+    $('#e-res', m).innerHTML = `<div class="ligne note" style="grid-template-columns:1.2fr .7fr 2fr 36px;margin:0 0 4px"><span>Nom</span><span>${priv ? 'Pers. max.' : 'Places'}</span><span>Lien iCal de votre agenda</span><span></span></div>` + ressources.map((r, i) => `<div class="ligne" style="grid-template-columns:1.2fr .7fr 2fr 36px"><input data-r="${i}" data-k="nom" value="${esc(r.nom)}">
+      <input type="number" data-r="${i}" data-k="capacite" value="${r.capacite}" min="1"><input data-r="${i}" data-k="ical_url" value="${esc(r.ical_url || '')}" placeholder="https://… (facultatif)">
+      <button class="btn lien" data-rm="${i}" aria-label="Retirer">${ic('x')}</button></div>`).join('');
+    $$('[data-r]', m).forEach((x) => x.oninput = () => { ressources[x.dataset.r][x.dataset.k] = x.type === 'number' ? +x.value : x.value; });
+    $$('[data-rm]', m).forEach((x) => x.onclick = () => { if (ressources.length > 1) { ressources.splice(+x.dataset.rm, 1); dessinerRes(); } });
   };
   const dessinerHor = () => {
-    $('#e-hor', m).innerHTML = horaires.map((h, i) => `<div class="ligne" style="grid-template-columns:1.2fr 1fr 1fr 1fr auto"><select data-h="${i}" data-k="jour">${JOURS.map((j, k) => `<option value="${k + 1}" ${h.jour === k + 1 ? 'selected' : ''}>${j}</option>`).join('')}</select>
+    $('#e-hor', m).innerHTML = horaires.map((h, i) => `<div class="ligne" style="grid-template-columns:1.2fr 1fr 1fr 1.3fr 36px"><select data-h="${i}" data-k="jour">${JOURS.map((j, k) => `<option value="${k + 1}" ${h.jour === k + 1 ? 'selected' : ''}>${j}</option>`).join('')}</select>
       <input type="time" data-h="${i}" data-k="debut" value="${h.debut}"><input type="time" data-h="${i}" data-k="fin" value="${h.fin}">
-      <select data-h="${i}" data-k="pas_min">${[15, 30, 45, 60, 75, 90, 120, 180, 240].map((p) => `<option value="${p}" ${+h.pas_min === p ? 'selected' : ''}>toutes les ${p} min</option>`).join('')}</select><button class="btn c p" data-rh="${i}">✕</button></div>`).join('') || '<p class="note">Aucune plage : l’activité ne peut pas être réservée.</p>';
-    $('#e-hor', m).querySelectorAll('[data-h]').forEach((x) => x.onchange = () => { horaires[x.dataset.h][x.dataset.k] = ['jour', 'pas_min'].includes(x.dataset.k) ? +x.value : x.value; });
-    $('#e-hor', m).querySelectorAll('[data-rh]').forEach((x) => x.onclick = () => { horaires.splice(+x.dataset.rh, 1); dessinerHor(); });
+      <select data-h="${i}" data-k="pas_min">${[15, 30, 45, 60, 75, 90, 120, 180, 240].map((p) => `<option value="${p}" ${+h.pas_min === p ? 'selected' : ''}>départ toutes les ${p} min</option>`).join('')}</select><button class="btn lien" data-rh="${i}" aria-label="Retirer">${ic('x')}</button></div>`).join('') || '<p class="note">Aucune plage : l’activité ne peut pas être réservée.</p>';
+    $$('[data-h]', m).forEach((x) => x.onchange = () => { horaires[x.dataset.h][x.dataset.k] = ['jour', 'pas_min'].includes(x.dataset.k) ? +x.value : x.value; });
+    $$('[data-rh]', m).forEach((x) => x.onclick = () => { horaires.splice(+x.dataset.rh, 1); dessinerHor(); });
   };
   const dessinerPhotos = () => {
-    $('#e-photos', m).innerHTML = photos.map((p, i) => `<div style="background-image:url('${esc(p)}')"><button data-rp="${i}">✕</button></div>`).join('');
-    $('#e-photos', m).querySelectorAll('[data-rp]').forEach((x) => x.onclick = () => { photos.splice(+x.dataset.rp, 1); dessinerPhotos(); });
+    $('#e-photos', m).innerHTML = photos.map((p, i) => `<div style="background-image:url('${esc(p)}')"><button data-rp="${i}" aria-label="Retirer">${ic('x')}</button></div>`).join('');
+    $$('[data-rp]', m).forEach((x) => x.onclick = () => { photos.splice(+x.dataset.rp, 1); dessinerPhotos(); });
   };
   dessinerRes(); dessinerHor(); dessinerPhotos();
-  m.querySelectorAll('input[name=mode]').forEach((x) => x.onchange = dessinerRes);
+  $$('input[name=mode]', m).forEach((x) => x.onchange = dessinerRes);
   $('#e-plus-res', m).onclick = () => { ressources.push({ nom: `Salle ${ressources.length + 1}`, capacite: ressources[0]?.capacite || 6, ical_url: '' }); dessinerRes(); };
   $('#e-plus-hor', m).onclick = () => { const d = horaires[horaires.length - 1] || { jour: 0, debut: '14:00', fin: '22:00', pas_min: 60 }; horaires.push({ ...d, jour: (d.jour % 7) + 1 }); dessinerHor(); };
   $('#e-fichier', m).onchange = async (ev) => {
     for (const f of ev.target.files) {
-      if (f.size > 5e6) { toast('Photo trop lourde (5 Mo max).'); continue; }
+      if (f.size > 5e6) { toast('Photo trop lourde (5 Mo au plus).', 'alerte'); continue; }
       const chemin = `${espace.entreprise.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${(f.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg')}`;
       const { error } = await sb.storage.from('pro-photos').upload(chemin, f, { contentType: f.type });
-      if (error) { toast('Envoi impossible : ' + error.message); continue; }
+      if (error) { toast('Envoi impossible : ' + error.message, 'alerte'); continue; }
       photos.push(sb.storage.from('pro-photos').getPublicUrl(chemin).data.publicUrl);
     }
     dessinerPhotos();
   };
-  const fermer = () => m.remove();
-  m.querySelectorAll('[data-fermer-m]').forEach((x) => x.onclick = fermer);
-  if ($('#e-suppr', m)) $('#e-suppr', m).onclick = async () => { if (!confirm('Supprimer cette activité ? (mise en pause si elle a déjà des réservations)')) return; await rpc('pro_supprimer_offre', { p_offre: o.id }); fermer(); await recharger(); activites(); };
+  if ($('#e-suppr', m)) $('#e-suppr', m).onclick = async () => {
+    if (!await demander({ titre: 'Supprimer l’activité ?', texte: 'Si elle a déjà des réservations, elle est seulement mise en pause.', bouton: 'Supprimer', danger: true })) return;
+    await rpc('pro_supprimer_offre', { p_offre: o.id }); fermer(); await recharger(); activites();
+  };
   $('#e-ok', m).onclick = async () => {
     const titre = $('#e-titre', m).value.trim();
-    if (titre.length < 2) return toast('Donnez un nom à l’activité.');
-    if (+$('#e-min', m).value > +$('#e-max', m).value) return toast('Le minimum de personnes dépasse le maximum.');
-    if (horaires.some((h) => h.debut >= h.fin)) return toast('Une plage horaire finit avant de commencer.');
-    if (ressources.some((r) => r.ical_url && !/^https:\/\//.test(r.ical_url.replace(/^webcal:/, 'https:')))) return toast('Le lien d’agenda doit commencer par https://');
-    ressources.forEach((r) => { r.ical_url = (r.ical_url || '').replace(/^webcal:/, 'https:'); });
+    if (titre.length < 2) return toast('Donnez un nom à l’activité.', 'alerte');
+    if (+$('#e-min', m).value > +$('#e-max', m).value) return toast('Le minimum de personnes dépasse le maximum.', 'alerte');
+    if (horaires.some((h) => h.debut >= h.fin)) return toast('Une plage horaire finit avant de commencer.', 'alerte');
+    ressources.forEach((r) => { r.ical_url = (r.ical_url || '').trim().replace(/^webcal:/, 'https:'); });
+    if (ressources.some((r) => r.ical_url && !/^https:\/\//.test(r.ical_url))) return toast('Le lien d’agenda doit commencer par https://', 'alerte');
     $('#e-ok', m).disabled = true;
     try {
-      await rpc('pro_enregistrer_offre', { p: {
-        id: o.id || null, titre, description: $('#e-desc', m).value, genre: $('#e-genre', m).value,
-        ambiances: [...m.querySelectorAll('[data-amb]:checked')].map((x) => x.value), mode: $('input[name=mode]:checked', m).value,
+      await rpc('pro_enregistrer_offre', { p: { id: o.id || null, titre, description: $('#e-desc', m).value, genre: $('#e-genre', m).value,
+        ambiances: $$('[data-amb]:checked', m).map((x) => x.value), mode: $('input[name=mode]:checked', m).value,
         duree_min: +$('#e-duree', m).value, battement_min: +$('#e-batt', m).value, prix_cents: Math.round(+$('#e-prix', m).value * 100), prix_par: $('#e-par', m).value,
         min_personnes: +$('#e-min', m).value, max_personnes: +$('#e-max', m).value, confirmation: $('input[name=conf]:checked', m).value,
         annulation_h: +$('#e-annul', m).value, delai_reponse_h: +$('#e-delai', m).value, reservable_jours: +$('#e-jours', m).value, preavis_h: +$('#e-preavis', m).value,
-        photos, actif: $('#e-actif', m).checked, ressources, horaires } });
+        demander_prenoms: $('#e-prenoms', m).checked, consignes: $('#e-consignes', m).value, photos, actif: $('#e-actif', m).checked, ressources, horaires } });
       toast('Activité enregistrée.'); fermer(); await recharger(); activites();
     } catch { $('#e-ok', m).disabled = false; }
   };
 }
 
-// ───── Agenda et logiciels ─────
-const LOGICIELS = ['Bookeo', 'Regiondo', 'Guidap', 'FareHarbor', 'Rezdy', 'Ventrata', 'Checkfront', 'TrekkSoft', 'Peek Pro', 'Weezevent', 'Zenchef (restaurants)', 'Autre'];
-function agenda() {
-  const lien = `${URL_SUPABASE}/functions/v1/pro-ical?jeton=${espace.entreprise.ical_jeton}`;
-  const relies = espace.offres.flatMap((o) => o.ressources.filter((r) => r.ical_url).map((r) => `${esc(o.titre)} · ${esc(r.nom)}`));
-  $('#vue').innerHTML = `<div class="titre"><h1>Agenda et logiciels</h1></div>
-  <div class="grille g2">
-  <div class="carte"><h2 style="font-size:19px">1. Vos réservations Tikette dans votre agenda</h2>
-    <p class="note" style="margin:8px 0 12px">Ajoutez ce lien à Google Agenda (« Autres agendas » › « À partir de l’URL »), Outlook, Apple Calendrier ou votre logiciel de réservation. Vos réservations Tikette y apparaissent et se mettent à jour toutes seules.</p>
-    <div class="copie"><input readonly value="${esc(lien)}" id="lien-ical"><button class="btn j p" id="copier">Copier</button></div>
-    <p class="note" style="margin-top:8px">Ce lien est secret : ne le publiez pas.</p></div>
-  <div class="carte"><h2 style="font-size:19px">2. Votre agenda dans Tikette</h2>
-    <p class="note" style="margin:8px 0 12px">Vous prenez aussi des réservations par téléphone ou sur votre site ? Dans <a href="#activites">Activités</a>, collez le lien iCal de votre agenda sur chaque salle : toutes les 10 minutes, Tikette ferme les créneaux déjà pris. Personne ne peut réserver deux fois la même salle.</p>
-    ${relies.length ? `<p><b>Reliés :</b> ${relies.join(', ')}</p>` : '<p class="note">Aucun agenda relié pour l’instant.</p>'}</div></div>
-  <div class="carte" style="margin-top:14px"><h2 style="font-size:19px">3. Connexion directe à votre logiciel de réservation</h2>
-    <p class="note" style="margin:8px 0 6px">La disponibilité en temps réel et les réservations Tikette directement dans votre logiciel. On les branche un par un, en commençant par ceux de nos partenaires : dites-nous lequel vous utilisez.</p>
-    ${LOGICIELS.map((l) => `<div class="logiciel"><span>${l}</span>${espace.entreprise.connecteur_demande.includes(l) ? '<span class="puce confirmee">Demandé</span>' : `<button class="btn c p" data-log="${esc(l)}">Je l’utilise</button>`}</div>`).join('')}</div>`;
-  $('#copier').onclick = () => { navigator.clipboard.writeText(lien); toast('Lien copié.'); };
-  document.querySelectorAll('[data-log]').forEach((b) => b.onclick = async () => {
-    const v = (espace.entreprise.connecteur_demande ? espace.entreprise.connecteur_demande + ', ' : '') + b.dataset.log;
-    await rpc('pro_modifier_entreprise', { p: { connecteur_demande: v } }); toast('Merci ! On vous recontacte dès que la connexion est prête.'); await recharger(); agenda();
-  });
+// ───── Ma fiche ─────
+function fiche() {
+  const e = espace.entreprise;
+  $('#vue').innerHTML = entete('Ma fiche', 'Les informations montrées aux clients dans Tikette.')
+  + `<div class="grille colonnes" style="grid-template-columns:1.3fr 1fr;align-items:start"><div class="carte">
+    <label class="l" style="margin-top:0">Nom affiché</label><input id="m-nom" value="${esc(e.nom)}" maxlength="90">
+    <label class="l">Présentation</label><textarea id="m-desc" rows="5" maxlength="1500">${esc(e.description)}</textarea>
+    <div class="grille g2" style="gap:0 14px"><div><label class="l">Adresse</label><input id="m-adr" value="${esc(e.adresse)}"></div><div><label class="l">Commune</label><input id="m-com" value="${esc(e.commune)}"></div></div>
+    <label class="l">Site internet</label><input id="m-site" value="${esc(e.site)}" placeholder="https://">
+    <div class="outils" style="margin-top:18px"><button class="btn prim" id="m-ok">Enregistrer</button></div></div>
+  <div class="carte"><h2>${ic('info')}Bon à savoir</h2><p class="note" style="margin:0">Le téléphone et l’e-mail de votre compte ne sont jamais montrés aux clients : ils sont dans <a href="#parametres">Paramètres</a>.</p>
+  <div class="sep"></div><p class="note" style="margin:0">L’adresse sert à l’itinéraire des clients. Pour déplacer le point sur la carte, écrivez-nous : contact@tikette.fr.</p></div></div>`;
+  $('#m-ok').onclick = async () => {
+    await rpc('pro_modifier_entreprise', { p: { nom: $('#m-nom').value, description: $('#m-desc').value, adresse: $('#m-adr').value, commune: $('#m-com').value, site: $('#m-site').value } });
+    toast('Fiche enregistrée.'); await recharger();
+  };
 }
 
 // ───── Statistiques ─────
 let periode = 'mois';
 async function stats() {
-  const fin = new Date(), debut = new Date();
-  if (periode === 'mois') { debut.setDate(1); fin.setMonth(fin.getMonth() + 1, 1); } else if (periode === '3mois') debut.setMonth(debut.getMonth() - 3); else { debut.setMonth(0, 1); fin.setFullYear(fin.getFullYear() + 1, 0, 1); }
-  debut.setHours(0, 0, 0, 0); fin.setHours(0, 0, 0, 0);
-  const [st, liste] = await Promise.all([rpc('pro_stats', { p_du: debut.toISOString(), p_au: fin.toISOString() }), rpc('pro_reservations_liste', { p_du: debut.toISOString(), p_au: fin.toISOString() })]);
+  const auj = jourISO(new Date()); let du, au;
+  if (periode === 'mois') { du = auj.slice(0, 8) + '01'; au = ajouterJours(du, 32).slice(0, 8) + '01'; }
+  else if (periode === '3mois') { du = ajouterJours(auj, -90); au = ajouterJours(auj, 1); }
+  else { du = auj.slice(0, 4) + '-01-01'; au = (+auj.slice(0, 4) + 1) + '-01-01'; }
+  const D = dateParis(du, '00:00').toISOString(), A = dateParis(au, '00:00').toISOString();
+  const [st, liste] = await Promise.all([rpc('pro_stats', { p_du: D, p_au: A }), rpc('pro_reservations_liste', { p_du: D, p_au: A })]);
   const acc = st.demandes ? Math.round(100 * st.acceptees / st.demandes) : 0;
-  const jours = Object.entries(st.par_jour).sort();
-  const max = Math.max(1, ...jours.map(([, n]) => n));
-  $('#vue').innerHTML = `<div class="titre"><h1>Statistiques</h1><div style="display:flex;gap:8px">${[['mois', 'Ce mois'], ['3mois', '3 derniers mois'], ['annee', 'Cette année']].map(([k, t]) => `<button class="btn ${periode === k ? 'j' : 'c'} p" data-p="${k}">${t}</button>`).join('')}
-    <button class="btn c p" id="exp2">⬇ Export Excel</button></div></div>
-  <div class="grille g4" style="margin-bottom:14px">
-    <div class="kpi"><small>Réservations</small><b>${st.reservations}</b></div><div class="kpi"><small>Personnes</small><b>${st.personnes}</b></div>
-    <div class="kpi"><small>Chiffre d'affaires apporté</small><b>${euros(st.ca_cents)}</b></div><div class="kpi"><small>Commission Tikette</small><b>${euros(st.commission_cents)}</b></div>
-    <div class="kpi"><small>Demandes reçues</small><b>${st.demandes}</b></div><div class="kpi"><small>Taux d'acceptation</small><b>${acc} %</b></div>
-    <div class="kpi"><small>Refusées ou sans réponse</small><b>${st.refusees}</b></div><div class="kpi"><small>Clients absents</small><b>${st.absents}</b></div></div>
-  <div class="grille g2"><div class="carte"><h2 style="font-size:18px">Réservations par jour</h2>${jours.length ? `<div class="barres">${jours.map(([j, n]) => `<div style="height:${100 * n / max}%" title="${j} : ${n}"><span>${j.slice(8)}</span></div>`).join('')}</div><div style="height:16px"></div>` : '<div class="vide">Pas encore de réservation sur la période.</div>'}</div>
-  <div class="carte"><h2 style="font-size:18px">Par activité</h2>${Object.entries(st.par_offre).map(([t, n]) => `<div class="logiciel"><span>${esc(t)}</span><b>${n}</b></div>`).join('') || '<div class="vide">—</div>'}</div></div>`;
-  document.querySelectorAll('[data-p]').forEach((b) => b.onclick = () => { periode = b.dataset.p; stats(); });
+  const jours = Object.entries(st.par_jour).sort(); const max = Math.max(1, ...jours.map(([, n]) => n));
+  const panier = st.reservations ? Math.round(st.ca_cents / st.reservations) : 0;
+  $('#vue').innerHTML = entete('Statistiques', '', `<div class="onglets">${[['mois', 'Ce mois'], ['3mois', '90 jours'], ['annee', 'Cette année']].map(([k, t]) => `<button class="${periode === k ? 'on' : ''}" data-p="${k}">${t}</button>`).join('')}</div><button class="btn" id="exp2">${ic('telecharger')}Exporter (Excel)</button>`)
+  + `<div class="grille g4" style="margin-bottom:16px">
+    <div class="kpi"><small>${ic('ticket')}Réservations</small><b>${st.reservations}</b></div><div class="kpi"><small>${ic('gens')}Personnes</small><b>${st.personnes}</b></div>
+    <div class="kpi"><small>${ic('euro')}Chiffre d’affaires apporté</small><b>${euros(st.ca_cents)}</b><i>panier moyen ${euros(panier)}</i></div><div class="kpi"><small>${ic('recu')}Commission</small><b>${euros(st.commission_cents)}</b></div>
+    <div class="kpi"><small>${ic('cloche')}Demandes reçues</small><b>${st.demandes}</b></div><div class="kpi"><small>${ic('ok')}Taux d’acceptation</small><b>${acc} %</b></div>
+    <div class="kpi"><small>${ic('x')}Refusées ou sans réponse</small><b>${st.refusees}</b></div><div class="kpi"><small>${ic('alerte')}Clients absents</small><b>${st.absents}</b></div></div>
+  <div class="grille colonnes" style="grid-template-columns:1.6fr 1fr"><div class="carte"><h2>Réservations par jour</h2>${jours.length ? `<div class="barres">${jours.map(([j, n]) => `<div style="height:${100 * n / max}%" title="${j} : ${n}"><span>${+j.slice(8)}</span></div>`).join('')}</div><div style="height:20px"></div>` : '<div class="vide">Pas encore de réservation sur la période.</div>'}</div>
+  <div class="carte"><h2>Par activité</h2>${Object.entries(st.par_offre).map(([t, n]) => `<div class="logiciel"><span>${esc(t)}</span><b>${n}</b></div>`).join('') || '<div class="vide">—</div>'}</div></div>`;
+  $$('[data-p]').forEach((b) => b.onclick = () => { periode = b.dataset.p; stats(); });
   $('#exp2').onclick = () => exporter(liste, 'statistiques');
 }
 
-// ───── Mon entreprise ─────
-function entreprise() {
+// ───── Agenda et logiciels ─────
+const LOGICIELS = ['Bookeo', 'Regiondo', 'Guidap', 'FareHarbor', 'Rezdy', 'Ventrata', 'Checkfront', 'TrekkSoft', 'Peek Pro', 'Zenchef', 'Autre'];
+function agenda() {
+  const e = espace.entreprise, lien = `${URL_SUPABASE}/functions/v1/pro-ical?jeton=${e.ical_jeton}`;
+  const relies = espace.offres.flatMap((o) => o.ressources.filter((r) => r.ical_url).map((r) => `${esc(o.titre)} · ${esc(r.nom)}`));
+  $('#vue').innerHTML = entete('Agenda et logiciels', 'Pour que votre planning reste juste, où que les clients réservent.')
+  + `<div class="grille g2"><div class="carte"><h2>${ic('telecharger')}Les réservations Tikette dans votre agenda</h2>
+    <p class="note" style="margin:0 0 12px">Ajoutez ce lien dans Google Agenda (Autres agendas › À partir de l’URL), Outlook, Apple Calendrier ou votre logiciel de réservation. Il se met à jour tout seul.</p>
+    <div class="copie"><input readonly value="${esc(lien)}"><button class="btn prim p" id="copier">${ic('copier')}Copier</button></div><p class="note" style="margin:8px 0 0">${icp('cadenas')} Lien personnel : ne le publiez pas.</p></div>
+  <div class="carte"><h2>${ic('lien')}Votre agenda dans Tikette</h2><p class="note" style="margin:0 0 12px">Vous prenez aussi des réservations ailleurs ? Collez le lien iCal de votre agenda sur chaque salle, dans Activités. Toutes les 10 minutes, Tikette ferme les créneaux déjà pris.</p>
+    ${relies.length ? relies.map((r) => `<div class="logiciel"><span>${r}</span><span class="etat confirmee">Relié</span></div>`).join('') : '<p class="note">Aucun agenda relié.</p>'}
+    <button class="btn p" style="margin-top:10px" onclick="aller('activites')">Relier une salle${ic('fleche')}</button></div></div>
+  <div class="carte" style="margin-top:16px"><h2>${ic('reglages')}Connexion directe à votre logiciel de réservation</h2><p class="note" style="margin:0 0 6px">Disponibilités en temps réel et réservations Tikette directement dans votre logiciel. Nous les branchons un par un : dites-nous lequel vous utilisez.</p>
+    <div class="grille g2" style="gap:0 30px">${LOGICIELS.map((l) => `<div class="logiciel"><span>${l}</span>${e.connecteur_demande.includes(l) ? '<span class="etat confirmee">Demandé</span>' : `<button class="btn p" data-log="${esc(l)}">Je l’utilise</button>`}</div>`).join('')}</div></div>`;
+  $('#copier').onclick = () => { navigator.clipboard.writeText(lien); toast('Lien copié.'); };
+  $$('[data-log]').forEach((b) => b.onclick = async () => {
+    await rpc('pro_modifier_entreprise', { p: { connecteur_demande: (e.connecteur_demande ? e.connecteur_demande + ', ' : '') + b.dataset.log } });
+    toast('Merci, on vous recontacte dès que la connexion est prête.'); await recharger(); agenda();
+  });
+}
+
+// ───── Paramètres ─────
+let sousParam = 'compte';
+function parametres() {
+  const items = [['compte', 'bouclier', 'Compte et sécurité'], ['notifications', 'cloche', 'Notifications'], ['equipe', 'gens', 'Équipe'], ['conges', 'soleil', 'Congés et fermetures'], ['facturation', 'recu', 'Facturation'], ['partenariat', 'boutique', 'Partenariat']];
+  $('#vue').innerHTML = entete('Paramètres') + `<div class="grille colonnes" style="grid-template-columns:220px 1fr;align-items:start"><div class="sous-nav">${items.map(([k, i, t]) => `<button data-s="${k}" class="${sousParam === k ? 'on' : ''}">${ic(i)}${t}</button>`).join('')}</div><div id="p-corps"></div></div>`;
+  $$('[data-s]').forEach((b) => b.onclick = () => { sousParam = b.dataset.s; parametres(); });
+  ({ compte: pCompte, notifications: pNotifs, equipe: pEquipe, conges: pConges, facturation: pFactu, partenariat: pPart }[sousParam])();
+}
+const nonProprio = '<div class="bandeau info">' + ic('cadenas') + '<div>Réservé au responsable du compte.</div></div>';
+async function pCompte() {
+  const { data: u } = await sb.auth.getUser(); const { data: f } = await sb.auth.mfa.listFactors();
+  const totp = (f?.totp || []).find((x) => x.status === 'verified');
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('mail')}Connexion</h2>
+    <div class="reglage"><div><b>E-mail de connexion</b><p>${esc(u?.user?.email || '')}</p></div><button class="btn p" id="c-mail">Changer</button></div>
+    <div class="reglage"><div><b>Téléphone de contact</b><p>Pour vous joindre en cas de souci. Jamais montré aux clients.</p></div><div class="copie" style="max-width:260px"><input id="c-tel" value="${esc(espace.entreprise.telephone)}"><button class="btn p" id="c-tel-ok">OK</button></div></div></div>
+  <div class="carte" style="margin-top:16px"><h2>${ic('bouclier')}Double authentification</h2>
+    <div class="reglage"><div><b>${totp ? 'Activée' : 'Désactivée'}</b><p>${totp ? 'Un code de votre appli d’authentification est demandé à chaque connexion.' : 'Recommandé : en plus du code par e-mail, un code de votre téléphone (Google Authenticator, Microsoft Authenticator, Mots de passe d’Apple…).'}</p></div>
+    ${totp ? `<button class="btn non p" id="c-mfa-off">Désactiver</button>` : `<button class="btn prim p" id="c-mfa-on">${ic('bouclier')}Activer</button>`}</div></div>
+  <div class="carte" style="margin-top:16px"><h2>${ic('sortie')}Sessions</h2><div class="reglage"><div><b>Se déconnecter partout</b><p>Ordinateurs et téléphones où votre compte est ouvert.</p></div><button class="btn p" id="c-partout">Déconnecter</button></div></div>`;
+  $('#c-tel-ok').onclick = async () => { await rpc('pro_modifier_entreprise', { p: { telephone: $('#c-tel').value } }); toast('Téléphone enregistré.'); await recharger(); };
+  $('#c-mail').onclick = async () => {
+    const m = await demander({ titre: 'Changer d’e-mail de connexion', texte: 'Un lien de confirmation est envoyé aux deux adresses.', champ: 'Nouvelle adresse', bouton: 'Envoyer' });
+    if (!m) return; const { error } = await sb.auth.updateUser({ email: m.trim() }); toast(error ? error.message : 'Confirmez depuis vos e-mails.', error ? 'alerte' : 'mail');
+  };
+  $('#c-partout').onclick = async () => { if (await demander({ titre: 'Se déconnecter partout ?', bouton: 'Déconnecter', danger: true })) { await sb.auth.signOut({ scope: 'global' }); location.reload(); } };
+  if (totp) $('#c-mfa-off').onclick = async () => {
+    if (!await demander({ titre: 'Désactiver la double authentification ?', texte: 'Votre compte sera moins protégé.', bouton: 'Désactiver', danger: true })) return;
+    const { error } = await sb.auth.mfa.unenroll({ factorId: totp.id }); toast(error ? error.message : 'Double authentification désactivée.', error ? 'alerte' : 'ok'); pCompte();
+  };
+  else $('#c-mfa-on').onclick = async () => {
+    for (const x of (f?.totp || []).filter((x) => x.status !== 'verified')) await sb.auth.mfa.unenroll({ factorId: x.id });
+    const { data, error } = await sb.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'Tikette Pro' });
+    if (error) return toast(error.message, 'alerte');
+    const { v, fermer } = fenetre({ titre: 'Activer la double authentification', petite: true, corps: `<p style="margin:12px 0">1. Scannez ce code avec votre appli d’authentification.</p>
+      <div class="qr" style="margin:0 auto"><img src="${data.totp.qr_code}" alt="Code QR"></div><p class="note" style="text-align:center;word-break:break-all">ou saisissez la clé : <b>${esc(data.totp.secret)}</b></p>
+      <p style="margin:14px 0 6px">2. Tapez le code à 6 chiffres affiché.</p><input id="mfa-c" inputmode="numeric" maxlength="6" placeholder="123456" style="letter-spacing:.3em;font-size:18px">`,
+      pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="mfa-ok">Activer</button>` });
+    $('#mfa-ok', v).onclick = async () => {
+      const r = await sb.auth.mfa.challengeAndVerify({ factorId: data.id, code: $('#mfa-c', v).value.trim() });
+      if (r.error) return toast('Code incorrect.', 'alerte'); fermer(); toast('Double authentification activée.'); pCompte();
+    };
+  };
+}
+function pNotifs() {
   const e = espace.entreprise;
-  $('#vue').innerHTML = `<div class="titre"><h1>Mon entreprise</h1><span class="puce ${e.statut === 'valide' ? 'confirmee' : 'demandee'}">${{ valide: 'Validée', en_attente: 'En vérification', suspendu: 'Suspendue', refuse: 'Refusée' }[e.statut]}</span></div>
-  <div class="grille g2"><div class="carte">
-    <label class="l">Nom affiché</label><input id="m-nom" value="${esc(e.nom)}">
-    <label class="l">Présentation</label><textarea id="m-desc" rows="4">${esc(e.description)}</textarea>
-    <div class="grille g2"><div><label class="l">Adresse</label><input id="m-adr" value="${esc(e.adresse)}"></div><div><label class="l">Commune</label><input id="m-com" value="${esc(e.commune)}"></div>
-    <div><label class="l">E-mail des réservations</label><input id="m-mail" type="email" value="${esc(e.email)}"></div><div><label class="l">Téléphone</label><input id="m-tel" value="${esc(e.telephone)}"></div></div>
-    <label class="l">Site</label><input id="m-site" value="${esc(e.site)}">
-    <button class="btn j" style="margin-top:16px" id="m-ok">Enregistrer</button></div>
-  <div class="carte"><h2 style="font-size:19px">Commission</h2>
-    <p style="margin-top:8px">${e.fondateur ? '<b>Partenaire fondateur</b> : 0 % jusqu’au 31 mars 2027, puis 8 % à vie.' : '10 % du montant des réservations venues de Tikette.'}</p>
-    <p class="note" style="margin-top:8px">Taux actuel : <b>${Math.round(e.taux_actuel * 100)} %</b>. Facture une fois par mois, sur les clients venus. Un client absent (marqué « Absent ») ne compte pas.</p>
-    <p class="note" style="margin-top:8px">SIRET : ${esc(e.siret || '—')}</p>
-    <h2 style="font-size:19px;margin-top:20px">Besoin d’aide ?</h2><p class="note" style="margin-top:6px">contact@tikette.fr — on peut aussi créer vos activités pour vous.</p></div></div>`;
-  $('#m-ok').onclick = async () => {
-    await rpc('pro_modifier_entreprise', { p: { nom: $('#m-nom').value, description: $('#m-desc').value, adresse: $('#m-adr').value, commune: $('#m-com').value,
-      email: $('#m-mail').value, telephone: $('#m-tel').value, site: $('#m-site').value } });
-    toast('Enregistré.'); await recharger(); $('#nom-ent').textContent = espace.entreprise.nom;
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('cloche')}Notifications</h2>
+    <div class="reglage"><div><b>Un e-mail à chaque réservation</b><p>Envoyé à ${esc(e.email)}. Les demandes à valider restent toujours visibles ici.</p></div><label class="interrupteur"><input type="checkbox" id="n-mail" ${e.notif_mail ? 'checked' : ''}><span></span></label></div>
+    <div class="reglage" style="display:block"><b>Prévenir aussi</b><p>D’autres adresses de votre équipe, séparées par des virgules (5 au plus).</p><div class="copie" style="margin-top:8px"><input id="n-copies" value="${esc(e.emails_copie)}" placeholder="accueil@monactivite.fr, gerant@monactivite.fr"><button class="btn prim p" id="n-ok">Enregistrer</button></div></div>
+    <div class="reglage"><div><b>E-mail des réservations</b><p>Adresse principale qui reçoit les réservations.</p></div><div class="copie" style="max-width:300px"><input id="n-email" value="${esc(e.email)}"><button class="btn p" id="n-email-ok">OK</button></div></div></div>`;
+  const sauver = async (p, t) => { await rpc('pro_modifier_entreprise', { p }); toast(t); await recharger(); };
+  $('#n-mail').onchange = (ev) => sauver({ notif_mail: ev.target.checked }, ev.target.checked ? 'E-mails activés.' : 'E-mails désactivés.');
+  $('#n-ok').onclick = () => sauver({ emails_copie: $('#n-copies').value }, 'Enregistré.');
+  $('#n-email-ok').onclick = () => sauver({ email: $('#n-email').value }, 'Enregistré.');
+}
+async function pEquipe() {
+  if (!proprio()) { $('#p-corps').innerHTML = nonProprio; return; }
+  const eq = await rpc('pro_equipe');
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('gens')}Équipe</h2><p class="note" style="margin:0 0 6px">Chaque personne se connecte avec sa propre adresse. L’équipe gère réservations, planning et activités ; seul le responsable gère l’équipe, la facturation et le partenariat.</p>
+    ${eq.membres.map((m) => `<div class="logiciel"><span><b>${esc(m.email)}</b>${m.moi ? ' <span class="note">(vous)</span>' : ''}<br><span class="note">${m.role === 'proprietaire' ? 'Responsable' : 'Équipe'}</span></span>${m.role === 'proprietaire' ? '' : `<button class="btn non p" data-retirer="${m.user_id}">Retirer</button>`}</div>`).join('')}
+    ${eq.invitations.map((i) => `<div class="logiciel"><span><b>${esc(i)}</b><br><span class="note">Invitée : accès à sa première connexion</span></span><button class="btn p" data-annuler="${esc(i)}">Annuler</button></div>`).join('')}
+    <div class="copie" style="margin-top:14px"><input id="q-mail" type="email" placeholder="collegue@monactivite.fr"><button class="btn prim" id="q-ok">${ic('plus')}Inviter</button></div>
+    <p class="note" style="margin:8px 0 0">La personne se connecte sur tikette.fr/pro/espace avec cette adresse (code par e-mail).</p></div>`;
+  $('#q-ok').onclick = async () => { const r = await rpc('pro_inviter', { p_email: $('#q-mail').value }); toast(r.ajoute ? 'Ajouté à l’équipe.' : 'Invitation enregistrée.'); pEquipe(); };
+  $$('[data-retirer]').forEach((b) => b.onclick = async () => { if (await demander({ titre: 'Retirer cette personne ?', bouton: 'Retirer', danger: true })) { await rpc('pro_retirer_membre', { p_user: b.dataset.retirer }); pEquipe(); } });
+  $$('[data-annuler]').forEach((b) => b.onclick = async () => { await rpc('pro_retirer_membre', { p_email: b.dataset.annuler }); pEquipe(); });
+}
+function pConges() {
+  const f = espace.offres.flatMap((o) => o.fermetures.map((x) => ({ ...x, offre: o.titre }))).filter((x) => new Date(x.fin) - new Date(x.debut) >= 864e5);
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('soleil')}Fermer une période</h2><p class="note" style="margin:0">Congés, travaux, privatisation : toutes vos activités sont fermées à la réservation sur ces dates. Les réservations déjà confirmées restent.</p>
+    <div class="grille g3" style="gap:0 14px;align-items:end"><div><label class="l">Du</label><input type="date" id="cg-du" value="${jourISO(new Date())}"></div><div><label class="l">Au (inclus)</label><input type="date" id="cg-au" value="${ajouterJours(jourISO(new Date()), 7)}"></div>
+    <div><label class="l">Motif (pour vous)</label><input id="cg-note" placeholder="Congés d’hiver"></div></div><button class="btn prim" id="cg-ok" style="margin-top:14px">Fermer cette période</button></div>
+  <div class="carte" style="margin-top:16px"><h2>Périodes fermées à venir</h2>${f.map((x) => `<div class="logiciel"><span><b>${fmt(x.debut, { day: 'numeric', month: 'short' })} → ${fmt(new Date(new Date(x.fin) - 1), { day: 'numeric', month: 'short', year: 'numeric' })}</b><br><span class="note">${esc(x.offre)}${x.note ? ' · ' + esc(x.note) : ''}</span></span><button class="btn p" data-rouvrir="${x.id}">Rouvrir</button></div>`).join('') || '<div class="vide">Aucune.</div>'}</div>`;
+  $('#cg-ok').onclick = async () => {
+    const du = $('#cg-du').value, au = $('#cg-au').value; if (!du || !au || au < du) return toast('Vérifiez les dates.', 'alerte');
+    await rpc('pro_fermer_tout', { p_debut: dateParis(du, '00:00').toISOString(), p_fin: dateParis(ajouterJours(au, 1), '00:00').toISOString(), p_note: $('#cg-note').value });
+    toast('Période fermée.'); await recharger(); pConges();
+  };
+  $$('[data-rouvrir]').forEach((b) => b.onclick = async () => { await rpc('pro_rouvrir', { p_fermeture: b.dataset.rouvrir }); await recharger(); pConges(); });
+}
+async function pFactu() {
+  if (!proprio()) { $('#p-corps').innerHTML = nonProprio; return; }
+  const e = espace.entreprise, fa = e.facturation || {}, rel = await rpc('pro_releves');
+  const nomMois = (m) => fmt(m + '-15T12:00:00Z', { month: 'long', year: 'numeric' }).replace(/^./, (c) => c.toUpperCase());
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('recu')}Informations de facturation</h2><div class="grille g2" style="gap:0 14px">
+    <div><label class="l">Raison sociale</label><input id="f-rs" value="${esc(fa.raison_sociale || '')}" placeholder="${esc(e.nom)}"></div><div><label class="l">N° de TVA (facultatif)</label><input id="f-tva" value="${esc(fa.tva || '')}" placeholder="FR12345678901"></div>
+    <div><label class="l">Adresse de facturation</label><input id="f-adr" value="${esc(fa.adresse || '')}" placeholder="${esc(e.adresse)}"></div><div><label class="l">E-mail des factures</label><input id="f-mail" value="${esc(fa.email || '')}" placeholder="${esc(e.email)}"></div></div>
+    <p class="note" style="margin-top:10px">SIRET : ${esc(e.siret || '—')}</p><button class="btn prim" id="f-ok" style="margin-top:6px">Enregistrer</button></div>
+  <div class="carte" style="margin-top:16px"><h2>${ic('euro')}Relevés mensuels</h2><p class="note" style="margin:0 0 6px">Commission calculée sur les clients venus. La facture du mois vous est envoyée par e-mail au début du mois suivant.</p>
+    ${rel.length ? `<table class="tableau"><tr><th>Mois</th><th style="text-align:right">Réservations</th><th style="text-align:right">Personnes</th><th style="text-align:right">Chiffre d’affaires</th><th style="text-align:right">Commission</th></tr>
+    ${rel.map((r) => `<tr><td>${nomMois(r.mois)}</td><td class="n">${r.reservations}</td><td class="n">${r.personnes}</td><td class="n">${euros(r.ca_cents)}</td><td class="n"><b>${euros(r.commission_cents)}</b></td></tr>`).join('')}</table>
+    <button class="btn p" id="f-exp" style="margin-top:12px">${ic('telecharger')}Exporter (Excel)</button>` : '<div class="vide">Pas encore de relevé.</div>'}</div>`;
+  $('#f-ok').onclick = async () => { await rpc('pro_modifier_entreprise', { p: { facturation: { raison_sociale: $('#f-rs').value, tva: $('#f-tva').value, adresse: $('#f-adr').value, email: $('#f-mail').value } } }); toast('Enregistré.'); await recharger(); };
+  if (rel.length) $('#f-exp').onclick = () => telechargerCsv(['Mois', 'Réservations', 'Personnes', 'Chiffre d’affaires (€)', 'Commission (€)'], rel.map((r) => [r.mois, r.reservations, r.personnes, virgule(r.ca_cents), virgule(r.commission_cents)]), 'releves');
+}
+function pPart() {
+  const e = espace.entreprise;
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('boutique')}Votre partenariat</h2>
+    <dl class="champs"><dt>Statut</dt><dd>${{ valide: 'Validé', en_attente: 'En vérification', suspendu: 'Suspendu', refuse: 'Refusé', quitte: 'Terminé' }[e.statut]}</dd>
+    <dt>Formule</dt><dd>${e.fondateur ? 'Partenaire fondateur : 0 % jusqu’au 31 mars 2027, puis 8 % à vie' : '10 % des réservations venues de Tikette'}</dd><dt>Taux actuel</dt><dd>${Math.round(e.taux_actuel * 100)} %</dd>
+    <dt>Conditions</dt><dd><a href="/pro/#conditions" target="_blank">Conditions partenaires</a></dd><dt>Aide</dt><dd><a href="mailto:contact@tikette.fr">contact@tikette.fr</a></dd></dl></div>
+  ${proprio() && e.statut !== 'quitte' ? `<div class="carte" style="margin-top:16px;border-color:#EBC7C7"><h2 style="color:var(--rouge)">${ic('alerte')}Quitter Tikette</h2><p class="note" style="margin:0 0 12px">Vos activités sont retirées de Tikette et les demandes en attente refusées (les clients sont prévenus). Les réservations confirmées restent à honorer. Sans frais.</p>
+    <button class="btn non" id="quitter">Mettre fin au partenariat</button></div>` : ''}`;
+  if ($('#quitter')) $('#quitter').onclick = async () => {
+    const t = await demander({ titre: 'Mettre fin au partenariat ?', texte: 'Pour confirmer, tapez <b>QUITTER</b>.', champ: 'Confirmation', bouton: 'Mettre fin', danger: true });
+    if ((t || '').trim().toUpperCase() !== 'QUITTER') return;
+    await rpc('pro_quitter'); toast('Partenariat terminé.'); await recharger(); pPart();
   };
 }
 
-// Nouvelles demandes : vérifiées toutes les minutes, avec le titre de l'onglet.
 setInterval(async () => {
-  if (!espace) return;
-  const avant = +espace.entreprise.a_valider || 0;
-  await recharger();
-  const n = +espace.entreprise.a_valider || 0;
-  document.title = (n ? `(${n}) ` : '') + 'Espace pro Tikette';
-  if (n > avant) { toast('Nouvelle demande de réservation !'); if (vueActuelle === 'accueil') accueil(); }
+  if (!espace) return; const avant = +espace.entreprise.a_valider || 0;
+  try { await recharger(); } catch { return; }
+  if ((+espace.entreprise.a_valider || 0) > avant) { toast('Nouvelle demande de réservation.', 'cloche'); if (vueActuelle === 'accueil') accueil(); }
 }, 60000);
-
 demarrer();
 </script>
 </body>
