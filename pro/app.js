@@ -18,10 +18,7 @@ sb.rpc('pro_places_fondateur').then(({ data }) => {
 });
 
 // ── Types d'activité ──
-const TYPES = [['escape', 'Escape game'], ['laser', 'Laser game, paintball'], ['karting', 'Karting'], ['bowling', 'Bowling, billard'], ['jeux', 'Jeux, réalité virtuelle'],
-  ['sensations', 'Sensations fortes'], ['plein_air', 'Plein air, nature'], ['nautique', 'Canoë, paddle, bateau'], ['cheval', 'Équitation'], ['atelier', 'Atelier, cours'],
-  ['degustation', 'Dégustation, vin, bière'], ['visite', 'Visite, savoir-faire'], ['bien_etre', 'Bien-être, spa'], ['spectacle', 'Spectacle, cabaret'], ['restaurant', 'Restaurant'], ['bar', 'Bar'], ['autre', 'Autre']];
-$('#i-type').innerHTML = TYPES.map(([k, t]) => `<option value="${k}">${t}</option>`).join('');
+const champTypes = ChampTypes($('#i-types'), { max: 8 });
 
 // ── SIRET : clé de contrôle puis annuaire officiel (recherche-entreprises.api.gouv.fr, gratuit, sans clé) ──
 let siretOk = null; // null = pas vérifié, false = faux, objet = trouvé
@@ -81,6 +78,7 @@ document.addEventListener('click', (e) => { if (!e.target.closest('#propos, #i-a
 
 // ── Inscription ──
 let infos = null;
+let champ = { valeurs: () => [], noms: () => [] }; champTypes.then((c) => { champ = c; });
 function lireFormulaire() {
   const nom = $('#i-nom').value.trim(), email = $('#i-mail').value.trim().toLowerCase();
   let site = $('#i-site').value.trim(); if (site && !/^https?:\/\//.test(site)) site = 'https://' + site;
@@ -88,8 +86,9 @@ function lireFormulaire() {
   if (siretOk === false) return 'Le SIRET n’est pas valide (laissez vide si vous n’en avez pas encore).';
   if (!adresse) return 'Choisissez l’adresse dans la liste proposée.';
   if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(email)) return 'L’adresse e-mail ne semble pas valide.';
+  if (!champ.valeurs().length) return 'Choisissez au moins un type d’activité.';
   if (!$('#i-ok').checked) return 'Cochez la case des conditions partenaires.';
-  infos = { nom, siret: $('#i-siret').value.replace(/\D/g, ''), activite: $('#i-type').value, ...adresse, email, telephone: $('#i-tel').value.trim(), site };
+  infos = { nom, siret: $('#i-siret').value.replace(/\D/g, ''), activite: champ.noms().join(', '), genres: champ.valeurs(), ...adresse, email, telephone: $('#i-tel').value.trim(), site };
   return '';
 }
 async function inscrire() {

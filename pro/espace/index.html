@@ -8,6 +8,7 @@
 <link rel="icon" href="/favicon.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="/pro/types.js"></script>
 <style>
 :root{--fond:#F5F3F9;--carte:#fff;--bord:#E7E2F0;--bord2:#D9D2E6;--texte:#1E1433;--doux:#6B6283;--pale:#9A92AE;
 --violet:#5B2AA8;--violet2:#EFE8FB;--nuit:#1E1433;--nuit2:#2C1F48;--lueur:#FFD166;--rose:#FF6B9A;
@@ -109,6 +110,11 @@ main{padding:28px 34px 70px;width:100%;max-width:1240px}
 .sous-nav button.on{background:#fff;color:var(--texte);font-weight:700;box-shadow:var(--ombre)}
 .logiciel{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--bord);font-size:14px}.logiciel:last-child{border:0}
 .qr{background:#fff;border:1px solid var(--bord);border-radius:12px;padding:10px;width:180px;height:180px}.qr img{width:100%;height:100%}
+.ct-puces{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}.ct-puces:empty{display:none}.ct-puce{display:inline-flex;align-items:center;gap:6px;background:var(--violet2);color:#3D1F73;border-radius:99px;padding:6px 6px 6px 13px;font-weight:700;font-size:14px}
+.ct-puce button{border:0;background:#fff;color:var(--violet);width:22px;height:22px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1}
+.ct-saisie{position:relative}.ct-liste{position:absolute;left:0;right:0;top:calc(100% + 6px);background:#fff;border:1px solid var(--bord2);border-radius:12px;box-shadow:0 18px 40px rgba(30,20,51,.15);z-index:5;max-height:300px;overflow:auto;padding:6px}
+.ct-item{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:14px}.ct-item.on,.ct-item:hover{background:var(--violet2)}
+.ct-titre{font-size:12px;color:var(--pale);padding:6px 12px 2px}.ct-vide{padding:10px 12px;font-size:13px;color:var(--doux)}.ct-aide{font-size:12px;color:var(--pale);margin-top:5px}
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--nuit);color:#fff;font-weight:500;border-radius:10px;padding:11px 18px;z-index:40;display:flex;gap:9px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.25)}
 @media(max-width:860px){#appli{grid-template-columns:1fr}nav.cote{position:fixed;bottom:0;top:auto;height:auto;width:100%;flex-direction:row;overflow-x:auto;padding:6px;z-index:10;gap:0}
 nav.cote .logo,nav.cote .bas,nav.cote button.actif::before{display:none}nav.cote button{flex-direction:column;gap:3px;font-size:10.5px;padding:7px 9px;width:auto;white-space:nowrap}
@@ -192,7 +198,6 @@ const icp = (n) => ic(n, 'style="width:13px;height:13px;vertical-align:-2px"');
 
 const STATUTS = { demandee: 'À valider', confirmee: 'Confirmée', refusee: 'Refusée', expiree: 'Expirée', annulee_client: 'Annulée par le client', annulee_pro: 'Annulée par vous', venue: 'Venue', absente: 'Absente' };
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-const GENRES = [['escape','Escape game'],['laser','Laser game, paintball'],['karting','Karting'],['bowling','Bowling, billard'],['jeux','Jeux, réalité virtuelle'],['sensations','Sensations fortes'],['plein_air','Plein air, nature'],['nautique','Canoë, paddle, bateau'],['cheval','Équitation'],['atelier','Atelier, cours'],['degustation','Dégustation, vin, bière'],['visite','Visite, savoir-faire'],['bien_etre','Bien-être, spa'],['spectacle','Spectacle, cabaret'],['restaurant','Restaurant'],['bar','Bar']];
 const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
 let espace = null, vueActuelle = 'accueil';
 const proprio = () => espace?.entreprise.role === 'proprietaire';
@@ -501,8 +506,9 @@ function activites() {
   + (espace.offres.map((o) => { const ph = (o.photos || [])[0] || (espace.entreprise.photos || [])[0];
     return `<div class="offre"><div class="ph" style="${ph ? `background-image:url('${esc(ph)}')` : ''}">${ph ? '' : ic('image')}</div>
     <div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><b style="font-size:16px">${esc(o.titre)}</b>${o.actif ? '<span class="etat confirmee">Proposée</span>' : '<span class="etat">En pause</span>'}${!o.horaires.length ? '<span class="etat demandee">Sans horaires</span>' : ''}</div>
-    <div class="note" style="margin-top:3px">${(o.genres || []).map((g) => GENRES.find((x) => x[0] === g)?.[1]).filter(Boolean).join(', ')}${(o.genres || []).length ? ' · ' : ''}${o.mode === 'privatise' ? `${o.ressources.filter((r) => r.actif).length} salle(s), un groupe à la fois` : `${o.ressources.reduce((s, r) => s + (r.actif ? r.capacite : 0), 0)} places partagées`} · ${o.duree_min} min · ${euros(o.prix_cents)} ${o.prix_par === 'personne' ? 'par personne' : 'le groupe'} · ${o.min_personnes} à ${o.max_personnes} pers. · ${o.confirmation === 'immediate' ? 'confirmation immédiate' : 'vous validez'}${o.demander_prenoms ? ' · prénoms demandés' : ''}</div></div>
+    <div class="note" style="margin-top:3px"><span data-types="${esc((o.genres || []).join(','))}"></span>${o.mode === 'privatise' ? `${o.ressources.filter((r) => r.actif).length} salle(s), un groupe à la fois` : `${o.ressources.reduce((s, r) => s + (r.actif ? r.capacite : 0), 0)} places partagées`} · ${o.duree_min} min · ${euros(o.prix_cents)} ${o.prix_par === 'personne' ? 'par personne' : 'le groupe'} · ${o.min_personnes} à ${o.max_personnes} pers. · ${o.confirmation === 'immediate' ? 'confirmation immédiate' : 'vous validez'}${o.demander_prenoms ? ' · prénoms demandés' : ''}</div></div>
     <button class="btn p" data-modif="${o.id}">${ic('crayon')}Modifier</button></div>`; }).join('') || `<div class="carte vide">Aucune activité pour l’instant.<br><br><button class="btn prim" onclick="editeur(null)">${ic('plus')}Créer ma première activité</button></div>`);
+  $$('[data-types]').forEach(async (x) => { const n = await nomsTypes(x.dataset.types.split(',')); x.textContent = n.length ? n.join(', ') + ' · ' : ''; });
   $('#nouv').onclick = () => editeur(null);
   $$('[data-modif]').forEach((b) => b.onclick = () => editeur(espace.offres.find((o) => o.id === b.dataset.modif)));
 }
@@ -515,7 +521,7 @@ function editeur(o) {
   <h3 style="margin-top:14px">Présentation</h3>
   ${champ('e-titre', 'Nom vu par les clients', o.titre, 'maxlength="90" placeholder="Escape game « Le Manoir »"')}
   <label class="l" for="e-desc">Description</label><textarea id="e-desc" rows="3" maxlength="1500" placeholder="Ce qui est compris, l’ambiance, à partir de quel âge…">${esc(o.description)}</textarea>
-  <label class="l">Type d’activité <span style="color:var(--pale)">· plusieurs choix possibles</span></label><div class="choix puces">${GENRES.map(([k, t]) => `<label><input type="checkbox" value="${k}" ${(o.genres || [o.genre]).includes(k) ? 'checked' : ''} data-genre>${t}</label>`).join('')}</div>
+  <label class="l">Types d’activité <span style="color:var(--pale)">· tapez un mot, choisissez, recommencez</span></label><div id="e-types"></div>
   <p class="note" style="margin:8px 0 0">${icp('info')} Tikette s’occupe du reste : selon ces types et le nom de l’activité, elle est proposée dans les bonnes sorties (en amoureux, entre potes, entre copines, insolite…).</p>
   <div class="sep"></div><h3>Fonctionnement</h3>
   <div class="choix" style="margin-top:10px"><label><input type="radio" name="mode" value="privatise" ${o.mode === 'privatise' ? 'checked' : ''}><span><b>Une salle = un groupe</b><br><span class="note">Escape game, salle VR, spa privatif : un seul groupe par salle et par créneau.</span></span></label>
@@ -538,6 +544,7 @@ function editeur(o) {
   <div class="photos" id="e-photos"></div><label class="btn p" style="margin-top:10px">${ic('image')}Ajouter des photos<input type="file" id="e-fichier" accept="image/jpeg,image/png,image/webp" multiple style="display:none"></label>
   <div class="reglage" style="margin-top:12px"><div><b>Proposée dans Tikette</b><p>Désactivez pour la mettre en pause.</p></div><label class="interrupteur"><input type="checkbox" id="e-actif" ${o.actif ? 'checked' : ''}><span></span></label></div>`,
   pied: `${o.id ? `<button class="btn non" id="e-suppr" style="margin-right:auto">${ic('poubelle')}Supprimer</button>` : ''}<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="e-ok">Enregistrer</button>` });
+  const typesP = ChampTypes($('#e-types', m), { valeurs: o.genres || [] });
   let ressources = o.ressources.filter((r) => r.actif !== false).map((r) => ({ ...r })), horaires = o.horaires.map((h) => ({ ...h })), photos = [...(o.photos || [])];
   const dessinerRes = () => {
     const priv = $('input[name=mode]:checked', m).value === 'privatise';
@@ -580,7 +587,7 @@ function editeur(o) {
   $('#e-ok', m).onclick = async () => {
     const titre = $('#e-titre', m).value.trim();
     if (titre.length < 2) return toast('Donnez un nom à l’activité.', 'alerte');
-    const genres = $$('[data-genre]:checked', m).map((x) => x.value);
+    const genres = (await typesP).valeurs();
     if (!genres.length) return toast('Choisissez au moins un type d’activité.', 'alerte');
     if (+$('#e-min', m).value > +$('#e-max', m).value) return toast('Le minimum de personnes dépasse le maximum.', 'alerte');
     if (horaires.some((h) => h.debut >= h.fin)) return toast('Une plage horaire finit avant de commencer.', 'alerte');
