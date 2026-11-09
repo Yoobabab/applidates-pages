@@ -2,16 +2,16 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-9MyZJX+i28mOu/bO+cJZBT7h8Q4HCfJUPkk2cK9CaPc=' 'sha256-4IhrN7lYzuknKOSct4aBmWy39oCJNEz5rwEYJkwUIWQ='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-4ac+j7XtSVrR6h+fpVhbUZyEWns9Sw5HCuHXifDXivg=' 'sha256-4IhrN7lYzuknKOSct4aBmWy39oCJNEz5rwEYJkwUIWQ='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Les idées sur 10 ans · Egg Not Found</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="logos/oeuf.png">
-<script>if (/[?&]console\b/.test(location.search)) document.documentElement.classList.add('dans-console');</script>
+<script>if (/[?&]console\b/.test(location.search)) { const r = document.documentElement; r.classList.add('dans-console'); let t = 'auto'; try { t = localStorage.getItem('console-theme') || 'auto'; } catch (e) {} const sombre = t === 'sombre' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches); r.classList.add(sombre ? 'console-sombre' : 'console-clair'); }</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
 <style>
 * { box-sizing: border-box; }
 body { margin: 0; }
@@ -122,7 +122,9 @@ tr.premier .score { color: var(--cerise); }
 .manquantes { display: grid; gap: 6px; color: var(--creme-doux); font-size: 14px; }
 .manquantes b { color: var(--creme); font-weight: 500; }
 /* Dans la console : pas de second logo, même fond que la console */
-.dans-console { --noir: #0A0A0A; }
+.dans-console { --titre: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif; }
+.console-clair { --noir: #F7F7F6; --carte: #FFFFFF; --carte-2: #F2F2F0; --trait: #E7E7EA; --creme: #18181A; --creme-doux: #5F5F66; --creme-faible: #9C9CA3; --cerise: #DB2E46; --cerise-sombre: #FDECEE; --vert: #2F8A5B; color-scheme: light; }
+.console-sombre { --noir: #2B2B2F; --carte: #35353A; --carte-2: #3C3C42; --trait: #424247; --creme: #F2F0EC; --creme-doux: #B4B2AE; --creme-faible: #85848A; --cerise: #F25B70; --cerise-sombre: #4A3237; --vert: #5CC08C; color-scheme: dark; }
 .dans-console .haut { display: none; }
 .dans-console .page { padding-block: 4px 24px; padding-left: 0; padding-right: 0; max-width: none; }
 .dans-console body { overflow: hidden; }

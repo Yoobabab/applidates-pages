@@ -467,6 +467,57 @@
   }
   @media (max-width: 520px) { .acc-chiffres { grid-template-columns: 1fr; } .horloge { font-size: 30px; } .route .pas { font-size: 0; } }
   @media (prefers-reduced-motion: reduce) { .accueil .o, .grand-oeuf, .pouls, .fil li.neuf { animation: none; } .prep .jauge i, .anneau .val, .route .avance, .route .ici { transition: none; } }
+  /* ───── Console v3 : composants de toutes les pages (boutons, onglets, cartes, champs, tableaux) ───── */
+  .entete { align-items: flex-end; margin-bottom: 2px; }
+  .entete h1 { font-size: 26px; font-weight: 600; letter-spacing: -.01em; font-family: 'Schibsted Grotesk', system-ui, sans-serif; }
+  .entete p { font-size: 13.5px; margin-top: 4px; }
+  .kpis { gap: 14px; }
+  .kpi, .panneau, .pan, .app, .groupe-recette, .depot, .fenetre, .carte-connexion, .palette { border-radius: 10px; border-color: var(--ligne); }
+  .kpi { padding: 16px 18px; background: var(--panneau); }
+  .kpi .t { font-family: var(--mono); font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--pale); }
+  .kpi .t svg.i { display: none; }
+  .kpi .v { font-size: 28px; letter-spacing: -.05em; margin: 6px 0 2px; }
+  .kpi .s { font-weight: 500; font-size: 12.5px; }
+  .panneau { padding: 18px 20px; }
+  .panneau h2, .pan .tt h2, .titre-section, .groupe-liens { font-family: var(--mono); font-size: 10.5px; letter-spacing: .08em; color: var(--pale); font-weight: 700; text-transform: uppercase; }
+  .pan .tt { padding: 14px 18px; }
+  .pan .tt svg.i { color: var(--pale); }
+  .periodes { display: inline-flex; flex-wrap: wrap; gap: 2px; background: var(--panneau2); border-radius: 9px; padding: 3px; width: fit-content; max-width: 100%; }
+  .periode, .onglets-page button, .seg button { border: 0; background: none; color: var(--doux); border-radius: 7px; padding: 6px 12px; font-size: 13px; font-weight: 500; }
+  .periode:hover, .onglets-page button:hover, .seg button:hover { color: var(--creme); }
+  .periode.actif, .onglets-page button.actif, .seg button.on { background: var(--panneau); color: var(--creme); box-shadow: 0 1px 2px var(--ombre); font-weight: 600; }
+  .onglets-page, .seg { background: var(--panneau2); border: 0; border-radius: 9px; padding: 3px; gap: 2px; }
+  .btn { border-radius: 7px; background: var(--creme); color: var(--fond); font-weight: 600; padding: 10px 16px; font-size: 13.5px; }
+  .btn:hover { filter: brightness(1.15); }
+  .btn-contour { border-radius: 7px; border: 1px solid var(--ligne2); background: var(--panneau); color: var(--creme); font-weight: 600; padding: 6px 12px; font-size: 12.5px; }
+  .btn-contour:hover { border-color: var(--creme); }
+  .btn-lien { color: var(--doux); }
+  .champ, select.champ, textarea.champ { border-radius: 7px; background: var(--panneau); border: 1px solid var(--ligne2); font-size: 14px; color: var(--creme); font-family: inherit; }
+  .champ:focus { outline: 2px solid color-mix(in srgb, var(--rouge) 45%, transparent); outline-offset: 0; border-color: var(--rouge); }
+  label.lab { font-family: 'Schibsted Grotesk', system-ui, sans-serif; text-transform: none; letter-spacing: 0; font-size: 12px; font-weight: 600; color: var(--doux); }
+  .etiquette, .etape, .tag { border-radius: 5px; font-weight: 600; }
+  .liens a, .puce-app, .qui-p { border-radius: 7px; }
+  .tuile-lien { border-radius: 8px; background: var(--panneau); }
+  .app { padding: 16px 18px; background: var(--panneau); }
+  .app:hover { border-color: var(--ligne2); box-shadow: 0 4px 14px var(--ombre); }
+  .barre .b { background: var(--rouge); border-radius: 4px 4px 0 0; }
+  .progression span { background: var(--rouge); }
+  th { font-size: 10.5px; color: var(--pale); letter-spacing: .08em; padding-top: 8px; }
+  td { border-bottom-color: var(--ligne); }
+  tbody tr:hover td { background: color-mix(in srgb, var(--creme) 3%, transparent); }
+  .coche input { border-color: var(--ligne2); border-radius: 4px; }
+  .coche input:checked { background: var(--creme); border-color: var(--creme); }
+  .coche input:checked::after { border-color: var(--fond); }
+  .groupe-recette { padding: 12px 16px; background: var(--panneau); }
+  .version { font-size: 11px; letter-spacing: .04em; }
+  .voile { background: color-mix(in srgb, #000 42%, transparent); }
+  .fenetre { padding: 22px 24px; box-shadow: 0 30px 60px var(--ombre); }
+  .depot { border-color: var(--ligne2); }
+  .depot .gros { color: var(--pale); }
+  .liste-ligne, .offre, .coche, .alerte-ligne, .retour { border-color: var(--ligne); }
+  .icone-btn { border-radius: 7px; }
+  .carte-connexion { box-shadow: 0 20px 50px var(--ombre); }
+  .cadre-objectifs { background: transparent; }
 </style>
 </head>
 <body>
