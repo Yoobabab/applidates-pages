@@ -535,7 +535,7 @@ async function demarrer() {
 }
 
 // ───────── Navigation ─────────
-const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres, retours: pageRetours, prospection: pageProspection };
+const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres, retours: pageRetours, prospection: pageProspection, espacepro: pageEspacePro };
 let courant = { nom: 'ensemble', app: null };
 let cochesCache = null;
 let retoursBadge = 0; // retours à traiter + réponses à valider, toutes applis
@@ -588,6 +588,7 @@ function dessinerNav() {
     onglet('À faire', 'afaire', null, '', restant ? String(restant) : ''),
     onglet('Coûts et échéances', 'couts'),
     onglet('Partenaires', 'partenaires'),
+    onglet('Espace pro', 'espacepro'),
     onglet('Prospection', 'prospection'),
     onglet('Avances de frais', 'avances'),
     onglet('Offres et abonnements', 'offres'),
@@ -1250,6 +1251,79 @@ async function pageProspection() {
       h('button', { class: 'btn-contour', disabled: pageProspect === 0, onclick: () => { pageProspect--; re(); } }, '‹'), h('span', { class: 'doux' }, `${pageProspect + 1} / ${pages}`),
       h('button', { class: 'btn-contour', disabled: pageProspect >= pages - 1, onclick: () => { pageProspect++; re(); } }, '›')) : '',
     h('p', { class: 'note-bas' }, '« Écrire dans Outlook » ouvre le mail déjà rédigé dans Outlook (s’il est votre messagerie par défaut) depuis contact@tikette.fr, et passe l’entreprise en « Mail envoyé ». Envoyer 20 à 30 mails par jour au plus, le mardi ou le jeudi matin. Relance 5 jours après.'));
+}
+
+// ───────── Espace pro de Tikette (entreprises partenaires, réservations, commissions, avis signalés) ─────────
+const STATUTS_PRO = { en_attente: 'À vérifier', valide: 'Validée', suspendu: 'Suspendue', refuse: 'Refusée', quitte: 'A quitté' };
+const COULEUR_PRO = { en_attente: 'var(--jaune)', valide: 'var(--vert)', suspendu: 'var(--rose)', refuse: 'var(--doux)', quitte: 'var(--doux)' };
+let ongletPro = 'entreprises', filtrePro = '';
+async function pageEspacePro() {
+  const g = generation;
+  let v;
+  try { v = await rpc('console_pro_vue'); }
+  catch (e) {
+    if (!/console_pro_vue|does not exist|Could not find/i.test(String(e?.message))) throw e;
+    afficherPour(g, entete('Espace pro', 'Les entreprises inscrites sur tikette.fr/pro'), h('div', { class: 'panneau' }, 'Il faut d’abord lancer dans Supabase (projet Tikette) : ',
+      h('b', {}, 'pro.sql'), ', ', h('b', {}, 'pro-types.sql'), ', ', h('b', {}, 'pro-auto.sql'), ', ', h('b', {}, 'pro-avis.sql'), ' puis ', h('b', {}, 'console-pro.sql'), '.')); return;
+  }
+  const t = v.totaux, re = () => aller('espacepro');
+  const cts = (c) => euros((c || 0) / 100);
+  const ents = v.entreprises.filter((e) => !filtrePro || e.statut === filtrePro);
+  const statut = (e) => h('select', { class: 'champ', style: `width:auto;padding:5px 8px;font-size:12.5px;color:${COULEUR_PRO[e.statut]}`, onchange: async (x) => {
+      const n = x.target.value;
+      if (['refuse', 'suspendu'].includes(n) && !confirm(`${STATUTS_PRO[n]} : ${e.nom} ? Ses activités ne seront plus proposées dans Tikette.`)) { x.target.value = e.statut; return; }
+      await rpc('console_pro_statut', { p_id: e.id, p_statut: n }); re(); } },
+    Object.entries(STATUTS_PRO).map(([k, l]) => h('option', { value: k, selected: k === e.statut }, l)));
+  const tabEnt = h('div', {},
+    h('div', { class: 'periodes', style: 'margin-bottom:10px' }, [['', 'Toutes'], ...Object.entries(STATUTS_PRO)].map(([k, l]) =>
+      h('button', { class: 'periode' + (filtrePro === k ? ' actif' : ''), onclick: () => { filtrePro = k; re(); } }, l + (k ? ` (${v.entreprises.filter((e) => e.statut === k).length})` : '')))),
+    ents.length ? h('div', { class: 'panneau tableau' }, h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'ENTREPRISE'), h('th', {}, 'CONTACT'), h('th', {}, 'ACTIVITÉ'), h('th', {}, 'RÉSERVATIONS'), h('th', {}, 'COMMISSION'), h('th', {}, 'AVIS'), h('th', {}, 'STATUT'))),
+      h('tbody', {}, ents.map((e) => h('tr', {},
+        h('td', {}, h('b', {}, e.nom), e.fondateur ? h('span', { style: 'color:var(--jaune);font-size:11px;margin-left:6px;font-weight:700' }, 'FONDATEUR') : '',
+          h('div', { class: 'doux', style: 'font-size:12px' }, e.activite || '—', ' · ', e.commune, e.code_postal ? ` (${e.code_postal.slice(0, 2)})` : ''),
+          h('div', { class: 'doux', style: 'font-size:11.5px' }, 'Inscrite le ', dateFr(e.cree_le), e.siret ? ' · SIRET ' + e.siret : ' · sans SIRET')),
+        h('td', { style: 'font-size:12.5px' }, h('a', { href: 'mailto:' + e.email, style: 'color:inherit' }, e.email), h('div', { class: 'doux', style: 'font-size:12px' }, e.telephone || ''),
+          e.site ? h('a', { href: e.site, target: '_blank', rel: 'noopener', class: 'doux', style: 'font-size:12px' }, 'site') : ''),
+        h('td', { style: 'font-size:12.5px' }, `${e.activites} activité${e.activites > 1 ? 's' : ''}`, h('div', { class: 'doux', style: 'font-size:12px' },
+          e.agenda_relie ? 'agenda relié' : 'agenda non relié', e.equipe > 1 ? ` · équipe de ${e.equipe}` : '', e.connecteur ? ` · veut ${e.connecteur}` : '')),
+        h('td', {}, nombre(e.reservations), e.a_valider ? h('div', { style: 'color:var(--jaune);font-size:12px' }, `${e.a_valider} à valider`) : '',
+          e.refusees ? h('div', { class: 'doux', style: 'font-size:12px' }, `${e.refusees} refusée${e.refusees > 1 ? 's' : ''} ou sans réponse`) : ''),
+        h('td', {}, cts(e.commission_cents), h('div', { class: 'doux', style: 'font-size:12px' }, `taux ${Math.round(e.taux * 100)} % · CA ${cts(e.ca_cents)}`)),
+        h('td', {}, e.avis ? [h('b', {}, String(e.note).replace('.', ',')), h('span', { style: 'color:var(--jaune)' }, ' ★'), h('div', { class: 'doux', style: 'font-size:12px' }, `${e.avis} avis`)] : h('span', { class: 'doux' }, '—')),
+        h('td', {}, statut(e))))))) : h('div', { class: 'panneau doux' }, 'Aucune entreprise ici pour l’instant.'));
+  const mois = [...new Set(v.releves.map((r) => r.mois))];
+  const tabFact = mois.length ? mois.map((m) => {
+    const lignes = v.releves.filter((r) => r.mois === m), total = lignes.reduce((a, r) => a + r.commission_cents, 0);
+    return h('div', { class: 'panneau', style: 'margin-bottom:12px' }, h('div', { style: 'display:flex;justify-content:space-between;align-items:baseline' },
+        h('b', {}, new Date(m + '-15').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })), h('span', {}, 'À facturer : ', h('b', {}, cts(total)))),
+      h('table', { style: 'width:100%;margin-top:8px;font-size:13px' }, h('tbody', {}, lignes.map((r) => h('tr', {}, h('td', {}, r.nom), h('td', { class: 'doux' }, `${r.reservations} venue${r.reservations > 1 ? 's' : ''}`),
+        h('td', { class: 'doux' }, 'CA ' + cts(r.ca_cents)), h('td', { style: 'text-align:right' }, h('b', {}, cts(r.commission_cents))))))));
+  }) : h('div', { class: 'panneau doux' }, 'Pas encore de client venu par Tikette. Les commissions à facturer apparaîtront ici, mois par mois (clients marqués « Venu » par le pro).');
+  const tabAvis = v.avis_signales.length ? v.avis_signales.map((a) => h('div', { class: 'panneau', style: 'margin-bottom:10px' },
+      h('div', {}, h('b', {}, a.entreprise), ' · ', a.offre, ' · ', h('span', { style: 'color:var(--jaune)' }, '★'.repeat(a.note)), h('span', { class: 'doux', style: 'font-size:12px' }, ' · ', dateFr(a.cree_le))),
+      a.tags.length ? h('div', { class: 'doux', style: 'font-size:12.5px;margin-top:4px' }, a.tags.join(' · ')) : '',
+      a.mot ? h('p', { style: 'margin:8px 0 0' }, '« ', a.mot, ' »') : '', a.reponse ? h('p', { class: 'doux', style: 'margin:6px 0 0;font-size:13px' }, 'Réponse du pro : ', a.reponse) : '',
+      h('div', { style: 'margin-top:10px;display:flex;gap:8px' },
+        h('button', { class: 'btn-contour', onclick: async () => { await rpc('console_pro_avis_decider', { p_reservation: a.id, p_action: 'garder' }); re(); } }, 'Garder (critique honnête)'),
+        h('button', { class: 'btn-contour', onclick: async () => { if (confirm('Retirer cet avis ? Il sera supprimé pour de bon.')) { await rpc('console_pro_avis_decider', { p_reservation: a.id, p_action: 'retirer' }); re(); } } }, 'Retirer'))))
+    : h('div', { class: 'panneau doux' }, 'Aucun avis signalé par les entreprises. Règle : on retire seulement un avis injurieux, hors sujet ou qui ne vient pas d’un vrai client ; une critique honnête reste.');
+  const logiciels = Object.entries(v.connecteurs).sort((a, b) => b[1] - a[1]);
+  const tabLog = logiciels.length ? h('div', { class: 'panneau' }, h('p', { class: 'doux', style: 'margin-top:0' }, 'Logiciels de réservation que les entreprises veulent relier à Tikette (le plus demandé = le prochain à brancher).'),
+      logiciels.map(([n, c]) => h('div', { style: 'display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--ligne)' }, h('span', {}, n), h('b', {}, String(c)))))
+    : h('div', { class: 'panneau doux' }, 'Aucune demande de connexion à un logiciel pour l’instant.');
+  const ONGLETS = [['entreprises', `Entreprises (${t.inscrites})`, tabEnt], ['factures', 'Commissions à facturer', tabFact], ['avis', `Avis signalés${t.avis_signales ? ` (${t.avis_signales})` : ''}`, tabAvis], ['logiciels', 'Logiciels demandés', tabLog]];
+  afficherPour(g, entete('Espace pro', 'Les entreprises inscrites sur tikette.fr/pro et ce que Tikette leur apporte', h('a', { class: 'btn-contour', href: 'https://tikette.fr/pro/', target: '_blank', rel: 'noopener' }, 'Voir tikette.fr/pro')),
+    h('div', { class: 'kpis' },
+      kpi('Entreprises', nombre(t.inscrites), `${t.validees} validées · ${t.en_attente} à vérifier`, t.en_attente ? 'var(--jaune)' : ''),
+      kpi('Partenaires fondateurs', `${t.fondateurs} / 50`, `il reste ${t.places_fondateur} places`),
+      kpi('Réservations du mois', nombre(t.reservations_mois), `${nombre(t.personnes_mois)} personnes · ${t.demandes_en_attente} en attente de réponse`),
+      kpi('Commission du mois', cts(t.commission_mois_cents), `CA apporté ${cts(t.ca_mois_cents)}`, 'var(--vert)'),
+      kpi('Avis clients', t.avis ? String(t.note_moyenne).replace('.', ',') + ' ★' : '—', `${t.avis} avis${t.avis_signales ? ` · ${t.avis_signales} signalé(s)` : ''}`, t.avis_signales ? 'var(--jaune)' : ''),
+      kpi('À surveiller (30 j)', nombre(t.refusees_ou_expirees_30j + t.absents_30j), `${t.refusees_ou_expirees_30j} refusées ou sans réponse · ${t.absents_30j} absents`)),
+    h('div', { class: 'periodes', style: 'margin:16px 0 12px' }, ONGLETS.map(([k, l]) => h('button', { class: 'periode' + (ongletPro === k ? ' actif' : ''), onclick: () => { ongletPro = k; re(); } }, l))),
+    ONGLETS.find((o) => o[0] === ongletPro)[2],
+    h('p', { class: 'note-bas' }, 'Une entreprise qui s’inscrit sur tikette.fr/pro passe toute seule en « Inscrit » dans la Prospection (même e-mail, ou même nom et même ville). Commission due = clients marqués « Venu » par le pro.'));
 }
 
 // ───────── Retours des testeurs ─────────
