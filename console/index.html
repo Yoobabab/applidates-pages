@@ -535,7 +535,7 @@ async function demarrer() {
 }
 
 // ───────── Navigation ─────────
-const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres, retours: pageRetours };
+const PAGES = { ensemble: pageEnsemble, objectifs: pageObjectifs, dixans: pageDixAns, tikette: pageTikette, appli: pageAppli, afaire: pageAFaire, couts: pageCouts, partenaires: pagePartenaires, avances: pageAvances, offres: pageOffres, retours: pageRetours, prospection: pageProspection };
 let courant = { nom: 'ensemble', app: null };
 let cochesCache = null;
 let retoursBadge = 0; // retours à traiter + réponses à valider, toutes applis
@@ -588,6 +588,7 @@ function dessinerNav() {
     onglet('À faire', 'afaire', null, '', restant ? String(restant) : ''),
     onglet('Coûts et échéances', 'couts'),
     onglet('Partenaires', 'partenaires'),
+    onglet('Prospection', 'prospection'),
     onglet('Avances de frais', 'avances'),
     onglet('Offres et abonnements', 'offres'),
     h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
@@ -1112,6 +1113,127 @@ async function pageOffres() {
 }
 
 
+
+// ───────── Prospection (entreprises à contacter pour Tikette) ─────────
+const STATUTS_PROSPECT = { a_contacter: 'À contacter', envoye: 'Mail envoyé', relance: 'Relancé', appele: 'Appelé', inscrit: 'Inscrit', non: 'Non merci' };
+const COULEUR_PROSPECT = { a_contacter: 'var(--doux)', envoye: 'var(--jaune)', relance: 'var(--jaune)', appele: 'var(--jaune)', inscrit: 'var(--vert)', non: 'var(--rose)' };
+let prospectsCache = null, filtreProspect = { vue: 'priorite', dep: '', act: '', statut: '', q: '', mail: true }, pageProspect = 0, placesFondateur = null;
+const nomCourt = (n) => String(n || '').split(/ - | – | \| /)[0].trim();
+function mailProspect(p, relance) {
+  const nom = nomCourt(p.nom), lieu = p.commune ? `${nom} à ${p.commune}` : nom;
+  const objet = relance ? `Re : Des clients pour ${nom}` : `Des clients pour ${nom}, sans commission jusqu’en avril`;
+  const corps = relance ? `Bonjour,
+
+Je me permets une petite relance, je sais que les mails se perdent vite.
+
+Il reste ${placesFondateur ?? 'encore des'} places de partenaire fondateur (0 % jusqu’au 31 mars, puis 8 %). L’appli sort le 14 décembre, et les activités inscrites avant seront les premières proposées.
+
+L’inscription prend dix minutes : https://tikette.fr/pro
+
+Si ça ne vous intéresse pas, dites-le-moi simplement et je n’insisterai pas.
+
+Greg, Tikette` : `Bonjour,
+
+Je m’appelle Greg, j’habite à Tavel et avec un ami on lance Tikette le 14 décembre : une appli qui organise une sortie complète en une minute pour les couples et les bandes de potes. Activité, resto, balade, tout est prêt.
+
+On cherche des activités du coin à proposer dedans, et ${lieu} colle exactement à ce que nos utilisateurs cherchent.
+
+Le principe est simple :
+- vous indiquez vos créneaux et vos places, le client réserve en deux clics et paie chez vous ;
+- vous recevez et validez les réservations dans votre espace pro ;
+- on prend 10 % seulement sur les clients qu’on vous envoie (GetYourGuide et Viator prennent 20 à 30 %) ;
+- pour les 50 premières entreprises : 0 % jusqu’au 31 mars, puis 8 % à vie.
+
+L’inscription est gratuite, sans engagement, et prend dix minutes : https://tikette.fr/pro
+
+Si vous préférez en parler de vive voix, répondez à ce mail et je vous appelle quand ça vous arrange.
+
+Bonne journée,
+Greg, Tikette
+
+Vous recevez ce mail parce que votre activité est référencée par l’office de tourisme. Une simple réponse « non merci » et on ne vous écrit plus.`;
+  const a = String(p.email || '').split(/[\s,;/]+/)[0];
+  return { a, objet, corps, mailto: `mailto:${encodeURIComponent(a)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps.replace(/\n/g, '\r\n'))}`,
+    web: `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(a)}&subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps)}` };
+}
+async function importerProspects(fichier, etat) {
+  etat.textContent = 'Lecture du fichier…';
+  if (!window.XLSX) await new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = ok; s.onerror = ko; document.head.append(s); });
+  const wb = XLSX.read(await fichier.arrayBuffer());
+  const lire = (nomFeuille) => (wb.Sheets[nomFeuille] ? XLSX.utils.sheet_to_json(wb.Sheets[nomFeuille], { defval: '' }) : []);
+  const prio = new Set(lire('Les 30 en priorité').map((r) => r['Nom'] + '|' + r['Commune']));
+  const toutes = lire('Toutes les entreprises').length ? lire('Toutes les entreprises') : lire(wb.SheetNames[0]);
+  const lignes = toutes.map((r) => ({ priorite: prio.has(r['Nom'] + '|' + r['Commune']), departement: String(r['Département'] || ''), commune: r['Commune'], code_postal: String(r['Code postal'] || ''),
+    nom: r['Nom'], activite: r['Activité'], email: r['E-mail'], telephone: String(r['Téléphone'] || ''), site: r['Site'], adresse: r['Adresse'] })).filter((l) => l.nom);
+  let ajoutees = 0;
+  for (let i = 0; i < lignes.length; i += 800) { etat.textContent = `Envoi… ${Math.min(i + 800, lignes.length)} / ${lignes.length}`; ajoutees += await rpc('console_prospects_importer', { p_lignes: lignes.slice(i, i + 800) }); }
+  etat.textContent = `${ajoutees} entreprises ajoutées.`; prospectsCache = null; setTimeout(() => aller('prospection'), 900);
+}
+async function pageProspection() {
+  const g = generation;
+  if (!prospectsCache) prospectsCache = await rpc('console_prospects', { p_appli: 'tikette' }).catch((e) => (/console_prospects/.test(String(e?.message)) ? false : Promise.reject(e)));
+  if (placesFondateur === null) placesFondateur = await rpc('pro_places_fondateur').catch(() => 50);
+  if (prospectsCache === false) { prospectsCache = null; afficherPour(g, entete('Prospection', 'Les entreprises à contacter pour Tikette'), h('div', { class: 'panneau' }, 'Il faut d’abord lancer ', h('b', {}, 'supabase/console-prospects.sql'), ' dans Supabase (projet Tikette).')); return; }
+  const tous = prospectsCache, f = filtreProspect;
+  const etat = h('span', { class: 'message' });
+  const fichier = h('input', { type: 'file', accept: '.xlsx', style: 'display:none', onchange: (e) => e.target.files[0] && importerProspects(e.target.files[0], etat).catch((x) => { etat.textContent = erreur(x); }) });
+  const boutonImport = h('button', { class: 'btn-contour', onclick: () => fichier.click() }, 'Importer l’Excel');
+  if (!tous.length) {
+    afficherPour(g, entete('Prospection', 'Les entreprises à contacter pour Tikette'),
+      h('div', { class: 'panneau' }, h('p', { style: 'margin-top:0' }, 'La liste est vide. Choisissez le fichier ', h('b', {}, 'Tikette-entreprises-a-contacter.xlsx'), ' envoyé par Claude : les 3 076 entreprises arrivent ici, avec les 30 en priorité.'),
+        h('button', { class: 'btn', onclick: () => fichier.click() }, 'Choisir le fichier Excel'), ' ', etat, fichier));
+    return;
+  }
+  const maintenant = Date.now();
+  const aRelancer = (p) => p.statut === 'envoye' && p.contacte_le && maintenant - new Date(p.contacte_le) > 5 * 864e5;
+  const compte = (s) => tous.filter((p) => p.statut === s).length;
+  const deps = [...new Set(tous.map((p) => p.departement))].sort(), acts = [...new Set(tous.map((p) => p.activite))].filter(Boolean).sort();
+  const q = f.q.toLowerCase();
+  let liste = tous.filter((p) => (f.vue !== 'priorite' || p.priorite) && (f.vue !== 'relancer' || aRelancer(p)) && (!f.dep || p.departement === f.dep) && (!f.act || p.activite === f.act)
+    && (!f.statut || p.statut === f.statut) && (!f.mail || p.email) && (!q || (p.nom + ' ' + p.commune + ' ' + p.activite).toLowerCase().includes(q)));
+  const PAR = 50, pages = Math.max(1, Math.ceil(liste.length / PAR)); pageProspect = Math.min(pageProspect, pages - 1);
+  const morceau = liste.slice(pageProspect * PAR, pageProspect * PAR + PAR);
+  const maj = async (p, statut, note) => { const n = await rpc('console_prospect_maj', { p_id: p.id, p_statut: statut ?? null, p_note: note ?? null }); Object.assign(p, n); };
+  const select = (valeur, options, change, tout) => h('select', { class: 'champ', style: 'width:auto;padding:7px 10px;font-size:13px', onchange: (e) => change(e.target.value) },
+    tout ? h('option', { value: '' }, tout) : '', options.map(([v, l]) => h('option', { value: v, selected: v === valeur }, l)));
+  const re = () => aller('prospection');
+  const ligne = (p) => {
+    const m = mailProspect(p, p.statut === 'envoye' || p.statut === 'relance'), relance = p.statut === 'envoye';
+    const ecrire = (lien) => async () => { window.open(lien, lien.startsWith('mailto') ? '_self' : '_blank'); if (p.statut === 'a_contacter') { await maj(p, 'envoye'); re(); } else if (relance) { await maj(p, 'relance'); re(); } };
+    return h('tr', {},
+      h('td', {}, h('b', {}, nomCourt(p.nom)), p.priorite ? h('span', { style: 'color:var(--rouge);font-size:11px;margin-left:6px;font-weight:700' }, 'PRIORITÉ') : '',
+        h('div', { class: 'doux', style: 'font-size:12px' }, p.activite, ' · ', p.commune, ' (', p.departement, ')', p.site ? [' · ', h('a', { href: p.site, target: '_blank', rel: 'noopener', style: 'color:var(--doux)' }, 'site')] : '')),
+      h('td', { style: 'font-size:12.5px' }, p.email ? String(p.email).split(/[\s,;/]+/)[0] : h('span', { class: 'doux' }, '—'), h('div', { class: 'doux', style: 'font-size:12px' }, String(p.telephone || '').split(' / ')[0])),
+      h('td', {}, select(p.statut, Object.entries(STATUTS_PROSPECT), async (v) => { await maj(p, v); re(); }),
+        p.contacte_le ? h('div', { class: 'doux', style: 'font-size:11.5px;margin-top:3px' }, 'Mail le ' + dateFr(p.contacte_le), p.relance_le ? ' · relancé le ' + dateFr(p.relance_le) : '') : '',
+        aRelancer(p) ? h('div', { style: 'color:var(--jaune);font-size:11.5px' }, 'À relancer') : ''),
+      h('td', { style: 'white-space:nowrap' }, p.email && !['inscrit', 'non'].includes(p.statut) ? [
+        h('button', { class: 'btn-contour mini', title: 'Ouvre le mail déjà écrit dans Outlook (ou votre messagerie)', onclick: ecrire(m.mailto) }, relance ? 'Relancer dans Outlook' : 'Écrire dans Outlook'), ' ',
+        h('button', { class: 'btn-lien', title: 'Outlook sur internet (compte Microsoft)', onclick: ecrire(m.web) }, 'web'), ' ',
+        h('button', { class: 'btn-lien', onclick: async () => { await navigator.clipboard.writeText(`À : ${m.a}\nObjet : ${m.objet}\n\n${m.corps}`); alert('Mail copié.'); } }, 'copier')] : '',
+        h('button', { class: 'btn-lien', style: 'margin-left:6px', onclick: async () => { const n = prompt('Note sur ' + nomCourt(p.nom), p.note || ''); if (n !== null) { await maj(p, null, n); re(); } } }, p.note ? 'note ✓' : 'note'),
+        p.note ? h('div', { class: 'doux', style: 'font-size:11.5px;white-space:normal;max-width:260px' }, p.note) : ''));
+  };
+  afficherPour(g, entete('Prospection', 'Les entreprises à contacter pour Tikette · le mail s’ouvre déjà écrit', h('div', { style: 'display:flex;gap:8px;align-items:center' }, etat, boutonImport, fichier)),
+    h('div', { class: 'kpis' }, kpi('À contacter', nombre(compte('a_contacter')), tous.filter((p) => p.statut === 'a_contacter' && p.email).length + ' avec un e-mail'),
+      kpi('Mails envoyés', nombre(compte('envoye') + compte('relance') + compte('appele')), tous.filter(aRelancer).length + ' à relancer', 'var(--jaune)'),
+      kpi('Inscrits', nombre(compte('inscrit')), 'objectif 30 à 45 d’ici fin janvier', 'var(--vert)'), kpi('Non merci', nombre(compte('non')), 'à ne plus contacter')),
+    h('div', { class: 'periodes', style: 'margin:14px 0 10px' }, [['priorite', 'Les 30 en priorité'], ['relancer', 'À relancer'], ['toutes', 'Toutes']].map(([v, l]) =>
+      h('button', { class: 'periode' + (f.vue === v ? ' actif' : ''), onclick: () => { f.vue = v; pageProspect = 0; re(); } }, l))),
+    h('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px' },
+      h('input', { class: 'champ', style: 'width:240px;padding:7px 12px;font-size:13px', placeholder: 'Chercher un nom, une ville…', value: f.q, onchange: (e) => { f.q = e.target.value; pageProspect = 0; re(); } }),
+      select(f.dep, deps.map((d) => [d, 'Dép. ' + d]), (v) => { f.dep = v; pageProspect = 0; re(); }, 'Tous les départements'),
+      select(f.act, acts.map((a) => [a, a]), (v) => { f.act = v; pageProspect = 0; re(); }, 'Toutes les activités'),
+      select(f.statut, Object.entries(STATUTS_PROSPECT), (v) => { f.statut = v; pageProspect = 0; re(); }, 'Tous les suivis'),
+      h('label', { class: 'doux', style: 'font-size:13px;display:flex;gap:6px;align-items:center' }, h('input', { type: 'checkbox', checked: f.mail, onchange: (e) => { f.mail = e.target.checked; pageProspect = 0; re(); } }), 'avec e-mail')),
+    h('div', { class: 'panneau tableau' }, h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, `ENTREPRISE (${nombre(liste.length)})`), h('th', {}, 'CONTACT'), h('th', {}, 'SUIVI'), h('th', {}, ''))),
+      h('tbody', {}, morceau.map(ligne)))),
+    pages > 1 ? h('div', { style: 'display:flex;gap:10px;align-items:center;justify-content:center;margin-top:12px' },
+      h('button', { class: 'btn-contour', disabled: pageProspect === 0, onclick: () => { pageProspect--; re(); } }, '‹'), h('span', { class: 'doux' }, `${pageProspect + 1} / ${pages}`),
+      h('button', { class: 'btn-contour', disabled: pageProspect >= pages - 1, onclick: () => { pageProspect++; re(); } }, '›')) : '',
+    h('p', { class: 'note-bas' }, '« Écrire dans Outlook » ouvre le mail déjà rédigé dans Outlook (s’il est votre messagerie par défaut) depuis contact@tikette.fr, et passe l’entreprise en « Mail envoyé ». Envoyer 20 à 30 mails par jour au plus, le mardi ou le jeudi matin. Relance 5 jours après.'));
+}
 
 // ───────── Retours des testeurs ─────────
 let filtreRetours = 'ouverts';
