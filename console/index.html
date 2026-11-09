@@ -2,24 +2,25 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-g9jp1JPMbGBBN17Gj5CYT3lkXvemr40K0EqJD2WWOyg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ADm/b8pt4mTOXijmqs4PBcO5SLboWiR8Oqixh/IftrI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Console Egg Not Found</title>
 <link rel="icon" href="logos/oeuf.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Schibsted+Grotesk:wght@400;500;600;700&display=swap">
 <script src="js/garde.js"></script>
 <script src="js/supabase-2.45.4.js"></script>
 <style>
   :root {
-    --fond: #0A0A0A; --panneau: #141414; --ligne: rgba(237,231,220,.09); --rouge: #E8344E; --creme: #EDE7DC;
-    --doux: #8A857C; --jaune: #F2C14E; --vert: #5ED6A0; --bleu: #9AD1FF; --rose: #F0506A;
+    --fond: #F7F7F6; --panneau: #FFFFFF; --panneau2: #F2F2F0; --ligne: #E7E7EA; --ligne2: #D8D8DD; --nav: #FFFFFF;
+    --rouge: #DB2E46; --creme: #18181A; --texte2: #3A3A40; --doux: #5F5F66; --pale: #9C9CA3; --sur-rouge: #FFFFFF;
+    --jaune: #B7791F; --vert: #2F8A5B; --bleu: #3866B8; --rose: #D63A57; --ombre: rgba(20,20,30,.12); color-scheme: light;
     --mono: 'Space Mono', ui-monospace, Menlo, Consolas, monospace;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--fond); color: var(--creme); font-family: 'Space Grotesk', system-ui, sans-serif; }
+  html, body { margin: 0; background: var(--fond); color: var(--creme); font-family: 'Schibsted Grotesk', system-ui, sans-serif; }
   body { min-height: 100vh; }
   .titre { font-family: var(--mono); font-weight: 700; }
   .rouge { color: var(--rouge); }
@@ -55,10 +56,10 @@
   #connexion { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
   .carte-connexion { width: 100%; max-width: 380px; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 22px; padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; }
   .champ { width: 100%; background: var(--fond); border: 1px solid var(--ligne); border-radius: 12px; color: var(--creme); padding: 11px 13px; font-size: 15px; }
-  .champ:focus { outline: 2px solid rgba(232,52,78,.6); border-color: transparent; }
+  .champ:focus { outline: 2px solid color-mix(in srgb, var(--rouge) 60%, transparent); border-color: transparent; }
   .btn { border: 0; background: var(--rouge); color: #fff; font-weight: 700; border-radius: 999px; padding: 11px 18px; font-size: 14px; }
   .btn:disabled { opacity: .5; cursor: default; }
-  .btn-contour { background: transparent; border: 1px solid rgba(232,52,78,.6); color: var(--rouge); font-weight: 700; border-radius: 999px; padding: 6px 12px; font-size: 12px; }
+  .btn-contour { background: transparent; border: 1px solid color-mix(in srgb, var(--rouge) 60%, transparent); color: var(--rouge); font-weight: 700; border-radius: 999px; padding: 6px 12px; font-size: 12px; }
   .btn-lien { background: none; border: 0; color: var(--doux); text-decoration: underline; padding: 0; font-size: 13px; }
   .message { font-size: 13px; min-height: 18px; }
   .qr { background: #fff; border-radius: 14px; padding: 10px; width: 180px; height: 180px; margin: 4px auto; display: block; }
@@ -73,12 +74,12 @@
   nav { width: 240px; flex-shrink: 0; border-right: 1px solid var(--ligne); padding: 20px 12px 16px; display: flex; flex-direction: column; gap: 2px; position: sticky; top: 0; height: 100vh; overflow-y: auto; }
   nav .qui { font-size: 11px; color: var(--doux); padding: 8px 10px 10px; word-break: break-all; }
   .rubrique { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--doux); font-weight: 700; padding: 12px 10px 4px; }
-  .onglet { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 10px; border: 0; background: none; color: #C9C3B8; font-size: 13.5px; font-weight: 600; text-align: left; width: 100%; }
-  .onglet:hover { background: rgba(237,231,220,.05); }
-  .onglet.actif { background: rgba(232,52,78,.14); color: var(--creme); font-weight: 700; }
+  .onglet { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border-radius: 10px; border: 0; background: none; color: var(--texte2); font-size: 13.5px; font-weight: 600; text-align: left; width: 100%; }
+  .onglet:hover { background: color-mix(in srgb, var(--creme) 5%, transparent); }
+  .onglet.actif { background: color-mix(in srgb, var(--rouge) 14%, transparent); color: var(--creme); font-weight: 700; }
   .onglet .badge { margin-left: auto; font-family: var(--mono); font-size: 11px; color: var(--rouge); }
   .propose { display: flex; align-items: center; gap: 10px; padding: 4px 6px 4px 10px; }
-  .propose .estompe { display: flex; align-items: center; gap: 10px; opacity: .38; font-size: 13.5px; font-weight: 600; color: #C9C3B8; }
+  .propose .estompe { display: flex; align-items: center; gap: 10px; opacity: .38; font-size: 13.5px; font-weight: 600; color: var(--texte2); }
   .icone-app { width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0; object-fit: cover; display: inline-flex; align-items: center; justify-content: center; font-family: var(--mono); font-weight: 700; font-size: 13px; color: var(--creme); }
   nav .bas { margin-top: auto; padding: 14px 10px 0; }
   main { flex: 1; min-width: 0; padding: 24px 28px 60px; display: flex; flex-direction: column; gap: 16px; }
@@ -111,15 +112,15 @@
   .vide { font-size: 13px; color: var(--doux); padding: 8px 0; }
   .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
   .app { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; cursor: pointer; text-align: left; color: var(--creme); }
-  .app:hover { border-color: rgba(232,52,78,.4); }
+  .app:hover { border-color: color-mix(in srgb, var(--rouge) 40%, transparent); }
   .app .nom { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; }
   .app .icone-app { width: 32px; height: 32px; border-radius: 9px; }
   .app .info { font-size: 12px; color: var(--doux); }
   .etiquette { font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px; margin-left: auto; white-space: nowrap; }
-  .etiquette.direct { background: rgba(94,214,160,.14); color: var(--vert); }
-  .etiquette.attente { background: rgba(242,193,78,.14); color: var(--jaune); }
-  .etiquette.gris { background: rgba(138,133,124,.14); color: var(--doux); }
-  .etiquette.alerte { background: rgba(232,52,78,.16); color: var(--rouge); }
+  .etiquette.direct { background: color-mix(in srgb, var(--vert) 14%, transparent); color: var(--vert); }
+  .etiquette.attente { background: color-mix(in srgb, var(--jaune) 14%, transparent); color: var(--jaune); }
+  .etiquette.gris { background: color-mix(in srgb, var(--doux) 14%, transparent); color: var(--doux); }
+  .etiquette.alerte { background: color-mix(in srgb, var(--rouge) 16%, transparent); color: var(--rouge); }
   .retour { border-top: 1px solid var(--ligne); padding: 12px 0; display: flex; flex-direction: column; gap: 6px; }
   .retour:first-of-type { border-top: 0; }
   .retour .tete { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -143,8 +144,8 @@
   .ligne-form { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
   label.lab { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--doux); font-weight: 700; }
   .boutons { display: flex; gap: 8px; flex-wrap: wrap; }
-  .depot { border: 1.5px dashed rgba(232,52,78,.5); border-radius: 12px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--doux); font-size: 12.5px; text-align: center; padding: 12px; cursor: pointer; position: relative; }
-  .depot.survol { background: rgba(232,52,78,.08); }
+  .depot { border: 1.5px dashed color-mix(in srgb, var(--rouge) 50%, transparent); border-radius: 12px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--doux); font-size: 12.5px; text-align: center; padding: 12px; cursor: pointer; position: relative; }
+  .depot.survol { background: color-mix(in srgb, var(--rouge) 8%, transparent); }
   .depot input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
   .depot .gros { font-size: 22px; color: var(--rouge); }
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -182,16 +183,16 @@
   /* Liens rapides */
   .tuiles-liens { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
   .tuile-lien { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: var(--fond); border: 1px solid var(--ligne); color: var(--creme); text-decoration: none; font-size: 13px; font-weight: 600; }
-  .tuile-lien:hover { border-color: var(--rouge); background: rgba(232,52,78,.06); }
+  .tuile-lien:hover { border-color: var(--rouge); background: color-mix(in srgb, var(--rouge) 6%, transparent); }
   .tuile-lien img { width: 22px; height: 22px; border-radius: 5px; background: #fff; padding: 2px; flex-shrink: 0; }
   .groupe-liens { font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.2px; color: var(--doux); font-weight: 700; margin: 14px 0 8px; }
   .groupe-liens:first-child { margin-top: 0; }
-  .voile { position: fixed; inset: 0; background: rgba(0,0,0,.72); display: flex; align-items: flex-start; justify-content: center; padding: 6vh 16px; z-index: 50; overflow-y: auto; }
+  .voile { position: fixed; inset: 0; background: var(--ombre); display: flex; align-items: flex-start; justify-content: center; padding: 6vh 16px; z-index: 50; overflow-y: auto; }
   .fenetre { width: 100%; max-width: 760px; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 18px; padding: 20px 22px; }
   .fenetre .haut-fenetre { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-  .bouton-liens { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0 2px; padding: 9px 12px; border-radius: 12px; border: 1px solid rgba(232,52,78,.55); background: rgba(232,52,78,.10); color: var(--creme); font-weight: 700; font-size: 13.5px; }
-  .bouton-liens:hover { background: rgba(232,52,78,.2); }
-  .bouton-objectifs { display: flex; align-items: center; gap: 10px; width: 100%; margin: 6px 0 4px; padding: 10px 12px; border-radius: 12px; border: 0; background: var(--rouge); color: #fff; text-align: left; box-shadow: 0 6px 18px rgba(232,52,78,.25); }
+  .bouton-liens { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0 2px; padding: 9px 12px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--rouge) 55%, transparent); background: color-mix(in srgb, var(--rouge) 10%, transparent); color: var(--creme); font-weight: 700; font-size: 13.5px; }
+  .bouton-liens:hover { background: color-mix(in srgb, var(--rouge) 20%, transparent); }
+  .bouton-objectifs { display: flex; align-items: center; gap: 10px; width: 100%; margin: 6px 0 4px; padding: 10px 12px; border-radius: 12px; border: 0; background: var(--rouge); color: #fff; text-align: left; box-shadow: 0 6px 18px color-mix(in srgb, var(--rouge) 25%, transparent); }
   .bouton-objectifs:hover { filter: brightness(1.08); }
   .bouton-objectifs.actif { outline: 2px solid var(--creme); outline-offset: 2px; }
   .bouton-objectifs .cible { width: 18px; height: 22px; flex-shrink: 0; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: #fff; position: relative; }
@@ -200,17 +201,17 @@
   .bouton-objectifs .nom { font-weight: 700; font-size: 14.5px; letter-spacing: .3px; }
   .bouton-objectifs .dates { font-family: var(--mono); font-size: 10.5px; opacity: .9; }
   .cadre-objectifs { width: 100%; height: 4200px; border: 0; display: block; background: transparent; }
-  .bouton-dixans { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 6px; padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(232,52,78,.55); background: rgba(232,52,78,.08); color: var(--creme); font-weight: 700; font-size: 13.5px; text-align: left; }
-  .bouton-dixans:hover { background: rgba(232,52,78,.18); }
-  .bouton-dixans.actif { background: rgba(232,52,78,.22); border-color: var(--rouge); }
+  .bouton-dixans { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0 0 6px; padding: 8px 12px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--rouge) 55%, transparent); background: color-mix(in srgb, var(--rouge) 8%, transparent); color: var(--creme); font-weight: 700; font-size: 13.5px; text-align: left; }
+  .bouton-dixans:hover { background: color-mix(in srgb, var(--rouge) 18%, transparent); }
+  .bouton-dixans.actif { background: color-mix(in srgb, var(--rouge) 22%, transparent); border-color: var(--rouge); }
   .bouton-dixans .courbe { width: 18px; text-align: center; color: var(--rouge); font-family: var(--mono); }
   /* Étapes des applis */
   .etape { font-size: 10.5px; font-weight: 700; border-radius: 999px; padding: 3px 9px; white-space: nowrap; }
-  .etape.idee { background: rgba(154,209,255,.14); color: var(--bleu); }
-  .etape.cours { background: rgba(242,193,78,.14); color: var(--jaune); }
-  .etape.test { background: rgba(240,80,106,.16); color: var(--rose); }
-  .etape.ligne { background: rgba(94,214,160,.14); color: var(--vert); }
-  .etape.pause { background: rgba(138,133,124,.16); color: var(--doux); }
+  .etape.idee { background: color-mix(in srgb, var(--bleu) 14%, transparent); color: var(--bleu); }
+  .etape.cours { background: color-mix(in srgb, var(--jaune) 14%, transparent); color: var(--jaune); }
+  .etape.test { background: color-mix(in srgb, var(--rose) 16%, transparent); color: var(--rose); }
+  .etape.ligne { background: color-mix(in srgb, var(--vert) 14%, transparent); color: var(--vert); }
+  .etape.pause { background: color-mix(in srgb, var(--doux) 16%, transparent); color: var(--doux); }
   /* À faire */
   .onglets-page { display: inline-flex; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 999px; padding: 4px; gap: 4px; }
   .onglets-page button { border: 0; background: none; color: var(--doux); font-weight: 700; font-size: 13px; padding: 8px 16px; border-radius: 999px; }
@@ -221,9 +222,9 @@
   .chip-app { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; color: var(--doux); white-space: nowrap; }
   .chip-app .icone-app { width: 16px; height: 16px; border-radius: 4px; font-size: 9px; }
   .moteur { font-family: var(--mono); font-size: 10.5px; color: var(--doux); margin-top: 4px; }
-  .puce-app { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12px; color: var(--creme, #EDE7DC); background: rgba(237,231,220,.06); border: 1px solid var(--ligne); border-radius: 999px; padding: 3px 9px 3px 4px; cursor: pointer; }
+  .puce-app { display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12px; color: var(--creme, #EDE7DC); background: color-mix(in srgb, var(--creme) 6%, transparent); border: 1px solid var(--ligne); border-radius: 999px; padding: 3px 9px 3px 4px; cursor: pointer; }
   .puce-app .icone-app { border-radius: 50%; font-size: 10px; }
-  .progression { height: 6px; border-radius: 3px; background: rgba(237,231,220,.08); overflow: hidden; margin: 6px 0 4px; }
+  .progression { height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--creme) 8%, transparent); overflow: hidden; margin: 6px 0 4px; }
   .progression span { display: block; height: 100%; background: var(--vert); border-radius: 3px; }
   .groupe-recette { border: 1px solid var(--ligne); border-radius: 12px; padding: 10px 14px; margin-top: 10px; }
   .groupe-recette > summary { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 14px; }
@@ -235,24 +236,27 @@
   .titre-section { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; color: var(--doux); font-weight: 700; margin: 6px 0 -4px; }
 
   /* ───── Console v2 (9 nov. 2026) : menu rangé par sujet, barre du haut, tableau de bord ───── */
-  :root { --nav: #0E0E0E; --panneau2: #191919; --ligne2: rgba(237,231,220,.14); --pale: #5E5A54; }
+  :root[data-theme="dark"] { --fond: #2B2B2F; --panneau: #35353A; --panneau2: #3C3C42; --ligne: #424247; --ligne2: #505056; --nav: #26262A;
+    --rouge: #F25B70; --creme: #F2F0EC; --texte2: #DAD8D3; --doux: #B4B2AE; --pale: #85848A; --jaune: #E0A848; --vert: #5CC08C; --bleu: #8DB5F0; --rose: #F06A80; --ombre: var(--ombre); color-scheme: dark; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --fond: #2B2B2F; --panneau: #35353A; --panneau2: #3C3C42; --ligne: #424247; --ligne2: #505056; --nav: #26262A;
+    --rouge: #F25B70; --creme: #F2F0EC; --texte2: #DAD8D3; --doux: #B4B2AE; --pale: #85848A; --jaune: #E0A848; --vert: #5CC08C; --bleu: #8DB5F0; --rose: #F06A80; --ombre: var(--ombre); color-scheme: dark; } }
   svg.i { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   #console { display: grid; grid-template-columns: 252px minmax(0, 1fr); }
   nav { width: auto; background: var(--nav); padding: 18px 12px 14px; gap: 1px; }
   nav .marque-nav { padding: 0 8px 16px !important; }
   .recherche { display: flex; align-items: center; gap: 8px; margin: 0 2px 12px; padding: 8px 10px; border: 1px solid var(--ligne2); border-radius: 10px; color: var(--doux); font-size: 13px; background: none; width: calc(100% - 4px); text-align: left; }
-  .recherche:hover { border-color: rgba(232,52,78,.5); color: var(--creme); }
+  .recherche:hover { border-color: color-mix(in srgb, var(--rouge) 50%, transparent); color: var(--creme); }
   .recherche kbd { margin-left: auto; font-family: var(--mono); font-size: 10.5px; border: 1px solid var(--ligne2); border-radius: 5px; padding: 1px 5px; }
   .rubrique { display: flex; align-items: center; gap: 7px; color: var(--pale); padding: 14px 10px 5px; }
   .rubrique img { width: 14px; height: 14px; border-radius: 4px; }
-  .onglet { gap: 10px; padding: 6px 10px; border-radius: 9px; position: relative; color: #C9C3B8; }
-  .onglet.actif { background: rgba(237,231,220,.06); color: var(--creme); }
+  .onglet { gap: 10px; padding: 6px 10px; border-radius: 9px; position: relative; color: var(--texte2); }
+  .onglet.actif { background: color-mix(in srgb, var(--creme) 6%, transparent); color: var(--creme); }
   .onglet.actif::before { content: ""; position: absolute; left: -12px; top: 7px; bottom: 7px; width: 3px; border-radius: 0 3px 3px 0; background: var(--rouge); }
-  .onglet .badge { font-size: 10.5px; font-weight: 700; background: rgba(232,52,78,.16); border-radius: 6px; padding: 0 6px; line-height: 18px; }
-  .onglet .badge.gris { background: rgba(237,231,220,.07); color: var(--doux); }
+  .onglet .badge { font-size: 10.5px; font-weight: 700; background: color-mix(in srgb, var(--rouge) 16%, transparent); border-radius: 6px; padding: 0 6px; line-height: 18px; }
+  .onglet .badge.gris { background: color-mix(in srgb, var(--creme) 7%, transparent); color: var(--doux); }
   .onglet .icone-app { width: 20px; height: 20px; border-radius: 6px; font-size: 11px; }
   .onglet .pt { width: 6px; height: 6px; border-radius: 50%; margin-left: auto; flex: none; }
-  .oeufs { display: flex; align-items: center; gap: 8px; margin: 6px 2px 0; padding: 9px 10px; border: 1px dashed rgba(232,52,78,.4); border-radius: 10px; color: var(--doux); font-size: 12.5px; background: none; text-align: left; width: calc(100% - 4px); }
+  .oeufs { display: flex; align-items: center; gap: 8px; margin: 6px 2px 0; padding: 9px 10px; border: 1px dashed color-mix(in srgb, var(--rouge) 40%, transparent); border-radius: 10px; color: var(--doux); font-size: 12.5px; background: none; text-align: left; width: calc(100% - 4px); }
   .oeufs:hover { color: var(--creme); border-color: var(--rouge); }
   .oeufs .pile { display: flex; gap: 2px; }
   .oeufs .fleche { margin-left: auto; transition: transform .2s; }
@@ -263,19 +267,19 @@
   .icone-btn { background: none; border: 1px solid transparent; color: var(--doux); border-radius: 8px; padding: 6px; display: inline-flex; margin-left: auto; }
   .icone-btn:hover { color: var(--creme); border-color: var(--ligne2); }
   main { padding: 0; gap: 0; display: block; }
-  #barre { display: flex; align-items: center; gap: 12px; padding: 12px 28px; border-bottom: 1px solid var(--ligne); position: sticky; top: 0; z-index: 20; background: rgba(10,10,10,.92); backdrop-filter: blur(8px); flex-wrap: wrap; }
+  #barre { display: flex; align-items: center; gap: 12px; padding: 12px 28px; border-bottom: 1px solid var(--ligne); position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--fond) 92%, transparent); backdrop-filter: blur(8px); flex-wrap: wrap; }
   #barre .fil { color: var(--doux); font-size: 13px; }
   #barre .fil b { color: var(--creme); }
   #barre .droite { margin-left: auto; display: flex; gap: 8px; align-items: center; position: relative; }
-  .pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--ligne2); border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 600; color: #C9C3B8; background: none; white-space: nowrap; }
-  .pill.r { border-color: rgba(232,52,78,.5); color: var(--creme); background: rgba(232,52,78,.08); }
+  .pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--ligne2); border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 600; color: var(--texte2); background: none; white-space: nowrap; }
+  .pill.r { border-color: color-mix(in srgb, var(--rouge) 50%, transparent); color: var(--creme); background: color-mix(in srgb, var(--rouge) 8%, transparent); }
   .pill .d { width: 7px; height: 7px; border-radius: 50%; background: var(--vert); }
   .btn-barre { display: inline-flex; align-items: center; gap: 7px; border-radius: 9px; padding: 7px 12px; font-weight: 700; font-size: 12.5px; border: 1px solid var(--ligne2); color: var(--creme); background: none; }
   .btn-barre:hover { border-color: var(--rouge); }
   .btn-barre.p { background: var(--rouge); border-color: var(--rouge); color: #fff; }
-  .menu-ajout { position: absolute; right: 0; top: calc(100% + 6px); background: var(--panneau); border: 1px solid var(--ligne2); border-radius: 12px; padding: 6px; min-width: 210px; box-shadow: 0 20px 40px rgba(0,0,0,.5); }
+  .menu-ajout { position: absolute; right: 0; top: calc(100% + 6px); background: var(--panneau); border: 1px solid var(--ligne2); border-radius: 12px; padding: 6px; min-width: 210px; box-shadow: 0 20px 40px var(--ombre); }
   .menu-ajout button { display: flex; align-items: center; gap: 9px; width: 100%; background: none; border: 0; color: var(--creme); padding: 8px 10px; border-radius: 8px; font-size: 13px; text-align: left; }
-  .menu-ajout button:hover { background: rgba(237,231,220,.06); }
+  .menu-ajout button:hover { background: color-mix(in srgb, var(--creme) 6%, transparent); }
   .burger { display: none; }
   #barre .pill.r .court { display: none; }
   @media (max-width: 900px) { #barre .pill.r .court { display: inline; } }
@@ -283,7 +287,7 @@
   .entete h1 { font-size: 25px; letter-spacing: -.3px; }
   .seg { display: inline-flex; border: 1px solid var(--ligne2); border-radius: 9px; overflow: hidden; }
   .seg button { padding: 6px 12px; font-size: 12px; font-weight: 700; color: var(--doux); background: none; border: 0; }
-  .seg button.on { background: var(--creme); color: #0A0A0A; }
+  .seg button.on { background: var(--creme); color: var(--fond); }
   .kpis { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
   .kpi { border-radius: 12px; padding: 14px 15px 12px; }
   .kpi .t { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12px; }
@@ -296,13 +300,13 @@
   .pan .tt button.a:hover { color: var(--creme); }
   .prio { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--ligne); font-size: 13px; cursor: pointer; }
   .prio:last-child { border-bottom: 0; }
-  .prio:hover { background: rgba(237,231,220,.03); }
+  .prio:hover { background: color-mix(in srgb, var(--creme) 3%, transparent); }
   .prio .ic { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; background: var(--panneau2); color: var(--doux); }
   .prio > span:nth-child(2) { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .prio small, .sante small { display: block; color: var(--doux); font-size: 11.5px; }
   .tag { font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 2px 7px; white-space: nowrap; }
-  .tag.r { background: rgba(232,52,78,.14); color: var(--rouge); } .tag.j { background: rgba(242,193,78,.13); color: var(--jaune); }
-  .tag.v { background: rgba(94,214,160,.12); color: var(--vert); } .tag.g { background: rgba(237,231,220,.07); color: var(--doux); } .tag.b { background: rgba(154,209,255,.12); color: var(--bleu); }
+  .tag.r { background: color-mix(in srgb, var(--rouge) 14%, transparent); color: var(--rouge); } .tag.j { background: color-mix(in srgb, var(--jaune) 13%, transparent); color: var(--jaune); }
+  .tag.v { background: color-mix(in srgb, var(--vert) 12%, transparent); color: var(--vert); } .tag.g { background: color-mix(in srgb, var(--creme) 7%, transparent); color: var(--doux); } .tag.b { background: color-mix(in srgb, var(--bleu) 12%, transparent); color: var(--bleu); }
   .qui-p { font-family: var(--mono); font-size: 10.5px; color: var(--doux); border: 1px solid var(--ligne2); border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
   .sante { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--ligne); font-size: 13px; }
   .sante:last-child { border-bottom: 0; }
@@ -311,30 +315,30 @@
   .portefeuille th { padding: 10px 16px; letter-spacing: 1px; color: var(--pale); }
   .portefeuille td { padding: 11px 16px; }
   .portefeuille tbody tr { cursor: pointer; }
-  .portefeuille tbody tr:hover td { background: rgba(237,231,220,.03); }
+  .portefeuille tbody tr:hover td { background: color-mix(in srgb, var(--creme) 3%, transparent); }
   .portefeuille tr:last-child td { border-bottom: 0; }
   .prod { display: flex; align-items: center; gap: 11px; }
   .prod .icone-app { width: 30px; height: 30px; border-radius: 8px; }
   .prod b { display: block; } .prod small { color: var(--doux); font-size: 11.5px; }
-  .av-b { display: flex; align-items: center; gap: 8px; } .av-b span { width: 90px; height: 5px; border-radius: 99px; background: rgba(237,231,220,.08); overflow: hidden; } .av-b span i { display: block; height: 100%; background: var(--rouge); }
+  .av-b { display: flex; align-items: center; gap: 8px; } .av-b span { width: 90px; height: 5px; border-radius: 99px; background: color-mix(in srgb, var(--creme) 8%, transparent); overflow: hidden; } .av-b span i { display: block; height: 100%; background: var(--rouge); }
   .mono { font-family: var(--mono); font-size: 12px; }
   .jalons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; padding: 18px 16px 16px; gap: 6px; }
   .jalons::before { content: ""; position: absolute; left: 28px; right: 28px; top: 27px; height: 1px; background: var(--ligne2); }
   .jal { position: relative; } .jal .rond { width: 18px; height: 18px; border-radius: 50%; background: var(--fond); border: 2px solid var(--ligne2); margin-bottom: 9px; }
-  .jal.fait .rond { background: var(--vert); border-color: var(--vert); } .jal.prochain .rond { border-color: var(--rouge); box-shadow: 0 0 0 4px rgba(232,52,78,.18); }
+  .jal.fait .rond { background: var(--vert); border-color: var(--vert); } .jal.prochain .rond { border-color: var(--rouge); box-shadow: 0 0 0 4px color-mix(in srgb, var(--rouge) 18%, transparent); }
   .jal b { display: block; font-size: 13px; } .jal small { color: var(--doux); font-size: 11.5px; } .jal .mono { color: var(--rouge); font-size: 11px; }
   .g2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; }
-  .palette { width: 100%; max-width: 560px; background: var(--panneau); border: 1px solid var(--ligne2); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.6); }
+  .palette { width: 100%; max-width: 560px; background: var(--panneau); border: 1px solid var(--ligne2); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px var(--ombre); }
   .palette input { width: 100%; background: none; border: 0; border-bottom: 1px solid var(--ligne); color: var(--creme); padding: 15px 16px; font-size: 15px; outline: none; }
   .palette .res { max-height: 380px; overflow-y: auto; padding: 6px; }
-  .palette .res button { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; color: #C9C3B8; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; text-align: left; }
-  .palette .res button.on { background: rgba(232,52,78,.14); color: var(--creme); }
+  .palette .res button { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; color: var(--texte2); padding: 8px 10px; border-radius: 8px; font-size: 13.5px; text-align: left; }
+  .palette .res button.on { background: color-mix(in srgb, var(--rouge) 14%, transparent); color: var(--creme); }
   .palette .res .icone-app { width: 20px; height: 20px; border-radius: 6px; font-size: 11px; }
   .palette .res small { margin-left: auto; color: var(--pale); font-family: var(--mono); font-size: 10.5px; }
   @media (max-width: 900px) {
     #console { display: block; }
     nav { position: fixed; inset: 0 auto 0 0; width: 280px; height: 100vh; z-index: 60; transform: translateX(-105%); transition: transform .25s; flex-direction: column; flex-wrap: nowrap; overflow-y: auto; border-right: 1px solid var(--ligne); border-bottom: 0; padding: 18px 12px 14px; }
-    nav.ouvert { transform: none; box-shadow: 30px 0 60px rgba(0,0,0,.6); }
+    nav.ouvert { transform: none; box-shadow: 30px 0 60px var(--ombre); }
     nav .rubrique { display: flex; } nav .onglet { width: 100%; }
     .burger { display: inline-flex; }
     #barre .sante-pill, #barre .btn-barre .txt { display: none; }
@@ -353,6 +357,116 @@
     .barres { height: 120px; gap: 4px; }
     .barre .l { font-size: 9px; }
   }
+  /* ───── Console v3 (9 nov. 2026) : thème clair / sombre, rubriques en haut, sous-pages en dessous ───── */
+  #console { display: block; }
+  nav#nav { position: sticky; top: 0; z-index: 30; display: flex; flex-direction: row; align-items: center; gap: 26px; width: auto; height: 58px; padding: 0 28px; background: var(--nav); border: 0; border-bottom: 1px solid var(--ligne); overflow-x: auto; overflow-y: visible; scrollbar-width: none; transform: none; inset: auto; box-shadow: none; }
+  nav#nav::-webkit-scrollbar { display: none; }
+  .accueil { display: flex; align-items: center; gap: 9px; background: none; border: 0; color: var(--creme); font: 700 14px var(--mono); white-space: nowrap; padding: 0; }
+  .accueil .o { width: 15px; height: 19px; background: var(--rouge); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: respire 3.2s ease-in-out infinite; }
+  @keyframes respire { 50% { transform: scale(1.08) rotate(-4deg); } }
+  .rubriques { display: flex; gap: 22px; height: 100%; }
+  .rubriques button { position: relative; display: flex; align-items: center; gap: 4px; background: none; border: 0; color: var(--doux); font-weight: 500; font-size: 14.5px; white-space: nowrap; padding: 0; }
+  .rubriques button.on { color: var(--creme); }
+  .rubriques button.on::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: var(--rouge); }
+  .rubriques sup, .sous sup { color: var(--rouge); font: 700 10px var(--mono); }
+  nav#nav .droite { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .outil { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; color: var(--doux); font-size: 13.5px; padding: 6px 8px; border-radius: 7px; white-space: nowrap; }
+  .outil:hover { color: var(--creme); background: var(--panneau2); }
+  .outil kbd { font: 10.5px var(--mono); color: var(--pale); }
+  .outil.p { background: var(--creme); color: var(--fond); font-weight: 600; }
+  .moi-rond { width: 30px; height: 30px; border-radius: 50%; background: var(--creme); color: var(--fond); display: grid; place-items: center; font: 700 11px var(--mono); border: 0; }
+  .menu-flottant { position: fixed; z-index: 70; background: var(--panneau); border: 1px solid var(--ligne); border-radius: 10px; padding: 8px; min-width: 240px; box-shadow: 0 18px 40px var(--ombre); }
+  .menu-flottant button { display: flex; align-items: center; gap: 9px; width: 100%; background: none; border: 0; color: var(--creme); padding: 8px 10px; border-radius: 7px; font-size: 13.5px; text-align: left; }
+  .menu-flottant button:hover { background: var(--panneau2); }
+  .menu-flottant .lab-m { font: 700 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--pale); padding: 6px 10px 6px; }
+  .menu-flottant .apparence { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ligne); border-radius: 7px; overflow: hidden; margin: 0 6px 8px; }
+  .menu-flottant .apparence button { justify-content: center; border-radius: 0; padding: 7px 0; color: var(--doux); }
+  .menu-flottant .apparence button.on { background: var(--creme); color: var(--fond); font-weight: 600; }
+  .menu-flottant .compte { padding: 8px 10px; border-top: 1px solid var(--ligne); margin-top: 4px; font-size: 12.5px; color: var(--doux); overflow-wrap: anywhere; }
+  #barre { position: sticky; top: 58px; z-index: 20; display: flex; align-items: center; gap: 6px; padding: 8px 28px; background: color-mix(in srgb, var(--fond) 94%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--ligne); flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+  #barre::-webkit-scrollbar { display: none; }
+  .sous { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; color: var(--doux); font-size: 13.5px; font-weight: 500; padding: 6px 11px; border-radius: 7px; white-space: nowrap; }
+  .sous:hover { color: var(--creme); }
+  .sous.on { background: var(--panneau); color: var(--creme); box-shadow: 0 1px 2px var(--ombre); }
+  .sous .icone-app { width: 18px; height: 18px; border-radius: 5px; font-size: 10px; }
+  .sous .pt { width: 6px; height: 6px; border-radius: 50%; }
+  #barre .bout { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .chip-j { display: inline-flex; align-items: center; gap: 6px; font: 700 11.5px var(--mono); color: var(--rouge); background: color-mix(in srgb, var(--rouge) 10%, transparent); border-radius: 999px; padding: 4px 10px; white-space: nowrap; }
+  .chip-sante { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--doux); white-space: nowrap; }
+  .chip-sante i { width: 7px; height: 7px; border-radius: 50%; }
+  .oeufs-barre { display: inline-flex; align-items: center; gap: 6px; background: none; border: 1px dashed color-mix(in srgb, var(--rouge) 50%, transparent); color: var(--doux); border-radius: 7px; padding: 5px 10px; font-size: 12.5px; white-space: nowrap; }
+  .eclore { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 28px; border-bottom: 1px solid var(--ligne); background: var(--panneau2); }
+  .eclore .propose { display: flex; align-items: center; gap: 10px; background: var(--panneau); border-radius: 8px; padding: 6px 8px 6px 10px; }
+  #page { padding: 26px 28px 60px; max-width: 1240px; margin: 0 auto; }
+  .pan, .kpi, .panneau { border-color: var(--ligne); box-shadow: 0 1px 2px color-mix(in srgb, var(--ombre) 35%, transparent); }
+
+  /* Accueil v3 */
+  .acc-haut { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 16px; }
+  .bloc { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 10px; padding: 20px 22px; min-width: 0; }
+  .lab { font: 700 10.5px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--pale); }
+  .maint .quoi { font-size: 24px; font-weight: 600; margin: 6px 0 2px; text-wrap: balance; }
+  .maint .meta { color: var(--doux); } .maint .meta b { color: var(--rouge); font-weight: 600; }
+  .maint .act { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .bt { font-weight: 600; font-size: 13.5px; padding: 9px 14px; border-radius: 7px; border: 0; background: var(--creme); color: var(--fond); }
+  .bt.leger { background: none; color: var(--doux); box-shadow: inset 0 0 0 1px var(--ligne2); }
+  .maint .suite { display: flex; gap: 22px; flex-wrap: wrap; border-top: 1px solid var(--ligne); margin-top: 16px; padding-top: 12px; font-size: 13.5px; color: var(--doux); }
+  .maint .suite button { background: none; border: 0; padding: 0; color: inherit; text-align: left; font-size: inherit; }
+  .maint .suite b { color: var(--creme); font-weight: 500; } .maint .suite i { font: 700 11px var(--mono); color: var(--rouge); font-style: normal; margin-right: 5px; }
+  .compte-sortie { background: var(--rouge); color: var(--sur-rouge); border-color: var(--rouge); position: relative; overflow: hidden; }
+  .compte-sortie .lab { color: color-mix(in srgb, var(--sur-rouge) 78%, transparent); }
+  .horloge { display: flex; gap: 14px; margin-top: 10px; font: 700 40px/1 var(--mono); letter-spacing: -.05em; }
+  .horloge small { display: block; font: 700 9.5px var(--mono); letter-spacing: .08em; opacity: .7; margin-top: 6px; }
+  .prep { margin-top: 18px; font-size: 12.5px; }
+  .prep .ligne-p { display: flex; justify-content: space-between; gap: 10px; opacity: .92; }
+  .prep .jauge { height: 6px; background: color-mix(in srgb, var(--sur-rouge) 25%, transparent); border-radius: 3px; margin: 6px 0; overflow: hidden; }
+  .prep .jauge i { display: block; height: 100%; width: 0; background: var(--sur-rouge); border-radius: 3px; transition: width 1.4s cubic-bezier(.2,.8,.2,1); }
+  .compte-sortie .grand-oeuf { position: absolute; right: -30px; top: -40px; width: 150px; height: 190px; background: color-mix(in srgb, var(--sur-rouge) 9%, transparent); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: respire 6s ease-in-out infinite; }
+  .acc-chiffres { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+  .acc-chiffres .v { font: 700 30px var(--mono); letter-spacing: -.05em; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .acc-chiffres .s { font-size: 12.5px; color: var(--doux); } .acc-chiffres .s b { color: var(--vert); } .acc-chiffres .s em { color: var(--rouge); font-style: normal; font-weight: 600; }
+  .anneau { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+  .anneau svg { width: 60px; height: 60px; flex: none; }
+  .anneau circle { fill: none; stroke-width: 7; } .anneau .f { stroke: var(--ligne); }
+  .anneau .val { stroke: var(--rouge); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; stroke-dasharray: 176; stroke-dashoffset: 176; transition: stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1); }
+  .acc-milieu { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+  .liberte h2, .simu h2 { font-size: 19px; font-weight: 600; margin: 6px 0 2px; text-wrap: balance; }
+  .liberte p, .simu p { margin: 0; color: var(--doux); font-size: 13.5px; }
+  .route { position: relative; height: 58px; margin: 22px 8px 0; }
+  .route .rail { position: absolute; left: 0; right: 0; top: 24px; height: 2px; background: var(--ligne); }
+  .route .avance { position: absolute; left: 0; top: 24px; height: 2px; width: 0; background: var(--rouge); transition: width 1.8s cubic-bezier(.2,.8,.2,1); }
+  .route .pas { position: absolute; top: 16px; transform: translateX(-50%); text-align: center; font: 700 10px var(--mono); color: var(--pale); white-space: nowrap; }
+  .route .pas::before { content: ""; display: block; width: 12px; height: 12px; border-radius: 50%; margin: 2px auto 8px; background: var(--panneau); box-shadow: inset 0 0 0 2px var(--ligne2); }
+  .route .pas.ok { color: var(--creme); } .route .pas.ok::before { background: var(--creme); box-shadow: none; }
+  .route .ici { position: absolute; top: 13px; left: 0; width: 16px; height: 20px; transform: translateX(-50%); background: var(--rouge); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; transition: left 1.8s cubic-bezier(.2,.8,.2,1); }
+  .liberte .mini { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; border-top: 1px solid var(--ligne); padding-top: 14px; }
+  .liberte .mini b { display: block; font: 700 18px var(--mono); letter-spacing: -.04em; } .liberte .mini span { font-size: 12px; color: var(--doux); }
+  .direct .tete { display: flex; align-items: center; gap: 8px; }
+  .pouls { width: 8px; height: 8px; border-radius: 50%; background: var(--vert); animation: pouls 1.8s infinite; }
+  @keyframes pouls { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--vert) 60%, transparent); } 70%, 100% { box-shadow: 0 0 0 8px transparent; } }
+  .fil { list-style: none; margin: 10px 0 0; padding: 0; }
+  .fil li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; padding: 10px 0; border-bottom: 1px solid var(--ligne); font-size: 13.5px; }
+  .fil li:last-child { border-bottom: 0; }
+  .fil li.neuf { animation: arrive .7s cubic-bezier(.2,.8,.2,1); }
+  @keyframes arrive { from { transform: translateY(-8px); background: color-mix(in srgb, var(--rouge) 10%, transparent); } to { transform: none; background: transparent; } }
+  .fil .ic { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; font: 700 10px var(--mono); background: var(--panneau2); color: var(--doux); }
+  .fil .ic.r { background: color-mix(in srgb, var(--rouge) 12%, transparent); color: var(--rouge); } .fil .ic.v { background: color-mix(in srgb, var(--vert) 14%, transparent); color: var(--vert); }
+  .fil small { display: block; color: var(--pale); font-size: 12px; } .fil time { font: 11px var(--mono); color: var(--pale); white-space: nowrap; }
+  .simu { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 28px; }
+  .curseur { margin-top: 16px; } .curseur label { display: flex; justify-content: space-between; font-size: 13.5px; color: var(--doux); }
+  .curseur output { font: 700 14px var(--mono); color: var(--creme); } .curseur input { width: 100%; margin-top: 8px; accent-color: var(--rouge); }
+  .verdict .date { font: 700 36px/1.05 var(--mono); letter-spacing: -.05em; color: var(--rouge); margin: 4px 0; }
+  .verdict .date.non { color: var(--doux); font-size: 26px; }
+  .verdict .ligne-v { font-size: 13.5px; color: var(--doux); } .verdict .ligne-v b { color: var(--creme); }
+  .verdict svg { width: 100%; height: 120px; margin-top: 8px; overflow: visible; }
+  .verdict .c-obj { stroke: var(--rouge); stroke-dasharray: 4 4; stroke-width: 1.5; } .verdict .c-rev { fill: none; stroke: var(--creme); stroke-width: 2.2; }
+  .verdict .c-aire { fill: var(--ligne); opacity: .8; } .verdict text { font: 700 10px var(--mono); fill: var(--pale); } .verdict .t-obj { fill: var(--rouge); }
+  @media (max-width: 900px) {
+    nav#nav { padding: 0 14px; gap: 18px; } #barre { padding: 8px 14px; top: 58px; } #page { padding: 18px 14px 50px; }
+    .acc-haut, .acc-milieu, .simu { grid-template-columns: 1fr; } .acc-chiffres { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .outil .txt, .chip-sante { display: none; } .eclore { padding: 10px 14px; }
+  }
+  @media (max-width: 520px) { .acc-chiffres { grid-template-columns: 1fr; } .horloge { font-size: 30px; } .route .pas { font-size: 0; } }
+  @media (prefers-reduced-motion: reduce) { .accueil .o, .grand-oeuf, .pouls, .fil li.neuf { animation: none; } .prep .jauge i, .anneau .val, .route .avance, .route .ici { transition: none; } }
 </style>
 </head>
 <body>
@@ -668,6 +782,7 @@ const ICONES = {
   euro: '<path d="M17 6a7 7 0 1 0 0 12M4 10h9M4 14h9"/>', recu: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>', coche: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/>',
   mains: '<path d="M7 11l3-3 3 3 4-4"/><path d="M3 21h18M5 21V11M19 21V7"/>', fusee: '<path d="M12 2c4 3 5 8 3 13H9C7 10 8 5 12 2z"/><path d="M9 15l-3 3M15 15l3 3"/>',
   alerte: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17v.01"/>', horloge: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', gens: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/>',
+  reglages: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
   pulse: '<path d="M3 12h4l3-8 4 16 3-8h4"/>', plus: '<path d="M12 5v14M5 12h14"/>', fleche: '<path d="M7 17L17 7M9 7h8v8"/>', sortie: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>',
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', chevron: '<path d="M9 6l6 6-6 6"/>', ok: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', robot: '<rect x="5" y="8" width="14" height="11" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01"/>',
   db: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>', etoile: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>',
@@ -696,80 +811,98 @@ async function compterNav() {
   compteursNav.echeances = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15).length;
   dessinerNav();
 }
+// Apparence : Auto (thème de l'ordinateur), Clair ou Sombre, gardée dans le navigateur.
+let themeChoisi = 'auto';
+try { themeChoisi = localStorage.getItem('console-theme') || 'auto'; } catch (e) {}
+function appliquerTheme(t) {
+  themeChoisi = t;
+  if (t === 'clair') document.documentElement.dataset.theme = 'light';
+  else if (t === 'sombre') document.documentElement.dataset.theme = 'dark';
+  else delete document.documentElement.dataset.theme;
+  try { localStorage.setItem('console-theme', t); } catch (e) {}
+}
+appliquerTheme(themeChoisi);
+// Rubriques du haut et leurs sous-pages.
+const RUBRIQUES = [['Studio', 'ensemble', ['ensemble', 'objectifs', 'dixans']], ['Tikette', 'tikette', ['tikette', 'espacepro', 'prospection', 'retours', 'offres']],
+  ['Applis et jeux', null, []], ['Finances', 'couts', ['couts', 'avances']], ['Organisation', 'afaire', ['afaire', 'partenaires', 'signatures']]];
+const rubriqueCourante = () => (courant.nom === 'appli' ? 'Applis et jeux' : (PLAN[courant.nom] || ['Studio'])[0]);
+function menuFlottant(bouton, contenu) {
+  document.querySelector('.menu-flottant')?.remove();
+  const r = bouton.getBoundingClientRect();
+  const m = h('div', { class: 'menu-flottant', style: `top:${r.bottom + 8}px;right:${Math.max(8, innerWidth - r.right)}px` }, ...contenu);
+  document.body.append(m);
+  setTimeout(() => document.addEventListener('click', function f(e) { if (!m.contains(e.target)) { m.remove(); document.removeEventListener('click', f); } }), 0);
+  return m;
+}
+function badgesNav() {
+  const restant = cochesCache ? A_FAIRE.elements.filter((e) => e.groupe === 'demande' && !cochesCache[e.cle]).length + tachesCache.filter((t) => !cochesCache['tache:' + t.id]).length : 0;
+  return { espacepro: compteursNav.pro, retours: retoursBadge || 0, couts: compteursNav.echeances, afaire: restant };
+}
 function dessinerNav() {
   const nav = document.getElementById('nav');
   if (!retoursBadgeLu) { retoursBadgeLu = true; compterRetours(); }
   if (!compteursNav.lus) { compteursNav.lus = true; compterNav(); }
-  const onglet = (libelle, nom, app, debut, badge, gris) => h('button', {
-    class: 'onglet' + (courant.nom === nom && (courant.app || null) === (app || null) ? ' actif' : ''),
-    onclick: () => { nav.classList.remove('ouvert'); aller(nom, app); },
-  }, debut || '', h('span', {}, libelle), badge ? h('span', { class: 'badge' + (gris ? ' gris' : '') }, badge) : '');
-  const page = (nom, badge, gris) => onglet(PLAN[nom][1], nom, null, ic(PLAN[nom][2]), badge, gris);
-  const ongletApp = (a) => {
-    const b = onglet(a.nom, 'appli', a.id, iconeApp(a));
-    b.append(h('span', { class: 'pt', title: (ETAPES[a.etape] || ETAPES['en cours'])[1], style: 'background:' + (POINT_ETAPE[a.etape] || 'var(--jaune)') }));
-    return b;
-  };
-  const tik = CATALOGUE.find((a) => a.id === 'tikette');
-  const confirmees = CATALOGUE.filter((a) => estConfirmee(a) && a.id !== 'tikette');
-  const proposees = CATALOGUE.filter((a) => !estConfirmee(a));
-  const restant = cochesCache ? A_FAIRE.elements.filter((e) => e.groupe === 'demande' && !cochesCache[e.cle]).length + tachesCache.filter((t) => !cochesCache['tache:' + t.id]).length : '';
-  const oeufs = proposees.length ? [
-    h('button', { class: 'oeufs' + (oeufsOuverts ? ' ouvert' : ''), onclick: () => { oeufsOuverts = !oeufsOuverts; dessinerNav(); } },
-      h('span', { class: 'pile' }, [0, 1, 2].slice(0, Math.min(3, proposees.length)).map(() => oeufPlein(12))),
-      `${proposees.length} idée${proposees.length > 1 ? 's' : ''} à faire éclore`, h('span', { class: 'fleche' }, ic('chevron'))),
-    oeufsOuverts ? proposees.map((a) => {
-      const b = h('button', { class: 'bouton-oeuf', title: 'Ajouter ' + a.nom + ' au studio', 'aria-label': 'Ajouter ' + a.nom, onclick: async () => {
-        b.classList.add('eclos');
-        try {
-          await rpc('console_appli_confirmer', { p_id: a.id }); CONFIRMEES.add(a.id); window.ENF_CONFIRMEES = [...CONFIRMEES];
-          setTimeout(() => (courant.nom === 'dixans' ? aller('dixans') : dessinerNav()), 550);
-        }
-        catch (e) { b.classList.remove('eclos'); alert(erreur(e)); }
-      } }, oeufBouton());
-      return h('div', { class: 'propose' }, h('span', { class: 'estompe' }, iconeApp(a), h('span', {}, a.nom)), b);
-    }) : ''] : '';
-  nav.replaceChildren(...[
-    h('div', { class: 'marque-nav' }, marque(15)),
-    h('button', { class: 'recherche', onclick: ouvrirPalette }, ic('loupe'), 'Aller à…', h('kbd', {}, 'Ctrl K')),
-    page('ensemble'), page('objectifs', '2029', true), page('dixans'),
-    h('div', { class: 'rubrique' }, tik ? iconeApp(tik) : '', 'TIKETTE'),
-    page('tikette'), page('espacepro', compteursNav.pro ? String(compteursNav.pro) : ''), page('prospection'),
-    page('retours', retoursBadge ? String(retoursBadge) : ''), page('offres'),
-    h('div', { class: 'rubrique' }, 'NOS APPLIS'), confirmees.filter((a) => a.type === 'appli').map(ongletApp),
-    h('div', { class: 'rubrique' }, 'NOS JEUX'), confirmees.filter((a) => a.type === 'jeu').map(ongletApp),
-    oeufs,
-    h('div', { class: 'rubrique' }, 'FINANCES'), page('couts', compteursNav.echeances ? String(compteursNav.echeances) : ''), page('avances'),
-    h('div', { class: 'rubrique' }, 'ORGANISATION'), page('afaire', restant ? String(restant) : ''), page('partenaires'), page('signatures'),
-    h('div', { style: 'margin-top:auto' }),
-    h('div', { class: 'bas' }, oeufPlein(18), h('div', { class: 'moi' }, h('b', {}, 'Egg Not Found'), email),
-      h('button', { class: 'icone-btn', title: 'Se déconnecter', 'aria-label': 'Se déconnecter', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, ic('sortie')))].flat(4));
+  const b = badgesNav(), rub = rubriqueCourante();
+  const appsConfirmees = CATALOGUE.filter((a) => estConfirmee(a) && a.id !== 'tikette');
+  const ouvrirRubrique = ([nom, defaut]) => (defaut ? aller(defaut) : appsConfirmees[0] && aller('appli', appsConfirmees[0].id));
+  const reglages = h('button', { class: 'outil', title: 'Paramètres', 'aria-label': 'Paramètres', onclick: (e) => {
+    e.stopPropagation();
+    const choix = h('div', { class: 'apparence', role: 'group', 'aria-label': 'Apparence' }, [['auto', 'Auto'], ['clair', 'Clair'], ['sombre', 'Sombre']].map(([v, l]) =>
+      h('button', { class: themeChoisi === v ? 'on' : '', 'aria-pressed': String(themeChoisi === v), onclick: () => { appliquerTheme(v); choix.querySelectorAll('button').forEach((x) => { const on = x.textContent === l; x.classList.toggle('on', on); x.setAttribute('aria-pressed', String(on)); }); } }, l)));
+    menuFlottant(reglages, [h('div', { class: 'lab-m' }, 'Apparence'), choix,
+      h('button', { onclick: () => { document.querySelector('.menu-flottant')?.remove(); ouvrirLiens(); } }, ic('fleche'), 'Liens rapides'),
+      h('div', { class: 'compte' }, 'Connecté : ', h('b', { style: 'color:var(--creme)' }, email)),
+      h('button', { onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, ic('sortie'), 'Se déconnecter')]);
+  } }, ic('reglages'));
+  const ajouter = h('button', { class: 'outil p', onclick: (e) => {
+    e.stopPropagation();
+    menuFlottant(ajouter, [['coche', 'Une tâche', 'afaire'], ['euro', 'Un coût ou un abonnement', 'couts'], ['recu', 'Une avance de frais', 'avances'], ['offre', 'Une offre', 'offres'], ['loupe', 'Des entreprises à contacter', 'prospection']]
+      .map(([i, t, n]) => h('button', { onclick: () => { document.querySelector('.menu-flottant')?.remove(); aller(n); } }, ic(i), t)));
+  } }, ic('plus'), h('span', { class: 'txt' }, 'Ajouter'));
+  nav.replaceChildren(
+    h('button', { class: 'accueil', title: 'Accueil', onclick: () => aller('ensemble') }, h('span', { class: 'o' }), 'Egg Not Found'),
+    h('div', { class: 'rubriques' }, RUBRIQUES.map((r) => {
+      const n = r[2].reduce((t, p) => t + (b[p] || 0), 0);
+      return h('button', { class: rub === r[0] ? 'on' : '', onclick: () => ouvrirRubrique(r) }, r[0], n ? h('sup', {}, String(n)) : '');
+    })),
+    h('div', { class: 'droite' }, h('button', { class: 'outil', onclick: ouvrirPalette }, ic('loupe'), h('span', { class: 'txt' }, 'Rechercher'), h('kbd', {}, 'Ctrl K')), ajouter, reglages,
+      h('span', { class: 'moi-rond', title: email }, (email[0] || 'G').toUpperCase())));
   dessinerBarre();
 }
-// Barre du haut : où l'on est, sortie de Tikette, santé, liens rapides, ajouter.
+// Sous-pages de la rubrique ouverte (les logos des applis n'apparaissent que dans « Applis et jeux »).
 function dessinerBarre() {
   const barre = document.getElementById('barre');
-  let [rub, titre] = PLAN[courant.nom] || ['Studio', ''];
-  if (courant.nom === 'appli') { const a = CATALOGUE.find((x) => x.id === courant.app); rub = a?.type === 'jeu' ? 'Nos jeux' : 'Nos applis'; titre = a?.nom || ''; }
+  const b = badgesNav(), rub = rubriqueCourante();
   const j = joursAvant(SORTIE_TIKETTE);
   const enPanne = (robotsCache || []).filter((r) => !r.ok && !r.encours);
-  let menu = null;
-  const ajouter = h('button', { class: 'btn-barre p', onclick: (e) => {
-    e.stopPropagation();
-    if (menu) { menu.remove(); menu = null; return; }
-    menu = h('div', { class: 'menu-ajout' }, [['coche', 'Une tâche', 'afaire'], ['euro', 'Un coût ou un abonnement', 'couts'], ['recu', 'Une avance de frais', 'avances'], ['offre', 'Une offre', 'offres'], ['loupe', 'Des entreprises à contacter', 'prospection']]
-      .map(([i, t, n]) => h('button', { onclick: () => { menu.remove(); menu = null; aller(n); } }, ic(i), t)));
-    ajouter.parentElement.append(menu);
-    document.addEventListener('click', function f() { menu?.remove(); menu = null; document.removeEventListener('click', f); });
-  } }, ic('plus'), 'Ajouter');
-  barre.replaceChildren(
-    h('button', { class: 'btn-barre burger', 'aria-label': 'Menu', onclick: () => document.getElementById('nav').classList.toggle('ouvert') }, ic('menu')),
-    h('span', { class: 'fil' }, rub + ' / ', h('b', {}, titre)),
-    j >= 0 ? h('span', { class: 'pill r' }, ic('horloge'), j === 0 ? 'Tikette sort aujourd’hui !' : [h('span', { class: 'long' }, `Sortie de Tikette dans ${j} jour${j > 1 ? 's' : ''} · 14 déc.`), h('span', { class: 'court' }, `Tikette J-${j}`)]) : '',
-    h('div', { class: 'droite' },
-      h('span', { class: 'pill sante-pill', title: 'Robots et sites' }, h('span', { class: 'd', style: 'background:' + (robotsCache == null ? 'var(--pale)' : enPanne.length ? 'var(--rouge)' : 'var(--vert)') }),
-        robotsCache == null ? 'Vérification…' : enPanne.length ? `${enPanne.length} robot${enPanne.length > 1 ? 's' : ''} en panne` : 'Tout fonctionne'),
-      h('button', { class: 'btn-barre', onclick: ouvrirLiens, title: 'Liens rapides' }, ic('fleche'), h('span', { class: 'txt' }, 'Liens rapides')), ajouter));
+  let items = [];
+  if (rub === 'Applis et jeux') {
+    const confirmees = CATALOGUE.filter((a) => estConfirmee(a) && a.id !== 'tikette');
+    const proposees = CATALOGUE.filter((a) => !estConfirmee(a));
+    items = confirmees.map((a) => h('button', { class: 'sous' + (courant.app === a.id ? ' on' : ''), onclick: () => aller('appli', a.id) }, iconeApp(a), a.nom,
+      h('span', { class: 'pt', title: (ETAPES[a.etape] || ETAPES['en cours'])[1], style: 'background:' + (POINT_ETAPE[a.etape] || 'var(--jaune)') })));
+    if (proposees.length) items.push(h('button', { class: 'oeufs-barre', onclick: () => { oeufsOuverts = !oeufsOuverts; dessinerBarre(); } },
+      [0, 1, 2].slice(0, Math.min(3, proposees.length)).map(() => oeufPlein(11)), `${proposees.length} idée${proposees.length > 1 ? 's' : ''} à faire éclore`));
+  } else {
+    const r = RUBRIQUES.find((x) => x[0] === rub) || RUBRIQUES[0];
+    items = r[2].map((n) => h('button', { class: 'sous' + (courant.nom === n ? ' on' : ''), onclick: () => aller(n) }, PLAN[n][1], b[n] ? h('sup', {}, String(b[n])) : ''));
+  }
+  barre.replaceChildren(...items, h('div', { class: 'bout' },
+    h('span', { class: 'chip-sante', title: 'Robots et sites' }, h('i', { style: 'background:' + (robotsCache == null ? 'var(--pale)' : enPanne.length ? 'var(--rouge)' : 'var(--vert)') }),
+      robotsCache == null ? 'Vérification…' : enPanne.length ? `${enPanne.length} robot${enPanne.length > 1 ? 's' : ''} en panne` : 'Tout fonctionne'),
+    j >= 0 ? h('span', { class: 'chip-j' }, j === 0 ? 'Tikette sort aujourd’hui' : `Tikette J-${j}`) : ''));
+  document.querySelector('.eclore')?.remove();
+  if (rub === 'Applis et jeux' && oeufsOuverts) {
+    const proposees = CATALOGUE.filter((a) => !estConfirmee(a));
+    barre.after(h('div', { class: 'eclore' }, proposees.map((a) => {
+      const bt = h('button', { class: 'bouton-oeuf', title: 'Ajouter ' + a.nom + ' au studio', 'aria-label': 'Ajouter ' + a.nom, onclick: async () => {
+        bt.classList.add('eclos');
+        try { await rpc('console_appli_confirmer', { p_id: a.id }); CONFIRMEES.add(a.id); window.ENF_CONFIRMEES = [...CONFIRMEES]; setTimeout(() => dessinerNav(), 550); }
+        catch (e) { bt.classList.remove('eclos'); alert(erreur(e)); }
+      } }, oeufBouton());
+      return h('div', { class: 'propose' }, h('span', { class: 'estompe', style: 'display:flex;align-items:center;gap:8px' }, iconeApp(a), h('span', {}, a.nom)), bt);
+    })));
+  }
   if (robotsCache == null) { robotsCache = []; robotsGithub().then((r) => { robotsCache = r || []; dessinerBarre(); }); }
 }
 // « Aller à… » (Ctrl K) : toutes les pages, applis et jeux.
@@ -873,7 +1006,7 @@ async function pageEnsemble() {
   if (pro?.totaux.avis_signales) P.push(['etoile', `${pro.totaux.avis_signales} avis signalé${pro.totaux.avis_signales > 1 ? 's' : ''} par un pro`, 'à garder ou retirer', 'j', 'Espace pro', 'G+Y', () => aller('espacepro')]);
   for (const p of PARTENAIRES.filter((p) => p.etat === 'attente' && (p.relance ? joursAvant(p.relance) <= 0 : joursDepuis(p.depuis) >= 10)))
     P.push(['mains', `${p.nom} : à relancer`, p.relance ? `prévu le ${dateFr(p.relance)}` : `pas de réponse depuis ${joursDepuis(p.depuis)} jours`, 'j', 'Partenaire', 'G+Y', () => aller('partenaires')]);
-  for (const e of demandes) P.push(['coche', e.titre, e.echeance ? (joursAvant(e.echeance) < 0 ? 'en retard, prévu le ' : 'avant le ') + dateFr(e.echeance) : '', e.echeance && joursAvant(e.echeance) < 0 ? 'r' : 'g', nomAppli(e.appli || 'studio'), quiCourt(e.qui), () => aller('afaire')]);
+  for (const e of demandes) P.push(['coche', e.titre, e.echeance ? (joursAvant(e.echeance) < 0 ? 'en retard, prévu le ' : 'avant le ') + dateFr(e.echeance) : '', e.echeance && joursAvant(e.echeance) < 0 ? 'r' : 'g', nomAppli(e.appli || 'studio'), quiCourt(e.qui), () => aller('afaire'), e]);
   const lignePrio = ([i, titre, sous, c, tag, qui, f]) => h('div', { class: 'prio', onclick: f, role: 'button', tabindex: '0', onkeydown: (e) => e.key === 'Enter' && f() },
     h('span', { class: 'ic' }, ic(i)), h('span', {}, titre, sous ? h('small', {}, sous) : ''), h('span', { class: 'tag ' + c }, tag), h('span', { class: 'qui-p' }, qui));
 
@@ -908,34 +1041,113 @@ async function pageEnsemble() {
 
   const choix = h('div', { class: 'seg' }, [['semaine', 'Semaine'], ['mois', 'Mois'], ['annee', 'Année']].map(([v, l]) =>
     h('button', { class: periodeEns === v ? 'on' : '', onclick: () => { periodeEns = v; aller('ensemble'); } }, l)));
-  const kpiIc = (i, titre, valeur, sous, couleur) => { const k = kpi(titre, valeur, sous, couleur); k.querySelector('.t').prepend(ic(i)); return k; };
-  afficherPour(g,
-    entete('Vue d’ensemble', new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).replace(/^./, (c) => c.toUpperCase()) + ' · le studio en un coup d’œil', choix),
-    h('div', { class: 'kpis' },
-      kpiIc('euro', 'Revenus ' + motPeriode, euros(revenus), ab.payants ? `${ab.payants} abonné${ab.payants > 1 ? 's' : ''} payant${ab.payants > 1 ? 's' : ''} (estimation)` : 'les paiements arrivent avec la vraie version'),
-      kpiIc('recu', 'Coûts ' + motPeriode, euros(depenses), 'abonnements et domaines', 'var(--rouge)'),
-      kpiIc('stats', 'Résultat', (resultat >= 0 ? '+' : '') + euros(resultat), resultat >= 0 ? 'positif' : 'les revenus ne couvrent pas encore les coûts', resultat >= 0 ? 'var(--vert)' : 'var(--rose)'),
-      kpiIc('gens', 'Abonnés payants', nombre(ab.payants), `${nombre(ab.offerts)} offert${ab.offerts > 1 ? 's' : ''} · comptes du studio non comptés`, 'var(--jaune)'),
-      kpiIc('horloge', 'Avances à rembourser', euros(reste), nbAvances ? `${nbAvances} avance${nbAvances > 1 ? 's' : ''} en attente de la SAS` : 'aucune avance en attente')),
-    h('div', { class: 'g2' },
-      h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('ok'), h('h2', {}, 'Priorités'), h('button', { class: 'a', onclick: () => aller('afaire') }, `Tout voir (${P.length}) →`)),
-        P.length ? P.slice(0, 7).map(lignePrio) : h('div', { class: 'vide', style: 'padding:14px 16px' }, 'Rien en attente. Bravo !')),
-      h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('pulse'), h('h2', {}, 'Santé du studio')),
-        sante(robotsPoint, 'Robots', robotsSous, robotsLigne),
-        sante('var(--vert)', 'Sauvegarde de la base', h('small', {}, 'automatique, gardée 35 jours'), h('b', {}, 'lundi 3 h 41')),
-        sante(enAttente.length ? 'var(--jaune)' : 'var(--vert)', 'Partenaires en attente', h('small', {}, enAttente.map((p) => p.nom).join(', ') || 'aucun'), h('b', {}, String(enAttente.length))),
-        sante(prochaine && joursAvant(prochaine.echeance) <= 15 ? 'var(--jaune)' : 'var(--vert)', 'Prochaine échéance', h('small', {}, prochaine ? `${prochaine.nom} · ${dateFr(prochaine.echeance)}` : 'aucune'), h('b', {}, prochaine ? 'J-' + joursAvant(prochaine.echeance) : '—')),
-        sante(recetteFaite === recette.length ? 'var(--vert)' : 'var(--jaune)', 'Recette (tests sur téléphone)', h('small', {}, h('span', { class: 'progression', style: 'display:block;margin:5px 0 0;width:140px' }, h('span', { style: `width:${recette.length ? Math.round((recetteFaite / recette.length) * 100) : 0}%` }))), h('b', {}, `${recetteFaite} / ${recette.length}`)),
-        sante('var(--vert)', 'Supabase (offre gratuite)', h('small', {}, 'Tikette, Guinche'), h('b', {}, '2 / 2 projets')))),
-    h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('tab'), h('h2', {}, 'Portefeuille'),
-        h('span', { class: 'a' }, `${produits.length} produits · ${produits.filter((a) => a.type === 'appli').length} applis, ${produits.filter((a) => a.type === 'jeu').length} jeux`)),
-      h('div', { class: 'tableau' }, h('table', { class: 'portefeuille' },
-        h('thead', {}, h('tr', {}, h('th', {}, 'PRODUIT'), h('th', {}, 'ÉTAPE'), h('th', { class: 'moins' }, 'VERSION'), h('th', {}, 'AVANCEMENT'), h('th', { class: 'moins' }, periodeEns === 'mois' ? 'CE MOIS' : periodeEns === 'semaine' ? 'CETTE SEMAINE' : 'CETTE ANNÉE'), h('th', { class: 'moins' }, 'MOTEUR'))),
-        h('tbody', {}, produits.map(ligneProduit))))),
-    jalons.length ? h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('fusee'), h('h2', {}, 'Jalons')),
-      h('div', { class: 'jalons' }, jalons.map(([d, titre, quoi]) => h('div', { class: 'jal ' + (d <= auj ? 'fait' : d === avenir[0]?.[0] ? 'prochain' : '') },
-        h('div', { class: 'rond' }), h('span', { class: 'mono' }, new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })), h('b', {}, titre), h('small', {}, quoi))))) : '');
+  // ── Accueil v3 : la prochaine chose à faire, la sortie, les chiffres, l'objectif liberté, le direct, le simulateur ──
+  const [p0, ...suiteP] = P;
+  const tacheFaite = async (e) => { await rpc('console_cocher', { p_cle: e.cle, p_fait: true }); cochesCache = null; aller('ensemble'); };
+  const maint = h('section', { class: 'bloc maint' }, h('div', { class: 'lab' }, 'À faire maintenant'),
+    p0 ? [h('div', { class: 'quoi' }, p0[1]), h('div', { class: 'meta' }, h('b', {}, p0[2] || p0[4]), ' · ', p0[4], ' · ', p0[5] === 'G' ? 'Greg' : p0[5] === 'Y' ? 'Yvan' : 'Greg + Yvan'),
+      h('div', { class: 'act' }, p0[7] ? h('button', { class: 'bt', onclick: () => tacheFaite(p0[7]) }, 'C’est fait') : h('button', { class: 'bt', onclick: p0[6] }, 'Ouvrir'),
+        p0[7] ? h('button', { class: 'bt leger', onclick: p0[6] }, 'Voir la tâche') : '', h('button', { class: 'bt leger', onclick: () => aller('afaire') }, `Tout voir (${P.length})`)),
+      suiteP.length ? h('div', { class: 'suite' }, suiteP.slice(0, 3).map((x) => h('button', { onclick: x[6] }, h('i', {}, x[4]), h('b', {}, x[1])))) : '']
+      : [h('div', { class: 'quoi' }, 'Rien d’urgent. Profite !'), h('div', { class: 'meta' }, 'Les rappels, échéances et retours apparaîtront ici.')]);
+  // Préparation de la sortie : demandes Tikette et tests sur téléphone cochés.
+  const prepListe = [...A_FAIRE.elements.filter((e) => e.groupe === 'demande' && e.appli === 'tikette'), ...recette];
+  const prepFaits = prepListe.filter((e) => faire.coches[e.cle]).length;
+  const prepPct = prepListe.length ? Math.round(prepFaits / prepListe.length * 100) : 0;
+  const restePrep = prepListe.filter((e) => !faire.coches[e.cle]).slice(0, 2).map((e) => { const t = e.titre.split(/\s[:(—]/)[0]; return t.length > 42 ? t.slice(0, 42).replace(/\s\S*$/, '') : t; });
+  const horloge = h('div', { class: 'horloge' });
+  const compte = h('section', { class: 'bloc compte-sortie', 'aria-label': 'Compte à rebours de la sortie de Tikette' }, h('span', { class: 'grand-oeuf' }),
+    h('div', { class: 'lab' }, 'Tikette sur l’App Store · 14 déc.'), horloge,
+    h('div', { class: 'prep' }, h('div', { class: 'ligne-p' }, h('span', {}, 'Préparation de la sortie'), h('b', {}, prepPct + ' %')),
+      h('div', { class: 'jauge' }, h('i', { 'data-l': prepPct + '%' })),
+      h('div', { class: 'ligne-p', style: 'opacity:.78' }, h('span', {}, `${prepFaits} sur ${prepListe.length}` + (restePrep.length ? ' · reste : ' + restePrep.join(', ') + '…' : '')))));
+  const sortie = new Date(SORTIE_TIKETTE + 'T09:00:00+01:00').getTime(), deux = (n) => String(n).padStart(2, '0');
+  const tic = () => {
+    if (!horloge.isConnected && g !== generation) return clearInterval(minuteurHorloge);
+    let r = Math.max(0, sortie - Date.now()) / 1000; const jj = Math.floor(r / 86400); r %= 86400;
+    horloge.replaceChildren(...[[jj, 'JOURS'], [deux(Math.floor(r / 3600)), 'H'], [deux(Math.floor(r % 3600 / 60)), 'MIN'], [deux(Math.floor(r % 60)), 'S']].map(([v, l]) => h('span', {}, h('b', {}, String(v)), h('small', {}, l))));
+  };
+  clearInterval(minuteurHorloge); tic(); minuteurHorloge = setInterval(tic, 1000);
+  // Chiffres
+  const places = att ? att.places : 50, prises = 50 - places;
+  const prochaineEch = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0).sort((x, y) => x.echeance.localeCompare(y.echeance))[0];
+  const chiffre = (lab, valeur, sous) => h('div', { class: 'bloc' }, h('div', { class: 'lab' }, lab), h('div', { class: 'v' }, valeur), h('div', { class: 's' }, sous));
+  const anneau = svg(`<svg viewBox="0 0 64 64" aria-hidden="true"><circle class="f" cx="32" cy="32" r="28"/><circle class="val" cx="32" cy="32" r="28" data-o="${176 * (1 - prises / 50)}"/></svg>`);
+  const chiffres = h('section', { class: 'acc-chiffres', 'aria-label': 'Chiffres' },
+    chiffre('Revenus ' + motPeriode, euros(revenus), ab.payants ? `${nombre(ab.payants)} abonné${ab.payants > 1 ? 's' : ''} payant${ab.payants > 1 ? 's' : ''}` : 'les paiements arrivent avec la sortie'),
+    chiffre('Abonnés Or', nombre(ab.payants), `${nombre(ab.offerts)} offert${ab.offerts > 1 ? 's' : ''} · studio non compté`),
+    h('div', { class: 'bloc' }, h('div', { class: 'lab' }, 'Places de fondateur'), h('div', { class: 'anneau' }, anneau,
+      h('div', {}, h('div', { class: 'v', style: 'margin:0' }, `${prises} / 50`), h('div', { class: 's' }, att ? (att.semaine ? h('span', {}, h('b', {}, '+' + att.semaine), ' cette semaine') : 'liste d’attente de l’espace pro') : 'lancer pro-attente.sql')))),
+    chiffre('Coûts ' + motPeriode, euros(depenses), prochaineEch ? h('span', {}, 'prochain : ', h('em', {}, prochaineEch.nom), ' le ' + dateFr(prochaineEch.echeance)) : 'abonnements et domaines'));
+  // Objectif liberté
+  const ETAPES_LIBERTE = [['MICRO', auj >= '2026-11-03'], ['TESTFLIGHT', auj >= '2026-11-05'], ['1RE SORTIE', auj >= SORTIE_TIKETTE], ['100 OR', ab.payants >= 100], ['SAS', false], ['1 000 €/MOIS', revenus / facteur >= 1000], ['LIBERTÉ', false]];
+  const derniere = ETAPES_LIBERTE.reduce((n, e, k) => (e[1] ? k : n), 0);
+  const posIci = Math.min(100, (derniere + 0.4) / (ETAPES_LIBERTE.length - 1) * 100);
+  const route = h('div', { class: 'route', 'aria-hidden': 'true' }, h('div', { class: 'rail' }), h('div', { class: 'avance', 'data-l': posIci + '%' }),
+    ETAPES_LIBERTE.map(([n, ok], k) => h('span', { class: 'pas' + (ok ? ' ok' : ''), style: `left:${k / (ETAPES_LIBERTE.length - 1) * 100}%` }, n)), h('span', { class: 'ici', 'data-l': posIci + '%' }));
+  const joursGreg = Math.max(0, Math.ceil((new Date('2029-09-01') - Date.now()) / 864e5));
+  const liberte = h('section', { class: 'bloc liberte' }, h('div', { class: 'lab' }, 'Objectif liberté'), h('h2', {}, 'Quitter le boulot avec 3 000 € nets chacun'),
+    h('p', {}, 'Greg en septembre 2029, Yvan en avril 2030.'), route,
+    h('div', { class: 'mini' }, h('div', {}, h('b', {}, 'J-' + nombre(joursGreg)), h('span', {}, 'avant le départ de Greg')),
+      h('div', {}, h('b', {}, euros(revenus / facteur).replace(',00', '')), h('span', {}, 'par mois sur 6 000 € visés')),
+      h('div', {}, h('b', {}, String(CATALOGUE.filter((a) => estConfirmee(a) && a.etape === 'en ligne').length)), h('span', {}, 'appli(s) en ligne'))));
+  // En direct : ce qui vient de se passer (retours, liste d'attente, avances, tâches cochées)
+  const evenements = () => [
+    ...retours.map((r) => ({ q: r.le, c: r.genre === 'bug' ? 'r' : '', i: r.genre === 'bug' ? '!' : '?', t: (GENRES[r.genre] || 'Retour') + ' de ' + (r.testeur || 'un testeur'), s: (r.texte || '').slice(0, 70) })),
+    ...(att?.liste || []).map((x) => ({ q: x.cree_le, c: 'r', i: 'PRO', t: x.nom + ' a réservé sa place', s: 'Liste d’attente · ' + (x.commune || 'tikette.fr/pro') })),
+    ...avances.map((a) => ({ q: a.cree_le || a.le, c: '', i: '€', t: 'Avance : ' + euros(a.montant), s: (a.fournisseur || '') + (a.qui ? ' · ' + a.qui : '') })),
+    ...Object.entries(faire.coches || {}).map(([cle, q]) => { const e = A_FAIRE.elements.find((x) => x.cle === cle); return e ? { q, c: 'v', i: '✓', t: 'Fait : ' + e.titre.slice(0, 60), s: e.groupe === 'recette' ? 'Recette' : 'À faire' } : null; }).filter(Boolean),
+  ].filter((e) => e.q).sort((a, b) => String(b.q).localeCompare(String(a.q))).slice(0, 5);
+  const heure = (q) => { const d = new Date(q.length === 10 ? q + 'T12:00:00' : q); return d.toDateString() === new Date().toDateString() ? deux(d.getHours()) + ':' + deux(d.getMinutes()) : d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' }); };
+  const fil = h('ul', { class: 'fil' }, evenements().map((e) => h('li', {}, h('span', { class: 'ic ' + e.c }, e.i), h('span', {}, e.t, h('small', {}, e.s)), h('time', {}, heure(e.q)))));
+  if (!fil.children.length) fil.append(h('li', {}, h('span', { class: 'ic' }, '·'), h('span', {}, 'Rien de neuf pour l’instant', h('small', {}, 'Inscriptions, retours et avances arriveront ici.')), h('time', {}, '')));
+  const direct = h('section', { class: 'bloc direct' }, h('div', { class: 'tete' }, h('span', { class: 'pouls' }), h('span', { class: 'lab', style: 'color:var(--creme)' }, 'En direct')), fil);
+  // Nouvelles inscriptions et retours toutes les minutes, tant que la page est ouverte.
+  const vus = new Set([...(att?.liste || []).map((x) => 'p' + x.id), ...retours.map((r) => 'r' + r.id)]);
+  clearInterval(minuteurDirect);
+  minuteurDirect = setInterval(async () => {
+    if (g !== generation) return clearInterval(minuteurDirect);
+    if (document.hidden) return;
+    const [a2, r2] = await Promise.all([rpc('console_pro_attente').catch(() => null), rpc('console_retours', { p_appli: null }).catch(() => [])]);
+    const neufs = [...(a2?.liste || []).filter((x) => !vus.has('p' + x.id)).map((x) => (vus.add('p' + x.id), ['r', 'PRO', x.nom + ' a réservé sa place', 'Liste d’attente · ' + (x.commune || '')])),
+      ...r2.filter((r) => !vus.has('r' + r.id)).map((r) => (vus.add('r' + r.id), [r.genre === 'bug' ? 'r' : '', r.genre === 'bug' ? '!' : '?', (GENRES[r.genre] || 'Retour') + ' de ' + (r.testeur || 'un testeur'), (r.texte || '').slice(0, 70)]))];
+    for (const [c, i, t, s] of neufs) {
+      const d = new Date();
+      fil.prepend(h('li', { class: 'neuf' }, h('span', { class: 'ic ' + c }, i), h('span', {}, t, h('small', {}, s)), h('time', {}, deux(d.getHours()) + ':' + deux(d.getMinutes()))));
+      while (fil.children.length > 5) fil.lastElementChild.remove();
+    }
+    if (neufs.length) compterNav();
+  }, 60000);
+  // Simulateur « Et si… »
+  const MOIS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+  const cur = (id, lab, min, max, pas, val) => h('div', { class: 'curseur' }, h('label', { for: id }, lab, h('output', { id: 'o-' + id })), h('input', { id, type: 'range', min, max, step: pas, value: val, oninput: simuler }));
+  const dateV = h('div', { class: 'date' }), ligneV = h('div', { class: 'ligne-v' }), courbe = svg('<svg viewBox="0 0 400 120" preserveAspectRatio="none" aria-hidden="true"></svg>');
+  const simu = h('section', { class: 'bloc simu' },
+    h('div', {}, h('div', { class: 'lab' }, 'Et si…'), h('h2', {}, 'Quand est-ce qu’on quitte le boulot ?'), h('p', {}, 'Bouge les curseurs : la date se recalcule avec les vrais prix de Tikette Or.'),
+      cur('s-tel', 'Téléchargements par mois ', 200, 20000, 100, 6000), cur('s-or', 'Passent à l’Or ', 0.5, 10, 0.5, 3), cur('s-an', 'Choisissent l’abonnement à l’année ', 0, 100, 5, 60)),
+    h('div', { class: 'verdict', 'aria-live': 'polite' }, h('div', { class: 'lab' }, 'Liberté atteinte en'), dateV, ligneV, courbe));
+  function simuler() {
+    const v = (id) => +simu.querySelector('#' + id).value, tel = v('s-tel'), or = v('s-or') / 100, an = v('s-an') / 100;
+    simu.querySelector('#o-s-tel').textContent = tel.toLocaleString('fr-FR'); simu.querySelector('#o-s-or').textContent = String(v('s-or')).replace('.', ',') + ' %'; simu.querySelector('#o-s-an').textContent = Math.round(an * 100) + ' %';
+    const parAbonne = (an * 19.99 / 12 + (1 - an) * 2.99) * 0.85, OBJ = 6000;
+    let abo = 0, trouve = -1; const pts = [];
+    for (let m = 0; m < 60; m++) { abo = abo * 0.95 + tel * or; pts.push(abo * parAbonne); if (trouve < 0 && pts[m] >= OBJ) trouve = m; }
+    const d = (m) => { const x = new Date(2026, 11 + m, 1); return MOIS[x.getMonth()] + ' ' + x.getFullYear(); };
+    if (trouve >= 0) { dateV.className = 'date'; dateV.textContent = d(trouve); ligneV.replaceChildren(h('b', {}, nombre(Math.round(abo))), ' abonnés Or au bout de 5 ans · ', h('b', {}, nombre(Math.round(pts[59])) + ' €'), ' par mois'); }
+    else { dateV.className = 'date non'; dateV.textContent = 'Pas en 5 ans'; ligneV.replaceChildren('On plafonne à ', h('b', {}, nombre(Math.round(pts[59])) + ' €'), ' par mois : il faudrait ', h('b', {}, nombre(Math.ceil(OBJ / Math.max(pts[59], 1) * tel))), ' téléchargements par mois.'); }
+    const max = Math.max(OBJ * 1.25, ...pts), y = (q) => (110 - q / max * 100).toFixed(1), x = (i) => (i / 59 * 400).toFixed(1);
+    const l = pts.map((q, i) => (i ? 'L' : 'M') + x(i) + ' ' + y(q)).join(' ');
+    courbe.innerHTML = `<path class="c-aire" d="${l} L400 110 L0 110Z"/><line class="c-obj" x1="0" x2="400" y1="${y(OBJ)}" y2="${y(OBJ)}"/><text class="t-obj" x="2" y="${y(OBJ) - 5}">6 000 €/MOIS</text><path class="c-rev" d="${l}"/><text x="0" y="122">DÉC. 2026</text><text x="400" y="122" text-anchor="end">2031</text>`;
+  }
+  simuler();
+  afficherPour(g, h('div', { class: 'acc-haut' }, maint, compte), chiffres, h('div', { class: 'acc-milieu' }, liberte, direct), simu);
+  // Les jauges se remplissent une fois affichées.
+  setTimeout(() => {
+    document.querySelectorAll('#page [data-l]').forEach((el) => { if (el.classList.contains('ici')) el.style.left = el.dataset.l; else el.style.width = el.dataset.l; });
+    document.querySelectorAll('#page .anneau .val').forEach((el) => { el.style.strokeDashoffset = el.dataset.o; });
+  }, 120);
 }
+let minuteurHorloge = null, minuteurDirect = null;
 function etatPartenaire(p) {
   const j = joursDepuis(p.depuis);
   if (p.etat === 'accepte') return h('span', { class: 'etiquette direct' }, 'accepté');
