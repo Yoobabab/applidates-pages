@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mEtyjceBglWfpuUiCrNWE3cegzhXl96zdzcRuudW42c='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-+9ZvT5tM4DFMdousUgXpOHyJxBkr0M/xnmYIGVNADMM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -64,7 +64,7 @@ body.console header{display:none}
 // Signatures mail des applis du studio : rien n'est envoyé, tout reste dans le navigateur.
 if (new URLSearchParams(location.search).has('console')) document.body.classList.add('console');
 try { const t = localStorage.getItem('console-theme'); if (t === 'clair') document.documentElement.dataset.theme = 'light'; if (t === 'sombre') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
-const LOGOS_MAIL = { tikette: 'https://tikette.fr/mail/tikette.png', shivr: 'https://tikette.fr/mail/shivr.png', guinche: 'https://tikette.fr/mail/guinche.png' };
+const LOGOS_MAIL = { tikette: 'https://tikette.fr/mail/tikette.png?v=2', shivr: 'https://tikette.fr/mail/shivr.png', guinche: 'https://tikette.fr/mail/guinche.png' };
 const PREREMPLI = {
   studio: { nom: 'Egg Not Found', couleur: '#E8344E', mail: 'contact@eggnotfound.fr', site: '', slogan: 'Studio d’applis et de jeux', logo: 'https://tikette.fr/mail/eggnotfound.png', large: true },
   tikette: { mail: 'contact@tikette.fr', site: 'tikette.fr', slogan: 'Choisis l’ambiance, On organise.' },
