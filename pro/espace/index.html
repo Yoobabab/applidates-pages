@@ -97,6 +97,19 @@ main{padding:28px 34px 70px;width:100%;max-width:1240px}
 .champs{display:grid;grid-template-columns:130px 1fr;gap:9px 12px;font-size:14px;margin:4px 0}.champs dt{color:var(--doux)}.champs dd{margin:0;font-weight:500}
 .prenoms{display:flex;gap:6px;flex-wrap:wrap}.prenoms span{background:var(--violet2);color:#3D1F73;border-radius:99px;padding:2px 10px;font-size:13px;font-weight:500}
 .copie{display:flex;gap:8px}.copie input{font-size:12.5px;color:var(--doux)}
+.etoiles{display:inline-flex;gap:1px;color:#F2B21B}.etoiles svg{width:15px;height:15px;stroke-width:1.4}.etoiles svg.plein{fill:currentColor}.etoiles svg.vide{color:#D9D2E6}
+.note-geante{display:flex;gap:22px;align-items:center}.note-geante .gn{font-family:var(--ft);font-size:56px;line-height:1;letter-spacing:-.03em}
+.repart{flex:1;display:grid;gap:5px}.repart div{display:grid;grid-template-columns:14px 1fr 30px;gap:8px;align-items:center;font-size:12.5px;color:var(--doux)}
+.repart i{height:8px;border-radius:99px;background:#F0EDF5;overflow:hidden;display:block}.repart i span{display:block;height:100%;background:#F2B21B;border-radius:99px}
+.classement{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--bord)}.classement:first-of-type{border-top:0}
+.rang{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-family:var(--ft);background:#F0EDF5;color:var(--doux)}
+.rang.r1{background:#FFE7A3;color:#7A5300}.rang.r2{background:#E8E6EE;color:#4A4560}.rang.r3{background:#F6DCC6;color:#7A4317}
+.puce{display:inline-block;font-size:12px;border-radius:99px;padding:2px 9px;background:var(--violet2);color:#3D1F73;margin:3px 4px 0 0;font-weight:600}.puce.neg{background:var(--rouge2);color:var(--rouge)}
+.tagbar{display:grid;grid-template-columns:170px 1fr 28px;gap:10px;align-items:center;font-size:13.5px;padding:5px 0}.tagbar i{height:10px;border-radius:99px;background:#F0EDF5;display:block;overflow:hidden}.tagbar i span{display:block;height:100%;border-radius:99px;background:var(--vert)}.tagbar.neg i span{background:var(--rouge)}
+.avis{padding:16px 0;border-top:1px solid var(--bord)}.avis:first-child{border-top:0}.avis .haut{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.avis blockquote{margin:10px 0 0;padding:10px 14px;background:#FAF8FD;border-left:3px solid var(--violet);border-radius:0 10px 10px 0;font-size:14.5px}
+.avis .rep{margin:10px 0 0 18px;padding:10px 14px;background:var(--vert2);border-radius:10px;font-size:14px}.avis .rep b{display:block;font-size:12px;color:var(--vert);margin-bottom:2px}
+.reac{font-size:12px;font-weight:700;border-radius:99px;padding:2px 9px}.reac.adore{background:#FFE3EC;color:#C2185B}.reac.bien{background:var(--vert2);color:var(--vert)}.reac.bof{background:#F0EDF5;color:var(--doux)}
 .barres{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:10px}.barres div{flex:1;background:var(--violet);opacity:.85;border-radius:4px 4px 0 0;min-height:2px;position:relative}
 .barres div span{position:absolute;bottom:-19px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--pale)}
 .tableau{width:100%;border-collapse:collapse;font-size:14px}.tableau th{text-align:left;font-size:12px;color:var(--doux);font-weight:500;padding:8px;border-bottom:1px solid var(--bord)}
@@ -191,6 +204,7 @@ const P = {
   recu: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6M9 16h3"/>', euro: '<path d="M17 6a7 7 0 1 0 0 12M4 10h9M4 14h9"/>',
   image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>',
   copier: '<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>', note: '<path d="M5 4h14v12l-4 4H5z"/><path d="M15 20v-4h4M8 9h8M8 13h5"/>',
+  etoile: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>', coeur: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>', bulle: '<path d="M4 5h16v11H9l-5 4z"/>', drapeau: '<path d="M5 21V4h11l-2 4 2 4H5"/>',
   fleche: '<path d="M5 12h14M13 6l6 6-6 6"/>', alerte: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17v.01"/>',
 };
 const ic = (n, s = '') => `<svg class="i" viewBox="0 0 24 24" ${s}>${P[n] || ''}</svg>`;
@@ -198,7 +212,7 @@ const icp = (n) => ic(n, 'style="width:13px;height:13px;vertical-align:-2px"');
 
 const STATUTS = { demandee: 'À valider', confirmee: 'Confirmée', refusee: 'Refusée', expiree: 'Expirée', annulee_client: 'Annulée par le client', annulee_pro: 'Annulée par vous', venue: 'Venue', absente: 'Absente' };
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
+const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['avis','etoile','Avis clients'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
 let espace = null, vueActuelle = 'accueil';
 const proprio = () => espace?.entreprise.role === 'proprietaire';
 
@@ -274,7 +288,7 @@ function aller(v) {
   if (!MENU.some((m) => m[0] === v)) v = 'accueil';
   vueActuelle = v; if (location.hash.slice(1) !== v) history.replaceState(null, '', '#' + v);
   dessinerMenu(); window.scrollTo(0, 0); $('#couche').innerHTML = '';
-  ({ accueil, reservations, planning, activites, fiche, stats, agenda, parametres }[v])();
+  ({ accueil, reservations, planning, activites, fiche, stats, avis, agenda, parametres }[v])();
 }
 const entete = (titre, sous = '', outils = '') => `<div class="entete"><div><h1>${titre}</h1>${sous ? `<p>${sous}</p>` : ''}</div><div class="outils">${outils}</div></div>`;
 
@@ -334,9 +348,10 @@ function detailResa(r, apres) {
 async function accueil() {
   const e = espace.entreprise, auj = jourISO(new Date());
   const debutMois = dateParis(auj.slice(0, 8) + '01', '00:00'), finMois = dateParis(ajouterJours(auj.slice(0, 8) + '01', 32).slice(0, 8) + '01', '00:00');
-  const [liste, st] = await Promise.all([
+  const [liste, st, av] = await Promise.all([
     rpc('pro_reservations_liste', { p_du: new Date(Date.now() - 864e5).toISOString(), p_au: new Date(Date.now() + 90 * 864e5).toISOString() }),
-    rpc('pro_stats', { p_du: debutMois.toISOString(), p_au: finMois.toISOString() })]);
+    rpc('pro_stats', { p_du: debutMois.toISOString(), p_au: finMois.toISOString() }),
+    rpc('pro_avis_liste').catch(() => null)]);
   const aValider = liste.filter((r) => r.statut === 'demandee');
   const duJour = liste.filter((r) => jourISO(r.debut) === auj && ['confirmee', 'venue', 'absente'].includes(r.statut));
   const prochaines = liste.filter((r) => r.statut === 'confirmee' && jourISO(r.debut) > auj).slice(0, 6);
@@ -361,6 +376,9 @@ async function accueil() {
     ${etapes.some((x) => !x[1]) ? `<div class="carte"><h2>${ic('activite')}Bien démarrer</h2>${etapes.map(([t, f]) => `<div class="logiciel"><span style="display:flex;gap:10px;align-items:center;${f ? 'color:var(--pale);text-decoration:line-through' : ''}">${f ? ic('ok', 'style="color:var(--vert)"') : ic('info', 'style="color:var(--pale)"')}${t}</span></div>`).join('')}
       <button class="btn prim" style="margin-top:12px" onclick="aller('${suite}')">Continuer${ic('fleche')}</button></div>` : ''}
     <div class="carte"><h2>${ic('calendrier')}Prochaines réservations</h2>${prochaines.map((r) => `<div class="logiciel" data-ouvrir="${r.id}" style="cursor:pointer"><span><b>${nomClient(r)}</b><br><span class="note">${esc(r.offre)} · ${r.personnes} pers.</span></span><span class="note" style="text-align:right">${jourCourt(r.debut)}<br>${heure(r.debut)}</span></div>`).join('') || '<div class="vide">Rien de prévu pour l’instant.</div>'}</div>
+    ${av?.nombre ? `<div class="carte"><h2>${ic('etoile')}Avis clients <span style="margin-left:auto;font-family:var(--ft);font-size:22px">${noteTxt(av.moyenne)}</span></h2>${etoiles(+av.moyenne)} <span class="note">${av.nombre} avis · ${av.recommandent ?? 0} % le recommandent</span>
+      ${av.avis.slice(0, 2).map((x) => `<div class="avis" style="padding:12px 0 0;margin-top:12px">${etoiles(x.note)} <span class="note">${esc(x.salle || x.offre)} · ${jourCourt(x.debut)}</span>${x.mot ? `<blockquote style="font-size:13.5px">${esc(x.mot)}</blockquote>` : ''}</div>`).join('')}
+      <button class="btn p" style="margin-top:14px" onclick="aller('avis')">Voir tous les avis${ic('fleche')}</button></div>` : ''}
    </div></div>`;
   brancherResas($('#vue'), liste, accueil);
 }
@@ -645,6 +663,75 @@ async function stats() {
   <div class="carte"><h2>Par activité</h2>${Object.entries(st.par_offre).map(([t, n]) => `<div class="logiciel"><span>${esc(t)}</span><b>${n}</b></div>`).join('') || '<div class="vide">—</div>'}</div></div>`;
   $$('[data-p]').forEach((b) => b.onclick = () => { periode = b.dataset.p; stats(); });
   $('#exp2').onclick = () => exporter(liste, 'statistiques');
+}
+
+// ───── Avis clients ─────
+const NEGATIFS = ['Trop cher', 'Trop court', 'Trop d’attente', 'Matériel fatigué', 'Difficile à trouver', 'Trop de monde'];
+const REACTIONS = { adore: 'Adoré', bien: 'Bien', bof: 'Bof' };
+const etoiles = (n) => `<span class="etoiles" aria-label="${String(n).replace('.', ',')} sur 5">${[1, 2, 3, 4, 5].map((i) => `<svg class="i ${n >= i - 0.25 ? 'plein' : 'vide'}" viewBox="0 0 24 24">${P.etoile}</svg>`).join('')}</span>`;
+const noteTxt = (n) => n == null ? '–' : (+n).toFixed(1).replace('.', ',');
+let periodeAvis = 'tout', filtreAvis = { qui: '', type: '' };
+async function avis() {
+  const auj = jourISO(new Date());
+  const du = periodeAvis === 'tout' ? null : periodeAvis === '90' ? ajouterJours(auj, -90) : auj.slice(0, 8) + '01';
+  const a = await rpc('pro_avis_liste', du ? { p_du: dateParis(du, '00:00').toISOString() } : {});
+  const onglets = `<div class="onglets">${[['tout', 'Depuis le début'], ['90', '90 jours'], ['mois', 'Ce mois']].map(([k, t]) => `<button class="${periodeAvis === k ? 'on' : ''}" data-p="${k}">${t}</button>`).join('')}</div>`;
+  const tete = entete('Avis clients', 'Ce que les clients Tikette ont pensé de leur sortie chez vous. Les avis sont anonymes.', onglets + (a.nombre ? `<button class="btn" id="exp-avis">${ic('telecharger')}Exporter (Excel)</button>` : ''));
+  if (!a.nombre) {
+    $('#vue').innerHTML = tete + `<div class="carte vide" style="padding:40px 20px">${ic('etoile', 'style="width:34px;height:34px;color:#F2B21B"')}<h2 style="margin:10px 0 6px">Pas encore d’avis${periodeAvis !== 'tout' ? ' sur cette période' : ''}</h2>
+      <p class="note" style="max-width:460px;margin:0 auto">Après chaque sortie, Tikette propose au client de noter son expérience. Les avis arrivent ici : la note, ce qu’il a adoré, et parfois un petit mot pour votre équipe.</p></div>`;
+    $$('[data-p]').forEach((b) => b.onclick = () => { periodeAvis = b.dataset.p; avis(); }); return;
+  }
+  const max = Math.max(1, ...a.repartition), sansRep = a.avis.filter((x) => !x.reponse).length;
+  const salles = a.par_salle.length > 1 ? a.par_salle : a.par_offre;
+  const tagsPos = a.tags.filter((t) => !NEGATIFS.includes(t.tag)), tagsNeg = a.tags.filter((t) => NEGATIFS.includes(t.tag));
+  const maxTag = Math.max(1, ...a.tags.map((t) => t.nombre));
+  const barre = (t, neg) => `<div class="tagbar ${neg ? 'neg' : ''}"><span>${esc(t.tag)}</span><i><span style="width:${100 * t.nombre / maxTag}%"></span></i><b>${t.nombre}</b></div>`;
+  let liste = a.avis.filter((x) => (!filtreAvis.qui || (x.salle ? x.offre + ' · ' + x.salle : x.offre) === filtreAvis.qui)
+    && (filtreAvis.type !== 'sans' || !x.reponse) && (filtreAvis.type !== 'bas' || x.note <= 3) && (filtreAvis.type !== 'mot' || x.mot));
+  const choixQui = [...new Set(a.avis.map((x) => x.salle ? x.offre + ' · ' + x.salle : x.offre))];
+  $('#vue').innerHTML = tete + `<div class="grille colonnes" style="grid-template-columns:1.25fr 1fr 1fr 1fr;margin-bottom:16px">
+    <div class="carte"><div class="note-geante"><div><b class="gn">${noteTxt(a.moyenne)}</b><div style="margin-top:6px">${etoiles(+a.moyenne)}</div><div class="note" style="margin-top:4px">${a.nombre} avis</div></div>
+      <div class="repart">${[5, 4, 3, 2, 1].map((n) => `<div><span>${n}</span><i><span style="width:${100 * a.repartition[n - 1] / max}%"></span></i><span>${a.repartition[n - 1]}</span></div>`).join('')}</div></div></div>
+    <div class="kpi"><small>${ic('ok')}Le recommandent</small><b>${a.recommandent ?? 0} %</b><i>4 étoiles ou plus</i></div>
+    <div class="kpi"><small>${ic('coeur')}Ont adoré</small><b>${a.adore}</b><i>sur ${a.nombre} sorties notées</i></div>
+    <div class="kpi"><small>${ic('bulle')}Sans réponse</small><b>${sansRep}</b><i>un merci fait toujours plaisir</i></div></div>
+  <div class="grille g2" style="margin-bottom:16px">
+    <div class="carte"><h2>${ic('etoile')}${a.par_salle.length > 1 ? 'Vos salles, de la mieux notée' : 'Vos activités, de la mieux notée'}</h2>
+      ${salles.map((x, i) => `<div class="classement"><span class="rang r${i + 1}">${i + 1}</span><div><b>${esc(x.salle || x.offre)}</b>${x.salle ? `<span class="note"> · ${esc(x.offre)}</span>` : ''}<div>${(x.tags || []).map((t) => `<span class="puce ${NEGATIFS.includes(t) ? 'neg' : ''}">${esc(t)}</span>`).join('')}</div></div>
+        <div style="text-align:right"><b style="font-family:var(--ft);font-size:20px">${noteTxt(x.moyenne)}</b> ${etoiles(+x.moyenne)}<div class="note">${x.nombre} avis${x.adore ? ` · ${x.adore} adoré` : ''}</div></div></div>`).join('')}
+      ${salles.length === 1 ? '<p class="note" style="margin:10px 0 0">Avec plusieurs salles, vous verrez ici laquelle plaît le plus.</p>' : ''}</div>
+    <div class="carte"><h2>${ic('coeur')}Ce que les clients retiennent</h2>
+      ${tagsPos.length ? `<div class="note" style="margin-bottom:4px">Ce qu’ils ont aimé</div>${tagsPos.map((t) => barre(t)).join('')}` : ''}
+      ${tagsNeg.length ? `<div class="note" style="margin:14px 0 4px">À améliorer</div>${tagsNeg.map((t) => barre(t, true)).join('')}` : ''}
+      ${!a.tags.length ? '<div class="vide">Pas encore de mots-clés.</div>' : ''}</div></div>
+  <div class="carte"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px"><h2 style="margin:0 auto 0 0">${ic('bulle')}Tous les avis</h2>
+    <select id="f-qui" style="width:auto"><option value="">Toutes les activités</option>${choixQui.map((q) => `<option ${q === filtreAvis.qui ? 'selected' : ''}>${esc(q)}</option>`).join('')}</select>
+    <select id="f-type" style="width:auto">${[['', 'Tous'], ['sans', 'Sans réponse'], ['bas', '3 étoiles ou moins'], ['mot', 'Avec un petit mot']].map(([v, t]) => `<option value="${v}" ${v === filtreAvis.type ? 'selected' : ''}>${t}</option>`).join('')}</select></div>
+    ${liste.map((x) => `<div class="avis"><div class="haut">${etoiles(x.note)}${x.reaction ? `<span class="reac ${x.reaction}">${REACTIONS[x.reaction]}</span>` : ''}<b>${esc(x.offre)}${x.salle ? ' · ' + esc(x.salle) : ''}</b>
+      <span class="note">${jourCourt(x.debut)} · ${x.personnes} pers.</span>${x.signale ? '<span class="etat demandee">Signalé à Tikette</span>' : ''}
+      <span style="margin-left:auto">${!x.reponse ? `<button class="btn p" data-rep="${x.id}">${ic('bulle')}Répondre</button>` : ''}${!x.signale ? `<button class="btn lien" data-sig="${x.id}" title="Signaler un avis injurieux ou faux">${ic('drapeau')}</button>` : ''}</span></div>
+      ${x.tags.length ? `<div>${x.tags.map((t) => `<span class="puce ${NEGATIFS.includes(t) ? 'neg' : ''}">${esc(t)}</span>`).join('')}</div>` : ''}
+      ${x.mot ? `<blockquote>${esc(x.mot)}</blockquote>` : ''}
+      ${x.reponse ? `<div class="rep"><b>Votre réponse · ${jourCourt(x.reponse_le)}</b>${esc(x.reponse)} <button class="btn lien p" data-rep="${x.id}">Modifier</button></div>` : ''}</div>`).join('') || '<div class="vide">Aucun avis avec ces filtres.</div>'}</div>`;
+  $$('[data-p]').forEach((b) => b.onclick = () => { periodeAvis = b.dataset.p; avis(); });
+  $('#f-qui').onchange = (e) => { filtreAvis.qui = e.target.value; avis(); };
+  $('#f-type').onchange = (e) => { filtreAvis.type = e.target.value; avis(); };
+  $$('[data-rep]').forEach((b) => b.onclick = () => {
+    const x = a.avis.find((y) => y.id === b.dataset.rep);
+    const { v, fermer } = fenetre({ titre: 'Répondre à cet avis', petite: true,
+      corps: `<p class="note" style="margin:12px 0 0">Le client voit votre réponse dans Tikette. Un merci, une précision… restez courtois, même face à une critique.</p>
+        <textarea id="r-txt" rows="5" maxlength="500" style="margin-top:12px">${esc(x.reponse || '')}</textarea>`,
+      pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="r-ok">Envoyer</button>` });
+    $('#r-txt', v).focus();
+    $('#r-ok', v).onclick = async () => { await rpc('pro_repondre_avis', { p_reservation: x.id, p_texte: $('#r-txt', v).value }); fermer(); toast('Réponse envoyée'); avis(); };
+  });
+  $$('[data-sig]').forEach((b) => b.onclick = async () => {
+    if (!await demander({ titre: 'Signaler cet avis ?', texte: 'Tikette le relit sous 48 h. Un avis injurieux, hors sujet ou qui ne vient pas d’un vrai client est retiré ; une critique honnête reste.', bouton: 'Signaler' })) return;
+    await rpc('pro_signaler_avis', { p_reservation: b.dataset.sig }); toast('Avis signalé'); avis();
+  });
+  $('#exp-avis').onclick = () => telechargerCsv(['Date de la sortie', 'Activité', 'Salle', 'Personnes', 'Note', 'Réaction', 'Mots-clés', 'Petit mot', 'Votre réponse'],
+    a.avis.map((x) => [fmt(x.debut, { day: '2-digit', month: '2-digit', year: 'numeric' }), x.offre, x.salle || '', x.personnes, x.note, REACTIONS[x.reaction] || '', x.tags.join(', '), x.mot, x.reponse]), 'avis-clients');
 }
 
 // ───── Agenda et logiciels ─────

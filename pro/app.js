@@ -6,15 +6,20 @@ const euros = (n) => Math.round(n).toLocaleString('fr-FR') + ' €';
 
 // ── Calcul ──
 function calculer() {
-  const ca = (+$('#c-prix').value || 0) * (+$('#c-pers').value || 0) * (+$('#c-nb').value || 0);
-  $('#r-ca').textContent = euros(ca); $('#r-com').textContent = euros(ca * 0.1);
-  $('#r-garde').textContent = euros(ca * 0.9); $('#r-autre').textContent = euros(ca * 0.75);
+  const prix = +$('#c-prix').value || 0, pers = +$('#c-pers').value || 0, nb = +$('#c-nb').value || 0, ca = prix * pers * nb;
+  $('#o-prix').textContent = prix + ' €'; $('#o-pers').textContent = pers; $('#o-nb').textContent = nb;
+  const anim = window.animerNombre || ((el, v, f) => { el.textContent = f(v); });
+  anim($('#r-ca'), ca, euros); anim($('#r-com'), ca * 0.1, euros); anim($('#r-garde'), ca * 0.9, euros); anim($('#r-autre'), ca * 0.75, euros);
+  $('#r-eco').textContent = `${euros(ca * 0.15)} de plus chaque mois qu’avec une plateforme à 25 %, soit ${euros(ca * 0.15 * 12)} par an.`;
 }
 ['#c-prix', '#c-pers', '#c-nb'].forEach((id) => $(id).addEventListener('input', calculer));
+calculer();
 
 // ── Places de fondateur ──
 sb.rpc('pro_places_fondateur').then(({ data }) => {
-  if (typeof data === 'number') $('#reste').textContent = data ? `il en reste ${data}` : 'toutes prises';
+  if (typeof data !== 'number') return;
+  $('#reste-n').textContent = data; $('#reste').textContent = data ? `${50 - data} déjà prises sur 50` : 'toutes prises';
+  setTimeout(() => { $('#jauge').style.width = (100 * (50 - data) / 50) + '%'; }, 400);
 });
 
 // ── Types d'activité ──
