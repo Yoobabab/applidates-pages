@@ -2,13 +2,16 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-MCFLKTO6LxxmIQNx2s+INTf9SUowWQInHSps3nSkHyg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Console Egg Not Found</title>
 <link rel="icon" href="logos/oeuf.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="js/garde.js"></script>
+<script src="js/supabase-2.45.4.js"></script>
 <style>
   :root {
     --fond: #0A0A0A; --panneau: #141414; --ligne: rgba(237,231,220,.09); --rouge: #E8344E; --creme: #EDE7DC;
@@ -231,15 +234,121 @@
   .point { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
   .titre-section { font-family: var(--mono); font-size: 11px; letter-spacing: 1.5px; color: var(--doux); font-weight: 700; margin: 6px 0 -4px; }
 
+  /* ───── Console v2 (9 nov. 2026) : menu rangé par sujet, barre du haut, tableau de bord ───── */
+  :root { --nav: #0E0E0E; --panneau2: #191919; --ligne2: rgba(237,231,220,.14); --pale: #5E5A54; }
+  svg.i { width: 16px; height: 16px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  #console { display: grid; grid-template-columns: 252px minmax(0, 1fr); }
+  nav { width: auto; background: var(--nav); padding: 18px 12px 14px; gap: 1px; }
+  nav .marque-nav { padding: 0 8px 16px !important; }
+  .recherche { display: flex; align-items: center; gap: 8px; margin: 0 2px 12px; padding: 8px 10px; border: 1px solid var(--ligne2); border-radius: 10px; color: var(--doux); font-size: 13px; background: none; width: calc(100% - 4px); text-align: left; }
+  .recherche:hover { border-color: rgba(232,52,78,.5); color: var(--creme); }
+  .recherche kbd { margin-left: auto; font-family: var(--mono); font-size: 10.5px; border: 1px solid var(--ligne2); border-radius: 5px; padding: 1px 5px; }
+  .rubrique { display: flex; align-items: center; gap: 7px; color: var(--pale); padding: 14px 10px 5px; }
+  .rubrique img { width: 14px; height: 14px; border-radius: 4px; }
+  .onglet { gap: 10px; padding: 6px 10px; border-radius: 9px; position: relative; color: #C9C3B8; }
+  .onglet.actif { background: rgba(237,231,220,.06); color: var(--creme); }
+  .onglet.actif::before { content: ""; position: absolute; left: -12px; top: 7px; bottom: 7px; width: 3px; border-radius: 0 3px 3px 0; background: var(--rouge); }
+  .onglet .badge { font-size: 10.5px; font-weight: 700; background: rgba(232,52,78,.16); border-radius: 6px; padding: 0 6px; line-height: 18px; }
+  .onglet .badge.gris { background: rgba(237,231,220,.07); color: var(--doux); }
+  .onglet .icone-app { width: 20px; height: 20px; border-radius: 6px; font-size: 11px; }
+  .onglet .pt { width: 6px; height: 6px; border-radius: 50%; margin-left: auto; flex: none; }
+  .oeufs { display: flex; align-items: center; gap: 8px; margin: 6px 2px 0; padding: 9px 10px; border: 1px dashed rgba(232,52,78,.4); border-radius: 10px; color: var(--doux); font-size: 12.5px; background: none; text-align: left; width: calc(100% - 4px); }
+  .oeufs:hover { color: var(--creme); border-color: var(--rouge); }
+  .oeufs .pile { display: flex; gap: 2px; }
+  .oeufs .fleche { margin-left: auto; transition: transform .2s; }
+  .oeufs.ouvert .fleche { transform: rotate(90deg); }
+  nav .bas { display: flex; align-items: center; gap: 10px; padding: 12px 8px 0; border-top: 1px solid var(--ligne); }
+  nav .bas .moi { min-width: 0; font-size: 12px; color: var(--doux); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  nav .bas .moi b { display: block; color: var(--creme); font-size: 13px; }
+  .icone-btn { background: none; border: 1px solid transparent; color: var(--doux); border-radius: 8px; padding: 6px; display: inline-flex; margin-left: auto; }
+  .icone-btn:hover { color: var(--creme); border-color: var(--ligne2); }
+  main { padding: 0; gap: 0; display: block; }
+  #barre { display: flex; align-items: center; gap: 12px; padding: 12px 28px; border-bottom: 1px solid var(--ligne); position: sticky; top: 0; z-index: 20; background: rgba(10,10,10,.92); backdrop-filter: blur(8px); flex-wrap: wrap; }
+  #barre .fil { color: var(--doux); font-size: 13px; }
+  #barre .fil b { color: var(--creme); }
+  #barre .droite { margin-left: auto; display: flex; gap: 8px; align-items: center; position: relative; }
+  .pill { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--ligne2); border-radius: 999px; padding: 5px 11px; font-size: 12px; font-weight: 600; color: #C9C3B8; background: none; white-space: nowrap; }
+  .pill.r { border-color: rgba(232,52,78,.5); color: var(--creme); background: rgba(232,52,78,.08); }
+  .pill .d { width: 7px; height: 7px; border-radius: 50%; background: var(--vert); }
+  .btn-barre { display: inline-flex; align-items: center; gap: 7px; border-radius: 9px; padding: 7px 12px; font-weight: 700; font-size: 12.5px; border: 1px solid var(--ligne2); color: var(--creme); background: none; }
+  .btn-barre:hover { border-color: var(--rouge); }
+  .btn-barre.p { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+  .menu-ajout { position: absolute; right: 0; top: calc(100% + 6px); background: var(--panneau); border: 1px solid var(--ligne2); border-radius: 12px; padding: 6px; min-width: 210px; box-shadow: 0 20px 40px rgba(0,0,0,.5); }
+  .menu-ajout button { display: flex; align-items: center; gap: 9px; width: 100%; background: none; border: 0; color: var(--creme); padding: 8px 10px; border-radius: 8px; font-size: 13px; text-align: left; }
+  .menu-ajout button:hover { background: rgba(237,231,220,.06); }
+  .burger { display: none; }
+  #barre .pill.r .court { display: none; }
+  @media (max-width: 900px) { #barre .pill.r .court { display: inline; } }
+  #page { padding: 26px 28px 60px; display: flex; flex-direction: column; gap: 18px; max-width: 1280px; }
+  .entete h1 { font-size: 25px; letter-spacing: -.3px; }
+  .seg { display: inline-flex; border: 1px solid var(--ligne2); border-radius: 9px; overflow: hidden; }
+  .seg button { padding: 6px 12px; font-size: 12px; font-weight: 700; color: var(--doux); background: none; border: 0; }
+  .seg button.on { background: var(--creme); color: #0A0A0A; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+  .kpi { border-radius: 12px; padding: 14px 15px 12px; }
+  .kpi .t { display: flex; align-items: center; gap: 7px; font-weight: 600; font-size: 12px; }
+  .kpi .v { font-size: 23px; letter-spacing: -.5px; margin: 6px 0 2px; }
+  .panneau { border-radius: 12px; }
+  .pan { background: var(--panneau); border: 1px solid var(--ligne); border-radius: 12px; overflow: hidden; min-width: 0; }
+  .pan .tt { display: flex; align-items: center; gap: 8px; padding: 13px 16px; border-bottom: 1px solid var(--ligne); }
+  .pan .tt h2 { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: .6px; text-transform: uppercase; }
+  .pan .tt .a { margin-left: auto; color: var(--doux); font-size: 12px; background: none; border: 0; }
+  .pan .tt button.a:hover { color: var(--creme); }
+  .prio { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--ligne); font-size: 13px; cursor: pointer; }
+  .prio:last-child { border-bottom: 0; }
+  .prio:hover { background: rgba(237,231,220,.03); }
+  .prio .ic { width: 26px; height: 26px; border-radius: 7px; display: grid; place-items: center; background: var(--panneau2); color: var(--doux); }
+  .prio > span:nth-child(2) { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .prio small, .sante small { display: block; color: var(--doux); font-size: 11.5px; }
+  .tag { font-size: 10.5px; font-weight: 700; border-radius: 6px; padding: 2px 7px; white-space: nowrap; }
+  .tag.r { background: rgba(232,52,78,.14); color: var(--rouge); } .tag.j { background: rgba(242,193,78,.13); color: var(--jaune); }
+  .tag.v { background: rgba(94,214,160,.12); color: var(--vert); } .tag.g { background: rgba(237,231,220,.07); color: var(--doux); } .tag.b { background: rgba(154,209,255,.12); color: var(--bleu); }
+  .qui-p { font-family: var(--mono); font-size: 10.5px; color: var(--doux); border: 1px solid var(--ligne2); border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
+  .sante { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--ligne); font-size: 13px; }
+  .sante:last-child { border-bottom: 0; }
+  .sante .d { width: 8px; height: 8px; border-radius: 50%; }
+  .sante b { font-family: var(--mono); font-size: 12px; text-align: right; }
+  .portefeuille th { padding: 10px 16px; letter-spacing: 1px; color: var(--pale); }
+  .portefeuille td { padding: 11px 16px; }
+  .portefeuille tbody tr { cursor: pointer; }
+  .portefeuille tbody tr:hover td { background: rgba(237,231,220,.03); }
+  .portefeuille tr:last-child td { border-bottom: 0; }
+  .prod { display: flex; align-items: center; gap: 11px; }
+  .prod .icone-app { width: 30px; height: 30px; border-radius: 8px; }
+  .prod b { display: block; } .prod small { color: var(--doux); font-size: 11.5px; }
+  .av-b { display: flex; align-items: center; gap: 8px; } .av-b span { width: 90px; height: 5px; border-radius: 99px; background: rgba(237,231,220,.08); overflow: hidden; } .av-b span i { display: block; height: 100%; background: var(--rouge); }
+  .mono { font-family: var(--mono); font-size: 12px; }
+  .jalons { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: relative; padding: 18px 16px 16px; gap: 6px; }
+  .jalons::before { content: ""; position: absolute; left: 28px; right: 28px; top: 27px; height: 1px; background: var(--ligne2); }
+  .jal { position: relative; } .jal .rond { width: 18px; height: 18px; border-radius: 50%; background: var(--fond); border: 2px solid var(--ligne2); margin-bottom: 9px; }
+  .jal.fait .rond { background: var(--vert); border-color: var(--vert); } .jal.prochain .rond { border-color: var(--rouge); box-shadow: 0 0 0 4px rgba(232,52,78,.18); }
+  .jal b { display: block; font-size: 13px; } .jal small { color: var(--doux); font-size: 11.5px; } .jal .mono { color: var(--rouge); font-size: 11px; }
+  .g2 { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 14px; }
+  .palette { width: 100%; max-width: 560px; background: var(--panneau); border: 1px solid var(--ligne2); border-radius: 14px; overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,.6); }
+  .palette input { width: 100%; background: none; border: 0; border-bottom: 1px solid var(--ligne); color: var(--creme); padding: 15px 16px; font-size: 15px; outline: none; }
+  .palette .res { max-height: 380px; overflow-y: auto; padding: 6px; }
+  .palette .res button { display: flex; align-items: center; gap: 10px; width: 100%; background: none; border: 0; color: #C9C3B8; padding: 8px 10px; border-radius: 8px; font-size: 13.5px; text-align: left; }
+  .palette .res button.on { background: rgba(232,52,78,.14); color: var(--creme); }
+  .palette .res .icone-app { width: 20px; height: 20px; border-radius: 6px; font-size: 11px; }
+  .palette .res small { margin-left: auto; color: var(--pale); font-family: var(--mono); font-size: 10.5px; }
+  @media (max-width: 900px) {
+    #console { display: block; }
+    nav { position: fixed; inset: 0 auto 0 0; width: 280px; height: 100vh; z-index: 60; transform: translateX(-105%); transition: transform .25s; flex-direction: column; flex-wrap: nowrap; overflow-y: auto; border-right: 1px solid var(--ligne); border-bottom: 0; padding: 18px 12px 14px; }
+    nav.ouvert { transform: none; box-shadow: 30px 0 60px rgba(0,0,0,.6); }
+    nav .rubrique { display: flex; } nav .onglet { width: 100%; }
+    .burger { display: inline-flex; }
+    #barre .sante-pill, #barre .btn-barre .txt { display: none; }
+    #barre .pill.r .long { display: none; }
+    #barre { flex-wrap: nowrap; }
+    #barre { padding: 10px 14px; } #barre .fil { display: none; }
+    #page { padding: 18px 14px 50px; }
+    .g2 { grid-template-columns: 1fr; }
+    .jalons { grid-template-columns: 1fr 1fr; } .jalons::before { display: none; }
+    .portefeuille .moins { display: none; }
+  }
+
   @media (max-width: 900px) {
     .ajout-rapide { grid-template-columns: 1fr; }
-    #console { flex-direction: column; }
-    nav { width: auto; height: auto; position: static; border-right: 0; border-bottom: 1px solid var(--ligne); flex-direction: row; flex-wrap: wrap; padding: 12px; gap: 4px; overflow: visible; }
-    nav .marque-nav { width: 100%; }
-    nav .qui, nav .rubrique { display: none; }
-    nav .onglet { width: auto; padding: 6px 10px; font-size: 13px; }
-    nav .bas { margin: 0; padding: 6px 10px; }
-    main { padding: 16px 16px 50px; }
     .grille, .grille3, .ligne-form { grid-template-columns: 1fr; }
     .barres { height: 120px; gap: 4px; }
     .barre .l { font-size: 9px; }
@@ -290,7 +399,7 @@
 
 <section id="console" hidden>
   <nav id="nav"></nav>
-  <main id="page"></main>
+  <main id="zone"><div id="barre"></div><div id="page"></div></main>
 </section>
 
 <script>
@@ -550,30 +659,66 @@ async function compterRetours() {
 let tachesCache = [];
 const estConfirmee = (a) => a.statut === 'confirmee' || CONFIRMEES.has(a.id);
 
+// Icônes au trait (dessins fixes).
+const ICONES = {
+  tab: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  cible: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>', courbe: '<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>',
+  stats: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', pro: '<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9M3 9h18M9 20v-6h6v6"/>',
+  loupe: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-5-5"/>', bulle: '<path d="M4 5h16v11H9l-5 4z"/>', offre: '<path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  euro: '<path d="M17 6a7 7 0 1 0 0 12M4 10h9M4 14h9"/>', recu: '<path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6M9 12h6"/>', coche: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/>',
+  mains: '<path d="M7 11l3-3 3 3 4-4"/><path d="M3 21h18M5 21V11M19 21V7"/>', fusee: '<path d="M12 2c4 3 5 8 3 13H9C7 10 8 5 12 2z"/><path d="M9 15l-3 3M15 15l3 3"/>',
+  alerte: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17v.01"/>', horloge: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', gens: '<circle cx="9" cy="8" r="3.2"/><path d="M3 20a6 6 0 0 1 12 0"/>',
+  pulse: '<path d="M3 12h4l3-8 4 16 3-8h4"/>', plus: '<path d="M12 5v14M5 12h14"/>', fleche: '<path d="M7 17L17 7M9 7h8v8"/>', sortie: '<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h10"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>', chevron: '<path d="M9 6l6 6-6 6"/>', ok: '<path d="M5 12.5l4.5 4.5L19 7.5"/>', robot: '<rect x="5" y="8" width="14" height="11" rx="2"/><path d="M12 4v4M9 13h.01M15 13h.01"/>',
+  db: '<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>', etoile: '<path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.8l-5.2 2.8 1-5.8-4.3-4.1 5.9-.8z"/>',
+};
+const ic = (n) => svg(`<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONES[n]}</svg>`);
+// Où l'on est (barre du haut) et le menu « Aller à… ».
+const PLAN = {
+  ensemble: ['Studio', 'Vue d’ensemble', 'tab'], objectifs: ['Studio', 'Objectifs', 'cible'], dixans: ['Studio', 'Les idées sur 10 ans', 'courbe'],
+  tikette: ['Tikette', 'Statistiques', 'stats'], espacepro: ['Tikette', 'Espace pro', 'pro'], prospection: ['Tikette', 'Prospection', 'loupe'], retours: ['Tikette', 'Retours testeurs', 'bulle'], offres: ['Tikette', 'Offres et abonnements', 'offre'],
+  couts: ['Finances', 'Coûts et échéances', 'euro'], avances: ['Finances', 'Avances de frais', 'recu'], afaire: ['Organisation', 'À faire', 'coche'], partenaires: ['Organisation', 'Partenaires', 'mains'],
+};
+// Dates clés (frise de la Vue d'ensemble) : à tenir à jour.
+const JALONS = [
+  ['2026-11-03', 'Micro-entreprise créée', 'Studio'], ['2026-11-05', 'Compte Apple et TestFlight', 'Tikette'], ['2026-11-09', 'Sauvegarde automatique', 'Base de données'],
+  ['2026-12-07', 'Dépôt de la marque INPI', 'Tikette'], ['2026-12-14', 'Sortie sur l’App Store', 'Tikette'], ['2026-12-15', 'Sortie de Guinche', 'Guinche'],
+  ['2026-12-31', 'Déclaration CFE', 'Micro-entreprise'], ['2027-02-14', 'Saint-Valentin', 'Tikette'], ['2027-03-31', 'Fin du 0 % des partenaires fondateurs', 'Espace pro'],
+];
+const SORTIE_TIKETTE = '2026-12-14';
+const POINT_ETAPE = { 'en test': 'var(--bleu)', 'en ligne': 'var(--vert)', 'en cours': 'var(--jaune)', 'en pause': 'var(--pale)', 'idée': 'var(--pale)' };
+let compteursNav = { pro: 0, echeances: 0, lus: false };
+let robotsCache = null;
+let oeufsOuverts = false;
+async function compterNav() {
+  const [pro, couts] = await Promise.all([rpc('console_pro_vue').catch(() => null), rpc('console_couts').catch(() => [])]);
+  compteursNav.pro = pro ? pro.totaux.en_attente + pro.totaux.avis_signales : 0;
+  compteursNav.echeances = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15).length;
+  dessinerNav();
+}
 function dessinerNav() {
   const nav = document.getElementById('nav');
   if (!retoursBadgeLu) { retoursBadgeLu = true; compterRetours(); }
-  const onglet = (libelle, nom, app, debut, badge) => h('button', {
+  if (!compteursNav.lus) { compteursNav.lus = true; compterNav(); }
+  const onglet = (libelle, nom, app, debut, badge, gris) => h('button', {
     class: 'onglet' + (courant.nom === nom && (courant.app || null) === (app || null) ? ' actif' : ''),
-    onclick: () => aller(nom, app),
-  }, debut || '', h('span', {}, libelle), badge ? h('span', { class: 'badge' }, badge) : '');
-  const ongletApp = (a) => (a.id === 'tikette' ? onglet(a.nom, 'tikette', null, iconeApp(a)) : onglet(a.nom, 'appli', a.id, iconeApp(a)));
-  const confirmees = CATALOGUE.filter(estConfirmee);
+    onclick: () => { nav.classList.remove('ouvert'); aller(nom, app); },
+  }, debut || '', h('span', {}, libelle), badge ? h('span', { class: 'badge' + (gris ? ' gris' : '') }, badge) : '');
+  const page = (nom, badge, gris) => onglet(PLAN[nom][1], nom, null, ic(PLAN[nom][2]), badge, gris);
+  const ongletApp = (a) => {
+    const b = onglet(a.nom, 'appli', a.id, iconeApp(a));
+    b.append(h('span', { class: 'pt', title: (ETAPES[a.etape] || ETAPES['en cours'])[1], style: 'background:' + (POINT_ETAPE[a.etape] || 'var(--jaune)') }));
+    return b;
+  };
+  const tik = CATALOGUE.find((a) => a.id === 'tikette');
+  const confirmees = CATALOGUE.filter((a) => estConfirmee(a) && a.id !== 'tikette');
   const proposees = CATALOGUE.filter((a) => !estConfirmee(a));
   const restant = cochesCache ? A_FAIRE.elements.filter((e) => e.groupe === 'demande' && !cochesCache[e.cle]).length + tachesCache.filter((t) => !cochesCache['tache:' + t.id]).length : '';
-  nav.replaceChildren(...[
-    h('div', { class: 'marque-nav', style: 'padding:0 8px' }, marque(15)),
-    h('div', { class: 'qui' }, 'Console · ' + email),
-    h('button', { class: 'bouton-liens', onclick: ouvrirLiens }, '↗', h('span', {}, 'Liens rapides')),
-    onglet('Vue d’ensemble', 'ensemble'),
-    onglet('Retours testeurs', 'retours', null, '', retoursBadge ? String(retoursBadge) : ''),
-    h('button', { class: 'bouton-objectifs' + (courant.nom === 'objectifs' ? ' actif' : ''), onclick: () => aller('objectifs') },
-      h('span', { class: 'cible', 'aria-hidden': 'true' }),
-      h('span', { class: 'textes' }, h('span', { class: 'nom' }, 'Objectifs'), h('span', { class: 'dates' }, 'Greg 09/2029 · Yvan 04/2030'))),
-    h('button', { class: 'bouton-dixans' + (courant.nom === 'dixans' ? ' actif' : ''), onclick: () => aller('dixans') }, h('span', { class: 'courbe', 'aria-hidden': 'true' }, '↗'), h('span', {}, 'Les idées sur 10 ans')),
-    h('div', { class: 'rubrique' }, 'NOS APPLIS'), confirmees.filter((a) => a.type === 'appli').map(ongletApp),
-    h('div', { class: 'rubrique' }, 'NOS JEUX'), confirmees.filter((a) => a.type === 'jeu').map(ongletApp),
-    proposees.length ? [h('div', { class: 'rubrique' }, 'À CONFIRMER'), proposees.map((a) => {
+  const oeufs = proposees.length ? [
+    h('button', { class: 'oeufs' + (oeufsOuverts ? ' ouvert' : ''), onclick: () => { oeufsOuverts = !oeufsOuverts; dessinerNav(); } },
+      h('span', { class: 'pile' }, [0, 1, 2].slice(0, Math.min(3, proposees.length)).map(() => oeufPlein(12))),
+      `${proposees.length} idée${proposees.length > 1 ? 's' : ''} à faire éclore`, h('span', { class: 'fleche' }, ic('chevron'))),
+    oeufsOuverts ? proposees.map((a) => {
       const b = h('button', { class: 'bouton-oeuf', title: 'Ajouter ' + a.nom + ' au studio', 'aria-label': 'Ajouter ' + a.nom, onclick: async () => {
         b.classList.add('eclos');
         try {
@@ -583,17 +728,78 @@ function dessinerNav() {
         catch (e) { b.classList.remove('eclos'); alert(erreur(e)); }
       } }, oeufBouton());
       return h('div', { class: 'propose' }, h('span', { class: 'estompe' }, iconeApp(a), h('span', {}, a.nom)), b);
-    })] : '',
-    h('div', { class: 'rubrique' }, 'LE STUDIO'),
-    onglet('À faire', 'afaire', null, '', restant ? String(restant) : ''),
-    onglet('Coûts et échéances', 'couts'),
-    onglet('Partenaires', 'partenaires'),
-    onglet('Espace pro', 'espacepro'),
-    onglet('Prospection', 'prospection'),
-    onglet('Avances de frais', 'avances'),
-    onglet('Offres et abonnements', 'offres'),
-    h('div', { class: 'bas' }, h('button', { class: 'btn-lien', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, 'Se déconnecter'))].flat(4));
+    }) : ''] : '';
+  nav.replaceChildren(...[
+    h('div', { class: 'marque-nav' }, marque(15)),
+    h('button', { class: 'recherche', onclick: ouvrirPalette }, ic('loupe'), 'Aller à…', h('kbd', {}, 'Ctrl K')),
+    page('ensemble'), page('objectifs', '2029', true), page('dixans'),
+    h('div', { class: 'rubrique' }, tik ? iconeApp(tik) : '', 'TIKETTE'),
+    page('tikette'), page('espacepro', compteursNav.pro ? String(compteursNav.pro) : ''), page('prospection'),
+    page('retours', retoursBadge ? String(retoursBadge) : ''), page('offres'),
+    h('div', { class: 'rubrique' }, 'NOS APPLIS'), confirmees.filter((a) => a.type === 'appli').map(ongletApp),
+    h('div', { class: 'rubrique' }, 'NOS JEUX'), confirmees.filter((a) => a.type === 'jeu').map(ongletApp),
+    oeufs,
+    h('div', { class: 'rubrique' }, 'FINANCES'), page('couts', compteursNav.echeances ? String(compteursNav.echeances) : ''), page('avances'),
+    h('div', { class: 'rubrique' }, 'ORGANISATION'), page('afaire', restant ? String(restant) : ''), page('partenaires'),
+    h('div', { style: 'margin-top:auto' }),
+    h('div', { class: 'bas' }, oeufPlein(18), h('div', { class: 'moi' }, h('b', {}, 'Egg Not Found'), email),
+      h('button', { class: 'icone-btn', title: 'Se déconnecter', 'aria-label': 'Se déconnecter', onclick: async () => { await sb.auth.signOut(); location.hash = ''; location.reload(); } }, ic('sortie')))].flat(4));
+  dessinerBarre();
 }
+// Barre du haut : où l'on est, sortie de Tikette, santé, liens rapides, ajouter.
+function dessinerBarre() {
+  const barre = document.getElementById('barre');
+  let [rub, titre] = PLAN[courant.nom] || ['Studio', ''];
+  if (courant.nom === 'appli') { const a = CATALOGUE.find((x) => x.id === courant.app); rub = a?.type === 'jeu' ? 'Nos jeux' : 'Nos applis'; titre = a?.nom || ''; }
+  const j = joursAvant(SORTIE_TIKETTE);
+  const enPanne = (robotsCache || []).filter((r) => !r.ok && !r.encours);
+  let menu = null;
+  const ajouter = h('button', { class: 'btn-barre p', onclick: (e) => {
+    e.stopPropagation();
+    if (menu) { menu.remove(); menu = null; return; }
+    menu = h('div', { class: 'menu-ajout' }, [['coche', 'Une tâche', 'afaire'], ['euro', 'Un coût ou un abonnement', 'couts'], ['recu', 'Une avance de frais', 'avances'], ['offre', 'Une offre', 'offres'], ['loupe', 'Des entreprises à contacter', 'prospection']]
+      .map(([i, t, n]) => h('button', { onclick: () => { menu.remove(); menu = null; aller(n); } }, ic(i), t)));
+    ajouter.parentElement.append(menu);
+    document.addEventListener('click', function f() { menu?.remove(); menu = null; document.removeEventListener('click', f); });
+  } }, ic('plus'), 'Ajouter');
+  barre.replaceChildren(
+    h('button', { class: 'btn-barre burger', 'aria-label': 'Menu', onclick: () => document.getElementById('nav').classList.toggle('ouvert') }, ic('menu')),
+    h('span', { class: 'fil' }, rub + ' / ', h('b', {}, titre)),
+    j >= 0 ? h('span', { class: 'pill r' }, ic('horloge'), j === 0 ? 'Tikette sort aujourd’hui !' : [h('span', { class: 'long' }, `Sortie de Tikette dans ${j} jour${j > 1 ? 's' : ''} · 14 déc.`), h('span', { class: 'court' }, `Tikette J-${j}`)]) : '',
+    h('div', { class: 'droite' },
+      h('span', { class: 'pill sante-pill', title: 'Robots et sites' }, h('span', { class: 'd', style: 'background:' + (robotsCache == null ? 'var(--pale)' : enPanne.length ? 'var(--rouge)' : 'var(--vert)') }),
+        robotsCache == null ? 'Vérification…' : enPanne.length ? `${enPanne.length} robot${enPanne.length > 1 ? 's' : ''} en panne` : 'Tout fonctionne'),
+      h('button', { class: 'btn-barre', onclick: ouvrirLiens, title: 'Liens rapides' }, ic('fleche'), h('span', { class: 'txt' }, 'Liens rapides')), ajouter));
+  if (robotsCache == null) { robotsCache = []; robotsGithub().then((r) => { robotsCache = r || []; dessinerBarre(); }); }
+}
+// « Aller à… » (Ctrl K) : toutes les pages, applis et jeux.
+function ouvrirPalette() {
+  const elements = [...Object.entries(PLAN).map(([n, [rub, t, i]]) => ({ t, rub, i: ic(i), go: () => aller(n) })),
+    ...CATALOGUE.filter(estConfirmee).map((a) => ({ t: a.nom, rub: a.type === 'jeu' ? 'Jeu' : 'Appli', i: iconeApp(a), go: () => (a.id === 'tikette' ? aller('tikette') : aller('appli', a.id)) }))];
+  const sansAccent = (x) => x.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  let actif = 0, liste = elements;
+  const res = h('div', { class: 'res' });
+  const champ = h('input', { placeholder: 'Aller à une page, une appli, un jeu…', 'aria-label': 'Rechercher' });
+  const voile = h('div', { class: 'voile', onclick: (e) => { if (e.target === voile) fermer(); } }, h('div', { class: 'palette' }, champ, res));
+  const fermer = () => voile.remove();
+  const dessiner = () => {
+    const q = sansAccent(champ.value.trim());
+    liste = elements.filter((e) => !q || sansAccent(e.t + ' ' + e.rub).includes(q));
+    actif = Math.min(actif, Math.max(0, liste.length - 1));
+    res.replaceChildren(...(liste.length ? liste.map((e, k) => h('button', { class: k === actif ? 'on' : '', onclick: () => { fermer(); e.go(); } }, e.i.cloneNode(true), e.t, h('small', {}, e.rub)))
+      : [h('div', { class: 'vide', style: 'padding:10px' }, 'Rien trouvé.')]));
+  };
+  champ.addEventListener('input', () => { actif = 0; dessiner(); });
+  champ.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); actif = (actif + (e.key === 'ArrowDown' ? 1 : liste.length - 1)) % Math.max(1, liste.length); dessiner(); res.querySelector('.on')?.scrollIntoView({ block: 'nearest' }); }
+    else if (e.key === 'Enter' && liste[actif]) { fermer(); liste[actif].go(); }
+    else if (e.key === 'Escape') fermer();
+  });
+  document.body.append(voile); dessiner(); champ.focus();
+}
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k' && !document.getElementById('console').hidden) { e.preventDefault(); if (!document.querySelector('.palette')) ouvrirPalette(); }
+});
 function aller(nom, app, depuisHistorique) {
   if (!PAGES[nom]) nom = 'ensemble';
   const nouvelle = courant.nom !== nom || (courant.app || null) !== (app || null);
@@ -632,60 +838,97 @@ function cadrePage(adresse, titre) {
 }
 
 // ───────── Vue d'ensemble ─────────
+let periodeEns = 'mois';
 async function pageEnsemble() {
   const g = generation;
-  const [t, avances, couts, faire, robots] = await Promise.all([
-    rpc('console_tikette', { p_periode: 'mois' }).catch(() => null), rpc('console_avances').catch(() => []),
-    rpc('console_couts').catch(() => []), chargerCoches(), Promise.race([robotsGithub(), new Promise((ok) => setTimeout(() => ok(null), 1200))])]);
+  const [t, avances, couts, faire, retours, pro] = await Promise.all([
+    rpc('console_tikette', { p_periode: periodeEns }).catch(() => null), rpc('console_avances').catch(() => []),
+    rpc('console_couts').catch(() => []), chargerCoches(), rpc('console_retours', { p_appli: null }).catch(() => []), rpc('console_pro_vue').catch(() => null)]);
   dessinerNav();
+  const facteur = { semaine: 12 / 52, mois: 1, annee: 12 }[periodeEns];
+  const motPeriode = { semaine: 'de la semaine', mois: 'du mois', annee: 'de l’année' }[periodeEns];
   const reste = avances.filter((a) => !a.rembourse_le).reduce((s, a) => s + Number(a.montant), 0);
-  const parMois = coutMensuel(couts);
+  const nbAvances = avances.filter((a) => !a.rembourse_le).length;
   const ab = abonnes(t);
+  const revenus = ab.payants * 2.54 * facteur, depenses = coutMensuel(couts) * facteur, resultat = revenus - depenses;
   const demandes = [...A_FAIRE.elements.filter((e) => e.groupe === 'demande'), ...(faire.taches || []).map(tacheEnElement)].filter((e) => !faire.coches[e.cle]);
   const recette = A_FAIRE.elements.filter((e) => e.groupe === 'recette');
   const recetteFaite = recette.filter((e) => faire.coches[e.cle]).length;
+  const quiCourt = (q) => (q === 'Greg' ? 'G' : q === 'Yvan' ? 'Y' : 'G+Y');
 
-  // Ce qui demande votre attention (échéances, partenaires muets, robots en panne).
-  const alertes = [
-    ...couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15)
-      .map((c) => ['var(--rouge)', `${c.nom} à renouveler le ${dateFr(c.echeance)} (J-${joursAvant(c.echeance)})`, () => aller('couts')]),
-    ...PARTENAIRES.filter((p) => p.etat === 'attente' && (p.relance ? joursAvant(p.relance) <= 0 : joursDepuis(p.depuis) >= 10))
-      .map((p) => ['var(--jaune)', p.relance ? `${p.nom} : à relancer (prévu le ${dateFr(p.relance)})` : `${p.nom} : pas de réponse depuis ${joursDepuis(p.depuis)} jours`, () => aller('partenaires')]),
-    ...(robots || []).filter((r) => !r.ok && !r.encours).map((r) => ['var(--rouge)', `Robot « ${r.nom} » en échec (${r.quand})`, null]),
-    ...couts.filter((c) => c.montant == null).slice(0, 1).map(() => ['var(--doux)', `${couts.filter((c) => c.montant == null).length} coûts sans montant à compléter`, () => aller('couts')]),
-  ];
+  // Priorités : tout ce qui attend une action, le plus urgent d'abord.
+  const P = [];
+  const echeances = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15).sort((x, y) => x.echeance.localeCompare(y.echeance));
+  for (const c of echeances) P.push(['euro', `${c.nom} à renouveler`, `le ${dateFr(c.echeance)} · J-${joursAvant(c.echeance)}`, 'r', 'Échéance', 'G+Y', () => aller('couts')]);
+  const aTraiter = retours.filter((r) => r.statut === 'a_traiter'), aValider = retours.filter((r) => r.proposition);
+  if (aTraiter.length || aValider.length) P.push(['bulle', `${aTraiter.length} retour${aTraiter.length > 1 ? 's' : ''} testeur${aTraiter.length > 1 ? 's' : ''} à traiter`,
+    aValider.length ? `dont ${aValider.length} réponse${aValider.length > 1 ? 's' : ''} de Claude à valider` : 'à lire et à confier à Claude', 'r', 'Retours', 'G+Y', () => aller('retours')]);
+  if (pro?.totaux.en_attente) P.push(['pro', `${pro.totaux.en_attente} entreprise${pro.totaux.en_attente > 1 ? 's' : ''} à vérifier`, pro.entreprises.filter((e) => e.statut === 'en_attente').slice(0, 2).map((e) => e.nom).join(', '), 'j', 'Espace pro', 'G+Y', () => aller('espacepro')]);
+  if (pro?.totaux.avis_signales) P.push(['etoile', `${pro.totaux.avis_signales} avis signalé${pro.totaux.avis_signales > 1 ? 's' : ''} par un pro`, 'à garder ou retirer', 'j', 'Espace pro', 'G+Y', () => aller('espacepro')]);
+  for (const p of PARTENAIRES.filter((p) => p.etat === 'attente' && (p.relance ? joursAvant(p.relance) <= 0 : joursDepuis(p.depuis) >= 10)))
+    P.push(['mains', `${p.nom} : à relancer`, p.relance ? `prévu le ${dateFr(p.relance)}` : `pas de réponse depuis ${joursDepuis(p.depuis)} jours`, 'j', 'Partenaire', 'G+Y', () => aller('partenaires')]);
+  for (const e of demandes) P.push(['coche', e.titre, e.echeance ? (joursAvant(e.echeance) < 0 ? 'en retard, prévu le ' : 'avant le ') + dateFr(e.echeance) : '', e.echeance && joursAvant(e.echeance) < 0 ? 'r' : 'g', nomAppli(e.appli || 'studio'), quiCourt(e.qui), () => aller('afaire')]);
+  const lignePrio = ([i, titre, sous, c, tag, qui, f]) => h('div', { class: 'prio', onclick: f, role: 'button', tabindex: '0', onkeydown: (e) => e.key === 'Enter' && f() },
+    h('span', { class: 'ic' }, ic(i)), h('span', {}, titre, sous ? h('small', {}, sous) : ''), h('span', { class: 'tag ' + c }, tag), h('span', { class: 'qui-p' }, qui));
 
-  const carteApp = (a) => h('button', { class: 'app', onclick: () => (a.id === 'tikette' ? aller('tikette') : aller('appli', a.id)) },
-    h('div', { class: 'nom' }, iconeApp(a), a.nom, h('span', { style: 'margin-left:auto' }, badgeEtape(a))),
-    h('div', { class: 'info' }, a.id === 'tikette' && t
-      ? `${nombre(t.dates.faits)} dates ce mois · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : 'pas encore de note'} · ${nombre(ab.payants)} abonnés`
-      : (a.version ? 'v' + a.version + ' · ' : '') + (a.resume || '')),
-    a.moteur ? h('div', { class: 'moteur' }, a.moteur) : '',
-    AVANCEMENT[a.id] ? h('div', { class: 'progression', title: `Avancement : ${pctAvancement(a.id)} %` }, h('span', { style: `width:${pctAvancement(a.id)}%` })) : '');
-  const confirmees = CATALOGUE.filter(estConfirmee);
+  // Santé du studio.
+  const enAttente = PARTENAIRES.filter((p) => p.etat === 'attente');
+  const prochaine = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0).sort((x, y) => x.echeance.localeCompare(y.echeance))[0];
+  const robotsLigne = h('b', {}, '…'), robotsPoint = h('span', { class: 'd', style: 'background:var(--pale)' }), robotsSous = h('small', {}, 'lieux, événements, site, Shivr, IA');
+  const sante = (point, titre, sous, valeur) => h('div', { class: 'sante' }, typeof point === 'string' ? h('span', { class: 'd', style: 'background:' + point }) : point, h('span', {}, titre, sous), valeur);
+  const remplirRobots = (r) => {
+    if (g !== generation) return;
+    const ko = (r || []).filter((x) => !x.ok && !x.encours);
+    robotsLigne.textContent = r && r.length ? `${r.filter((x) => x.ok).length} / ${r.length} OK` : 'GitHub muet';
+    robotsPoint.style.background = !r || !r.length ? 'var(--pale)' : ko.length ? 'var(--rouge)' : 'var(--vert)';
+    if (ko.length) robotsSous.textContent = 'En panne : ' + ko.map((x) => x.nom).join(', ');
+  };
+  if (robotsCache && robotsCache.length) remplirRobots(robotsCache); else robotsGithub().then((r) => { robotsCache = r || []; remplirRobots(r); dessinerBarre(); });
 
-  afficherPour(g, 
-    entete('Vue d’ensemble', 'Le studio en un coup d’œil · ' + new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })),
+  // Portefeuille.
+  const ORDRE = { 'en ligne': 0, 'en test': 1, 'en cours': 2, 'idée': 3, 'en pause': 4 };
+  const produits = CATALOGUE.filter(estConfirmee).sort((x, y) => (x.id === 'tikette' ? -1 : y.id === 'tikette' ? 1 : (ORDRE[x.etape] ?? 2) - (ORDRE[y.etape] ?? 2)));
+  const ceMois = (a) => a.id === 'tikette' && t ? `${nombre(t.dates.faits)} date${t.dates.faits > 1 ? 's' : ''} · ${t.notes.moyenne ? String(t.notes.moyenne).replace('.', ',') + ' ★' : 'pas de note'} · ${nombre(ab.payants)} abonné${ab.payants > 1 ? 's' : ''}` : '—';
+  const ligneProduit = (a) => h('tr', { onclick: () => (a.id === 'tikette' ? aller('tikette') : aller('appli', a.id)) },
+    h('td', {}, h('div', { class: 'prod' }, iconeApp(a), h('div', {}, h('b', {}, a.nom), h('small', {}, a.type === 'jeu' ? 'Jeu' : 'Appli')))),
+    h('td', {}, badgeEtape(a)), h('td', { class: 'mono moins' }, a.version || '—'),
+    h('td', {}, AVANCEMENT[a.id] ? h('div', { class: 'av-b' }, h('span', {}, h('i', { style: `width:${pctAvancement(a.id)}%` })), h('b', { class: 'mono', style: 'font-weight:400' }, pctAvancement(a.id) + ' %')) : h('span', { class: 'doux' }, '—')),
+    h('td', { class: 'doux moins' }, ceMois(a)), h('td', { class: 'doux moins', style: 'font-size:12px', title: a.technique || '' }, a.moteur || '—'));
+
+  // Jalons : les 2 derniers passés et les 3 suivants.
+  const auj = aujourdhui();
+  const passes = JALONS.filter((x) => x[0] <= auj).slice(-2), avenir = JALONS.filter((x) => x[0] > auj).slice(0, 5 - Math.min(2, passes.length));
+  const jalons = [...passes, ...avenir];
+
+  const choix = h('div', { class: 'seg' }, [['semaine', 'Semaine'], ['mois', 'Mois'], ['annee', 'Année']].map(([v, l]) =>
+    h('button', { class: periodeEns === v ? 'on' : '', onclick: () => { periodeEns = v; aller('ensemble'); } }, l)));
+  const kpiIc = (i, titre, valeur, sous, couleur) => { const k = kpi(titre, valeur, sous, couleur); k.querySelector('.t').prepend(ic(i)); return k; };
+  afficherPour(g,
+    entete('Vue d’ensemble', new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).replace(/^./, (c) => c.toUpperCase()) + ' · le studio en un coup d’œil', choix),
     h('div', { class: 'kpis' },
-      kpi('Revenus du mois', euros(ab.payants * 2.54), ab.payants ? `${ab.payants} abonnés payants (estimation)` : 'les paiements arrivent avec la vraie version'),
-      kpi('Coûts du mois', euros(parMois), 'abonnements et domaines ramenés au mois', 'var(--rouge)'),
-      kpi('Abonnés', nombre(ab.payants), `${nombre(ab.offerts)} abonnement${ab.offerts > 1 ? 's' : ''} offert${ab.offerts > 1 ? 's' : ''} · comptes du studio non comptés`, 'var(--jaune)'),
-      kpi('Avances à rembourser', euros(reste), (() => { const n = avances.filter((a) => !a.rembourse_le).length; return n ? n + ' avance' + (n > 1 ? 's' : '') + ' en attente de la SAS' : 'aucune avance en attente'; })())),
-    h('div', { class: 'grille' },
-      h('div', { class: 'panneau' },
-        h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:6px' }, h('h2', { style: 'margin:0' }, `À faire maintenant (${demandes.length})`), h('button', { class: 'btn-contour mini', onclick: () => aller('afaire') }, 'Tout voir')),
-        demandes.length ? demandes.slice(0, 5).map((e) => ligneCoche(e, faire.coches, () => aller('ensemble'))) : h('div', { class: 'vide' }, 'Rien en attente. Bravo !'),
-        h('div', { class: 'liste-ligne', style: 'border:0;padding-top:12px' }, h('span', {}, 'Recette (tests sur le téléphone)'),
-          h('b', {}, `${recetteFaite} / ${recette.length} faits`)),
-        h('div', { class: 'progression' }, h('span', { style: `width:${recette.length ? Math.round((recetteFaite / recette.length) * 100) : 0}%` }))),
-      h('div', { class: 'panneau' }, h('h2', {}, 'À surveiller'),
-        alertes.length ? alertes.map(([c, texte, f]) => h('div', { class: 'alerte-ligne', style: f ? 'cursor:pointer' : '', onclick: f || null }, h('span', { class: 'point', style: 'background:' + c }), h('span', {}, texte)))
-          : h('div', { class: 'vide' }, 'Rien d’urgent : échéances, partenaires et robots vont bien.'),
-        ligneRobots(robots, g))),
-    h('div', { class: 'titre-section' }, `NOS APPLIS ET JEUX (${confirmees.length})`),
-    h('div', { class: 'apps' }, confirmees.map(carteApp)),
-    panneauMoteurs(),
-    h('div', { class: 'panneau' }, h('h2', {}, 'Liens rapides'), blocLiens()));
+      kpiIc('euro', 'Revenus ' + motPeriode, euros(revenus), ab.payants ? `${ab.payants} abonné${ab.payants > 1 ? 's' : ''} payant${ab.payants > 1 ? 's' : ''} (estimation)` : 'les paiements arrivent avec la vraie version'),
+      kpiIc('recu', 'Coûts ' + motPeriode, euros(depenses), 'abonnements et domaines', 'var(--rouge)'),
+      kpiIc('stats', 'Résultat', (resultat >= 0 ? '+' : '') + euros(resultat), resultat >= 0 ? 'positif' : 'les revenus ne couvrent pas encore les coûts', resultat >= 0 ? 'var(--vert)' : 'var(--rose)'),
+      kpiIc('gens', 'Abonnés payants', nombre(ab.payants), `${nombre(ab.offerts)} offert${ab.offerts > 1 ? 's' : ''} · comptes du studio non comptés`, 'var(--jaune)'),
+      kpiIc('horloge', 'Avances à rembourser', euros(reste), nbAvances ? `${nbAvances} avance${nbAvances > 1 ? 's' : ''} en attente de la SAS` : 'aucune avance en attente')),
+    h('div', { class: 'g2' },
+      h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('ok'), h('h2', {}, 'Priorités'), h('button', { class: 'a', onclick: () => aller('afaire') }, `Tout voir (${P.length}) →`)),
+        P.length ? P.slice(0, 7).map(lignePrio) : h('div', { class: 'vide', style: 'padding:14px 16px' }, 'Rien en attente. Bravo !')),
+      h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('pulse'), h('h2', {}, 'Santé du studio')),
+        sante(robotsPoint, 'Robots', robotsSous, robotsLigne),
+        sante('var(--vert)', 'Sauvegarde de la base', h('small', {}, 'automatique, gardée 35 jours'), h('b', {}, 'lundi 3 h 41')),
+        sante(enAttente.length ? 'var(--jaune)' : 'var(--vert)', 'Partenaires en attente', h('small', {}, enAttente.map((p) => p.nom).join(', ') || 'aucun'), h('b', {}, String(enAttente.length))),
+        sante(prochaine && joursAvant(prochaine.echeance) <= 15 ? 'var(--jaune)' : 'var(--vert)', 'Prochaine échéance', h('small', {}, prochaine ? `${prochaine.nom} · ${dateFr(prochaine.echeance)}` : 'aucune'), h('b', {}, prochaine ? 'J-' + joursAvant(prochaine.echeance) : '—')),
+        sante(recetteFaite === recette.length ? 'var(--vert)' : 'var(--jaune)', 'Recette (tests sur téléphone)', h('small', {}, h('span', { class: 'progression', style: 'display:block;margin:5px 0 0;width:140px' }, h('span', { style: `width:${recette.length ? Math.round((recetteFaite / recette.length) * 100) : 0}%` }))), h('b', {}, `${recetteFaite} / ${recette.length}`)),
+        sante('var(--vert)', 'Supabase (offre gratuite)', h('small', {}, 'Tikette, Guinche'), h('b', {}, '2 / 2 projets')))),
+    h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('tab'), h('h2', {}, 'Portefeuille'),
+        h('span', { class: 'a' }, `${produits.length} produits · ${produits.filter((a) => a.type === 'appli').length} applis, ${produits.filter((a) => a.type === 'jeu').length} jeux`)),
+      h('div', { class: 'tableau' }, h('table', { class: 'portefeuille' },
+        h('thead', {}, h('tr', {}, h('th', {}, 'PRODUIT'), h('th', {}, 'ÉTAPE'), h('th', { class: 'moins' }, 'VERSION'), h('th', {}, 'AVANCEMENT'), h('th', { class: 'moins' }, periodeEns === 'mois' ? 'CE MOIS' : periodeEns === 'semaine' ? 'CETTE SEMAINE' : 'CETTE ANNÉE'), h('th', { class: 'moins' }, 'MOTEUR'))),
+        h('tbody', {}, produits.map(ligneProduit))))),
+    jalons.length ? h('div', { class: 'pan' }, h('div', { class: 'tt' }, ic('fusee'), h('h2', {}, 'Jalons')),
+      h('div', { class: 'jalons' }, jalons.map(([d, titre, quoi]) => h('div', { class: 'jal ' + (d <= auj ? 'fait' : d === avenir[0]?.[0] ? 'prochain' : '') },
+        h('div', { class: 'rond' }), h('span', { class: 'mono' }, new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })), h('b', {}, titre), h('small', {}, quoi))))) : '');
 }
 function etatPartenaire(p) {
   const j = joursDepuis(p.depuis);
@@ -1176,7 +1419,7 @@ function telechargerBrouillon(m, nom) {
 }
 async function importerProspects(fichier, etat) {
   etat.textContent = 'Lecture du fichier…';
-  if (!window.XLSX) await new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'; s.onload = ok; s.onerror = ko; document.head.append(s); });
+  if (!window.XLSX) await new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'js/xlsx-0.18.5.min.js'; s.onload = ok; s.onerror = ko; document.head.append(s); });
   const wb = XLSX.read(await fichier.arrayBuffer());
   const lire = (nomFeuille) => (wb.Sheets[nomFeuille] ? XLSX.utils.sheet_to_json(wb.Sheets[nomFeuille], { defval: '' }) : []);
   const prio = new Set(lire('Les 30 en priorité').map((r) => r['Nom'] + '|' + r['Commune']));
