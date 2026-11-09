@@ -109,6 +109,7 @@ section h2{font-size:44px;line-height:1.05}
 .notif{background:rgba(247,241,255,.95);color:var(--encre);border-radius:18px;padding:12px 14px;font-size:14px;display:grid;grid-template-columns:1fr auto;transform:translateY(-140%);transition:transform .7s cubic-bezier(.2,.9,.3,1.2)}
 .joue .notif{transform:none}.notif span{color:var(--encre2);font-size:12px}.notif p{grid-column:1/-1;margin-top:4px}
 .conf{background:var(--vert);color:#06372E;border-radius:18px;padding:14px;font-weight:700;text-align:center;opacity:0;transform:scale(.85);transition:all .5s .5s}.joue .conf{opacity:1;transform:none}
+.bientot{display:inline-block;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,209,102,.5);color:var(--lueur);font-size:13px;font-weight:700;letter-spacing:.02em}
 /* Aperçu de l'espace pro */
 .apercu{display:grid;grid-template-columns:.85fr 1.15fr;gap:34px;align-items:center;margin-top:30px}
 .onglets-ap{display:grid;gap:10px}
@@ -169,7 +170,7 @@ footer{margin:60px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-
 <linearGradient id="lm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(0 7)" fill="#0B0618" opacity=".35"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lr)"/>
 <path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".5" stroke-width="2.5"/>
 <line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
-<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/><path transform="translate(150 190) scale(2.1)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/></svg> tikette<small>PRO</small></div><div class="liens"><a href="#comment">Comment ça marche</a><a href="#espace">L’espace pro</a><a href="#commission">Commission</a><a href="#faq">Questions</a><a class="btn c" style="padding:10px 18px" href="/pro/espace/">Se connecter</a></div></nav>
+<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/><path transform="translate(150 190) scale(2.1)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/></svg> tikette<small>PRO</small></div><div class="liens"><a href="#comment">Comment ça marche</a><a href="#espace">L’espace pro</a><a href="#commission">Commission</a><a href="#faq">Questions</a><span class="bientot">Bientôt disponible</span></div></nav>
 
 <div class="hero"><i class="tache t1"></i><i class="tache t2"></i><i class="tache t3"></i>
 <div><div class="pastille"><i></i>Gard · Vaucluse · Bouches-du-Rhône · Hérault</div>
@@ -265,11 +266,11 @@ footer{margin:60px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-
 <div class="carte"><div class="res"><span>Chiffre d’affaires apporté</span><b id="r-ca">2 000 €</b></div><div class="res"><span>Commission Tikette (10 %)</span><b id="r-com">200 €</b></div><div class="res g"><span>Vous gardez</span><b id="r-garde">1 800 €</b></div><div class="res"><span>Avec une plateforme à 25 %</span><b style="color:var(--doux)" id="r-autre">1 500 €</b></div>
 <div class="economie" id="r-eco">300 € de plus chaque mois qu’avec une plateforme à 25 %.</div><p class="note">Partenaire fondateur : 0 % jusqu’au 31 mars 2027, puis 8 %.</p></div></div></section>
 
-<section id="inscription"><div class="sur">Inscription</div><h2>Inscrire mon activité</h2>
-<div class="insc"><div class="pourquoi"><p style="color:var(--doux)">Dix minutes, et votre activité est prête pour le lancement.</p><ul>
+<section id="inscription"><div class="sur">Bientôt disponible</div><h2>Réservez votre place</h2>
+<div class="insc"><div class="pourquoi"><p style="color:var(--doux)">L’espace pro ouvre très bientôt. Laissez vos informations : les places de partenaire fondateur sont attribuées dans l’ordre de la liste, et on vous écrit dès l’ouverture.</p><ul>
 <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Gratuit et sans engagement.</b> Vous arrêtez quand vous voulez.</span></li>
 <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Le client paie chez vous.</b> Tikette ne touche pas à votre argent.</span></li>
-<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Pas de mot de passe.</b> Un code par e-mail pour vous connecter.</span></li>
+<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Prévenu en premier.</b> Vous recevez votre accès avant tout le monde.</span></li>
 <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Besoin d’aide ?</b> On crée votre fiche pour vous : <a href="mailto:contact@tikette.fr" style="color:var(--lueur)">contact@tikette.fr</a></span></li></ul></div>
 <div class="carte">
 <form id="f-insc" class="form" novalidate>
@@ -277,15 +278,13 @@ footer{margin:60px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-
 <div class="champ"><label for="i-siret">SIRET</label><input id="i-siret" inputmode="numeric" maxlength="17" placeholder="812 345 678 00019"><div class="aide" id="a-siret">Vérifié automatiquement dans l’annuaire officiel des entreprises.</div></div>
 <div class="champ l"><label>Votre activité <span style="opacity:.7">· tapez un mot (escape, canoë, poterie…), choisissez, recommencez</span></label><div id="i-types"></div></div>
 <div class="champ l" style="position:relative"><label for="i-adr">Adresse de l’activité</label><input id="i-adr" required autocomplete="off" placeholder="Commencez à taper l’adresse"><div class="propos cache" id="propos"></div><div class="aide" id="a-adr">Choisissez l’adresse dans la liste : c’est là que Tikette envoie les clients.</div></div>
-<div class="champ"><label for="i-mail">E-mail (connexion et réservations)</label><input id="i-mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr"></div>
+<div class="champ"><label for="i-mail">E-mail (on vous écrit à l’ouverture)</label><input id="i-mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr"></div>
 <div class="champ"><label for="i-tel">Téléphone (jamais montré aux clients)</label><input id="i-tel" type="tel" maxlength="20" autocomplete="tel" placeholder="06 12 34 56 78"></div>
 <div class="champ l"><label for="i-site">Site internet (facultatif)</label><input id="i-site" type="url" placeholder="https://"></div>
 <div class="champ l"><label class="coche"><input type="checkbox" id="i-ok"><span>J’accepte les <a href="#conditions">conditions partenaires</a> (10 %, ou 0 % puis 8 % pour les partenaires fondateurs, facturé une fois par mois sur les clients venus).</span></label></div>
-<div class="champ l"><button class="btn j brille" id="i-go">Créer mon espace pro</button> <span style="color:var(--doux);font-size:14px;margin-left:10px">Gratuit · sans engagement · code de connexion par e-mail</span><p class="err" id="i-err"></p></div>
+<div class="champ l"><button class="btn j brille" id="i-go">Réserver ma place</button> <span style="color:var(--doux);font-size:14px;margin-left:10px">Gratuit · sans engagement · on vous écrit à l’ouverture</span><p class="err" id="i-err"></p></div>
 </form>
-<form id="f-code" class="cache"><h3 style="font-size:24px">Vérifiez vos e-mails</h3><p style="color:var(--doux);margin:8px 0 16px">On vient d’envoyer un code à 6 chiffres à <b id="c-mail"></b>.</p>
-<div class="champ" style="max-width:260px"><input id="c-code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456"></div>
-<button class="btn j">Valider et ouvrir mon espace</button> <a href="#inscription" id="c-retour" style="margin-left:12px;color:var(--doux)">Modifier mes informations</a><p class="err" id="c-err"></p></form>
+<div id="f-ok" class="cache" role="status"><h3 style="font-size:26px">C’est noté !</h3><p style="color:var(--doux);margin:10px 0 0" id="ok-texte"></p><p style="color:var(--doux);margin:10px 0 0">Une question d’ici là ? <a href="mailto:contact@tikette.fr" style="color:var(--lueur)">contact@tikette.fr</a></p></div>
 </div></div></section>
 
 <section class="faq apparait" id="faq"><div class="sur">Questions</div><h2>Ce qu’on nous demande</h2>

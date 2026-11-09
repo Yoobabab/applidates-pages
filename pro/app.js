@@ -1,4 +1,5 @@
-// tikette.fr/pro : calcul, places de fondateur, inscription (SIRET et adresse vérifiés, code par e-mail).
+// tikette.fr/pro : calcul, places de fondateur, liste d'attente « bientôt disponible » (SIRET et adresse vérifiés).
+// À l'ouverture de l'espace pro : remettre l'inscription avec code par e-mail (voir l'historique git, commit « liste d'attente »).
 const sb = window.supabase.createClient('https://mmoyrhyimcalnztwpydi.supabase.co', 'sb_publishable_SSawNJhqUZUxxKpzIds7kQ_80hU2NSH',
   { auth: { persistSession: true, storageKey: 'tikette-pro' } });
 const $ = (s) => document.querySelector(s);
@@ -16,7 +17,7 @@ function calculer() {
 calculer();
 
 // ── Places de fondateur ──
-sb.rpc('pro_places_fondateur').then(({ data }) => {
+sb.rpc('pro_attente_places').then(({ data }) => {
   if (typeof data !== 'number') return;
   $('#reste-n').textContent = data; $('#reste').textContent = data ? `${50 - data} déjà prises sur 50` : 'toutes prises';
   setTimeout(() => { $('#jauge').style.width = (100 * (50 - data) / 50) + '%'; }, 400);
@@ -96,32 +97,17 @@ function lireFormulaire() {
   infos = { nom, siret: $('#i-siret').value.replace(/\D/g, ''), activite: champ.noms().join(', '), genres: champ.valeurs(), ...adresse, email, telephone: $('#i-tel').value.trim(), site };
   return '';
 }
-async function inscrire() {
-  const { data, error } = await sb.rpc('pro_inscrire', { p: infos });
-  if (error) throw error;
-  try { localStorage.removeItem('tikette-pro-inscription'); } catch {}
-  location.href = '/pro/espace/' + (data?.fondateur ? '#accueil' : '');
-}
 $('#f-insc').addEventListener('submit', async (e) => {
   e.preventDefault(); const err = lireFormulaire(); $('#i-err').textContent = err; if (err) return;
   $('#i-go').disabled = true;
   try {
-    const { data: s } = await sb.auth.getSession();
-    if (s.session) { await inscrire(); return; } // déjà connecté (ex. depuis l'espace pro)
-    try { localStorage.setItem('tikette-pro-inscription', JSON.stringify(infos)); } catch {}
-    const { error } = await sb.auth.signInWithOtp({ email: infos.email, options: { shouldCreateUser: true } });
+    const { data, error } = await sb.rpc('pro_attente_inscrire', { p: infos });
     if (error) throw error;
-    $('#c-mail').textContent = infos.email; $('#f-insc').classList.add('cache'); $('#f-code').classList.remove('cache'); $('#c-code').focus();
-  } catch (x) { $('#i-err').textContent = /rate|seconds/i.test(x.message) ? 'Patientez une minute avant de redemander un code.' : 'Impossible pour l’instant : ' + x.message; }
+    $('#ok-texte').textContent = data?.fondateur
+      ? `Vous êtes n° ${data.rang} sur la liste : une place de partenaire fondateur vous est réservée (0 % jusqu’au 31 mars 2027). On vous écrit à ${infos.email} dès l’ouverture de l’espace pro.`
+      : `Vous êtes n° ${data?.rang ?? ''} sur la liste. On vous écrit à ${infos.email} dès l’ouverture de l’espace pro.`;
+    $('#f-insc').classList.add('cache'); $('#f-ok').classList.remove('cache');
+    $('#f-ok').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } catch (x) { $('#i-err').textContent = /Trop de demandes/.test(x.message) ? x.message : 'Envoi impossible pour l’instant, réessayez ou écrivez à contact@tikette.fr.'; }
   $('#i-go').disabled = false;
 });
-$('#f-code').addEventListener('submit', async (e) => {
-  e.preventDefault(); $('#c-err').textContent = '';
-  const { error } = await sb.auth.verifyOtp({ email: infos.email, token: $('#c-code').value.trim(), type: 'email' });
-  if (error) { $('#c-err').textContent = 'Code incorrect ou expiré.'; return; }
-  try { await inscrire(); } catch (x) { $('#c-err').textContent = x.message; }
-});
-$('#c-retour').addEventListener('click', () => { $('#f-code').classList.add('cache'); $('#f-insc').classList.remove('cache'); });
-
-// Venu de l'espace pro sans entreprise : reprise des informations tapées avant.
-try { const t = JSON.parse(localStorage.getItem('tikette-pro-inscription') || 'null'); if (t) { $('#i-nom').value = t.nom || ''; $('#i-mail').value = t.email || ''; } } catch {}
