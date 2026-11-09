@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-MCFLKTO6LxxmIQNx2s+INTf9SUowWQInHSps3nSkHyg='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-tbCBiJWFLqAEzt/Cufgr2R49wxshBVGzEjegKZf6QuY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -691,8 +691,8 @@ let compteursNav = { pro: 0, echeances: 0, lus: false };
 let robotsCache = null;
 let oeufsOuverts = false;
 async function compterNav() {
-  const [pro, couts] = await Promise.all([rpc('console_pro_vue').catch(() => null), rpc('console_couts').catch(() => [])]);
-  compteursNav.pro = pro ? pro.totaux.en_attente + pro.totaux.avis_signales : 0;
+  const [pro, couts, att] = await Promise.all([rpc('console_pro_vue').catch(() => null), rpc('console_couts').catch(() => []), rpc('console_pro_attente').catch(() => null)]);
+  compteursNav.pro = (pro ? pro.totaux.en_attente + pro.totaux.avis_signales : 0) + (att ? att.nouvelles : 0);
   compteursNav.echeances = couts.filter((c) => c.echeance && joursAvant(c.echeance) >= 0 && joursAvant(c.echeance) <= 15).length;
   dessinerNav();
 }
@@ -844,6 +844,7 @@ async function pageEnsemble() {
   const [t, avances, couts, faire, retours, pro] = await Promise.all([
     rpc('console_tikette', { p_periode: periodeEns }).catch(() => null), rpc('console_avances').catch(() => []),
     rpc('console_couts').catch(() => []), chargerCoches(), rpc('console_retours', { p_appli: null }).catch(() => []), rpc('console_pro_vue').catch(() => null)]);
+  const att = await rpc('console_pro_attente').catch(() => null);
   dessinerNav();
   const facteur = { semaine: 12 / 52, mois: 1, annee: 12 }[periodeEns];
   const motPeriode = { semaine: 'de la semaine', mois: 'du mois', annee: 'de l’année' }[periodeEns];
@@ -863,6 +864,7 @@ async function pageEnsemble() {
   const aTraiter = retours.filter((r) => r.statut === 'a_traiter'), aValider = retours.filter((r) => r.proposition);
   if (aTraiter.length || aValider.length) P.push(['bulle', `${aTraiter.length} retour${aTraiter.length > 1 ? 's' : ''} testeur${aTraiter.length > 1 ? 's' : ''} à traiter`,
     aValider.length ? `dont ${aValider.length} réponse${aValider.length > 1 ? 's' : ''} de Claude à valider` : 'à lire et à confier à Claude', 'r', 'Retours', 'G+Y', () => aller('retours')]);
+  if (att?.nouvelles) P.push(['pro', `${att.nouvelles} entreprise${att.nouvelles > 1 ? 's' : ''} sur la liste d’attente`, att.liste.filter((x) => x.statut === 'nouveau').slice(0, 2).map((x) => x.nom).join(', '), 'j', 'Espace pro', 'G+Y', () => aller('espacepro')]);
   if (pro?.totaux.en_attente) P.push(['pro', `${pro.totaux.en_attente} entreprise${pro.totaux.en_attente > 1 ? 's' : ''} à vérifier`, pro.entreprises.filter((e) => e.statut === 'en_attente').slice(0, 2).map((e) => e.nom).join(', '), 'j', 'Espace pro', 'G+Y', () => aller('espacepro')]);
   if (pro?.totaux.avis_signales) P.push(['etoile', `${pro.totaux.avis_signales} avis signalé${pro.totaux.avis_signales > 1 ? 's' : ''} par un pro`, 'à garder ou retirer', 'j', 'Espace pro', 'G+Y', () => aller('espacepro')]);
   for (const p of PARTENAIRES.filter((p) => p.etat === 'attente' && (p.relance ? joursAvant(p.relance) <= 0 : joursDepuis(p.depuis) >= 10)))
@@ -1500,16 +1502,48 @@ async function pageProspection() {
 const STATUTS_PRO = { en_attente: 'À vérifier', valide: 'Validée', suspendu: 'Suspendue', refuse: 'Refusée', quitte: 'A quitté' };
 const COULEUR_PRO = { en_attente: 'var(--jaune)', valide: 'var(--vert)', suspendu: 'var(--rose)', refuse: 'var(--doux)', quitte: 'var(--doux)' };
 let ongletPro = 'entreprises', filtrePro = '';
+// Liste d'attente de tikette.fr/pro (« bientôt disponible ») : supabase/pro-attente.sql du dépôt AppliDates.
+const STATUTS_ATT = { nouveau: 'Nouveau', contacte: 'Contacté', retenu: 'Retenu', refuse: 'Pas retenu' };
+const COULEUR_ATT = { nouveau: 'var(--jaune)', contacte: 'var(--bleu)', retenu: 'var(--vert)', refuse: 'var(--doux)' };
+function blocAttente(a, re) {
+  const choix = (x) => h('select', { class: 'champ', style: `width:auto;padding:5px 8px;font-size:12.5px;color:${COULEUR_ATT[x.statut]}`,
+      onchange: async (e) => { await rpc('console_pro_attente_maj', { p_id: x.id, p_statut: e.target.value }); re(); } },
+    Object.entries(STATUTS_ATT).map(([k, l]) => h('option', { value: k, selected: k === x.statut }, l)));
+  const note = (x) => h('input', { class: 'champ', style: 'padding:5px 8px;font-size:12.5px;min-width:140px', value: x.note, placeholder: 'Note…', maxlength: 500,
+    onchange: async (e) => { await rpc('console_pro_attente_maj', { p_id: x.id, p_note: e.target.value }); } });
+  return h('div', {},
+    h('div', { class: 'kpis' },
+      kpi('Demandes', nombre(a.demandes), `${a.nouvelles} nouvelle${a.nouvelles > 1 ? 's' : ''} à regarder`, a.nouvelles ? 'var(--jaune)' : ''),
+      kpi('Tentatives d’inscription', nombre(a.tentatives), 'formulaires envoyés (une même entreprise peut revenir)'),
+      kpi('Cette semaine', nombre(a.semaine), 'nouvelles entreprises en 7 jours'),
+      kpi('Places de fondateur', `${50 - a.places} / 50`, `il en reste ${a.places}`)),
+    a.liste.length ? h('div', { class: 'panneau tableau', style: 'margin-top:14px' }, h('table', {},
+      h('thead', {}, h('tr', {}, h('th', {}, 'N°'), h('th', {}, 'ENTREPRISE'), h('th', {}, 'CONTACT'), h('th', {}, 'ENVOIS'), h('th', {}, 'STATUT'), h('th', {}, 'NOTE'))),
+      h('tbody', {}, [...a.liste].sort((x, y) => x.id - y.id).map((x, i) => h('tr', {},
+        h('td', { class: 'doux' }, String(i + 1), i < 50 ? h('div', { style: 'color:var(--jaune);font-size:10.5px;font-weight:700' }, 'FONDATEUR') : ''),
+        h('td', {}, h('b', {}, x.nom), h('div', { class: 'doux', style: 'font-size:12px' }, x.activite || '—', ' · ', x.commune || '?', x.code_postal ? ` (${x.code_postal.slice(0, 2)})` : ''),
+          h('div', { class: 'doux', style: 'font-size:11.5px' }, 'Le ', dateFr(x.cree_le), x.siret ? ' · SIRET ' + x.siret : ' · sans SIRET')),
+        h('td', { style: 'font-size:12.5px' }, h('a', { href: 'mailto:' + x.email, style: 'color:inherit' }, x.email), h('div', { class: 'doux', style: 'font-size:12px' }, x.telephone || ''),
+          x.site ? h('a', { href: x.site, target: '_blank', rel: 'noopener', class: 'doux', style: 'font-size:12px' }, 'site') : ''),
+        h('td', {}, String(x.tentatives)),
+        h('td', {}, choix(x)), h('td', {}, note(x)))))))
+      : h('div', { class: 'panneau doux', style: 'margin-top:14px' }, 'Personne pour l’instant. Le formulaire de tikette.fr/pro remplit cette liste toute seule.'));
+}
 async function pageEspacePro() {
   const g = generation;
   let v;
+  const re = () => aller('espacepro');
+  const att = await rpc('console_pro_attente').catch(() => null);
   try { v = await rpc('console_pro_vue'); }
   catch (e) {
     if (!/console_pro_vue|does not exist|Could not find/i.test(String(e?.message))) throw e;
+    const lien = h('a', { class: 'btn-contour', href: 'https://tikette.fr/pro/', target: '_blank', rel: 'noopener' }, 'Voir tikette.fr/pro');
+    if (att) { afficherPour(g, entete('Espace pro', 'Bientôt disponible : les entreprises qui ont laissé leurs informations sur tikette.fr/pro', lien), blocAttente(att, re),
+      h('p', { class: 'note-bas' }, 'Une entreprise de la Prospection qui remplit le formulaire passe toute seule en « Inscrit ». Les 50 premières de la liste ont une place de partenaire fondateur.')); return; }
     afficherPour(g, entete('Espace pro', 'Les entreprises inscrites sur tikette.fr/pro'), h('div', { class: 'panneau' }, 'Il faut d’abord lancer dans Supabase (projet Tikette) : ',
-      h('b', {}, 'pro.sql'), ', ', h('b', {}, 'pro-types.sql'), ', ', h('b', {}, 'pro-auto.sql'), ', ', h('b', {}, 'pro-avis.sql'), ' puis ', h('b', {}, 'console-pro.sql'), '.')); return;
+      h('b', {}, 'pro-attente.sql'), ' pour la liste d’attente « bientôt disponible ». À l’ouverture : ', h('b', {}, 'pro.sql'), ', ', h('b', {}, 'pro-types.sql'), ', ', h('b', {}, 'pro-auto.sql'), ', ', h('b', {}, 'pro-avis.sql'), ' puis ', h('b', {}, 'console-pro.sql'), '.')); return;
   }
-  const t = v.totaux, re = () => aller('espacepro');
+  const t = v.totaux;
   const cts = (c) => euros((c || 0) / 100);
   const ents = v.entreprises.filter((e) => !filtrePro || e.statut === filtrePro);
   const statut = (e) => h('select', { class: 'champ', style: `width:auto;padding:5px 8px;font-size:12.5px;color:${COULEUR_PRO[e.statut]}`, onchange: async (x) => {
@@ -1555,7 +1589,7 @@ async function pageEspacePro() {
   const tabLog = logiciels.length ? h('div', { class: 'panneau' }, h('p', { class: 'doux', style: 'margin-top:0' }, 'Logiciels de réservation que les entreprises veulent relier à Tikette (le plus demandé = le prochain à brancher).'),
       logiciels.map(([n, c]) => h('div', { style: 'display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--ligne)' }, h('span', {}, n), h('b', {}, String(c)))))
     : h('div', { class: 'panneau doux' }, 'Aucune demande de connexion à un logiciel pour l’instant.');
-  const ONGLETS = [['entreprises', `Entreprises (${t.inscrites})`, tabEnt], ['factures', 'Commissions à facturer', tabFact], ['avis', `Avis signalés${t.avis_signales ? ` (${t.avis_signales})` : ''}`, tabAvis], ['logiciels', 'Logiciels demandés', tabLog]];
+  const ONGLETS = [...(att ? [['attente', `Liste d’attente (${att.demandes})`, blocAttente(att, re)]] : []), ['entreprises', `Entreprises (${t.inscrites})`, tabEnt], ['factures', 'Commissions à facturer', tabFact], ['avis', `Avis signalés${t.avis_signales ? ` (${t.avis_signales})` : ''}`, tabAvis], ['logiciels', 'Logiciels demandés', tabLog]];
   afficherPour(g, entete('Espace pro', 'Les entreprises inscrites sur tikette.fr/pro et ce que Tikette leur apporte', h('a', { class: 'btn-contour', href: 'https://tikette.fr/pro/', target: '_blank', rel: 'noopener' }, 'Voir tikette.fr/pro')),
     h('div', { class: 'kpis' },
       kpi('Entreprises', nombre(t.inscrites), `${t.validees} validées · ${t.en_attente} à vérifier`, t.en_attente ? 'var(--jaune)' : ''),
