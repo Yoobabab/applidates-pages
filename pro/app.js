@@ -18,11 +18,9 @@ sb.rpc('pro_places_fondateur').then(({ data }) => {
 });
 
 // ── Types d'activité ──
-const TYPES = [['escape', 'Escape game'], ['laser_tag', 'Laser game'], ['karting', 'Karting'], ['bowling_alley', 'Bowling'], ['canoe', 'Canoë / kayak / paddle'],
-  ['eaux_vives', 'Rafting / canyoning'], ['aerien', 'Montgolfière / parapente / ULM'], ['climbing_adventure', 'Accrobranche / via ferrata'], ['atelier', 'Atelier / cours'],
-  ['winery', 'Domaine / dégustation'], ['brasserie', 'Brasserie / distillerie'], ['usine', 'Visite de savoir-faire'], ['vr', 'Réalité virtuelle'], ['hache', 'Lancer de hache'],
-  ['trampoline_park', 'Trampoline'], ['paintball', 'Paintball'], ['horse_riding', 'Équitation'], ['bains', 'Spa / bien-être'], ['bateau', 'Bateau / croisière'],
-  ['cabaret', 'Cabaret / dîner-spectacle'], ['resto', 'Restaurant'], ['bar', 'Bar'], ['insolite', 'Activité insolite'], ['autre', 'Autre']];
+const TYPES = [['escape', 'Escape game'], ['laser', 'Laser game, paintball'], ['karting', 'Karting'], ['bowling', 'Bowling, billard'], ['jeux', 'Jeux, réalité virtuelle'],
+  ['sensations', 'Sensations fortes'], ['plein_air', 'Plein air, nature'], ['nautique', 'Canoë, paddle, bateau'], ['cheval', 'Équitation'], ['atelier', 'Atelier, cours'],
+  ['degustation', 'Dégustation, vin, bière'], ['visite', 'Visite, savoir-faire'], ['bien_etre', 'Bien-être, spa'], ['spectacle', 'Spectacle, cabaret'], ['restaurant', 'Restaurant'], ['bar', 'Bar'], ['autre', 'Autre']];
 $('#i-type').innerHTML = TYPES.map(([k, t]) => `<option value="${k}">${t}</option>`).join('');
 
 // ── SIRET : clé de contrôle puis annuaire officiel (recherche-entreprises.api.gouv.fr, gratuit, sans clé) ──
