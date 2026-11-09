@@ -1119,42 +1119,59 @@ const STATUTS_PROSPECT = { a_contacter: 'À contacter', envoye: 'Mail envoyé', 
 const COULEUR_PROSPECT = { a_contacter: 'var(--doux)', envoye: 'var(--jaune)', relance: 'var(--jaune)', appele: 'var(--jaune)', inscrit: 'var(--vert)', non: 'var(--rose)' };
 let prospectsCache = null, filtreProspect = { vue: 'priorite', dep: '', act: '', statut: '', q: '', mail: true }, pageProspect = 0, placesFondateur = null;
 const nomCourt = (n) => String(n || '').split(/ - | – | \| /)[0].trim();
+const REGION_PROSPECT = { '30': 'du Gard', '84': 'du Vaucluse', '13': 'des Bouches-du-Rhône', '34': 'de l’Hérault' };
 function mailProspect(p, relance) {
-  const nom = nomCourt(p.nom), lieu = p.commune ? `${nom} à ${p.commune}` : nom;
-  const objet = relance ? `Re : Des clients pour ${nom}` : `Des clients pour ${nom}, sans commission jusqu’en avril`;
+  const nom = nomCourt(p.nom), ici = p.commune ? `${nom}, à ${p.commune},` : nom;
+  const region = REGION_PROSPECT[p.departement] ? `${REGION_PROSPECT[p.departement]} ` : 'de votre secteur ';
+  const signature = `Bien cordialement,
+
+Gregory Hubert
+Cofondateur, Tikette
+contact@tikette.fr · https://tikette.fr`;
+  const desabo = `Si vous ne souhaitez plus être contacté, il suffit de répondre « Non merci ».`;
+  const objet = relance ? `Re : Tikette × ${nom} : proposition de partenariat` : `Tikette × ${nom} : proposition de partenariat`;
   const corps = relance ? `Bonjour,
 
-Je me permets une petite relance, je sais que les mails se perdent vite.
+Je reviens vers vous au sujet de mon message de la semaine dernière concernant Tikette.
 
-Il reste ${placesFondateur ?? 'encore des'} places de partenaire fondateur (0 % jusqu’au 31 mars, puis 8 %). L’appli sort le 14 décembre, et les activités inscrites avant seront les premières proposées.
+Il reste ${placesFondateur ?? 'encore quelques'} places de partenaire fondateur : aucune commission jusqu’au 31 mars 2027, puis 8 % sans limite de durée. L’application sort le 14 décembre, et les activités inscrites d’ici là seront mises en avant dès le lancement.
 
-L’inscription prend dix minutes : https://tikette.fr/pro
+L’inscription est gratuite et prend une dizaine de minutes : https://tikette.fr/pro
+Si vous le préférez, je peux aussi créer votre fiche à partir des informations de votre site, et vous n’aurez plus qu’à la vérifier.
 
-Si ça ne vous intéresse pas, dites-le-moi simplement et je n’insisterai pas.
+${signature}
 
-Greg, Tikette` : `Bonjour,
+${desabo}` : `Bonjour,
 
-Je m’appelle Greg, j’habite à Tavel et avec un ami on lance Tikette le 14 décembre : une appli qui organise une sortie complète en une minute pour les couples et les bandes de potes. Activité, resto, balade, tout est prêt.
+Tikette est une application qui compose des sorties clés en main pour les couples et les groupes d’amis : une activité, un restaurant, une balade, avec les horaires et la réservation. Elle sort le 14 décembre sur l’App Store et Google Play.
 
-On cherche des activités du coin à proposer dedans, et ${lieu} colle exactement à ce que nos utilisateurs cherchent.
+Nous sélectionnons actuellement les activités ${region}qui y seront proposées, et ${ici} correspond précisément à ce que recherchent nos utilisateurs.
 
-Le principe est simple :
-- vous indiquez vos créneaux et vos places, le client réserve en deux clics et paie chez vous ;
-- vous recevez et validez les réservations dans votre espace pro ;
-- on prend 10 % seulement sur les clients qu’on vous envoie (GetYourGuide et Viator prennent 20 à 30 %) ;
-- pour les 50 premières entreprises : 0 % jusqu’au 31 mars, puis 8 % à vie.
+Le fonctionnement :
+• un espace professionnel gratuit, où vous indiquez vos créneaux, vos places et vos tarifs ;
+• les réservations arrivent dans cet espace : vous les validez, ou elles se confirment automatiquement ;
+• le client règle sur place, comme d’habitude ;
+• une commission de 10 %, uniquement sur les clients envoyés par Tikette.
 
-L’inscription est gratuite, sans engagement, et prend dix minutes : https://tikette.fr/pro
+Offre de lancement pour les 50 premiers partenaires : aucune commission jusqu’au 31 mars 2027, puis 8 % sans limite de durée.
 
-Si vous préférez en parler de vive voix, répondez à ce mail et je vous appelle quand ça vous arrange.
+L’inscription est gratuite, sans engagement : https://tikette.fr/pro
+Je peux aussi créer votre fiche moi-même à partir de votre site, ou vous présenter Tikette par téléphone : il suffit de répondre à ce message.
 
-Bonne journée,
-Greg, Tikette
+${signature}
 
-Vous recevez ce mail parce que votre activité est référencée par l’office de tourisme. Une simple réponse « non merci » et on ne vous écrit plus.`;
+${desabo}`;
   const a = String(p.email || '').split(/[\s,;/]+/)[0];
-  return { a, objet, corps, mailto: `mailto:${encodeURIComponent(a)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps.replace(/\n/g, '\r\n'))}`,
-    web: `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(a)}&subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps)}` };
+  return { a, objet, corps, mailto: `mailto:${encodeURIComponent(a)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps.replace(/\n/g, '\r\n'))}` };
+}
+// Brouillon .eml : Outlook (Windows ou Mac) l'ouvre prêt à envoyer, même s'il n'est pas la messagerie par défaut.
+function telechargerBrouillon(m, nom) {
+  const b64 = (t) => btoa(unescape(encodeURIComponent(t)));
+  const eml = [`To: ${m.a}`, `Subject: =?UTF-8?B?${b64(m.objet)}?=`, 'X-Unsent: 1', 'MIME-Version: 1.0', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: base64', '',
+    b64(m.corps.replace(/\n/g, '\r\n')).replace(/.{76}/g, '$&\r\n')].join('\r\n');
+  const url = URL.createObjectURL(new Blob([eml], { type: 'message/rfc822' }));
+  const lien = h('a', { href: url, download: `Tikette - ${nom.replace(/[\\/:*?"<>|]/g, '')}.eml` }); document.body.append(lien); lien.click(); lien.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
 async function importerProspects(fichier, etat) {
   etat.textContent = 'Lecture du fichier…';
@@ -1199,7 +1216,7 @@ async function pageProspection() {
   const re = () => aller('prospection');
   const ligne = (p) => {
     const m = mailProspect(p, p.statut === 'envoye' || p.statut === 'relance'), relance = p.statut === 'envoye';
-    const ecrire = (lien) => async () => { window.open(lien, lien.startsWith('mailto') ? '_self' : '_blank'); if (p.statut === 'a_contacter') { await maj(p, 'envoye'); re(); } else if (relance) { await maj(p, 'relance'); re(); } };
+    const noter = async () => { if (p.statut === 'a_contacter') { await maj(p, 'envoye'); re(); } else if (relance) { await maj(p, 'relance'); re(); } };
     return h('tr', {},
       h('td', {}, h('b', {}, nomCourt(p.nom)), p.priorite ? h('span', { style: 'color:var(--rouge);font-size:11px;margin-left:6px;font-weight:700' }, 'PRIORITÉ') : '',
         h('div', { class: 'doux', style: 'font-size:12px' }, p.activite, ' · ', p.commune, ' (', p.departement, ')', p.site ? [' · ', h('a', { href: p.site, target: '_blank', rel: 'noopener', style: 'color:var(--doux)' }, 'site')] : '')),
@@ -1208,13 +1225,13 @@ async function pageProspection() {
         p.contacte_le ? h('div', { class: 'doux', style: 'font-size:11.5px;margin-top:3px' }, 'Mail le ' + dateFr(p.contacte_le), p.relance_le ? ' · relancé le ' + dateFr(p.relance_le) : '') : '',
         aRelancer(p) ? h('div', { style: 'color:var(--jaune);font-size:11.5px' }, 'À relancer') : ''),
       h('td', { style: 'white-space:nowrap' }, p.email && !['inscrit', 'non'].includes(p.statut) ? [
-        h('button', { class: 'btn-contour mini', title: 'Ouvre le mail déjà écrit dans Outlook (ou votre messagerie)', onclick: ecrire(m.mailto) }, relance ? 'Relancer dans Outlook' : 'Écrire dans Outlook'), ' ',
-        h('button', { class: 'btn-lien', title: 'Outlook sur internet (compte Microsoft)', onclick: ecrire(m.web) }, 'web'), ' ',
-        h('button', { class: 'btn-lien', onclick: async () => { await navigator.clipboard.writeText(`À : ${m.a}\nObjet : ${m.objet}\n\n${m.corps}`); alert('Mail copié.'); } }, 'copier')] : '',
+        h('button', { class: 'btn-contour mini', title: 'Télécharge le mail déjà écrit : ouvrez le fichier, il s’ouvre dans Outlook prêt à envoyer', onclick: () => { telechargerBrouillon(m, nomCourt(p.nom)); noter(); } }, relance ? 'Relancer dans Outlook' : 'Écrire dans Outlook'), ' ',
+        h('a', { class: 'btn-lien', href: m.mailto, title: 'Ouvre votre messagerie par défaut', onclick: () => { noter(); } }, 'messagerie'), ' ',
+        h('button', { class: 'btn-lien', onclick: async (e) => { await navigator.clipboard.writeText(`À : ${m.a}\nObjet : ${m.objet}\n\n${m.corps}`); e.target.textContent = 'copié ✓'; } }, 'copier')] : '',
         h('button', { class: 'btn-lien', style: 'margin-left:6px', onclick: async () => { const n = prompt('Note sur ' + nomCourt(p.nom), p.note || ''); if (n !== null) { await maj(p, null, n); re(); } } }, p.note ? 'note ✓' : 'note'),
         p.note ? h('div', { class: 'doux', style: 'font-size:11.5px;white-space:normal;max-width:260px' }, p.note) : ''));
   };
-  afficherPour(g, entete('Prospection', 'Les entreprises à contacter pour Tikette · le mail s’ouvre déjà écrit', h('div', { style: 'display:flex;gap:8px;align-items:center' }, etat, boutonImport, fichier)),
+  afficherPour(g, entete('Prospection', 'Les entreprises à contacter pour Tikette · le mail s’ouvre déjà écrit dans Outlook', h('div', { style: 'display:flex;gap:8px;align-items:center' }, etat, boutonImport, fichier)),
     h('div', { class: 'kpis' }, kpi('À contacter', nombre(compte('a_contacter')), tous.filter((p) => p.statut === 'a_contacter' && p.email).length + ' avec un e-mail'),
       kpi('Mails envoyés', nombre(compte('envoye') + compte('relance') + compte('appele')), tous.filter(aRelancer).length + ' à relancer', 'var(--jaune)'),
       kpi('Inscrits', nombre(compte('inscrit')), 'objectif 30 à 45 d’ici fin janvier', 'var(--vert)'), kpi('Non merci', nombre(compte('non')), 'à ne plus contacter')),
