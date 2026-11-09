@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-mEtyjceBglWfpuUiCrNWE3cegzhXl96zdzcRuudW42c='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Signatures mail</title>
+<script src="js/garde.js"></script>
+<style>
+:root{--fond:#0A0A0A;--carte:#151515;--texte:#EDE7DC;--doux:#9A948A;--ligne:#262626;--rouge:#E8344E}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--fond:#F4EFE6;--carte:#FFFDF8;--texte:#1A1714;--doux:#6E675E;--ligne:#E4DCCD}}
+:root[data-theme="light"]{--fond:#F4EFE6;--carte:#FFFDF8;--texte:#1A1714;--doux:#6E675E;--ligne:#E4DCCD}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fond);color:var(--texte);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:980px;margin:0 auto;padding:28px 16px 60px}
+h1{font-size:26px;margin:0 0 4px}
+.sous{color:var(--doux);margin:0 0 24px}
+.grille{display:grid;grid-template-columns:320px 1fr;gap:28px}
+@media (max-width:760px){.grille{grid-template-columns:1fr}}
+label{display:block;font-size:12.5px;color:var(--doux);margin:14px 0 5px}
+input,select{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--ligne);background:var(--carte);color:var(--texte);font:inherit}
+.apercu{background:#fff;border-radius:10px;padding:26px 24px;min-height:150px;overflow-x:auto}
+.titre{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--doux);margin:0 0 10px}
+.boutons{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+button{font:inherit;font-weight:600;border:0;border-radius:8px;padding:11px 16px;cursor:pointer}
+.plein{background:var(--rouge);color:#fff}
+.contour{background:transparent;color:var(--texte);box-shadow:inset 0 0 0 1px var(--ligne)}
+.ok{color:#3BB273;font-size:14px;min-height:20px;margin-top:8px}
+ol{color:var(--doux);padding-left:20px;margin:22px 0 0}
+ol li{margin:4px 0}
+ol b{color:var(--texte)}
+body.console header{display:none}
+</style>
+</head>
+<body>
+<main>
+<header><h1>Signatures mail</h1><p class="sous">Une signature propre pour chaque appli du studio, à coller dans Outlook.</p></header>
+<div class="grille">
+<div>
+<label for="s-appli">Appli</label><select id="s-appli"></select>
+<label for="s-nom">Prénom et nom</label><input id="s-nom" maxlength="60" placeholder="Greg Hubert">
+<label for="s-role">Rôle</label><input id="s-role" maxlength="60" placeholder="Cofondateur">
+<label for="s-mail">E-mail</label><input id="s-mail" maxlength="80">
+<label for="s-site">Site (facultatif)</label><input id="s-site" maxlength="80" placeholder="tikette.fr">
+<label for="s-slogan">Phrase (facultatif)</label><input id="s-slogan" maxlength="80">
+</div>
+<div>
+<p class="titre">Aperçu (tel qu'il s'affichera dans le mail)</p>
+<div class="apercu" id="apercu"></div>
+<div class="boutons"><button class="plein" id="b-copier">Copier la signature</button><button class="contour" id="b-html">Copier le code HTML</button></div>
+<div class="ok" id="ok" role="status"></div>
+<ol>
+<li>Clique sur <b>Copier la signature</b>.</li>
+<li>Dans Outlook : <b>Fichier › Options › Courrier › Signatures… › Nouveau</b>, donne-lui un nom (ex. « Tikette »).</li>
+<li>Clique dans la grande case et fais <b>Ctrl + V</b>, puis <b>OK</b>.</li>
+<li>En haut à droite de cette fenêtre, choisis le compte <b>contact@…</b> et la signature pour les nouveaux messages et les réponses.</li>
+</ol>
+</div>
+</div>
+</main>
+<script>
+// Signatures mail des applis du studio : rien n'est envoyé, tout reste dans le navigateur.
+if (new URLSearchParams(location.search).has('console')) document.body.classList.add('console');
+try { const t = localStorage.getItem('console-theme'); if (t === 'clair') document.documentElement.dataset.theme = 'light'; if (t === 'sombre') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+const LOGOS_MAIL = { tikette: 'https://tikette.fr/mail/tikette.png', shivr: 'https://tikette.fr/mail/shivr.png', guinche: 'https://tikette.fr/mail/guinche.png' };
+const PREREMPLI = {
+  studio: { nom: 'Egg Not Found', couleur: '#E8344E', mail: 'contact@eggnotfound.fr', site: '', slogan: 'Studio d’applis et de jeux', logo: 'https://tikette.fr/mail/eggnotfound.png', large: true },
+  tikette: { mail: 'contact@tikette.fr', site: 'tikette.fr', slogan: 'Choisis l’ambiance, On organise.' },
+  shivr: { mail: 'contact@shivr.fr', site: 'shivr.fr', slogan: 'Le frisson de chaque carte.' },
+};
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+let applis = {};
+function signature() {
+  const a = applis[$('#s-appli').value] || PREREMPLI.studio, c = a.couleur || '#E8344E';
+  const nom = $('#s-nom').value.trim(), role = $('#s-role').value.trim(), mail = $('#s-mail').value.trim(), site = $('#s-site').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, ''), slogan = $('#s-slogan').value.trim();
+  const logo = a.large ? `<img src="${esc(a.logo)}" width="96" alt="${esc(a.nom)}" style="display:block;border:0;width:96px;height:auto">`
+    : `<img src="${esc(a.logo)}" width="56" height="56" alt="${esc(a.nom)}" style="display:block;border:0;width:56px;height:56px;border-radius:12px">`;
+  const liens = [site ? `<a href="https://${esc(site)}" style="color:${c};font-weight:bold;text-decoration:none">${esc(site)}</a>` : '',
+    mail ? `<a href="mailto:${esc(mail)}" style="color:#4A4458;text-decoration:none">${esc(mail)}</a>` : ''].filter(Boolean).join(' &nbsp;·&nbsp; ');
+  const studio = a.id === undefined ? '' : `<tr><td colspan="2" style="padding-top:12px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#A39DB3">${esc(a.nom)} est une appli du studio <b style="color:#6B6480">Egg Not Found</b></td></tr>`;
+  return `<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;color:#1E1433">`
+    + `<tr><td style="padding:0 14px 0 0;vertical-align:middle">${logo}</td>`
+    + `<td style="padding:2px 0 2px 14px;border-left:3px solid ${c};vertical-align:middle">`
+    + (nom ? `<div style="font-size:15px;font-weight:bold;color:#1E1433">${esc(nom)}</div>` : '')
+    + `<div style="font-size:13px;color:#6B6480">${esc([role, a.nom].filter(Boolean).join(' · '))}</div>`
+    + (liens ? `<div style="font-size:13px;margin-top:6px">${liens}</div>` : '')
+    + (slogan ? `<div style="font-size:12px;color:#8A849A;font-style:italic;margin-top:4px">${esc(slogan)}</div>` : '')
+    + `</td></tr>${studio}</table>`;
+}
+function remplir() {
+  const a = applis[$('#s-appli').value] || PREREMPLI.studio, p = PREREMPLI[$('#s-appli').value] || {};
+  $('#s-mail').value = p.mail || a.mail || 'contact@eggnotfound.fr';
+  $('#s-site').value = p.site ?? (a.site || '').replace(/^https?:\/\//, '');
+  $('#s-slogan').value = p.slogan || a.slogan || '';
+  dessiner();
+}
+function dessiner() {
+  $('#apercu').innerHTML = signature(); $('#ok').textContent = '';
+  try { localStorage.setItem('signature-moi', JSON.stringify({ nom: $('#s-nom').value, role: $('#s-role').value, appli: $('#s-appli').value })); } catch (e) {}
+}
+async function copier(html) {
+  try {
+    if (html && window.ClipboardItem) {
+      await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([signature()], { type: 'text/html' }), 'text/plain': new Blob([$('#apercu').innerText], { type: 'text/plain' }) })]);
+    } else if (html) {
+      const r = document.createRange(); r.selectNodeContents($('#apercu')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); document.execCommand('copy'); s.removeAllRanges();
+    } else await navigator.clipboard.writeText(signature());
+    $('#ok').textContent = html ? '✓ Copiée : colle-la dans Outlook avec Ctrl + V.' : '✓ Code HTML copié.';
+  } catch (e) { $('#ok').textContent = 'Copie impossible : sélectionne l’aperçu à la souris puis Ctrl + C.'; }
+}
+fetch('donnees/applis.json').then((r) => r.json()).catch(() => []).then((d) => {
+  const liste = Array.isArray(d) ? d : (d.applis || []);
+  applis = { studio: PREREMPLI.studio };
+  for (const a of liste) if (a.logo || LOGOS_MAIL[a.id]) applis[a.id] = { ...a, logo: LOGOS_MAIL[a.id] || new URL(a.logo, location.href).href };
+  $('#s-appli').innerHTML = Object.entries(applis).map(([k, a]) => `<option value="${esc(k)}">${esc(k === 'studio' ? 'Egg Not Found (le studio)' : a.nom)}</option>`).join('');
+  let m = {}; try { m = JSON.parse(localStorage.getItem('signature-moi') || '{}'); } catch (e) {}
+  $('#s-nom').value = m.nom || ''; $('#s-role').value = m.role || '';
+  $('#s-appli').value = applis[m.appli] ? m.appli : 'tikette';
+  remplir();
+});
+$('#s-appli').addEventListener('change', remplir);
+['#s-nom', '#s-role', '#s-mail', '#s-site', '#s-slogan'].forEach((s) => $(s).addEventListener('input', dessiner));
+$('#b-copier').addEventListener('click', () => copier(true));
+$('#b-html').addEventListener('click', () => copier(false));
+</script>
+</body>
+</html>
