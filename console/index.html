@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-dsfMfknQCGvBUmSEibmAy1LdTuXIohVyNAnsgs+hwsk='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Hvv/jCQf81amxjhTarlzQErbG6v+izxs3Gu4DJ1LUSI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1815,7 +1815,10 @@ async function pageEspacePro() {
   try { v = await rpc('console_pro_vue'); }
   catch (e) {
     if (!/console_pro_vue|does not exist|Could not find/i.test(String(e?.message))) throw e;
-    const lien = h('a', { class: 'btn-contour', href: 'https://tikette.fr/pro/', target: '_blank', rel: 'noopener' }, 'Voir tikette.fr/pro');
+    // Bouton temporaire (demande de Greg, 11 nov. 2026) : démo de toute la démarche pro, jusqu'à 01 h 49 (heure de Paris).
+    const demo = Date.now() < Date.parse('2026-11-11T00:49:47Z')
+      ? h('a', { class: 'btn', href: 'https://tikette.fr/pro/demo/', target: '_blank', rel: 'noopener', style: 'margin-left:8px' }, 'Voir la démarche pro (démo, 1 h)') : '';
+    const lien = h('span', {}, h('a', { class: 'btn-contour', href: 'https://tikette.fr/pro/', target: '_blank', rel: 'noopener' }, 'Voir tikette.fr/pro'), demo);
     if (att) { afficherPour(g, entete('Espace pro', 'Bientôt disponible : les entreprises qui ont laissé leurs informations sur tikette.fr/pro', lien), blocAttente(att, re),
       h('p', { class: 'note-bas' }, 'Une entreprise de la Prospection qui remplit le formulaire passe toute seule en « Inscrit ». Les 50 premières de la liste ont une place de partenaire fondateur.')); return; }
     afficherPour(g, entete('Espace pro', 'Les entreprises inscrites sur tikette.fr/pro'), h('div', { class: 'panneau' }, 'Il faut d’abord lancer dans Supabase (projet Tikette) : ',
