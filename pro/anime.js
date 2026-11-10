@@ -43,7 +43,7 @@
     $('#cj').textContent = Math.floor(s / 86400); $('#ch').textContent = deux(Math.floor(s % 86400 / 3600));
     $('#cm').textContent = deux(Math.floor(s % 3600 / 60)); $('#cs').textContent = deux(s % 60);
   };
-  tic(); setInterval(tic, 1000);
+  if ($('#cj')) { tic(); setInterval(tic, 1000); }
 
   // Bandeau des activités qui défile.
   const A = ['Escape game', 'Canoë-kayak', 'Karting', 'Atelier cuisine', 'Dégustation de vins', 'Laser game', 'Montgolfière', 'Spa et hammam', 'Poterie', 'Bowling', 'Accrobranche', 'Réalité virtuelle',

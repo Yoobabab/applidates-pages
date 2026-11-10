@@ -4,6 +4,7 @@
 <title>Tikette pour les pros</title>
 <meta name="description" content="Inscrivez votre activité sur Tikette : des réservations en 2 clics, 10 % de commission seulement quand le client vient. Partenaire fondateur : 0 % jusqu’au 31 mars 2027.">
 <link rel="icon" href="/favicon.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <script src="/js/garde.js"></script>
 <script src="/js/supabase-2.45.4.js"></script>
 <script src="/pro/types.js"></script>
@@ -165,12 +166,7 @@ footer{margin:60px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-
 .ecrans3 .tel:nth-child(2){transform:none}.pourquoi{position:static}.colle-bas{display:block}.compte{gap:14px}.compte .lbl{width:100%}.ecran-pro{min-height:380px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.apparait{opacity:1;transform:none}.barre .b i{width:var(--w)!important}}
 </style></head><body><div class="page">
-<nav id="nav"><div class="marque"><svg class="logo" viewBox="68 70 164 176" aria-hidden="true"><defs><linearGradient id="lc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
-<radialGradient id="lr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-<linearGradient id="lm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" transform="translate(0 7)" fill="#0B0618" opacity=".35"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#lr)"/>
-<path d="M118 85 L182 85 A29 29 0 0 1 211 114 L211 115.9 A22 22 0 0 0 211 156.1 L211 198 A29 29 0 0 1 182 227 L118 227 A29 29 0 0 1 89 198 L89 156.1 A22 22 0 0 0 89 115.9 L89 114 A29 29 0 0 1 118 85 Z" fill="none" stroke="#F7F1FF" stroke-opacity=".5" stroke-width="2.5"/>
-<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
-<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/><path transform="translate(150 190) scale(2.1)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/></svg> tikette<small>PRO</small></div><div class="liens"><a href="#comment">Comment ça marche</a><a href="#espace">L’espace pro</a><a href="#commission">Commission</a><a href="#faq">Questions</a><span class="bientot">Bientôt disponible</span></div></nav>
+<nav id="nav"><div class="marque"><img class="logo" src="/tikette-icone.png" alt="" width="34" height="34" style="border-radius:9px"> tikette<small>PRO</small></div><div class="liens"><a href="#comment">Comment ça marche</a><a href="#espace">L’espace pro</a><a href="#commission">Commission</a><a href="#faq">Questions</a><span class="bientot">Bientôt disponible</span></div></nav>
 
 <div class="hero"><i class="tache t1"></i><i class="tache t2"></i><i class="tache t3"></i>
 <div><div class="pastille"><i></i>Gard · Vaucluse · Bouches-du-Rhône · Hérault</div>
@@ -195,8 +191,10 @@ footer{margin:60px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-
 </g></svg>
 <div class="bulle b1" id="bulle1"></div><div class="bulle b2" id="bulle2"></div></div></div>
 
-<div class="compte apparait"><div class="lbl">L’appli sort le 14 décembre<small>Les activités inscrites avant sont proposées dès le premier jour.</small></div>
-<div class="c"><b id="cj">–</b><span>jours</span></div><div class="c"><b id="ch">–</b><span>heures</span></div><div class="c"><b id="cm">–</b><span>minutes</span></div><div class="c"><b id="cs">–</b><span>secondes</span></div></div>
+<section class="apparait" style="margin-top:22px"><div class="fondateur"><div><div class="sur" style="color:#7A3BC4">Offre de lancement</div><h2>Partenaire fondateur : 0 % jusqu’au 31 mars 2027, puis 8 % à vie.</h2>
+<p>Pour les 50 premières entreprises inscrites. Vous êtes en avant dans l’appli dès la sortie, le 14 décembre, avec le badge « Partenaire fondateur ».</p>
+<a class="btn" style="margin-top:22px;background:var(--encre);color:var(--lueur)" href="#inscription">Prendre ma place<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+<div class="places"><div class="n" id="reste-n">50</div>places restantes<div class="jauge"><i id="jauge"></i></div><b style="color:var(--lueur)" id="reste">sur 50 au départ</b></div></div></section>
 
 <div class="defile" aria-hidden="true"><div class="rail" id="rail1"></div><div class="rail" id="rail2"></div></div>
 
@@ -253,10 +251,6 @@ footer{margin:60px 0 40px;color:var(--doux);font-size:14px;display:flex;justify-
 <div class="barre"><span>GetYourGuide</span><div class="b"><i style="--w:100%"></i></div><span>20-30 %</span></div>
 <p class="note">Commissions publiques des plateformes, relevées en novembre 2026.</p></div></div></section>
 
-<section class="apparait"><div class="fondateur"><div><div class="sur" style="color:#7A3BC4">Offre de lancement</div><h2>Partenaire fondateur : 0 % jusqu’au 31 mars 2027, puis 8 % à vie.</h2>
-<p>Pour les 50 premières entreprises inscrites. Vous êtes en avant dans l’appli dès la sortie, le 14 décembre, avec le badge « Partenaire fondateur ».</p>
-<a class="btn" style="margin-top:22px;background:var(--encre);color:var(--lueur)" href="#inscription">Prendre ma place<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
-<div class="places"><div class="n" id="reste-n">50</div>places restantes<div class="jauge"><i id="jauge"></i></div><b style="color:var(--lueur)" id="reste">sur 50 au départ</b></div></div></section>
 
 <section class="apparait"><div class="sur">Le calcul</div><h2>Ce que vous gardez vraiment.</h2>
 <div class="calc"><div class="carte">
