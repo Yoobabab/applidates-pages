@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ADm/b8pt4mTOXijmqs4PBcO5SLboWiR8Oqixh/IftrI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-vJf4yailr0XnYExH957UeuR5elohSI1Uqxg7KSK2Gig='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1014,7 +1014,8 @@ async function pageDixAns() {
 }
 // Page du même site affichée dans la console, à la hauteur de son contenu.
 function cadrePage(adresse, titre) {
-  const cadre = h('iframe', { class: 'cadre-objectifs', src: adresse, title: titre, allow: 'clipboard-write' });
+  // le numéro change à chaque ouverture : le navigateur ne ressert jamais une ancienne version de la page
+  const cadre = h('iframe', { class: 'cadre-objectifs', src: adresse + (adresse.includes('?') ? '&' : '?') + 'v=' + Date.now(), title: titre, allow: 'clipboard-write' });
   const ajuster = () => {
     try { cadre.style.height = cadre.contentDocument.documentElement.scrollHeight + 'px'; } catch (e) { cadre.style.height = '4200px'; }
   };
