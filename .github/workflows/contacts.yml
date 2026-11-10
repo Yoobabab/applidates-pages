@@ -1,5 +1,6 @@
 # Coordonnées publiées sur les sites d'une liste d'entreprises (prospection Tikette) : lancement à la main, ≈ 1 min.
-# La liste arrive par l'entrée « sites » (une adresse par ligne) ; le résultat est un artefact privé gardé 1 jour, rien n'est écrit dans le dépôt ni dans le journal.
+# La liste arrive par l'entrée « sites » (une adresse par ligne). Le résultat est chiffré avec la clé publique « cle »
+# (seul celui qui a la clé privée peut le lire) puis posé sur la branche temporaire « tmp-contacts », effacée après lecture.
 name: Contacts des sites
 on:
   workflow_dispatch:
@@ -7,6 +8,11 @@ on:
       sites:
         description: 'Sites (un par ligne)'
         required: true
+      cle:
+        description: 'Clé publique (PEM en base64)'
+        required: true
+permissions:
+  contents: write
 jobs:
   contacts:
     runs-on: ubuntu-latest
@@ -29,8 +35,15 @@ jobs:
               for s, (m, t) in zip(sites, res): w.writerow([s, m, t])
           print(sum(1 for m, t in res if m), 'e-mails sur', len(sites))
           PY
-      - uses: actions/upload-artifact@v4
-        with:
-          name: contacts
-          path: /tmp/contacts.csv
-          retention-days: 1
+      - name: Chiffrer et déposer
+        env:
+          CLE: ${{ inputs.cle }}
+        run: |
+          echo "$CLE" | base64 -d > /tmp/pub.pem
+          openssl rand -hex 32 > /tmp/k
+          openssl enc -aes-256-cbc -pbkdf2 -salt -in /tmp/contacts.csv -out /tmp/contacts.enc -pass file:/tmp/k
+          openssl pkeyutl -encrypt -pubin -inkey /tmp/pub.pem -in /tmp/k -out /tmp/k.enc
+          rm -f /tmp/k /tmp/contacts.csv
+          mkdir /tmp/sortie && cd /tmp/sortie && cp /tmp/contacts.enc /tmp/k.enc .
+          git init -q -b tmp-contacts && git add . && git -c user.name=robot -c user.email=robot@tikette.fr commit -qm "Contacts chiffrés (temporaire) [skip ci]"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" tmp-contacts
