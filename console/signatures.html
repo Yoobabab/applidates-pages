@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-+9ZvT5tM4DFMdousUgXpOHyJxBkr0M/xnmYIGVNADMM='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-U9YUAbao89JWVLnCluzdc5hr1hW9WwdkhKFmBQ06/t4='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -45,6 +45,8 @@ body.console header{display:none}
 <label for="s-mail">E-mail</label><input id="s-mail" maxlength="80">
 <label for="s-site">Site (facultatif)</label><input id="s-site" maxlength="80" placeholder="tikette.fr">
 <label for="s-slogan">Phrase (facultatif)</label><input id="s-slogan" maxlength="80">
+<label for="s-insta">Instagram (facultatif)</label><input id="s-insta" maxlength="40" placeholder="tikette.app">
+<label for="s-tiktok">TikTok (facultatif)</label><input id="s-tiktok" maxlength="40" placeholder="tikette.app">
 </div>
 <div>
 <p class="titre">Aperçu (tel qu'il s'affichera dans le mail)</p>
@@ -67,7 +69,7 @@ try { const t = localStorage.getItem('console-theme'); if (t === 'clair') docume
 const LOGOS_MAIL = { tikette: 'https://tikette.fr/mail/tikette.png?v=2', shivr: 'https://tikette.fr/mail/shivr.png', guinche: 'https://tikette.fr/mail/guinche.png' };
 const PREREMPLI = {
   studio: { nom: 'Egg Not Found', couleur: '#E8344E', mail: 'contact@eggnotfound.fr', site: '', slogan: 'Studio d’applis et de jeux', logo: 'https://tikette.fr/mail/eggnotfound.png', large: true },
-  tikette: { mail: 'contact@tikette.fr', site: 'tikette.fr', slogan: 'Choisis l’ambiance, On organise.' },
+  tikette: { mail: 'contact@tikette.fr', site: 'tikette.fr', slogan: 'Choisis l’ambiance, On organise.', insta: 'tikette.app', tiktok: 'tikette.app' },
   shivr: { mail: 'contact@shivr.fr', site: 'shivr.fr', slogan: 'Le frisson de chaque carte.' },
 };
 const $ = (s) => document.querySelector(s);
@@ -76,6 +78,10 @@ let applis = {};
 function signature() {
   const a = applis[$('#s-appli').value] || PREREMPLI.studio, c = a.couleur || '#E8344E';
   const nom = $('#s-nom').value.trim(), role = $('#s-role').value.trim(), mail = $('#s-mail').value.trim(), site = $('#s-site').value.trim().replace(/^https?:\/\//, '').replace(/\/$/, ''), slogan = $('#s-slogan').value.trim();
+  const pseudo = (v) => v.trim().replace(/^@/, '').replace(/[^A-Za-z0-9._]/g, '');
+  const insta = pseudo($('#s-insta').value), tiktok = pseudo($('#s-tiktok').value);
+  const icone = (url, img, nom) => `<a href="${esc(url)}" style="text-decoration:none;display:inline-block;margin-right:6px"><img src="https://tikette.fr/mail/${img}.png" width="22" height="22" alt="${nom}" style="display:inline-block;border:0;width:22px;height:22px;vertical-align:middle"></a>`;
+  const reseaux = [insta ? icone(`https://www.instagram.com/${insta}/`, 'instagram', 'Instagram') : '', tiktok ? icone(`https://www.tiktok.com/@${tiktok}`, 'tiktok', 'TikTok') : ''].join('');
   const logo = a.large ? `<img src="${esc(a.logo)}" width="96" alt="${esc(a.nom)}" style="display:block;border:0;width:96px;height:auto">`
     : `<img src="${esc(a.logo)}" width="56" height="56" alt="${esc(a.nom)}" style="display:block;border:0;width:56px;height:56px;border-radius:12px">`;
   const liens = [site ? `<a href="https://${esc(site)}" style="color:${c};font-weight:bold;text-decoration:none">${esc(site)}</a>` : '',
@@ -88,6 +94,7 @@ function signature() {
     + `<div style="font-size:13px;color:#6B6480">${esc([role, a.nom].filter(Boolean).join(' · '))}</div>`
     + (liens ? `<div style="font-size:13px;margin-top:6px">${liens}</div>` : '')
     + (slogan ? `<div style="font-size:12px;color:#8A849A;font-style:italic;margin-top:4px">${esc(slogan)}</div>` : '')
+    + (reseaux ? `<div style="margin-top:8px;line-height:0">${reseaux}</div>` : '')
     + `</td></tr>${studio}</table>`;
 }
 function remplir() {
@@ -95,6 +102,7 @@ function remplir() {
   $('#s-mail').value = p.mail || a.mail || 'contact@eggnotfound.fr';
   $('#s-site').value = p.site ?? (a.site || '').replace(/^https?:\/\//, '');
   $('#s-slogan').value = p.slogan || a.slogan || '';
+  $('#s-insta').value = p.insta || ''; $('#s-tiktok').value = p.tiktok || '';
   dessiner();
 }
 function dessiner() {
@@ -122,7 +130,7 @@ fetch('donnees/applis.json').then((r) => r.json()).catch(() => []).then((d) => {
   remplir();
 });
 $('#s-appli').addEventListener('change', remplir);
-['#s-nom', '#s-role', '#s-mail', '#s-site', '#s-slogan'].forEach((s) => $(s).addEventListener('input', dessiner));
+['#s-nom', '#s-role', '#s-mail', '#s-site', '#s-slogan', '#s-insta', '#s-tiktok'].forEach((s) => $(s).addEventListener('input', dessiner));
 $('#b-copier').addEventListener('click', () => copier(true));
 $('#b-html').addEventListener('click', () => copier(false));
 </script>
