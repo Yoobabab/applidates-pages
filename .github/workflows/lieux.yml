@@ -43,10 +43,10 @@ jobs:
           for p in france belgium switzerland luxembourg monaco; do
           osmium tags-filter /tmp/$p.osm.pbf \
             nw/amenity=restaurant,fast_food,bar,pub,cafe,nightclub,cinema,theatre,arts_centre,music_venue,karaoke_box,planetarium,public_bath \
-            nw/leisure=bowling_alley,escape_game,amusement_arcade,miniature_golf,water_park,trampoline_park,park,garden,stadium,ice_rink,horse_riding,sauna \
+            nw/leisure=bowling_alley,escape_game,amusement_arcade,miniature_golf,water_park,trampoline_park,park,garden,stadium,ice_rink,horse_riding,sauna,spa \
             nw/sport=laser_tag,karting,paintball,climbing_adventure,climbing,canoe,kayak,billiards,darts,axe_throwing,shooting \
             nw/tourism=museum,gallery,viewpoint,theme_park,zoo,aquarium \
-            nw/craft=winery,brewery,distillery nw/shop=wine \
+            nw/craft=winery,brewery,distillery nw/shop=wine,massage nw/beauty=spa \
             nw/natural=beach \
             -o /tmp/filtre-$p.osm.pbf --overwrite
           rm /tmp/$p.osm.pbf

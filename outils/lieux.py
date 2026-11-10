@@ -47,6 +47,8 @@ ETIQUETTES = {
     'craft': ('cr', 30), 'shop': ('sh', 30), 'website': ('w', 160),
     # Lus par l'appli pour reconnaître canoë (location), caves avec dégustation et bains.
     'rental': ('re', 30), 'tasting': ('ta', 10), 'bath:type': ('bt', 20),
+    # Spas et salons de massage (demande de Greg, 10 nov. 2026).
+    'beauty': ('be', 20), 'massage': ('ma', 20),
 }
 
 
@@ -97,6 +99,9 @@ def rubrique(t):
     if tourism in ('museum', 'gallery') or amenity == 'planetarium':
         return 'musees'
     if leisure == 'sauna' or (amenity == 'public_bath' and t.get('bath:type') in ('thermal', 'hammam', 'onsen')):
+        return 'detente'
+    if leisure == 'spa' or t.get('beauty') == 'spa' or (t.get('shop') == 'massage' and t.get('massage') != 'erotic'
+            and not re.search(r'[ée]rotique|tantr|naturist|sensuel|happy end', t.get('name', ''), re.I)):
         return 'detente'
     if t.get('craft') in ('brewery', 'distillery'):
         return 'domaines'
