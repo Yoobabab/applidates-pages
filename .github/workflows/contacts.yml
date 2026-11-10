@@ -1,0 +1,36 @@
+# Coordonnées publiées sur les sites d'une liste d'entreprises (prospection Tikette) : lancement à la main, ≈ 1 min.
+# La liste arrive par l'entrée « sites » (une adresse par ligne) ; le résultat est un artefact privé gardé 1 jour, rien n'est écrit dans le dépôt ni dans le journal.
+name: Contacts des sites
+on:
+  workflow_dispatch:
+    inputs:
+      sites:
+        description: 'Sites (un par ligne)'
+        required: true
+jobs:
+  contacts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v5
+      - name: Coordonnées
+        env:
+          SITES: ${{ inputs.sites }}
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures as cf, csv, os, sys
+          sys.path.insert(0, 'outils')
+          from contacts_sites import trouver
+          sites = [s.strip() for s in os.environ['SITES'].replace('\\n', '\n').splitlines() if s.strip()][:400]
+          with cf.ThreadPoolExecutor(24) as ex:
+              res = list(ex.map(trouver, sites))
+          with open('/tmp/contacts.csv', 'w', encoding='utf-8-sig', newline='') as f:
+              w = csv.writer(f, delimiter=';'); w.writerow(['Site', 'E-mail', 'Téléphone'])
+              for s, (m, t) in zip(sites, res): w.writerow([s, m, t])
+          print(sum(1 for m, t in res if m), 'e-mails sur', len(sites))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: contacts
+          path: /tmp/contacts.csv
+          retention-days: 1
