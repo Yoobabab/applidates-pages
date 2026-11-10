@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-qNruDFuLDD6S3QO66NG0N35bx5kziYQam+/F5hVb4Qo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-eHE5Q0i5QzVGPr/3biSLMJIw2ohg2UTNHQLqu9a66Xc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1637,7 +1637,8 @@ const REGION_PROSPECT = { '30': 'du Gard', '84': 'du Vaucluse', '13': 'des Bouch
 // Mail de prospection validé par Greg (10 nov. 2026) : selfie hébergé sur tikette.fr/mail, collé tel quel dans Outlook (Ctrl+V).
 // Quand une entreprise a plusieurs adresses, prendre celle du même domaine que son site (la 1re est parfois mal tapée par l'office de tourisme).
 function adresseProspect(p) {
-  const mails = String(p.email || '').split(/[\s,;/]+/).filter((x) => x.includes('@'));
+  const faux = /anthropic\.com$|@(mon)?e?mail\.com$|@monemail\.|example\.|exemple\.|sentry|wixpress/i;
+  const mails = String(p.email || '').split(/[\s,;/]+/).filter((x) => /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9à-ÿ.-]+\.[a-z]{2,}$/i.test(x) && !faux.test(x));
   let site = ''; try { site = new URL(/\/\//.test(p.site || '') ? p.site : 'https://' + (p.site || 'x')).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) {}
   return mails.find((m) => site && m.split('@')[1].toLowerCase() === site) || mails[0] || '';
 }
@@ -1737,11 +1738,11 @@ async function pageProspection() {
     return h('tr', {},
       h('td', {}, h('b', {}, nomCourt(p.nom)), p.priorite ? h('span', { style: 'color:var(--rouge);font-size:11px;margin-left:6px;font-weight:700' }, 'PRIORITÉ') : '',
         h('div', { class: 'doux', style: 'font-size:12px' }, p.activite, ' · ', p.commune, ' (', p.departement, ')', p.site ? [' · ', h('a', { href: p.site, target: '_blank', rel: 'noopener', style: 'color:var(--doux)' }, 'site')] : '')),
-      h('td', { style: 'font-size:12.5px' }, p.email ? adresseProspect(p) : h('span', { class: 'doux' }, '—'), h('div', { class: 'doux', style: 'font-size:12px' }, String(p.telephone || '').split(' / ')[0])),
+      h('td', { style: 'font-size:12.5px' }, adresseProspect(p) || h('span', { class: 'doux' }, p.email ? 'adresse à vérifier' : '—'), h('div', { class: 'doux', style: 'font-size:12px' }, String(p.telephone || '').split(' / ')[0])),
       h('td', {}, select(p.statut, Object.entries(STATUTS_PROSPECT), async (v) => { await maj(p, v); re(); }),
         p.contacte_le ? h('div', { class: 'doux', style: 'font-size:11.5px;margin-top:3px' }, 'Mail le ' + dateFr(p.contacte_le), p.relance_le ? ' · relancé le ' + dateFr(p.relance_le) : '') : '',
         aRelancer(p) ? h('div', { style: 'color:var(--jaune);font-size:11.5px' }, 'À relancer') : ''),
-      h('td', { style: 'white-space:nowrap' }, p.email && !['inscrit', 'non'].includes(p.statut) ? [
+      h('td', { style: 'white-space:nowrap' }, adresseProspect(p) && !['inscrit', 'non'].includes(p.statut) ? [
         h('button', { class: 'btn-contour mini', title: 'Copie le mail avec la photo, puis ouvre un nouveau message avec l’adresse et l’objet : collez avec Ctrl+V', onclick: async (e) => {
           const b = e.currentTarget, ok = await copierMailProspect(m);
           b.textContent = ok ? 'Copié ✓ · Ctrl+V dans le mail' : 'Copie impossible : utilisez « brouillon »';
