@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-eHE5Q0i5QzVGPr/3biSLMJIw2ohg2UTNHQLqu9a66Xc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-dsfMfknQCGvBUmSEibmAy1LdTuXIohVyNAnsgs+hwsk='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1637,8 +1637,10 @@ const REGION_PROSPECT = { '30': 'du Gard', '84': 'du Vaucluse', '13': 'des Bouch
 // Mail de prospection validé par Greg (10 nov. 2026) : selfie hébergé sur tikette.fr/mail, collé tel quel dans Outlook (Ctrl+V).
 // Quand une entreprise a plusieurs adresses, prendre celle du même domaine que son site (la 1re est parfois mal tapée par l'office de tourisme).
 function adresseProspect(p) {
+  // Adresses revenues en erreur (« Undeliverable ») : à compléter à chaque retour.
+  const refusees = ['poterie@poterieanduze.com', 'p.edlinger@blocsession.com'];
   const faux = /anthropic\.com$|@(mon)?e?mail\.com$|@monemail\.|example\.|exemple\.|sentry|wixpress/i;
-  const mails = String(p.email || '').split(/[\s,;/]+/).filter((x) => /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9à-ÿ.-]+\.[a-z]{2,}$/i.test(x) && !faux.test(x));
+  const mails = String(p.email || '').split(/[\s,;/]+/).filter((x) => /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9à-ÿ.-]+\.[a-z]{2,}$/i.test(x) && !faux.test(x) && !refusees.includes(x.toLowerCase()));
   let site = ''; try { site = new URL(/\/\//.test(p.site || '') ? p.site : 'https://' + (p.site || 'x')).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) {}
   return mails.find((m) => site && m.split('@')[1].toLowerCase() === site) || mails[0] || '';
 }
