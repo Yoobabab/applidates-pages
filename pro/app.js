@@ -53,31 +53,74 @@ async function verifierSiret() {
 $('#i-siret').addEventListener('change', verifierSiret);
 $('#i-siret').addEventListener('input', () => { if ($('#i-siret').value.replace(/\D/g, '').length === 14) verifierSiret(); });
 
-// ── Adresse : Base Adresse Nationale (Géoplateforme IGN, gratuite) ──
-let adresse = null, minuteur;
+// ── Adresse : Géoplateforme de l'IGN, puis OpenStreetMap (Photon) si elle est en panne ──
+let adresse = null, minuteur, recherche = 0;
+const PAYS = ['FR', 'BE', 'CH', 'LU', 'MC'];
+async function jsonAvecDelai(url, ms = 4000) {
+  const c = new AbortController(); const t = setTimeout(() => c.abort(), ms);
+  try { const r = await fetch(url, { signal: c.signal }); if (!r.ok) throw new Error(String(r.status)); return await r.json(); }
+  finally { clearTimeout(t); }
+}
+async function viaIgn(q) {
+  const r = await jsonAvecDelai(`https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(q)}&limit=5`);
+  return (r.features || []).filter((x) => x.properties?.postcode).map((x) => ({
+    label: x.properties.label, adresse: x.properties.name || x.properties.label, commune: x.properties.city,
+    code_postal: x.properties.postcode, lat: x.geometry.coordinates[1], lon: x.geometry.coordinates[0] }));
+}
+async function viaPhoton(q) {
+  const r = await jsonAvecDelai(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=8&lang=fr&lat=46.6&lon=2.4`);
+  const vus = new Set();
+  return (r.features || []).filter((x) => PAYS.includes(x.properties?.countrycode) && x.properties.postcode).map((x) => {
+    const pr = x.properties;
+    const rue = [pr.housenumber, pr.street].filter(Boolean).join(' ');
+    const ville = pr.city || pr.town || pr.village || pr.locality || pr.name || '';
+    const premier = rue || (pr.name && pr.name !== ville ? pr.name : '');
+    return { label: [premier, `${pr.postcode} ${ville}`.trim()].filter(Boolean).join(', '), adresse: premier || ville,
+      commune: ville, code_postal: pr.postcode, lat: x.geometry.coordinates[1], lon: x.geometry.coordinates[0] };
+  }).filter((x) => !vus.has(x.label) && vus.add(x.label)).slice(0, 5);
+}
+// Si aucun service ne répond : on garde l'adresse tapée, avec son code postal (vérifiée par le studio).
+function adresseALaMain(q) {
+  const m = q.match(/\b(\d{5})\b\s*,?\s*([^,\d][^,]*)?$/) || q.match(/\b(\d{5})\b/);
+  if (!m) return null;
+  const avant = q.slice(0, m.index).replace(/[,\s]+$/, '');
+  return { adresse: avant || q, commune: (m[2] || '').trim(), code_postal: m[1], lat: null, lon: null };
+}
 function chercherAdresse() {
   adresse = null; clearTimeout(minuteur);
-  const q = $('#i-adr').value.trim(); const p = $('#propos');
-  $('#a-adr').className = 'aide'; $('#a-adr').textContent = 'Choisissez l’adresse dans la liste : c’est là que Tikette envoie les clients.';
-  if (q.length < 4) { p.classList.add('cache'); return; }
+  const q = $('#i-adr').value.trim(); const p = $('#propos'); const a = $('#a-adr');
+  a.className = 'aide'; a.textContent = 'Tapez le numéro, la rue et la ville, puis choisissez dans la liste.';
+  if (q.length < 3) { p.classList.add('cache'); return; }
+  const n = ++recherche;
   minuteur = setTimeout(async () => {
-    try {
-      const r = await fetch(`https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(q)}&limit=5`).then((x) => x.json());
-      const f = (r.features || []).filter((x) => x.properties?.postcode);
-      if (!f.length) { p.classList.add('cache'); $('#a-adr').className = 'aide ko'; $('#a-adr').textContent = 'Adresse introuvable : essayez avec le code postal.'; return; }
-      p.innerHTML = ''; f.forEach((x) => {
-        const b = document.createElement('button'); b.type = 'button'; b.textContent = x.properties.label;
-        b.onclick = () => {
-          const pr = x.properties;
-          adresse = { adresse: pr.name || pr.label, commune: pr.city, code_postal: pr.postcode, lat: x.geometry.coordinates[1], lon: x.geometry.coordinates[0] };
-          $('#i-adr').value = pr.label; p.classList.add('cache');
-          $('#a-adr').className = 'aide ok'; $('#a-adr').textContent = '✓ Adresse reconnue';
-        };
-        p.appendChild(b);
-      });
-      p.classList.remove('cache');
-    } catch { $('#a-adr').className = 'aide ko'; $('#a-adr').textContent = 'Recherche d’adresse indisponible, réessayez.'; }
-  }, 350);
+    a.className = 'aide'; a.textContent = 'Recherche…';
+    let f = null;
+    try { f = await viaIgn(q); } catch { f = null; }
+    if (!f || !f.length) { try { const g = await viaPhoton(q); if (g.length || !f) f = g; } catch { /* les deux en panne */ } }
+    if (n !== recherche) return; // une recherche plus récente est partie
+    if (f === null) {
+      p.classList.add('cache');
+      const m = adresseALaMain(q);
+      if (m) { adresse = m; a.className = 'aide ok'; a.textContent = '✓ Adresse notée (la recherche est en panne, on la vérifiera)'; }
+      else { a.className = 'aide ko'; a.textContent = 'Recherche d’adresse en panne : écrivez l’adresse complète avec le code postal (ex. 12 rue du Port, 13002 Marseille).'; }
+      return;
+    }
+    if (!f.length) {
+      p.classList.add('cache'); a.className = 'aide ko';
+      a.textContent = /^\d{5}$/.test(q) ? 'Ajoutez la rue et la ville après le code postal.' : 'Aucune adresse trouvée : vérifiez la rue et ajoutez la ville.';
+      return;
+    }
+    p.innerHTML = ''; f.forEach((x) => {
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = x.label;
+      b.onclick = () => {
+        adresse = { adresse: x.adresse, commune: x.commune, code_postal: x.code_postal, lat: x.lat, lon: x.lon };
+        $('#i-adr').value = x.label; p.classList.add('cache');
+        a.className = 'aide ok'; a.textContent = '✓ Adresse reconnue';
+      };
+      p.appendChild(b);
+    });
+    p.classList.remove('cache'); a.className = 'aide'; a.textContent = 'Choisissez votre adresse dans la liste.';
+  }, 400);
 }
 $('#i-adr').addEventListener('input', chercherAdresse);
 document.addEventListener('click', (e) => { if (!e.target.closest('#propos, #i-adr')) $('#propos').classList.add('cache'); });
