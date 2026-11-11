@@ -13,7 +13,7 @@ import base64, hashlib, pathlib, re, sys
 
 SUPABASE = 'https://mmoyrhyimcalnztwpydi.supabase.co'
 CONNEXIONS = [SUPABASE, SUPABASE.replace('https://', 'wss://'), 'https://api.github.com', 'https://raw.githubusercontent.com',
-              'https://recherche-entreprises.api.gouv.fr', 'https://data.geopf.fr']
+              'https://recherche-entreprises.api.gouv.fr', 'https://data.geopf.fr', 'https://photon.komoot.io']
 SCRIPT = re.compile(r'<script(?![^>]*\bsrc=)[^>]*>(.*?)</script>', re.S | re.I)
 ANCIENNE = re.compile(r'\s*<meta http-equiv="Content-Security-Policy"[^>]*>', re.I)
 REFERRER = '<meta name="referrer" content="strict-origin-when-cross-origin">'
