@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ix+fOE8FnUWn8MUDiNQpIJeBmM2wKSnCEHEHVuM/bIw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-yVSxCFVSyo+8JAqiVPslcdsHo0TgKni7xqEejh1osA0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -162,17 +162,17 @@ nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96
 <section id="connexion" class="ecran-seul cache"><div class="carte">
   <div class="logo"><img src="/mail/tikette.png" alt="">tikette <b>PRO</b></div>
   <div id="etape-mail"><h1 style="margin:24px 0 6px">Connexion</h1>
-  <p class="note">Adresse e-mail de votre inscription : vous recevez un code à 6 chiffres.</p>
+  <p class="note">Saisissez l’adresse e-mail de votre entreprise (celle à laquelle nous vous avons écrit) : vous recevez un code à 6 chiffres. Pas de mot de passe à retenir.</p>
   <form id="f-mail"><label class="l" for="mail">E-mail</label><input id="mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr">
   <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Recevoir mon code</button></form></div>
   <div id="etape-code" class="cache"><h1 style="margin:24px 0 6px">Vérifiez vos e-mails</h1><p class="note">Code envoyé à <b id="mail-envoye"></b>.</p>
   <form id="f-code"><label class="l" for="code">Code</label><input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" style="letter-spacing:.3em;font-size:18px">
-  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Se connecter</button></form><p class="note" style="margin-top:12px"><a href="#" id="autre-mail">Changer d'adresse</a></p></div>
+  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Se connecter</button></form><p class="note" style="margin-top:12px">Le code est valable 1 heure. Tikette ne vous le demandera jamais, ni par téléphone ni par e-mail : ne le communiquez à personne.</p><p class="note"><a href="#" id="autre-mail">Changer d'adresse</a> · <a href="#" id="renvoyer">Renvoyer un code</a></p></div>
   <div id="etape-mfa" class="cache"><h1 style="margin:24px 0 6px">Double authentification</h1><p class="note">Code à 6 chiffres affiché dans votre appli d'authentification.</p>
   <form id="f-mfa"><input id="code-mfa" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" style="letter-spacing:.3em;font-size:18px;margin-top:14px">
   <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Valider</button></form></div>
   <p id="err-connexion" class="note" style="color:var(--rouge);min-height:1em"></p>
-  <div class="sep"></div><p class="note">Pas encore partenaire ? <a href="/pro/#inscription">Inscrire mon activité</a></p>
+  <div class="sep"></div><p class="note"><a href="/pro/connexion/">Comment se connecter en toute sécurité ?</a></p><p class="note">Pas encore partenaire ? <a href="/pro/#inscription">Inscrire mon activité</a></p>
 </div></section>
 
 <div id="appli" class="cache">
@@ -263,12 +263,27 @@ function demander({ titre, texte = '', champ = null, valeur = '', bouton = 'Vali
 // ───── Connexion ─────
 let mailEnCours = '';
 const etape = (n) => ['mail', 'code', 'mfa'].forEach((k) => $('#etape-' + k).classList.toggle('cache', k !== n));
+// Le code n'est envoyé qu'aux adresses qui ont un espace pro (ou une invitation) : jamais de compte créé pour une adresse inconnue.
+async function envoyerCode() {
+  $('#err-connexion').textContent = '';
+  const { data: possible, error: e1 } = await sb.rpc('pro_connexion_possible', { p_email: mailEnCours });
+  if (e1) { $('#err-connexion').textContent = 'Connexion impossible pour le moment, réessayez dans un instant.'; return false; }
+  if (!possible) {
+    $('#err-connexion').textContent = 'Cette adresse n’a pas encore d’espace pro. Utilisez l’adresse à laquelle nous vous avons écrit, ou contactez-nous : contact@tikette.fr.';
+    return false;
+  }
+  const { error } = await sb.auth.signInWithOtp({ email: mailEnCours, options: { shouldCreateUser: true } });
+  if (error) { $('#err-connexion').textContent = /rate|seconds|too many/i.test(error.message) ? 'Un code vient d’être envoyé : patientez une minute avant d’en redemander un.' : error.message; return false; }
+  return true;
+}
 $('#f-mail').onsubmit = async (e) => {
-  e.preventDefault(); mailEnCours = $('#mail').value.trim(); $('#err-connexion').textContent = '';
-  const { error } = await sb.auth.signInWithOtp({ email: mailEnCours, options: { shouldCreateUser: false } });
-  if (error) { $('#err-connexion').textContent = /not found|signups/i.test(error.message) ? 'Aucun compte avec cette adresse. Inscrivez d’abord votre activité.' : error.message; return; }
+  e.preventDefault(); mailEnCours = $('#mail').value.trim().toLowerCase();
+  const b = e.submitter || $('#f-mail button'); b.disabled = true;
+  const ok = await envoyerCode(); b.disabled = false;
+  if (!ok) return;
   $('#mail-envoye').textContent = mailEnCours; etape('code'); $('#code').focus();
 };
+$('#renvoyer').onclick = async (e) => { e.preventDefault(); if (await envoyerCode()) toast('Nouveau code envoyé.'); };
 $('#f-code').onsubmit = async (e) => {
   e.preventDefault();
   const { error } = await sb.auth.verifyOtp({ email: mailEnCours, token: $('#code').value.trim(), type: 'email' });
@@ -291,6 +306,9 @@ async function demarrer() {
   const niv = await sb.auth.mfa.getAuthenticatorAssuranceLevel().catch(() => ({ data: null }));
   if (niv?.data?.nextLevel === 'aal2' && niv.data.currentLevel !== 'aal2') { montrerConnexion('mfa'); $('#code-mfa').focus(); return; }
   espace = await rpc('pro_mon_espace'); await lireALire();
+  // Double authentification fortement conseillée : rappel sur le tableau de bord tant qu'elle n'est pas activée.
+  const facteurs = await sb.auth.mfa.listFactors().catch(() => ({ data: null }));
+  window.sansDoubleAuth = !(facteurs?.data?.totp || []).some((x) => x.status === 'verified');
   if (!espace && await rpc('pro_accepter_invitation').catch(() => false)) espace = await rpc('pro_mon_espace');
   if (!espace) { location.href = '/pro/#inscription'; return; }
   $('#connexion').classList.add('cache'); $('#appli').classList.remove('cache');
@@ -498,6 +516,7 @@ async function accueil() {
   const suite = !espace.offres.length ? 'activites' : !relie ? 'agenda' : 'activites';
   $('#vue').innerHTML = entete('Tableau de bord', jourLong(new Date()).replace(/^./, (c) => c.toUpperCase()), e.fondateur ? '<span class="etat" style="background:#FFF3D1;color:#7A5600">Partenaire fondateur</span>' : '')
   + (e.statut === 'en_attente' ? `<div class="bandeau att">${ic('horloge')}<div><b>Inscription en cours de vérification</b> (48 h au plus). Préparez déjà vos activités et vos horaires : elles seront proposées dans Tikette dès la validation.</div></div>` : '')
+  + (window.sansDoubleAuth ? `<div class="bandeau att">${ic('bouclier')}<div><b>Protégez votre compte</b> : activez la double authentification (2 minutes). En plus du code par e-mail, un code de votre téléphone sera demandé à chaque connexion. <a href="#parametres">Paramètres › Compte et sécurité</a></div></div>` : '')
   + (e.statut === 'suspendu' ? `<div class="bandeau att">${ic('alerte')}<div><b>Compte suspendu</b> : vos activités ne sont plus proposées. Écrivez-nous à contact@tikette.fr.</div></div>` : '')
   + `<div class="grille g4" style="margin-bottom:16px">
     <div class="kpi"><small>${ic('ticket')}Réservations du mois</small><b>${st.reservations}</b><i>${st.demandes} demandes reçues</i></div>
@@ -925,7 +944,7 @@ async function pCompte() {
   $('#c-partout').onclick = async () => { if (await demander({ titre: 'Se déconnecter partout ?', bouton: 'Déconnecter', danger: true })) { await sb.auth.signOut({ scope: 'global' }); location.reload(); } };
   if (totp) $('#c-mfa-off').onclick = async () => {
     if (!await demander({ titre: 'Désactiver la double authentification ?', texte: 'Votre compte sera moins protégé.', bouton: 'Désactiver', danger: true })) return;
-    const { error } = await sb.auth.mfa.unenroll({ factorId: totp.id }); toast(error ? error.message : 'Double authentification désactivée.', error ? 'alerte' : 'ok'); pCompte();
+    const { error } = await sb.auth.mfa.unenroll({ factorId: totp.id }); if (!error) window.sansDoubleAuth = true; toast(error ? error.message : 'Double authentification désactivée.', error ? 'alerte' : 'ok'); pCompte();
   };
   else $('#c-mfa-on').onclick = async () => {
     for (const x of (f?.totp || []).filter((x) => x.status !== 'verified')) await sb.auth.mfa.unenroll({ factorId: x.id });
@@ -937,7 +956,7 @@ async function pCompte() {
       pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="mfa-ok">Activer</button>` });
     $('#mfa-ok', v).onclick = async () => {
       const r = await sb.auth.mfa.challengeAndVerify({ factorId: data.id, code: $('#mfa-c', v).value.trim() });
-      if (r.error) return toast('Code incorrect.', 'alerte'); fermer(); toast('Double authentification activée.'); pCompte();
+      if (r.error) return toast('Code incorrect.', 'alerte'); fermer(); window.sansDoubleAuth = false; toast('Double authentification activée.'); pCompte();
     };
   };
 }

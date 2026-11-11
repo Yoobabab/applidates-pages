@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZTInPwQbeR1aJ+6Xg468HKF6/zctpj464MDsTQS51mc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xn+CxD7Gfo716oAlT30wahue8Vb8wsuSqd8kb92n7kI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1795,6 +1795,54 @@ function mailAttente(x, rang) {
     'À très vite,\nGreg et Yvan\nTikette · https://tikette.fr'].join('\n\n');
   return `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps)}`;
 }
+// Mail d'ouverture de l'espace pro (même style que la prospection : copié mis en forme, collé dans Outlook).
+function mailAcces(x, rang) {
+  const objet = 'Votre espace pro Tikette est ouvert';
+  const lignes = [
+    'Bonjour,',
+    'Un grand merci pour votre confiance ! Nous, c’est Greg et Yvan, les deux potes derrière <b>Tikette</b>.',
+    rang <= 50 ? 'Bonne nouvelle : vous faites partie de nos <b>partenaires fondateurs</b> (0 % de commission jusqu’au 31 mars 2027, puis 8 % à vie).' : '',
+    'Votre <b>espace pro</b> est maintenant ouvert. C’est là que vous reliez votre activité à Tikette : vos activités et vos créneaux, vos photos, vos réservations, et la réception de vos paiements (via Stripe, environ 5 minutes).',
+    ['<b>Pour vous connecter :</b>', '1. Allez sur <a href="https://tikette.fr/pro/espace/">https://tikette.fr/pro/espace/</a>',
+      `2. Saisissez cette adresse e-mail : <b>${x.email}</b>`, '3. Recopiez le code à 6 chiffres reçu par e-mail (valable 1 heure). Pas de mot de passe à retenir.'],
+    ['<b>Côté sécurité :</b>', '→ activez la double authentification dans Paramètres › Compte et sécurité (2 minutes, avec Google Authenticator ou l’appli Mots de passe de l’iPhone) ;',
+      '→ nous ne vous demanderons jamais votre code, ni par téléphone ni par e-mail ;',
+      '→ pour vos collègues, invitez-les dans Paramètres › Équipe plutôt que de partager vos accès.'],
+    'Le guide pas à pas est ici : <a href="https://tikette.fr/pro/connexion/">https://tikette.fr/pro/connexion/</a>',
+    'Tikette sort le <b>14 décembre</b> : en remplissant votre fiche dès maintenant, votre activité sera prête pour le lancement. Une question ? Répondez simplement à ce mail.',
+    ['À très vite,', 'Greg et Yvan', 'Tikette · <a href="https://tikette.fr">tikette.fr</a>'],
+  ].filter(Boolean);
+  const html = '<div style="font-family:Aptos,Calibri,Arial,sans-serif;font-size:11pt;line-height:1.4;color:#000000">'
+    + lignes.map((l) => Array.isArray(l) ? l.map((t, i) => MAIL_P(t, i === l.length - 1 ? '0 0 12px' : '0')).join('') : MAIL_P(l)).join('') + '</div>';
+  const corps = lignes.map((l) => [].concat(l).join('\n').replace(/<[^>]+>/g, '')).join('\n\n');
+  return { a: x.email, objet, corps, html, mailto: `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}` };
+}
+// Ouvre l'espace pro d'une entreprise de la liste (supabase/pro-acces.sql), puis prépare le mail d'accès.
+function boutonAcces(x, rang, re) {
+  const envoyer = async (b) => {
+    const m = mailAcces(x, rang), ok = await copierMailProspect(m);
+    b.textContent = ok ? 'Copié ✓ · Ctrl+V dans le mail' : 'Copie impossible : utilisez « brouillon »';
+    if (ok) location.href = m.mailto;
+  };
+  if (x.acces_le) return h('div', {},
+    h('div', { style: 'color:var(--vert);font-size:12px;font-weight:700;white-space:nowrap' }, 'Accès ouvert le ' + dateFr(x.acces_le)),
+    h('button', { class: 'btn-lien', onclick: (e) => envoyer(e.currentTarget) }, 'Renvoyer le mail'), ' ',
+    h('button', { class: 'btn-lien', onclick: () => telechargerBrouillon(mailAcces(x, rang), 'acces-' + x.id) }, 'brouillon'));
+  return h('button', { class: 'btn', style: 'white-space:nowrap;font-size:12.5px', title: 'Crée son espace pro et prépare le mail de connexion',
+    onclick: async (e) => {
+      const b = e.currentTarget;
+      if (!confirm(`Ouvrir l’espace pro de ${x.nom} ?\n\nSa fiche est créée (« À vérifier » : rien n’apparaît dans l’appli avant votre validation) et ${x.email} pourra se connecter sur tikette.fr/pro/espace.`)) return;
+      b.disabled = true;
+      try { await rpc('console_pro_ouvrir_acces', { p_id: x.id }); }
+      catch (err) {
+        b.disabled = false;
+        alert(/console_pro_ouvrir_acces|Could not find/i.test(String(err?.message)) ? 'Lancez d’abord supabase/pro-acces.sql dans Supabase.' : String(err?.message || err));
+        return;
+      }
+      x.acces_le = new Date().toISOString();
+      await envoyer(b); setTimeout(re, 1500);
+    } }, 'Ouvrir l’accès');
+}
 function blocAttente(a, re) {
   const choix = (x) => h('select', { class: 'champ', style: `width:auto;padding:5px 8px;font-size:12.5px;color:${COULEUR_ATT[x.statut]}`,
       onchange: async (e) => { await rpc('console_pro_attente_maj', { p_id: x.id, p_statut: e.target.value }); re(); } },
@@ -1808,7 +1856,7 @@ function blocAttente(a, re) {
       kpi('Cette semaine', nombre(a.semaine), 'nouvelles entreprises en 7 jours'),
       kpi('Places de fondateur', `${50 - a.places} / 50`, `il en reste ${a.places}`)),
     a.liste.length ? h('div', { class: 'panneau tableau', style: 'margin-top:14px' }, h('table', {},
-      h('thead', {}, h('tr', {}, h('th', {}, 'N°'), h('th', {}, 'ENTREPRISE'), h('th', {}, 'CONTACT'), h('th', {}, 'ENVOIS'), h('th', {}, 'STATUT'), h('th', {}, ''), h('th', {}, 'NOTE'))),
+      h('thead', {}, h('tr', {}, h('th', {}, 'N°'), h('th', {}, 'ENTREPRISE'), h('th', {}, 'CONTACT'), h('th', {}, 'ENVOIS'), h('th', {}, 'STATUT'), h('th', {}, ''), h('th', {}, 'ESPACE PRO'), h('th', {}, 'NOTE'))),
       h('tbody', {}, [...a.liste].sort((x, y) => x.id - y.id).map((x, i) => h('tr', {},
         h('td', { class: 'doux' }, String(i + 1), i < 50 ? h('div', { style: 'color:var(--jaune);font-size:10.5px;font-weight:700' }, 'FONDATEUR') : ''),
         h('td', {}, h('b', {}, x.nom), x.depuis_prospection ? h('span', { class: 'doux', style: 'font-size:11px;margin-left:6px' }, 'via la prospection') : '',
@@ -1821,6 +1869,7 @@ function blocAttente(a, re) {
         h('td', {}, h('a', { class: x.statut === 'nouveau' ? 'btn' : 'btn-contour', style: 'white-space:nowrap;font-size:12.5px', href: mailAttente(x, i + 1),
           onclick: async () => { if (x.statut === 'nouveau') { await rpc('console_pro_attente_maj', { p_id: x.id, p_statut: 'contacte' }).catch(() => {}); setTimeout(re, 800); } } },
           x.statut === 'nouveau' ? 'Écrire' : 'Réécrire')),
+        h('td', {}, boutonAcces(x, i + 1, re)),
         h('td', {}, note(x)))))))
       : h('div', { class: 'panneau doux', style: 'margin-top:14px' }, 'Personne pour l’instant. Le formulaire de tikette.fr/pro remplit cette liste toute seule.'));
 }

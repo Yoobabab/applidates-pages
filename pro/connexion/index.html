@@ -1,0 +1,85 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Se connecter à l’espace pro · Tikette</title>
+<meta name="description" content="Comment se connecter à l’espace pro Tikette en toute sécurité : code par e-mail, double authentification, équipe.">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=2">
+<link rel="shortcut icon" href="/favicon.ico?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<script src="/js/garde.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+:root{--fond:#1E1433;--carte:#2A1D45;--bord:#3B2A5C;--texte:#F7F1FF;--doux:#C9BCE3;--lueur:#FFD166;--rose:#FF6B9A;--vert:#2EC4A6;
+--ft:"Bricolage Grotesque",system-ui,sans-serif;--fx:"DM Sans",Arial,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--fond);color:var(--texte);font-family:var(--fx);font-size:17px;line-height:1.6}
+h1,h2,h3{font-family:var(--ft);margin:0;letter-spacing:-.02em}
+.page{max-width:780px;margin:0 auto;padding:0 20px 60px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0 10px}
+.marque{display:flex;align-items:center;gap:10px;font-family:var(--ft);font-weight:800;font-size:24px;color:#fff;text-decoration:none}
+.marque small{font-family:var(--fx);font-size:12px;font-weight:700;background:var(--lueur);color:var(--fond);border-radius:999px;padding:2px 9px}
+.btn{display:inline-block;background:var(--lueur);color:var(--fond);font-weight:700;border-radius:999px;padding:12px 22px;text-decoration:none}
+.btn.contour{background:none;color:var(--lueur);border:1px solid rgba(255,209,102,.5);padding:8px 16px;font-size:14px}
+.tete{padding:34px 0 10px}.tete h1{font-size:clamp(30px,5vw,44px)}.tete p{color:var(--doux);margin-top:10px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:20px;padding:22px 24px;margin-top:18px}
+.carte h2{font-size:22px;margin-bottom:10px}
+ol.etapes{list-style:none;margin:0;padding:0;counter-reset:e}
+ol.etapes li{counter-increment:e;position:relative;padding:4px 0 14px 50px}
+ol.etapes li::before{content:counter(e);position:absolute;left:0;top:2px;width:34px;height:34px;border-radius:50%;background:var(--rose);color:#fff;font-weight:800;display:grid;place-items:center;font-family:var(--ft)}
+ol.etapes b{color:#fff}
+.doux{color:var(--doux)}
+.alerte{border-color:rgba(255,107,154,.55)}
+.alerte h2{color:var(--rose)}
+ul{padding-left:22px;margin:6px 0 0}li{margin:4px 0}
+.ok{border-color:rgba(46,196,166,.5)}.ok h2{color:var(--vert)}
+a{color:var(--lueur)}
+code{background:#140D24;border-radius:6px;padding:1px 6px}
+footer{margin-top:34px;color:var(--doux);font-size:14px;text-align:center}
+</style>
+</head>
+<body><div class="page">
+<nav><a class="marque" href="/pro/"><img src="/tikette-icone.png" alt="" width="34" height="34" style="border-radius:9px">tikette<small>PRO</small></a>
+<a class="btn contour" href="/pro/espace/">Espace pro</a></nav>
+
+<header class="tete"><h1>Se connecter à votre espace pro</h1>
+<p>Votre espace pro, c’est là que vous reliez votre activité à Tikette : vos activités et créneaux, vos photos, vos réservations et la réception de vos paiements. Voici comment y entrer, en toute sécurité.</p></header>
+
+<section class="carte"><h2>Première connexion, en 1 minute</h2>
+<ol class="etapes">
+<li>Ouvrez <a href="/pro/espace/">tikette.fr/pro/espace</a>, ou touchez le bouton <b>« Espace pro »</b> en haut de tikette.fr/pro.</li>
+<li>Saisissez <b>l’adresse e-mail de votre entreprise</b>, celle à laquelle nous vous avons écrit pour vous ouvrir l’accès.</li>
+<li>Vous recevez un e-mail <b>« Votre code espace pro »</b> de contact@tikette.fr avec un <b>code à 6 chiffres</b>. Recopiez-le : c’est fait, vous êtes dans votre espace.</li>
+</ol>
+<p class="doux">Pas de mot de passe à créer ni à retenir : à chaque connexion, un nouveau code vous est envoyé. Il est valable 1 heure et ne sert qu’une fois. Pas d’e-mail ? Regardez dans les indésirables, puis touchez « Renvoyer un code ».</p></section>
+
+<section class="carte ok"><h2>Activez la double authentification (conseillé)</h2>
+<p>En plus du code par e-mail, un code affiché sur votre téléphone est demandé à chaque connexion. Même si quelqu’un accède à votre boîte mail, il ne peut pas entrer dans votre espace.</p>
+<ol class="etapes">
+<li>Installez une appli d’authentification gratuite si vous n’en avez pas : <b>Google Authenticator</b>, <b>Microsoft Authenticator</b>, ou l’appli <b>Mots de passe</b> de l’iPhone.</li>
+<li>Dans votre espace pro : <b>Paramètres › Compte et sécurité › Double authentification › Activer</b>.</li>
+<li>Scannez le code QR avec l’appli, puis recopiez le code à 6 chiffres qu’elle affiche. C’est activé.</li>
+</ol>
+<p class="doux">Ensuite, à chaque connexion : code reçu par e-mail, puis code de l’appli. Téléphone perdu ou changé ? Écrivez-nous depuis l’adresse de votre entreprise : après vérification, nous désactivons la double authentification pour que vous la réactiviez sur le nouveau téléphone.</p></section>
+
+<section class="carte alerte"><h2>Les bons réflexes</h2>
+<ul>
+<li><b>Tikette ne vous demandera jamais vos codes</b>, ni par téléphone, ni par e-mail, ni par SMS. Si quelqu’un vous les demande, c’est une arnaque : ne répondez pas et prévenez-nous.</li>
+<li>Vérifiez l’adresse avant de saisir votre e-mail : la seule bonne adresse commence par <code>https://tikette.fr/pro/espace</code>.</li>
+<li>Nos e-mails viennent toujours de <b>contact@tikette.fr</b>.</li>
+<li>Sur un ordinateur partagé, déconnectez-vous à la fin (bouton « Se déconnecter » du menu).</li>
+<li>Vos paiements sont gérés par <b>Stripe</b> : Tikette ne voit jamais votre IBAN ni les cartes de vos clients.</li>
+</ul></section>
+
+<section class="carte"><h2>Votre équipe</h2>
+<p>Ne partagez pas vos codes avec vos collègues : invitez-les plutôt. Dans <b>Paramètres › Équipe</b>, ajoutez l’adresse e-mail de chacun (15 personnes au plus). Ils se connectent avec leur propre adresse et leur propre code, et vous pouvez retirer un accès à tout moment.</p></section>
+
+<section class="carte"><h2>Un souci pour vous connecter ?</h2>
+<ul>
+<li><b>« Cette adresse n’a pas encore d’espace pro »</b> : utilisez l’adresse à laquelle nous vous avons écrit. Vous voulez en changer ? Une fois connecté : Paramètres › Compte et sécurité › E-mail de connexion.</li>
+<li><b>Code refusé</b> : prenez le dernier code reçu, en moins d’une heure.</li>
+<li>Toujours bloqué ? Écrivez-nous à <a href="mailto:contact@tikette.fr">contact@tikette.fr</a>, on vous répond vite.</li>
+</ul></section>
+
+<p style="text-align:center;margin-top:30px"><a class="btn" href="/pro/espace/">Aller à mon espace pro</a></p>
+<footer><a href="/pro/">Tikette pour les pros</a> · <a href="/mentions-legales/">Mentions légales</a> · <a href="/confidentialite/">Confidentialité</a></footer>
+</div></body></html>
