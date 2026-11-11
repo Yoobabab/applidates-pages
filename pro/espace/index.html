@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Kvw426R8NXEWWp5u9wc69KjGWiK2J8k5CgUiDc9Q0zo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Ix+fOE8FnUWn8MUDiNQpIJeBmM2wKSnCEHEHVuM/bIw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -136,6 +136,26 @@ main{padding:28px 34px 70px;width:100%;max-width:1240px}
 nav.cote .logo,nav.cote .bas,nav.cote button.actif::before{display:none}nav.cote button{flex-direction:column;gap:3px;font-size:10.5px;padding:7px 9px;width:auto;white-space:nowrap}
 nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96px}.g3,.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}
 .resa{grid-template-columns:62px 1fr}.resa .act{grid-column:1/-1;justify-content:flex-start}h1{font-size:24px}.colonnes{grid-template-columns:1fr!important}}
+/* Messages (maquette « Espace pro · messages et e-mails », validée le 11 nov. 2026) */
+.msgs{display:grid;grid-template-columns:300px 1fr;min-height:560px;padding:0;overflow:hidden}
+.msgs .fils{border-right:1px solid var(--bord);overflow:auto;max-height:70vh}
+.msgs .fil{padding:12px 16px;border-bottom:1px solid #F1EEF6;cursor:pointer}
+.msgs .fil.on{background:var(--violet2);box-shadow:inset 3px 0 0 var(--violet)}
+.msgs .fil .pt{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--rose);margin-left:6px}
+.msgs .conv{display:flex;flex-direction:column;min-width:0}
+.msgs .conv-tete{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid var(--bord);flex-wrap:wrap}
+.msgs .bulles{flex:1;padding:18px;display:flex;flex-direction:column;gap:8px;background:#FCFBFD;overflow:auto;max-height:52vh}
+.msgs .b{max-width:70%;border-radius:14px;padding:9px 13px;font-size:14px;line-height:1.45;white-space:pre-wrap;word-wrap:break-word}
+.msgs .b.client{align-self:flex-start;background:var(--violet2);border-bottom-left-radius:4px}
+.msgs .b.pro{align-self:flex-end;background:var(--violet);color:#fff;border-bottom-right-radius:4px}
+.msgs .meta{font-size:12px;color:var(--pale)}.msgs .meta.pro{align-self:flex-end}
+.msgs .rapides{display:flex;gap:6px;flex-wrap:wrap;padding:8px 18px 0}
+.msgs .saisie{display:flex;gap:10px;padding:12px 18px;border-top:1px solid var(--bord)}
+.msgs .saisie textarea{resize:none;height:44px}
+.creneaux-pro{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.creneaux-pro button{border:1px solid var(--bord2);background:#fff;border-radius:9px;padding:6px 11px;font-weight:700;cursor:pointer}
+.creneaux-pro button.on{background:var(--violet);border-color:var(--violet);color:#fff}
+@media (max-width:820px){.msgs{grid-template-columns:1fr}.msgs .fils{max-height:220px;border-right:0;border-bottom:1px solid var(--bord)}}
 </style>
 </head>
 <body>
@@ -215,8 +235,8 @@ const icp = (n) => ic(n, 'style="width:13px;height:13px;vertical-align:-2px"');
 
 const STATUTS = { demandee: 'À valider', confirmee: 'Confirmée', refusee: 'Refusée', expiree: 'Expirée', annulee_client: 'Annulée par le client', annulee_pro: 'Annulée par vous', venue: 'Venue', absente: 'Absente' };
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['avis','etoile','Avis clients'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
-let espace = null, vueActuelle = 'accueil';
+const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['messages','bulle','Messages'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['avis','etoile','Avis clients'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
+let espace = null, vueActuelle = 'accueil', aLire = { messages: 0, changements: 0 };
 const proprio = () => espace?.entreprise.role === 'proprietaire';
 
 function toast(t, icone = 'ok') { const e = $('#toast'); e.innerHTML = ic(icone) + esc(t); e.classList.remove('cache'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.add('cache'), 2800); }
@@ -270,7 +290,7 @@ async function demarrer() {
   if (!data.session) return montrerConnexion('mail');
   const niv = await sb.auth.mfa.getAuthenticatorAssuranceLevel().catch(() => ({ data: null }));
   if (niv?.data?.nextLevel === 'aal2' && niv.data.currentLevel !== 'aal2') { montrerConnexion('mfa'); $('#code-mfa').focus(); return; }
-  espace = await rpc('pro_mon_espace');
+  espace = await rpc('pro_mon_espace'); await lireALire();
   if (!espace && await rpc('pro_accepter_invitation').catch(() => false)) espace = await rpc('pro_mon_espace');
   if (!espace) { location.href = '/pro/#inscription'; return; }
   $('#connexion').classList.add('cache'); $('#appli').classList.remove('cache');
@@ -288,20 +308,24 @@ async function demarrer() {
   window.onhashchange = () => { const v = location.hash.slice(1); if (v && v !== vueActuelle) aller(v); };
 }
 function dessinerMenu() {
-  const n = +espace.entreprise.a_valider || 0;
+  const n = (+espace.entreprise.a_valider || 0) + (+aLire.changements || 0), nm = +aLire.messages || 0;
   $('#menu').innerHTML = `<div class="logo"><img src="/mail/tikette.png" alt="">tikette <b>PRO</b></div>`
-    + MENU.map(([k, i, t]) => `<button data-vue="${k}" class="${k === vueActuelle ? 'actif' : ''}">${ic(i)}<span>${t}</span>${k === 'reservations' && n ? `<span class="compteur">${n}</span>` : ''}</button>`).join('')
+    + MENU.map(([k, i, t]) => `<button data-vue="${k}" class="${k === vueActuelle ? 'actif' : ''}">${ic(i)}<span>${t}</span>${k === 'reservations' && n ? `<span class="compteur">${n}</span>` : ''}${k === 'messages' && nm ? `<span class="compteur">${nm}</span>` : ''}</button>`).join('')
     + `<div class="bas"><b>${esc(espace.entreprise.nom)}</b><span>${esc(espace.entreprise.commune || '')}</span><br><button id="deco" style="padding:8px 0;margin-top:6px">${ic('sortie')}<span>Se déconnecter</span></button></div>`;
   $$('#menu [data-vue]').forEach((b) => b.onclick = () => aller(b.dataset.vue));
   $('#deco').onclick = async () => { await sb.auth.signOut(); location.reload(); };
-  document.title = (n ? `(${n}) ` : '') + 'Espace pro · Tikette';
+  document.title = (n + nm ? `(${n + nm}) ` : '') + 'Espace pro · Tikette';
 }
-async function recharger() { espace = await rpc('pro_mon_espace'); dessinerMenu(); }
+async function lireALire() { aLire = await sb.rpc('pro_a_lire').then((r) => r.data || aLire, () => aLire); }
+async function recharger() { [espace] = await Promise.all([rpc('pro_mon_espace'), lireALire()]); dessinerMenu(); }
+// Nouveaux messages et changements : la pastille du menu est relue chaque minute.
+setInterval(async () => { if (!espace || document.hidden) return; const avant = JSON.stringify(aLire); await lireALire(); if (JSON.stringify(aLire) !== avant) dessinerMenu(); }, 60000);
 function aller(v) {
   if (!MENU.some((m) => m[0] === v)) v = 'accueil';
   vueActuelle = v; if (location.hash.slice(1) !== v) history.replaceState(null, '', '#' + v);
   dessinerMenu(); window.scrollTo(0, 0); $('#couche').innerHTML = '';
-  ({ accueil, reservations, planning, activites, fiche, stats, avis, agenda, parametres }[v])();
+  clearInterval(messages.t);
+  ({ accueil, reservations, messages, planning, activites, fiche, stats, avis, agenda, parametres }[v])();
 }
 const entete = (titre, sous = '', outils = '') => `<div class="entete"><div><h1>${titre}</h1>${sous ? `<p>${sous}</p>` : ''}</div><div class="outils">${outils}</div></div>`;
 
@@ -342,11 +366,12 @@ function detailResa(r, apres) {
   t.innerHTML = `<aside class="tiroir"><div class="tete"><div><h2>${nomClient(r)}</h2><span class="note">Réservation ${esc(r.code)}</span></div><button class="btn lien" data-fermer aria-label="Fermer">${ic('x')}</button></div>
   <div class="corps"><span class="etat ${r.statut}">${STATUTS[r.statut]}</span>
   <dl class="champs" style="margin-top:16px"><dt>Quand</dt><dd>${jourLong(r.debut)}, ${heure(r.debut)} – ${heure(r.fin)}</dd><dt>Activité</dt><dd>${esc(r.offre)}</dd>
-  <dt>Salle / places</dt><dd>${esc(r.ressource)}</dd><dt>Personnes</dt><dd>${r.personnes}</dd><dt>Montant</dt><dd>${euros(r.prix_cents)} <span class="note">payé sur place</span></dd>
+  <dt>Salle / places</dt><dd>${esc(r.ressource)}</dd><dt>Personnes</dt><dd>${r.personnes}</dd><dt>Montant</dt><dd>${euros(r.prix_cents)} <span class="note">${r.paiement === 'paye' ? 'payé dans l’appli' : r.paiement === 'rembourse' ? 'remboursé' : r.paiement === 'non_rembourse' ? 'payé, non remboursé' : 'payé sur place'}</span></dd>
   ${r.groupe ? `<dt>Nom de la bande</dt><dd>${esc(r.groupe)}</dd>` : ''}<dt>Réservé par</dt><dd>${esc(r.prenom || '—')}</dd></dl>
   ${r.participants?.length ? `<h3 style="margin-top:18px">Participants</h3><div class="prenoms" style="margin-top:8px">${r.participants.map((p) => `<span>${esc(p)}</span>`).join('')}</div>` : ''}
   ${r.message ? `<h3 style="margin-top:18px">Message du client</h3><p style="margin:6px 0 0;background:#F7F5FA;border-radius:10px;padding:10px 12px">${esc(r.message)}</p>` : ''}
   ${r.motif ? `<h3 style="margin-top:18px">Motif</h3><p class="note">${esc(r.motif)}</p>` : ''}
+  <div class="outils" style="margin-top:16px"><button class="btn p" id="t-ecrire">${ic('bulle')}Écrire au client</button>${['demandee', 'confirmee'].includes(r.statut) && new Date(r.debut) > new Date() ? `<button class="btn p" id="t-changer">${ic('horloge')}Proposer un autre horaire</button>` : ''}</div>
   <h3 style="margin-top:18px">Note interne</h3><p class="note" style="margin:2px 0 6px">Visible seulement par votre équipe.</p>
   <textarea id="t-note" rows="3" maxlength="300" placeholder="Ex. anniversaire, prévoir la bougie">${esc(r.note_pro || '')}</textarea>
   <button class="btn p" id="t-noter" style="margin-top:8px">Enregistrer la note</button></div>
@@ -354,17 +379,116 @@ function detailResa(r, apres) {
   $('#couche').appendChild(t);
   t.addEventListener('mousedown', (e) => { if (e.target === t) t.remove(); }); $('[data-fermer]', t).onclick = () => t.remove();
   $$('[data-a]', t).forEach((b) => b.onclick = () => agir(b.dataset.id, b.dataset.a, apres));
+  $('#t-ecrire', t).onclick = () => { t.remove(); convOuverte = r.id; aller('messages'); };
+  const ch = $('#t-changer', t); if (ch) ch.onclick = () => proposerChangement(r, apres);
   $('#t-noter', t).onclick = async () => { await rpc('pro_annoter', { p_id: r.id, p_note: $('#t-note', t).value }); r.note_pro = $('#t-note', t).value; toast('Note enregistrée.'); };
+}
+
+// ───── Changements d'horaire ─────
+function ligneChangement(c) {
+  const client = c.par === 'client';
+  return `<div class="resa"><div class="h">${heure(c.nouveau_debut)}<small>${jourCourt(c.nouveau_debut)}</small></div>
+    <div><div class="qui">${nomClient(c)} <span class="note" style="font-weight:500">· ${c.personnes} pers.</span> <span class="etat demandee">${client ? 'Décalage demandé' : 'Votre proposition'}</span></div>
+    <div class="note">${esc(c.offre)} · <s>${jourCourt(c.ancien_debut)} ${heure(c.ancien_debut)}</s> → <b>${jourCourt(c.nouveau_debut)} ${heure(c.nouveau_debut)}</b>${c.message ? ` · « ${esc(c.message)} »` : ''}</div>
+    <div class="note" style="color:var(--ambre)">${icp('horloge')} ${client ? 'Réponse avant' : 'En attente du client jusqu’à'} ${jourCourt(c.repondre_avant)}, ${heure(c.repondre_avant)}</div></div>
+    <div class="act">${client ? `<button class="btn ok p" data-ch="oui" data-id="${c.id}">${ic('ok')}Accepter</button><button class="btn non p" data-ch="non" data-id="${c.id}">Refuser</button>` : `<button class="btn p" data-ch="retirer" data-id="${c.id}">Retirer</button>`}</div></div>`;
+}
+function brancherChangements(racine, apres) {
+  $$('[data-ch]', racine).forEach((b) => b.onclick = async () => {
+    const a = b.dataset.ch;
+    const r = a === 'retirer' ? await rpc('retirer_changement_reservation', { p_id: b.dataset.id, p_cote: 'pro' })
+      : await rpc('repondre_changement_reservation', { p_id: b.dataset.id, p_cote: 'pro', p_accepter: a === 'oui' });
+    if (!r.ok) toast(r.raison === 'trop_tard' ? 'Trop tard : l’heure limite est passée.' : 'Impossible : ce changement a déjà une réponse.', 'alerte');
+    else toast(a === 'oui' ? 'Nouvel horaire accepté, le client est prévenu.' : a === 'non' ? 'Refusé : l’horaire reste le même, le client est prévenu.' : 'Proposition retirée.');
+    await recharger(); apres();
+  });
+}
+// Proposer un autre horaire au client : il accepte dans l'appli jusqu'à 2 h avant, sinon rien ne change.
+function proposerChangement(r, apres) {
+  let jour = jourISO(r.debut), choisi = null;
+  const { v, fermer } = fenetre({ titre: 'Proposer un autre horaire',
+    corps: `<p class="note" style="margin:10px 0 0">Actuellement : <b>${jourLong(r.debut)}, ${heure(r.debut)}</b> · ${r.personnes} pers. Le client accepte ou refuse dans l’appli ; sans réponse au plus tard 2 h avant, rien ne change. Le nouveau créneau reste bloqué en attendant.</p>
+      <label class="l">Jour</label><input type="date" id="c-jour" value="${jour}" min="${jourISO(new Date())}">
+      <label class="l">Heure</label><div class="creneaux-pro" id="c-heures"><span class="note">Chargement…</span></div>
+      <label class="l">Un mot pour le client (facultatif)</label><textarea id="c-mot" rows="2" maxlength="300" placeholder="Ex. petit souci de salle à 19 h, désolés !"></textarea>`,
+    pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="c-ok" disabled>Envoyer la proposition</button>` });
+  const lire = async () => {
+    choisi = null; $('#c-ok', v).disabled = true;
+    const d = await rpc('pro_disponibilites', { p_offre: r.offre_id, p_du: jour, p_au: jour });
+    const parHeure = {}; d.forEach((x) => { if (x.places >= r.personnes && new Date(x.debut).getTime() !== new Date(r.debut).getTime()) parHeure[x.debut] = true; });
+    const l = Object.keys(parHeure).sort();
+    $('#c-heures', v).innerHTML = l.map((x) => `<button type="button" data-d="${x}">${heure(x)}</button>`).join('') || '<span class="note">Aucun créneau libre ce jour-là.</span>';
+    $$('[data-d]', v).forEach((b) => b.onclick = () => { choisi = b.dataset.d; $$('[data-d]', v).forEach((x) => x.classList.toggle('on', x === b)); $('#c-ok', v).disabled = false; });
+  };
+  $('#c-jour', v).onchange = (e) => { jour = e.target.value; lire(); };
+  $('#c-ok', v).onclick = async () => {
+    const rep = await rpc('proposer_changement_reservation', { p_resa: r.id, p_cote: 'pro', p_debut: choisi, p_message: $('#c-mot', v).value });
+    if (!rep.ok) { toast({ pris: 'Ce créneau vient d’être pris.', trop_tard: 'Trop tard : il faut au moins 2 h avant.', meme: 'C’est déjà l’horaire actuel.' }[rep.raison] || 'Impossible pour cette réservation.', 'alerte'); return; }
+    fermer(); $('#couche').innerHTML = ''; toast('Proposition envoyée : le client est prévenu dans l’appli.'); apres();
+  };
+  lire();
+}
+
+// ───── Messages ─────
+let convOuverte = null;
+const REPONSES = ['Arrivez 10 min avant, merci !', 'Bien noté, à bientôt !', 'Oui, pas de souci.', 'Le parking est juste devant.'];
+async function messages() {
+  clearInterval(messages.t);
+  const fils = await rpc('pro_conversations');
+  if (convOuverte && !fils.some((f) => f.id === convOuverte)) {
+    // Écrire à un client sans conversation encore : on l'ajoute en tête.
+    const liste = await rpc('pro_reservations_liste', { p_du: new Date(Date.now() - 400 * 864e5).toISOString(), p_au: new Date(Date.now() + 400 * 864e5).toISOString() });
+    const r = liste.find((x) => x.id === convOuverte);
+    if (r) fils.unshift({ ...r, dernier: '', non_lus: 0, messages_ouverts: new Date(r.fin).getTime() + 7 * 864e5 > Date.now() });
+  }
+  if (!convOuverte && fils.length) convOuverte = fils[0].id;
+  $('#vue').innerHTML = entete('Messages', 'Les clients vous écrivent depuis l’appli ; ils reçoivent votre réponse en notification.')
+  + `<div class="carte msgs"><div class="fils">${fils.map((f) => `<div class="fil ${f.id === convOuverte ? 'on' : ''}" data-fil="${f.id}">
+      <div style="display:flex;align-items:center"><b>${nomClient(f)}</b>${+f.non_lus ? '<span class="pt"></span>' : ''}<span class="note" style="margin-left:auto">${f.dernier_le ? (jourISO(f.dernier_le) === jourISO(new Date()) ? heure(f.dernier_le) : jourCourt(f.dernier_le)) : ''}</span></div>
+      <div class="note">${esc(f.code)} · ${jourCourt(f.debut)} ${heure(f.debut)}</div>
+      <div class="note" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--texte)">${f.dernier ? (f.dernier_auteur === 'pro' ? 'Vous : ' : '') + esc(f.dernier) : '<i>Nouvelle conversation</i>'}</div></div>`).join('') || '<div class="vide" style="padding:20px">Aucun message pour l’instant.</div>'}</div>
+    <div class="conv" id="conv"></div></div>`;
+  $$('[data-fil]').forEach((b) => b.onclick = () => { convOuverte = b.dataset.fil; messages(); });
+  const f = fils.find((x) => x.id === convOuverte);
+  if (!f) { $('#conv').innerHTML = '<div class="vide" style="margin:auto">Choisissez une conversation.</div>'; return; }
+  $('#conv').innerHTML = `<div class="conv-tete"><div><b>${nomClient(f)} · ${f.personnes} pers.</b><div class="note">${esc(f.code)} · ${esc(f.offre)} · ${jourLong(f.debut)} ${heure(f.debut)}${f.prix_cents ? ` · ${euros(f.prix_cents)} ${f.paiement === 'paye' ? 'payé' : ''}` : ''}</div></div>
+      <span class="etat ${f.statut}" style="margin-left:auto">${STATUTS[f.statut] || ''}</span></div>
+    <div class="bulles" id="bulles"></div>
+    ${f.messages_ouverts ? `<div class="rapides">${REPONSES.map((t) => `<button class="btn p" data-rapide="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+    <div class="saisie"><textarea id="m-texte" maxlength="1000" placeholder="Répondre…" aria-label="Réponse"></textarea><button class="btn prim" id="m-envoyer">Envoyer</button></div>` : '<div class="note" style="padding:14px 18px">Conversation fermée (7 jours après la sortie).</div>'}`;
+  const dessinerBulles = async () => {
+    const ms = await rpc('messages_reservation', { p_resa: f.id, p_cote: 'pro' });
+    const b = $('#bulles'); if (!b) return;
+    const enBas = b.scrollTop + b.clientHeight >= b.scrollHeight - 30;
+    b.innerHTML = (ms || []).map((m, i) => `<div class="b ${m.auteur}">${esc(m.texte)}</div>${i === ms.length - 1 || ms[i + 1].auteur !== m.auteur ? `<div class="meta ${m.auteur}">${jourCourt(m.cree_le)} ${heure(m.cree_le)}${m.auteur === 'pro' ? (m.lu ? ' · Lu' : ' · Envoyé') : ''}</div>` : ''}`).join('')
+      || '<div class="note" style="margin:auto">Écrivez au client : il reçoit une notification dans l’appli.</div>';
+    if (enBas) b.scrollTop = b.scrollHeight;
+    const avant = aLire.messages; await lireALire(); if (aLire.messages !== avant) dessinerMenu();
+  };
+  const envoyer = async () => {
+    const t = $('#m-texte').value.trim(); if (!t) return;
+    $('#m-envoyer').disabled = true;
+    const r = await rpc('ecrire_message_reservation', { p_resa: f.id, p_cote: 'pro', p_texte: t }).finally(() => { $('#m-envoyer').disabled = false; });
+    if (!r.ok) { toast(r.raison === 'ferme' ? 'Conversation fermée.' : 'Message non envoyé.', 'alerte'); return; }
+    $('#m-texte').value = ''; await dessinerBulles(); $('#bulles').scrollTop = 1e9;
+  };
+  if ($('#m-envoyer')) {
+    $('#m-envoyer').onclick = envoyer;
+    $('#m-texte').onkeydown = (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); envoyer(); } };
+    $$('[data-rapide]').forEach((b) => b.onclick = () => { $('#m-texte').value = b.dataset.rapide; $('#m-texte').focus(); });
+  }
+  await dessinerBulles(); $('#bulles').scrollTop = 1e9;
+  messages.t = setInterval(() => { if (!document.hidden && vueActuelle === 'messages') dessinerBulles(); }, 15000);
 }
 
 // ───── Tableau de bord ─────
 async function accueil() {
   const e = espace.entreprise, auj = jourISO(new Date());
   const debutMois = dateParis(auj.slice(0, 8) + '01', '00:00'), finMois = dateParis(ajouterJours(auj.slice(0, 8) + '01', 32).slice(0, 8) + '01', '00:00');
-  const [liste, st, av] = await Promise.all([
+  const [liste, st, av, chs] = await Promise.all([
     rpc('pro_reservations_liste', { p_du: new Date(Date.now() - 864e5).toISOString(), p_au: new Date(Date.now() + 90 * 864e5).toISOString() }),
     rpc('pro_stats', { p_du: debutMois.toISOString(), p_au: finMois.toISOString() }),
-    rpc('pro_avis_liste').catch(() => null)]);
+    rpc('pro_avis_liste').catch(() => null), sb.rpc('pro_changements_en_cours').then((r) => r.data || [], () => [])]);
   const aValider = liste.filter((r) => r.statut === 'demandee');
   const duJour = liste.filter((r) => jourISO(r.debut) === auj && ['confirmee', 'venue', 'absente'].includes(r.statut));
   const prochaines = liste.filter((r) => r.statut === 'confirmee' && jourISO(r.debut) > auj).slice(0, 6);
@@ -382,7 +506,7 @@ async function accueil() {
     <div class="kpi"><small>${ic('recu')}Commission</small><b>${euros(st.commission_cents)}</b><i>taux actuel ${Math.round(e.taux_actuel * 100)} %</i></div></div>
   <div class="grille colonnes" style="grid-template-columns:1.45fr 1fr;align-items:start">
    <div class="grille">
-    <div class="carte"><h2>${ic('cloche')}À valider ${aValider.length ? `<span class="etat demandee">${aValider.length}</span>` : ''}</h2>${aValider.map(ligneResa).join('') || '<div class="vide">Aucune demande en attente.</div>'}</div>
+    <div class="carte"><h2>${ic('cloche')}À valider ${aValider.length + chs.filter((c) => c.par === 'client').length ? `<span class="etat demandee">${aValider.length + chs.filter((c) => c.par === 'client').length}</span>` : ''}</h2>${chs.map(ligneChangement).join('')}${aValider.map(ligneResa).join('') || (chs.length ? '' : '<div class="vide">Aucune demande en attente.</div>')}</div>
     <div class="carte"><h2>${ic('horloge')}Aujourd’hui</h2>${duJour.map(ligneResa).join('') || '<div class="vide">Aucune réservation aujourd’hui.</div>'}</div>
    </div>
    <div class="grille">
@@ -394,6 +518,7 @@ async function accueil() {
       <button class="btn p" style="margin-top:14px" data-aller="avis">Voir tous les avis${ic('fleche')}</button></div>` : ''}
    </div></div>`;
   brancherResas($('#vue'), liste, accueil);
+  brancherChangements($('#vue'), accueil);
 }
 
 // ───── Réservations ─────
@@ -851,11 +976,18 @@ function pNotifs() {
   $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('cloche')}Notifications</h2>
     <div class="reglage"><div><b>Un e-mail à chaque réservation</b><p>Envoyé à ${esc(e.email)}. Les demandes à valider restent toujours visibles ici.</p></div><label class="interrupteur"><input type="checkbox" id="n-mail" ${e.notif_mail ? 'checked' : ''}><span></span></label></div>
     <div class="reglage" style="display:block"><b>Prévenir aussi</b><p>D’autres adresses de votre équipe, séparées par des virgules (5 au plus).</p><div class="copie" style="margin-top:8px"><input id="n-copies" value="${esc(e.emails_copie)}" placeholder="accueil@monactivite.fr, gerant@monactivite.fr"><button class="btn prim p" id="n-ok">Enregistrer</button></div></div>
-    <div class="reglage"><div><b>E-mail des réservations</b><p>Adresse principale qui reçoit les réservations.</p></div><div class="copie" style="max-width:300px"><input id="n-email" value="${esc(e.email)}"><button class="btn p" id="n-email-ok">OK</button></div></div></div>`;
+    <div class="reglage"><div><b>E-mail des réservations</b><p>Adresse principale qui reçoit les réservations.</p></div><div class="copie" style="max-width:300px"><input id="n-email" value="${esc(e.email)}"><button class="btn p" id="n-email-ok">OK</button></div></div>
+    ${[['message', 'Nouveau message d’un client', 'Au plus un e-mail toutes les 15 minutes par conversation.'], ['changement_demande', 'Un client demande un autre horaire', 'Avec l’heure limite pour répondre.'],
+       ['changement_reponse', 'Réponse d’un client à votre proposition', 'Accepté, refusé ou sans réponse.'], ['annulation', 'Annulation par un client', 'Remboursé ou non.'],
+       ['rappel_limite', 'Rappel 1 h avant l’heure limite', 'Pour une demande pas encore acceptée.']].map(([k, t, d]) => `<div class="reglage"><div><b>${t}</b><p>${d}</p></div><label class="interrupteur"><input type="checkbox" data-mail="${k}" ${(e.mails_coupes || []).includes(k) ? '' : 'checked'} ${proprio() ? '' : 'disabled'}><span></span></label></div>`).join('')}</div>`;
   const sauver = async (p, t) => { await rpc('pro_modifier_entreprise', { p }); toast(t); await recharger(); };
   $('#n-mail').onchange = (ev) => sauver({ notif_mail: ev.target.checked }, ev.target.checked ? 'E-mails activés.' : 'E-mails désactivés.');
   $('#n-ok').onclick = () => sauver({ emails_copie: $('#n-copies').value }, 'Enregistré.');
   $('#n-email-ok').onclick = () => sauver({ email: $('#n-email').value }, 'Enregistré.');
+  $$('[data-mail]').forEach((c) => c.onchange = async () => {
+    await rpc('pro_regler_mails', { p_coupes: $$('[data-mail]').filter((x) => !x.checked).map((x) => x.dataset.mail) });
+    toast('Enregistré.'); await recharger();
+  });
 }
 async function pEquipe() {
   if (!proprio()) { $('#p-corps').innerHTML = nonProprio; return; }
