@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-DHTAiKMBbfH2Q5d8WDO8Ohkc35lVbl7w/hjeg2Jh5VU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ky/hh777MZ5QDBQ/1a+4JqmvnRzdeIIAurwM1gU6Mdo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -176,7 +176,8 @@ nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96
   <p class="note" style="margin-top:12px"><a href="#" id="oubli">Mot de passe oublié ?</a> · <a href="#" id="premiere">Première connexion sans lien ?</a></p></div>
   <div id="etape-activer" class="cache"><h1 style="margin:24px 0 6px">Bienvenue <span id="a-nom"></span> !</h1>
   <p class="note">Créez votre mot de passe : vous arrivez ensuite directement dans votre espace pro.</p>
-  <form id="f-activer"><label class="l" for="a-mail">E-mail de connexion</label><input id="a-mail" type="email" readonly autocomplete="username" style="background:#F5F3F9">
+  <form id="f-activer"><label class="l" for="a-mail">E-mail de connexion</label><input id="a-mail" type="email" required autocomplete="username">
+  <p class="note" style="margin-top:6px">C’est l’adresse à laquelle nous vous avons écrit. Vous pouvez en mettre une autre (celle de votre espace pro, par exemple) : un code de vérification lui sera envoyé.</p>
   <label class="l" for="a-mdp">Mot de passe</label><input id="a-mdp" type="password" required minlength="10" autocomplete="new-password">
   <label class="l" for="a-mdp2">Le même, encore une fois</label><input id="a-mdp2" type="password" required minlength="10" autocomplete="new-password">
   <p class="note" style="margin-top:8px">10 caractères au moins, avec des lettres et des chiffres. Gardez-le pour vous : Tikette ne vous le demandera jamais.</p>
@@ -289,7 +290,7 @@ function demander({ titre, texte = '', champ = null, valeur = '', bouton = 'Vali
 // Première fois : lien personnel du mail de validation (?acces=…) → adresse déjà remplie, on crée son mot de passe
 // (fonction pro-activer). Ensuite : e-mail + mot de passe. Oubli (ou membre d'équipe invité) : code par e-mail,
 // envoyé seulement aux adresses qui ont un espace pro ou une invitation, puis nouveau mot de passe.
-let mailEnCours = '', jetonAcces = '';
+let mailEnCours = '', jetonAcces = '', mailDuLien = '', activation = null;
 const ETAPES = ['mail', 'activer', 'oubli', 'code', 'nouveau', 'mfa'];
 const etape = (n) => { ETAPES.forEach((k) => $('#etape-' + k).classList.toggle('cache', k !== n)); $('#err-connexion').textContent = ''; };
 const erreur = (t) => { $('#err-connexion').textContent = t; };
@@ -307,25 +308,39 @@ $('#f-mail').onsubmit = async (e) => {
   if (error) return erreur(/invalid|credentials/i.test(error.message) ? 'E-mail ou mot de passe incorrect.' : /rate|too many/i.test(error.message) ? 'Trop d’essais : patientez quelques minutes.' : error.message);
   demarrer();
 };
+const messageActivation = (r) => r?.erreur === 'lien' ? 'Ce lien a déjà servi ou a expiré. Connectez-vous avec votre mot de passe, ou écrivez-nous à contact@tikette.fr pour en recevoir un nouveau.'
+  : r?.erreur === 'mot_de_passe' ? 'Mot de passe refusé : choisissez-en un plus long ou moins courant.'
+  : r?.erreur === 'ailleurs' ? 'Cette adresse est déjà rattachée à un autre espace pro. Choisissez-en une autre ou écrivez-nous à contact@tikette.fr.'
+  : r?.erreur === 'verification' ? 'Adresse non vérifiée : recommencez avec le code reçu par e-mail.'
+  : 'Connexion impossible pour le moment, réessayez dans un instant.';
+async function activer(motDePasse, email) {
+  const { data, error } = await sb.functions.invoke('pro-activer', { body: { jeton: jetonAcces, motDePasse, email } });
+  let r = data;
+  if (error && error.context?.json) r = await error.context.json().catch(() => null);
+  return r || { ok: false };
+}
+const entrer = () => { try { localStorage.setItem('tikette-pro:visite', 'a-lancer'); } catch {} jetonAcces = ''; activation = null; demarrer(); };
 $('#f-activer').onsubmit = async (e) => {
   e.preventDefault();
   const a = $('#a-mdp').value; if (!verifierMdp(a, $('#a-mdp2').value)) return;
+  const mail = $('#a-mail').value.trim().toLowerCase();
   occupe(e.target, true);
-  const { data, error } = await sb.functions.invoke('pro-activer', { body: { jeton: jetonAcces, motDePasse: a } });
-  let r = data;
-  if (error && error.context?.json) r = await error.context.json().catch(() => null);
-  if (!r?.ok) {
-    occupe(e.target, false);
-    return erreur(r?.erreur === 'lien' ? 'Ce lien a déjà servi ou a expiré. Connectez-vous avec votre mot de passe, ou écrivez-nous à contact@tikette.fr pour en recevoir un nouveau.'
-      : r?.erreur === 'mot_de_passe' ? 'Mot de passe refusé : choisissez-en un plus long ou moins courant.'
-      : r?.erreur === 'ailleurs' ? 'Cette adresse est déjà rattachée à un autre espace pro. Écrivez-nous à contact@tikette.fr.'
-      : 'Connexion impossible pour le moment, réessayez dans un instant.');
+  if (mail !== mailDuLien) {
+    // Autre adresse de connexion : on la note sur le lien, puis on vérifie par un code qu'elle est bien au partenaire.
+    const { data: rep, error } = await sb.rpc('pro_lien_choisir_email', { p_jeton: jetonAcces, p_email: mail });
+    if (error || rep !== 'ok') { occupe(e.target, false); return erreur(rep === 'email' ? 'Adresse e-mail incorrecte.' : messageActivation({ erreur: rep || 'serveur' })); }
+    mailEnCours = mail;
+    const ok = await envoyerCode(); occupe(e.target, false);
+    if (!ok) return;
+    activation = { motDePasse: a, email: mail };
+    $('#mail-envoye').textContent = mail; etape('code'); $('#code').focus(); return;
   }
+  const r = await activer(a);
+  if (!r.ok) { occupe(e.target, false); return erreur(messageActivation(r)); }
   const { error: e2 } = await sb.auth.signInWithPassword({ email: r.email, password: a });
   occupe(e.target, false);
   if (e2) { etape('mail'); $('#mail').value = r.email; return erreur('Mot de passe créé. Connectez-vous avec.'); }
-  try { localStorage.setItem('tikette-pro:visite', 'a-lancer'); } catch {}
-  jetonAcces = ''; demarrer();
+  entrer();
 };
 async function envoyerCode() {
   const { data: possible, error: e1 } = await sb.rpc('pro_connexion_possible', { p_email: mailEnCours });
@@ -338,7 +353,7 @@ async function envoyerCode() {
 const ouvrirOubli = (titre) => (e) => { e.preventDefault(); $('#oubli-titre').textContent = titre; $('#o-mail').value = $('#mail').value; etape('oubli'); };
 $('#oubli').onclick = ouvrirOubli('Mot de passe oublié');
 $('#premiere').onclick = ouvrirOubli('Première connexion');
-$$('[data-retour]').forEach((a) => a.onclick = (e) => { e.preventDefault(); etape('mail'); });
+$$('[data-retour]').forEach((a) => a.onclick = (e) => { e.preventDefault(); if (activation) { activation = null; etape('activer'); } else etape('mail'); });
 $('#f-oubli').onsubmit = async (e) => {
   e.preventDefault(); mailEnCours = $('#o-mail').value.trim().toLowerCase(); occupe(e.target, true);
   const ok = await envoyerCode(); occupe(e.target, false);
@@ -350,6 +365,11 @@ $('#f-code').onsubmit = async (e) => {
   e.preventDefault();
   const { error } = await sb.auth.verifyOtp({ email: mailEnCours, token: $('#code').value.trim(), type: 'email' });
   if (error) return erreur('Code incorrect ou expiré.');
+  if (activation) {
+    const r = await activer(activation.motDePasse, activation.email);
+    if (!r.ok) { await sb.auth.signOut(); etape('activer'); return erreur(messageActivation(r)); }
+    return entrer();
+  }
   etape('nouveau'); $('#n-mdp').focus();
 };
 $('#f-nouveau').onsubmit = async (e) => {
@@ -378,7 +398,7 @@ $('#f-mfa').onsubmit = async (e) => {
 async function ecranActiver() {
   const { data: l } = await sb.rpc('pro_lien_infos', { p_jeton: jetonAcces });
   if (!l) { jetonAcces = ''; etape('mail'); erreur('Ce lien a déjà servi ou a expiré. Connectez-vous avec votre mot de passe (ou « Mot de passe oublié ? »).'); return; }
-  $('#a-nom').textContent = l.entreprise; $('#a-mail').value = l.email; etape('activer'); $('#a-mdp').focus();
+  mailDuLien = l.email; $('#a-nom').textContent = l.entreprise; $('#a-mail').value = l.email; etape('activer'); $('#a-mdp').focus();
 }
 
 // ───── Visite guidée (proposée une fois à l'arrivée, relançable depuis le menu ou le tableau de bord) ─────

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-pKQCPiP5npzL6u725wFOy292sHtF1cbMNhXasYILTj8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-N/CnzVlxhLD2BjXy7+mWEqoeIygo9uCrS7yaem/2ByU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1805,9 +1805,9 @@ function mailAcces(x, rang, lien) {
     rang <= 50 ? 'Bonne nouvelle : vous faites partie de nos <b>partenaires fondateurs</b> (0 % de commission jusqu’au 31 mars 2027, puis 8 % à vie).' : '',
     'Votre inscription est validée et votre <b>espace pro</b> vous attend. C’est là que vous reliez votre activité à Tikette : vos activités et vos créneaux, vos photos, vos réservations, et la réception de vos paiements (via Stripe, environ 5 minutes).',
     lien ? ['<b>Pour y entrer, c’est simple :</b>', `1. Cliquez sur votre lien personnel : <a href="${url}">ouvrir mon espace pro</a>`,
-      `2. Votre adresse de connexion est déjà remplie (<b>${x.email}</b>) : créez votre mot de passe.`,
+      `2. Choisissez votre adresse de connexion : <b>${x.email}</b> est déjà remplie, vous pouvez la garder ou en mettre une autre (un code de vérification lui sera envoyé). Puis créez votre mot de passe.`,
       '3. Vous voilà dans votre espace : une visite guidée d’une minute vous montre où tout se trouve.']
-      : ['<b>Pour vous connecter :</b>', `rendez-vous sur <a href="${url}">${url}</a> avec <b>${x.email}</b> et votre mot de passe (« Mot de passe oublié ? » si besoin).`],
+      : ['<b>Pour vous connecter :</b>', `rendez-vous sur <a href="${url}">${url}</a> avec votre adresse de connexion et votre mot de passe (« Mot de passe oublié ? » si besoin).`],
     lien ? 'Ce lien est personnel et ne sert qu’une fois (valable 30 jours) : ne le transférez pas. Ensuite, vous vous connecterez depuis le bouton « Espace pro » de tikette.fr/pro avec votre e-mail et votre mot de passe. Nous ne vous demanderons jamais votre mot de passe.' : '',
     'Tikette sort le <b>14 décembre</b> : en créant vos activités dès maintenant, vous serez prêt pour le lancement. Une question ? Répondez simplement à ce mail.',
     ['À très vite,', 'Greg et Yvan', 'Tikette · <a href="https://tikette.fr">tikette.fr</a>'],
