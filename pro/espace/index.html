@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TnwMwR+u19gSujyrKg8BAP08MMXo/e4p6mn3RsDyYlE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W/PYjjva+0wGo9lOuwp9r9Up5ybFLNSnHv1QAQlb1u0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -163,6 +163,23 @@ nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96
 #visite .bulle h3{font-size:17px;margin-bottom:6px}#visite .bulle p{margin:0;color:var(--doux);font-size:14px}
 #visite .bulle .pas{font-size:12px;color:var(--pale);font-weight:700;letter-spacing:.04em;margin-bottom:6px}
 #visite .bulle .bas{display:flex;gap:8px;align-items:center;margin-top:14px}#visite .bulle .bas .btn.lien{margin-right:auto;padding-left:0}
+#montre{position:fixed;inset:0;z-index:60;pointer-events:none}
+#montre .trou{position:fixed;border-radius:12px;box-shadow:0 0 0 9999px rgba(20,12,36,.5);outline:3px solid var(--rose);outline-offset:2px;transition:all .25s ease}
+#montre .bulle{position:fixed;width:300px;max-width:calc(100vw - 24px);background:#fff;border-radius:14px;padding:14px 16px 12px;box-shadow:0 18px 50px rgba(20,12,36,.35);pointer-events:auto}
+#montre .bulle p{margin:0;font-size:14px}#montre .bulle .bas{display:flex;justify-content:flex-end;margin-top:10px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.aide-demarrer{display:flex;gap:28px;align-items:center;background:linear-gradient(120deg,#fff 60%,#F3EEFC)}
+.aide-barre{height:8px;background:var(--violet2);border-radius:99px;margin:10px 0 6px;overflow:hidden}.aide-barre i{display:block;height:100%;background:var(--violet);border-radius:99px}
+.aide-anneau{width:210px;flex:none;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.aide-anneau b{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;font-family:var(--ft);font-size:26px;background:radial-gradient(#fff 58%,transparent 59%),conic-gradient(var(--violet) var(--p),var(--violet2) 0)}
+.aide-tuto{display:flex;flex-direction:column;gap:8px}.aide-tuto b{font-size:16px}.aide-tuto p{margin:0;font-size:13.5px;color:var(--doux);line-height:1.5}
+.aide-icone{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--violet2);color:var(--violet)}
+.aide-etape{display:flex;gap:16px;align-items:flex-start}.aide-etape b{font-size:15.5px}.aide-etape p{margin:4px 0 10px;font-size:14px;color:#4A4060;line-height:1.55}
+.aide-num{width:30px;height:30px;border-radius:50%;background:var(--violet);color:#fff;font-weight:800;display:grid;place-items:center;flex:none;font-size:14px}
+.aide-mini{width:250px;flex:none;background:var(--fond);border:1px solid var(--bord);border-radius:10px;padding:10px;font-size:11.5px}
+.aide-mini div{background:#fff;border:1px solid var(--bord);border-radius:8px;padding:9px 10px;display:flex;flex-direction:column;gap:3px}
+.aide-mini span{color:var(--doux)}.aide-mini i{font-style:normal;align-self:flex-end;margin-top:6px;background:var(--violet);color:#fff;border-radius:6px;padding:4px 8px;font-weight:700;outline:3px solid var(--rose);outline-offset:2px}
+@media (max-width:900px){.g3{grid-template-columns:1fr}.aide-demarrer{flex-direction:column}.aide-mini{display:none}}
 </style>
 </head>
 <body>
@@ -259,7 +276,7 @@ const icp = (n) => ic(n, 'style="width:13px;height:13px;vertical-align:-2px"');
 
 const STATUTS = { demandee: 'À valider', confirmee: 'Confirmée', refusee: 'Refusée', expiree: 'Expirée', annulee_client: 'Annulée par le client', annulee_pro: 'Annulée par vous', venue: 'Venue', absente: 'Absente' };
 const JOURS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['messages','bulle','Messages'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['avis','etoile','Avis clients'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres']];
+const MENU = [['accueil','tableau','Tableau de bord'],['reservations','ticket','Réservations'],['messages','bulle','Messages'],['planning','calendrier','Planning'],['activites','activite','Activités'],['fiche','boutique','Ma fiche'],['stats','stats','Statistiques'],['avis','etoile','Avis clients'],['agenda','lien','Agenda et logiciels'],['parametres','reglages','Paramètres'],['aide','info','Aide et tutos']];
 let espace = null, vueActuelle = 'accueil', aLire = { messages: 0, changements: 0 };
 const proprio = () => espace?.entreprise.role === 'proprietaire';
 
@@ -452,6 +469,155 @@ const visite = (() => {
   } };
 })();
 
+// ───── Aide et tutos (maquette « Espace pro · menu Aide et tutos » validée par Greg le 11 nov. 2026) ─────
+// « Me montrer » : on ouvre le bon écran et on éclaire l'élément à toucher, avec une petite bulle.
+const montrer = (() => {
+  let el = null;
+  const fermer = () => { el?.remove(); el = null; document.removeEventListener('mousedown', clic, true); document.removeEventListener('keydown', touche); window.removeEventListener('resize', placer); };
+  const clic = (e) => { if (!e.target.closest('#montre .bulle')) setTimeout(fermer, 0); };
+  const touche = (e) => { if (e.key === 'Escape') fermer(); };
+  let cible = null;
+  function placer() {
+    if (!el || !cible) return;
+    const r = cible.getBoundingClientRect(), trou = $('.trou', el), bulle = $('.bulle', el);
+    Object.assign(trou.style, { left: r.left - 6 + 'px', top: r.top - 6 + 'px', width: r.width + 12 + 'px', height: r.height + 12 + 'px' });
+    const l = bulle.offsetWidth, h = bulle.offsetHeight;
+    let y = r.bottom + 16; if (y + h > innerHeight - 12) y = r.top - h - 16;
+    bulle.style.left = Math.min(Math.max(12, r.left + r.width / 2 - l / 2), innerWidth - l - 12) + 'px'; bulle.style.top = Math.max(12, y) + 'px';
+  }
+  return async function (m) {
+    fermer();
+    if (m.sous) sousParam = m.sous;
+    aller(m.vue);
+    for (let i = 0; i < 40 && !(cible = $(m.cible)); i++) await new Promise((r) => setTimeout(r, 100));
+    if (!cible) { toast('Ouvrez ' + m.ou + ' : c’est là.', 'info'); return; }
+    cible.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    el = document.createElement('div'); el.id = 'montre';
+    el.innerHTML = `<div class="trou"></div><div class="bulle" role="dialog" aria-label="Me montrer"><p>${m.bulle}</p><div class="bas"><button class="btn prim p" data-fin>Compris</button></div></div>`;
+    document.body.appendChild(el); $('[data-fin]', el).onclick = fermer;
+    setTimeout(() => { placer(); document.addEventListener('mousedown', clic, true); document.addEventListener('keydown', touche); window.addEventListener('resize', placer); }, 350);
+  };
+})();
+
+const TUTOS = [
+  { id: 'demarrer', icone: 'etoile', titre: 'Bien démarrer', duree: '8 min',
+    resume: 'Les 6 étapes pour être prêt : connexion protégée, fiche, première activité, paiements et agenda.',
+    etapes: [
+      ['Protégez votre compte', 'Activez la double authentification : en plus de votre mot de passe, un code de votre téléphone (Google Authenticator, Microsoft Authenticator ou Mots de passe de l’iPhone) est demandé à chaque connexion.',
+        { vue: 'parametres', sous: 'compte', cible: '#c-mfa-on, #c-mfa-off', ou: 'Paramètres › Compte et sécurité', bulle: 'Touchez « Activer », scannez le code avec votre appli puis tapez les 6 chiffres.' }, ['Double authentification', 'Désactivée', 'Activer']],
+      ['Complétez « Ma fiche »', 'Nom affiché, présentation, adresse et site internet. C’est ce que voient les clients : décrivez ce qu’on vit chez vous, pas seulement ce que vous vendez.',
+        { vue: 'fiche', cible: '#m-desc', ou: 'Ma fiche', bulle: 'Écrivez votre présentation ici, puis touchez « Enregistrer ».' }, ['Ma fiche', 'Présentation, adresse, site', 'Enregistrer']],
+      ['Créez votre première activité', 'Nom, types d’activité, prix (par personne ou pour le groupe), durée, nombre de personnes, salles ou places, horaires et photos. Tikette choisit lui-même les ambiances où la proposer.',
+        { vue: 'activites', cible: '#nouv', ou: 'Activités', bulle: 'Touchez « Nouvelle activité » : tout se remplit sur une seule page.' }, ['Activités', 'Aucune activité pour l’instant', 'Nouvelle activité']],
+      ['Recevez vos paiements', 'Activez le paiement dans l’appli avec Stripe (environ 5 minutes). Le tuto « Recevoir mes paiements » vous guide.',
+        { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'Touchez ce bouton : la page sécurisée de Stripe s’ouvre.' }, ['Recevoir mes paiements', 'Pas encore activé', 'Recevoir mes paiements']],
+      ['Reliez votre agenda', 'Pour ne jamais avoir deux réservations sur le même créneau, reliez votre agenda ou votre logiciel. Le tuto « Relier mon agenda ou mon logiciel » vous guide.',
+        { vue: 'agenda', cible: '#copier', ou: 'Agenda et logiciels', bulle: 'Copiez ce lien et ajoutez-le dans votre agenda : les réservations Tikette y apparaissent toutes seules.' }, ['Agenda et logiciels', 'Lien personnel de votre agenda', 'Copier']],
+      ['Attendez la validation de Tikette', 'On vérifie chaque partenaire et chaque activité (48 h au plus). Dès que c’est validé, vos activités sont proposées dans l’appli.', null, null],
+    ],
+    cote: [['Où retrouver la visite ?', 'Le bouton « Visite guidée » en bas du menu refait le tour de l’espace en une minute.']] },
+  { id: 'paiements', icone: 'euro', titre: 'Recevoir mes paiements', duree: '5 min',
+    resume: 'Activer le paiement dans l’appli avec Stripe : ce qu’il vous faut, la page Stripe pas à pas, les frais, les virements et les remboursements.',
+    etapes: [
+      ['Ouvrez Paramètres › Paiements', 'Seul le responsable du compte voit cette page. Touchez « Recevoir mes paiements » : la page sécurisée de Stripe s’ouvre.',
+        { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'C’est ce bouton : il ouvre votre page Stripe.' }, ['Recevoir mes paiements', 'Pas encore activé : vos clients paient sur place.', 'Recevoir mes paiements']],
+      ['Remplissez la page Stripe', 'E-mail et téléphone (Stripe vous envoie un code), votre entreprise et son SIRET, l’identité du responsable, puis l’IBAN. Vous pouvez vous arrêter et reprendre plus tard.', null, ['Stripe · Votre entreprise', 'SIRET, adresse, activité…', 'Continuer']],
+      ['Revenez dans votre espace', 'Stripe vous ramène tout seul ici. S’il manque une information, le bouton devient « Reprendre ma page Stripe » : touchez-le pour finir.',
+        { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'S’il affiche « Reprendre ma page Stripe », il reste une information à donner à Stripe.' }, ['Paiement dans l’appli', 'Votre page Stripe n’est pas terminée.', 'Reprendre ma page Stripe']],
+      ['C’est activé', '« Paiement dans l’appli activé » : vos clients paient à la réservation, pour tout le groupe. Vos virements et vos reçus sont dans « Mon tableau de bord Stripe ».',
+        { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'Ce bouton ouvre votre tableau de bord Stripe : virements, reçus, coordonnées bancaires.' }, ['Paiement dans l’appli activé', 'L’argent arrive sur votre compte bancaire.', 'Mon tableau de bord Stripe']],
+    ],
+    cote: [['Ce qu’il vous faut', 'Une pièce d’identité du responsable, votre SIRET et l’IBAN du compte qui reçoit les virements.'],
+      ['Combien ça coûte', 'Frais Stripe : environ 1,5 % + 0,25 € par carte européenne, prélevés par Stripe. La commission Tikette est prélevée au même moment. Tikette ne touche jamais votre argent.'],
+      ['Remboursements', 'Automatiques si vous refusez, si vous ne répondez pas à temps ou si vous annulez. Un client qui annule plus de 48 h avant est remboursé ; après, non.']] },
+  { id: 'agenda', icone: 'lien', titre: 'Relier mon agenda ou mon logiciel', duree: '4 min',
+    resume: 'Voir les réservations Tikette dans Google, Outlook ou Apple Calendrier, fermer les créneaux déjà pris ailleurs, connexion directe à votre logiciel.',
+    etapes: [
+      ['Copiez votre lien Tikette', 'Dans « Agenda et logiciels », copiez le lien personnel. Il contient toutes vos réservations Tikette et se met à jour tout seul. Ne le publiez pas.',
+        { vue: 'agenda', cible: '#copier', ou: 'Agenda et logiciels', bulle: 'Touchez « Copier » : le lien est prêt à coller dans votre agenda.' }, ['Les réservations Tikette dans votre agenda', 'Lien personnel', 'Copier']],
+      ['Ajoutez-le à votre agenda', 'Google Agenda : « Autres agendas » › « + » › « À partir de l’URL ». Outlook : « Ajouter un calendrier » › « S’abonner à partir du web ». Apple Calendrier : « Fichier » › « Nouvel abonnement ». Votre logiciel de réservation : cherchez « importer un calendrier iCal ».', null, ['Google Agenda', 'Autres agendas › À partir de l’URL', 'Ajouter un agenda']],
+      ['Fermez les créneaux pris ailleurs', 'Vous prenez aussi des réservations par téléphone ou sur votre site ? Copiez le lien iCal de votre agenda (dans Google : paramètres de l’agenda › « Adresse secrète au format iCal ») et collez-le sur chaque salle, dans Activités › Modifier. Toutes les 10 minutes, Tikette ferme les créneaux déjà pris.',
+        { vue: 'activites', cible: '[data-modif], #nouv', ou: 'Activités', bulle: 'Touchez « Modifier » : le lien iCal se colle dans la ligne de chaque salle.' }, ['Salles', 'Lien iCal de votre agenda', 'Modifier']],
+      ['Connexion directe à votre logiciel', 'Vous utilisez Bookeo, Regiondo, FareHarbor, Planity… ? Touchez « Je l’utilise » : on branche les logiciels un par un et on vous prévient dès que le vôtre est prêt.',
+        { vue: 'agenda', cible: '[data-log]', ou: 'Agenda et logiciels', bulle: 'Touchez « Je l’utilise » à côté de votre logiciel.' }, ['Connexion directe à votre logiciel', 'Bookeo, Regiondo, Planity…', 'Je l’utilise']],
+    ],
+    cote: [['Pourquoi relier ?', 'Un créneau pris ailleurs mais libre dans Tikette, c’est une double réservation. Le lien iCal l’évite sans rien faire de plus.'],
+      ['Délai', 'Votre agenda dans Tikette : toutes les 10 minutes. Tikette dans votre agenda : selon votre agenda (Google le relit plusieurs fois par jour).']] },
+  { id: 'reservations', icone: 'ticket', titre: 'Gérer mes réservations', duree: '6 min',
+    resume: 'Accepter ou refuser à temps, écrire au client, proposer un autre horaire, répondre à un décalage, annuler, marquer venu ou absent, exporter.',
+    etapes: [
+      ['Acceptez ou refusez à temps', 'Les demandes arrivent dans « Réservations › À valider » et sur le tableau de bord, avec l’heure limite. Sans réponse à temps, la demande expire et le client est remboursé tout seul.',
+        { vue: 'reservations', cible: '[data-f="valider"]', ou: 'Réservations', bulle: 'Les demandes à accepter ou refuser sont ici.' }, ['Réservations', 'À valider · À venir · Historique', 'Accepter']],
+      ['Ouvrez une réservation', 'Touchez une ligne : quand, salle, personnes, montant, nom de la bande, prénoms des participants, message du client. Ajoutez une note interne, visible seulement par votre équipe.',
+        { vue: 'reservations', cible: '#r-liste', ou: 'Réservations', bulle: 'Touchez une réservation pour ouvrir sa fiche.' }, ['Réservation TK-…', 'Participants, message, note interne', 'Enregistrer la note']],
+      ['Écrivez au client', 'Depuis la fiche, « Écrire au client » ouvre la conversation. Le client reçoit une notification dans l’appli. Pas besoin d’échanger de numéro.',
+        { vue: 'messages', cible: '#vue', ou: 'Messages', bulle: 'Toutes vos conversations avec les clients sont ici.' }, ['Messages', 'Une conversation par réservation', 'Envoyer']],
+      ['Proposez un autre horaire', 'Un souci de salle ? « Proposer un autre horaire » dans la fiche : le client accepte ou refuse dans l’appli. Sans réponse au plus tard 2 h avant, rien ne change. Le nouveau créneau reste gardé en attendant.', null, ['Proposer un autre horaire', 'Jour, heure, un mot pour le client', 'Envoyer la proposition']],
+      ['Répondez aux décalages', 'Quand un client demande un autre horaire, la demande apparaît dans « À valider » avec l’heure limite : « Accepter » ou « Refuser ».',
+        { vue: 'accueil', cible: '#vue .carte', ou: 'Tableau de bord', bulle: 'Les décalages demandés par les clients arrivent dans « À valider ».' }, ['À valider', 'Décalage demandé', 'Accepter']],
+      ['Annulez si besoin', '« Annuler » dans la fiche d’une réservation confirmée. Le client est prévenu et remboursé en entier. Attention : 2 annulations tardives ou absences de votre part en 3 mois mettent la réservation Tikette en pause 30 jours.', null, ['Réservation confirmée', 'Le client est remboursé en entier', 'Annuler']],
+      ['Après la sortie : venu ou absent', 'Une fois l’heure passée, marquez « Venu » ou « Absent ». Le client peut ensuite laisser un avis, que vous retrouvez dans « Avis clients ».', null, ['Réservation passée', 'Le client est-il venu ?', 'Venu']],
+      ['Exportez pour votre compta', '« Exporter (Excel) » télécharge toutes les réservations affichées : dates, montants, commissions, participants, notes.',
+        { vue: 'reservations', cible: '#exp', ou: 'Réservations', bulle: 'Ce bouton télécharge le fichier pour Excel.' }, ['Réservations', 'Toutes les réservations affichées', 'Exporter (Excel)']],
+    ],
+    cote: [['Bon à savoir', 'Le client paie à la réservation, pour tout le groupe. Le nombre de personnes ne dépasse jamais le maximum de votre activité.'],
+      ['Notifications', 'Un e-mail à chaque réservation, message, demande de décalage ou annulation. Réglable dans Paramètres › Notifications.']] },
+];
+const lireLus = () => { try { return JSON.parse(localStorage.getItem('tikette-pro:tutos-lus') || '[]'); } catch { return []; } };
+const marquerLu = (id) => { try { const l = lireLus(); if (!l.includes(id)) localStorage.setItem('tikette-pro:tutos-lus', JSON.stringify([...l, id])); } catch {} };
+let etatPaiements = null, tutoOuvert = null, aResteAide = 0;
+const compterAide = () => etatDemarrage().then((f) => { aResteAide = f.filter((x) => !x).length; dessinerMenu(); }, () => {});
+async function etatDemarrage() {
+  if (etatPaiements === null) { const s = proprio() ? await stripePro('etat').catch(() => null) : null; etatPaiements = !!(s?.ok && s.paiements); }
+  const e = espace.entreprise;
+  const relie = espace.offres.some((o) => o.ressources.some((r) => r.ical_url)) || !!e.connecteur_demande;
+  return [!window.sansDoubleAuth, !!(e.description || '').trim(), espace.offres.length > 0 && espace.offres.some((o) => o.horaires.length), etatPaiements, relie, e.statut === 'valide'];
+}
+function etatTuto(t, faits) {
+  if (t.id === 'demarrer') return faits.every(Boolean) ? 'fait' : 'afaire';
+  if (t.id === 'paiements') return faits[3] ? 'fait' : 'afaire';
+  if (t.id === 'agenda') return faits[4] ? 'fait' : 'afaire';
+  return lireLus().includes(t.id) ? 'lu' : 'alire';
+}
+const ETATS_TUTO = { fait: ['Fait', 'confirmee'], afaire: ['À faire', 'demandee'], alire: ['À lire', ''], lu: ['Lu', 'confirmee'] };
+async function aide() {
+  if (tutoOuvert) return tuto(tutoOuvert);
+  $('#vue').innerHTML = entete('Aide et tutos', 'Pas à pas, avec un bouton « Me montrer » qui vous emmène au bon endroit de votre espace.') + '<div class="carte"><p class="note">Chargement…</p></div>';
+  const faits = await etatDemarrage(), d = TUTOS[0], n = faits.filter(Boolean).length;
+  if (aResteAide !== faits.length - n) { aResteAide = faits.length - n; dessinerMenu(); }
+  if (vueActuelle !== 'aide' || tutoOuvert) return;
+  $('#vue').innerHTML = entete('Aide et tutos', 'Pas à pas, avec un bouton « Me montrer » qui vous emmène au bon endroit de votre espace.')
+  + `<div class="carte aide-demarrer"><div style="flex:1;min-width:0"><h2>${ic('etoile')}Bien démarrer <span class="note" style="font-weight:500;font-family:var(--fx);font-size:13px">${d.duree} · ${n} étape${n > 1 ? 's' : ''} sur ${faits.length} faite${n > 1 ? 's' : ''}</span></h2>
+    <div class="aide-barre"><i style="width:${Math.round(n / faits.length * 100)}%"></i></div>
+    ${d.etapes.map(([t, , m], i) => `<div class="logiciel"><span style="display:flex;gap:10px;align-items:center;${faits[i] ? 'color:var(--pale);text-decoration:line-through' : 'font-weight:600'}">${faits[i] ? ic('ok', 'style="color:var(--vert)"') : ic('info', 'style="color:var(--pale)"')}${t}</span>${!faits[i] && m ? `<button class="btn p" data-montrer="0-${i}">Me montrer</button>` : ''}</div>`).join('')}
+    <button class="btn prim" style="margin-top:12px" data-tuto="demarrer">Ouvrir le tuto${ic('fleche')}</button></div>
+    <div class="aide-anneau" style="--p:${Math.round(n / faits.length * 100)}%"><b>${n}/${faits.length}</b><span class="note">Les cases se cochent toutes seules quand c’est fait dans votre espace.</span></div></div>
+  <div class="grille g3" style="margin-top:16px">${TUTOS.slice(1).map((t) => { const [lib, cl] = ETATS_TUTO[etatTuto(t, faits)];
+    return `<div class="carte aide-tuto"><div class="aide-icone">${ic(t.icone)}</div><b>${t.titre}</b><p>${t.resume}</p>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:auto"><span class="etat ${cl}">${lib}</span><span class="note">${t.duree}</span><button class="btn prim p" style="margin-left:auto" data-tuto="${t.id}">Ouvrir</button></div></div>`; }).join('')}</div>
+  <p class="note" style="margin-top:16px">Une question qui n’est pas ici ? Écrivez-nous à <a href="mailto:contact@tikette.fr">contact@tikette.fr</a>, on répond sous 24 h ouvrées.</p>`;
+  brancherAide();
+}
+function brancherAide() {
+  $$('#vue [data-tuto]').forEach((b) => b.onclick = () => { tutoOuvert = b.dataset.tuto; tuto(tutoOuvert); window.scrollTo(0, 0); });
+  $$('#vue [data-montrer]').forEach((b) => b.onclick = () => { const [t, i] = b.dataset.montrer.split('-').map(Number); montrer(TUTOS[t].etapes[i][2]); });
+}
+function tuto(id) {
+  const k = TUTOS.findIndex((t) => t.id === id), t = TUTOS[k];
+  if (!t) { tutoOuvert = null; return aide(); }
+  if (t.id === 'reservations') { marquerLu(t.id); dessinerMenu(); }
+  const avant = TUTOS[k - 1], apres = TUTOS[k + 1];
+  $('#vue').innerHTML = `<div class="note" style="margin-bottom:6px"><a href="#aide" data-retour-aide>Aide et tutos</a> › <b style="color:var(--texte)">${t.titre}</b></div>`
+  + entete(t.titre, `${t.duree} · ${t.etapes.length} étapes`)
+  + `<div class="grille colonnes" style="grid-template-columns:1fr 330px;align-items:start"><div class="grille">${t.etapes.map(([titre, texte, m, ecran], i) => `<div class="carte aide-etape"><div class="aide-num">${i + 1}</div>
+      <div style="flex:1;min-width:0"><b>${titre}</b><p>${texte}</p>${m ? `<button class="btn p" data-montrer="${k}-${i}">${ic('fleche')}Me montrer</button>` : ''}</div>
+      ${ecran ? `<div class="aide-mini" aria-hidden="true"><div><b>${ecran[0]}</b><span>${ecran[1]}</span><i>${ecran[2]}</i></div></div>` : ''}</div>`).join('')}</div>
+    <div class="grille">${t.cote.map(([a, b]) => `<div class="carte"><b>${a}</b><p class="note" style="margin:6px 0 0;font-size:14px;line-height:1.55">${b}</p></div>`).join('')}
+      <div class="outils" style="justify-content:space-between">${avant ? `<button class="btn p" data-tuto="${avant.id}">${ic('gauche')}${avant.titre}</button>` : '<span></span>'}${apres ? `<button class="btn prim p" data-tuto="${apres.id}">${apres.titre}${ic('droite')}</button>` : ''}</div></div></div>`;
+  $('[data-retour-aide]').onclick = (e) => { e.preventDefault(); tutoOuvert = null; aide(); };
+  brancherAide();
+}
+
 async function demarrer() {
   const { data } = await sb.auth.getSession();
   const montrerConnexion = (n) => { $('#connexion').classList.remove('cache'); $('#appli').classList.add('cache'); etape(n); };
@@ -480,12 +646,13 @@ async function demarrer() {
   }
   aller(retourStripe ? 'parametres' : location.hash.slice(1) || 'accueil');
   if (lireVisite() === 'a-lancer') setTimeout(() => visite.lancer(), 600);
+  compterAide();
   window.onhashchange = () => { const v = location.hash.slice(1); if (v && v !== vueActuelle) aller(v); };
 }
 function dessinerMenu() {
   const n = (+espace.entreprise.a_valider || 0) + (+aLire.changements || 0), nm = +aLire.messages || 0;
   $('#menu').innerHTML = `<div class="logo"><img src="/mail/tikette.png" alt="">tikette <b>PRO</b></div>`
-    + MENU.map(([k, i, t]) => `<button data-vue="${k}" class="${k === vueActuelle ? 'actif' : ''}">${ic(i)}<span>${t}</span>${k === 'reservations' && n ? `<span class="compteur">${n}</span>` : ''}${k === 'messages' && nm ? `<span class="compteur">${nm}</span>` : ''}</button>`).join('')
+    + MENU.map(([k, i, t]) => `<button data-vue="${k}" class="${k === vueActuelle ? 'actif' : ''}">${ic(i)}<span>${t}</span>${k === 'reservations' && n ? `<span class="compteur">${n}</span>` : ''}${k === 'messages' && nm ? `<span class="compteur">${nm}</span>` : ''}${k === 'aide' && aResteAide ? `<span class="compteur">${aResteAide}</span>` : ''}</button>`).join('')
     + `<div class="bas"><b>${esc(espace.entreprise.nom)}</b><span>${esc(espace.entreprise.commune || '')}</span><br><button id="b-visite" style="padding:8px 0;margin-top:6px">${ic('etoile')}<span>Visite guidée</span></button><button id="deco" style="padding:8px 0">${ic('sortie')}<span>Se déconnecter</span></button></div>`;
   $$('#menu [data-vue]').forEach((b) => b.onclick = () => aller(b.dataset.vue));
   $('#deco').onclick = async () => { await sb.auth.signOut(); location.reload(); };
@@ -501,7 +668,8 @@ function aller(v) {
   vueActuelle = v; if (location.hash.slice(1) !== v) history.replaceState(null, '', '#' + v);
   dessinerMenu(); window.scrollTo(0, 0); $('#couche').innerHTML = '';
   clearInterval(messages.t);
-  ({ accueil, reservations, messages, planning, activites, fiche, stats, avis, agenda, parametres }[v])();
+  if (v !== 'aide') tutoOuvert = null;
+  ({ accueil, reservations, messages, planning, activites, fiche, stats, avis, agenda, parametres, aide }[v])();
 }
 const entete = (titre, sous = '', outils = '') => `<div class="entete"><div><h1>${titre}</h1>${sous ? `<p>${sous}</p>` : ''}</div><div class="outils">${outils}</div></div>`;
 
