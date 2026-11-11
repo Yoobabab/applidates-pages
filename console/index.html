@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-xn+CxD7Gfo716oAlT30wahue8Vb8wsuSqd8kb92n7kI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-pKQCPiP5npzL6u725wFOy292sHtF1cbMNhXasYILTj8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1796,52 +1796,60 @@ function mailAttente(x, rang) {
   return `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps)}`;
 }
 // Mail d'ouverture de l'espace pro (même style que la prospection : copié mis en forme, collé dans Outlook).
-function mailAcces(x, rang) {
-  const objet = 'Votre espace pro Tikette est ouvert';
+function mailAcces(x, rang, lien) {
+  const objet = 'Bienvenue chez Tikette : votre espace pro est prêt';
+  const url = lien ? `https://tikette.fr/pro/espace/?acces=${lien}` : 'https://tikette.fr/pro/espace/';
   const lignes = [
     'Bonjour,',
     'Un grand merci pour votre confiance ! Nous, c’est Greg et Yvan, les deux potes derrière <b>Tikette</b>.',
     rang <= 50 ? 'Bonne nouvelle : vous faites partie de nos <b>partenaires fondateurs</b> (0 % de commission jusqu’au 31 mars 2027, puis 8 % à vie).' : '',
-    'Votre <b>espace pro</b> est maintenant ouvert. C’est là que vous reliez votre activité à Tikette : vos activités et vos créneaux, vos photos, vos réservations, et la réception de vos paiements (via Stripe, environ 5 minutes).',
-    ['<b>Pour vous connecter :</b>', '1. Allez sur <a href="https://tikette.fr/pro/espace/">https://tikette.fr/pro/espace/</a>',
-      `2. Saisissez cette adresse e-mail : <b>${x.email}</b>`, '3. Recopiez le code à 6 chiffres reçu par e-mail (valable 1 heure). Pas de mot de passe à retenir.'],
-    ['<b>Côté sécurité :</b>', '→ activez la double authentification dans Paramètres › Compte et sécurité (2 minutes, avec Google Authenticator ou l’appli Mots de passe de l’iPhone) ;',
-      '→ nous ne vous demanderons jamais votre code, ni par téléphone ni par e-mail ;',
-      '→ pour vos collègues, invitez-les dans Paramètres › Équipe plutôt que de partager vos accès.'],
-    'Le guide pas à pas est ici : <a href="https://tikette.fr/pro/connexion/">https://tikette.fr/pro/connexion/</a>',
-    'Tikette sort le <b>14 décembre</b> : en remplissant votre fiche dès maintenant, votre activité sera prête pour le lancement. Une question ? Répondez simplement à ce mail.',
+    'Votre inscription est validée et votre <b>espace pro</b> vous attend. C’est là que vous reliez votre activité à Tikette : vos activités et vos créneaux, vos photos, vos réservations, et la réception de vos paiements (via Stripe, environ 5 minutes).',
+    lien ? ['<b>Pour y entrer, c’est simple :</b>', `1. Cliquez sur votre lien personnel : <a href="${url}">ouvrir mon espace pro</a>`,
+      `2. Votre adresse de connexion est déjà remplie (<b>${x.email}</b>) : créez votre mot de passe.`,
+      '3. Vous voilà dans votre espace : une visite guidée d’une minute vous montre où tout se trouve.']
+      : ['<b>Pour vous connecter :</b>', `rendez-vous sur <a href="${url}">${url}</a> avec <b>${x.email}</b> et votre mot de passe (« Mot de passe oublié ? » si besoin).`],
+    lien ? 'Ce lien est personnel et ne sert qu’une fois (valable 30 jours) : ne le transférez pas. Ensuite, vous vous connecterez depuis le bouton « Espace pro » de tikette.fr/pro avec votre e-mail et votre mot de passe. Nous ne vous demanderons jamais votre mot de passe.' : '',
+    'Tikette sort le <b>14 décembre</b> : en créant vos activités dès maintenant, vous serez prêt pour le lancement. Une question ? Répondez simplement à ce mail.',
     ['À très vite,', 'Greg et Yvan', 'Tikette · <a href="https://tikette.fr">tikette.fr</a>'],
   ].filter(Boolean);
   const html = '<div style="font-family:Aptos,Calibri,Arial,sans-serif;font-size:11pt;line-height:1.4;color:#000000">'
     + lignes.map((l) => Array.isArray(l) ? l.map((t, i) => MAIL_P(t, i === l.length - 1 ? '0 0 12px' : '0')).join('') : MAIL_P(l)).join('') + '</div>';
-  const corps = lignes.map((l) => [].concat(l).join('\n').replace(/<[^>]+>/g, '')).join('\n\n');
+  const corps = lignes.map((l) => [].concat(l).join('\n').replace(/<a href="([^"]+)">[^<]*<\/a>/g, '$1').replace(/<[^>]+>/g, '')).join('\n\n');
   return { a: x.email, objet, corps, html, mailto: `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}` };
 }
-// Ouvre l'espace pro d'une entreprise de la liste (supabase/pro-acces.sql), puis prépare le mail d'accès.
+// Bouton « Valider » (supabase/pro-acces.sql) : crée l'espace pro de l'entreprise et prépare le mail avec son lien
+// personnel (adresse déjà remplie, elle crée son mot de passe). « Renvoyer le mail » refait un lien neuf.
 function boutonAcces(x, rang, re) {
-  const envoyer = async (b) => {
-    const m = mailAcces(x, rang), ok = await copierMailProspect(m);
+  const ouvrir = async () => {
+    try { return await rpc('console_pro_ouvrir_acces', { p_id: x.id }); }
+    catch (err) {
+      alert(/console_pro_ouvrir_acces|Could not find|pro_nouveau_lien/i.test(String(err?.message)) ? 'Lancez d’abord supabase/pro-acces.sql dans Supabase.' : String(err?.message || err));
+      return null;
+    }
+  };
+  const envoyer = async (b, r) => {
+    const m = mailAcces(x, r.rang || rang, r.lien), ok = await copierMailProspect(m);
     b.textContent = ok ? 'Copié ✓ · Ctrl+V dans le mail' : 'Copie impossible : utilisez « brouillon »';
     if (ok) location.href = m.mailto;
   };
+  const brouillon = async () => { const r = await ouvrir(); if (r) telechargerBrouillon(mailAcces(x, r.rang || rang, r.lien), 'acces-' + x.id); };
   if (x.acces_le) return h('div', {},
-    h('div', { style: 'color:var(--vert);font-size:12px;font-weight:700;white-space:nowrap' }, 'Accès ouvert le ' + dateFr(x.acces_le)),
-    h('button', { class: 'btn-lien', onclick: (e) => envoyer(e.currentTarget) }, 'Renvoyer le mail'), ' ',
-    h('button', { class: 'btn-lien', onclick: () => telechargerBrouillon(mailAcces(x, rang), 'acces-' + x.id) }, 'brouillon'));
-  return h('button', { class: 'btn', style: 'white-space:nowrap;font-size:12.5px', title: 'Crée son espace pro et prépare le mail de connexion',
+    h('div', { style: 'color:var(--vert);font-size:12px;font-weight:700;white-space:nowrap' }, 'Validé le ' + dateFr(x.acces_le)),
+    h('div', { style: `font-size:12px;white-space:nowrap;color:${x.active_le ? 'var(--vert)' : 'var(--texte-doux, #999)'}` },
+      x.active_le ? 'Espace activé le ' + dateFr(x.active_le) : 'Mot de passe pas encore créé'),
+    h('button', { class: 'btn-lien', title: 'Prépare un nouveau mail (l’ancien lien ne marche plus)',
+      onclick: async (e) => { const b = e.currentTarget; const r = await ouvrir(); if (r) envoyer(b, r); } }, 'Renvoyer le mail'), ' ',
+    h('button', { class: 'btn-lien', onclick: brouillon }, 'brouillon'));
+  return h('button', { class: 'btn', style: 'white-space:nowrap;font-size:12.5px', title: 'Crée son espace pro et prépare le mail avec son lien de connexion',
     onclick: async (e) => {
       const b = e.currentTarget;
-      if (!confirm(`Ouvrir l’espace pro de ${x.nom} ?\n\nSa fiche est créée (« À vérifier » : rien n’apparaît dans l’appli avant votre validation) et ${x.email} pourra se connecter sur tikette.fr/pro/espace.`)) return;
+      if (!confirm(`Valider ${x.nom} ?\n\nSon espace pro est créé (activités « À vérifier » : rien n’apparaît dans l’appli avant votre validation), et le mail avec son lien personnel est préparé dans Outlook.`)) return;
       b.disabled = true;
-      try { await rpc('console_pro_ouvrir_acces', { p_id: x.id }); }
-      catch (err) {
-        b.disabled = false;
-        alert(/console_pro_ouvrir_acces|Could not find/i.test(String(err?.message)) ? 'Lancez d’abord supabase/pro-acces.sql dans Supabase.' : String(err?.message || err));
-        return;
-      }
+      const r = await ouvrir();
+      if (!r) { b.disabled = false; return; }
       x.acces_le = new Date().toISOString();
-      await envoyer(b); setTimeout(re, 1500);
-    } }, 'Ouvrir l’accès');
+      await envoyer(b, r); setTimeout(re, 1500);
+    } }, 'Valider');
 }
 function blocAttente(a, re) {
   const choix = (x) => h('select', { class: 'champ', style: `width:auto;padding:5px 8px;font-size:12.5px;color:${COULEUR_ATT[x.statut]}`,
