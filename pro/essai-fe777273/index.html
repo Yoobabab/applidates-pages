@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-pktNFe3F9Y+oq/FB6QbtaO75N+TQiOMo5f196XYSqRc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Kvw426R8NXEWWp5u9wc69KjGWiK2J8k5CgUiDc9Q0zo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -837,7 +837,7 @@ async function pPaiements() {
     <div class="reglage"><div><b>${actif ? 'Paiement dans l’appli activé' : 'Paiement dans l’appli'}</b><p>${esc(etat)}</p></div>
     ${e?.ok ? `<button class="btn ${actif ? 'p' : 'prim'}" id="s-go">${actif ? 'Mon tableau de bord Stripe' : commence ? 'Reprendre ma page Stripe' : 'Recevoir mes paiements'}</button>` : ''}</div>
     <p class="note" style="margin:10px 0 0">Les clients paient à la réservation, pour tout le groupe. Le paiement est versé directement sur votre compte par <b>Stripe</b> : Tikette ne touche jamais l’argent. Stripe prélève ses frais (environ 1,5 % + 0,25 € par carte européenne) et la commission Tikette au moment du paiement. Si vous refusez, ne répondez pas à temps ou annulez, le client est remboursé automatiquement.</p>
-    <p class="note" style="margin:8px 0 0">Il vous faut 5 minutes : une pièce d’identité, votre SIRET et l’IBAN du compte qui recevra les virements.</p></div>`;
+    ${actif ? '' : '<p class="note" style="margin:8px 0 0">Il vous faut 5 minutes : une pièce d’identité, votre SIRET et l’IBAN du compte qui recevra les virements.</p>'}</div>`;
   if ($('#s-go')) $('#s-go').onclick = async () => {
     $('#s-go').disabled = true;
     const r = await stripePro('compte');
