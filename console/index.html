@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-gRzQ+dpjKlB7y/V+ZMb+yNlI5qM/WgOdy+tiGs+Kc3k='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-9jQwKSv27+jv3GyDoT6murwFl/yhkoZEOPbjP74NJAA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1814,7 +1814,8 @@ function mailAcces(x, rang, lien) {
   const etape = (t) => `<tr><td valign="top" style="width:30px;padding:0 0 12px;font-family:Arial,sans-serif;font-size:18px;font-weight:bold;color:#FF6B9A">&#10140;</td><td style="padding:0 0 12px;font-family:Aptos,Calibri,Arial,sans-serif;font-size:15px;line-height:1.5;color:#2A1D45">${t}</td></tr>`;
   const bouton = (texte) => `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:6px 0 20px"><tr><td bgcolor="#FFD166" style="background:#FFD166;border-radius:12px;padding:14px 30px"><a href="${url}" style="font-family:Aptos,Calibri,Arial,sans-serif;font-size:16px;font-weight:bold;color:#1E1433;text-decoration:none">${texte}</a></td></tr></table>`;
   const encadre = (fond, bord, t) => `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px"><tr><td bgcolor="${fond}" style="background:${fond};border-left:4px solid ${bord};border-radius:8px;padding:14px 16px;font-family:Aptos,Calibri,Arial,sans-serif;font-size:14px;line-height:1.5;color:#2A1D45">${t}</td></tr></table>`;
-  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;border-collapse:collapse">`
+  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F1ECFA" style="background:#F1ECFA;border-collapse:collapse"><tr><td align="center" style="padding:32px 12px">`
+    + `<table role="presentation" width="600" align="center" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:600px;border-collapse:collapse;margin:0 auto">`
     + `<tr><td style="padding:0;line-height:0"><img src="https://tikette.fr/mail/bandeau-espace-pro.png" width="600" alt="tikette · Votre espace pro est prêt" style="display:block;width:100%;max-width:600px;height:auto;border:0"></td></tr>`
     + `<tr><td bgcolor="#FFF7FA" style="background:#FFF7FA;padding:28px 28px 8px;border:1px solid #F3DDE6;border-top:0">`
     + P('Bonjour,')
@@ -1834,7 +1835,7 @@ function mailAcces(x, rang, lien) {
     + P('&#127915; Tikette sort le <b>14 décembre</b> : en créant vos activités dès maintenant, vous serez prêt pour le lancement.')
     + P('Une question ? Répondez simplement à ce mail.')
     + P('À très vite,', '8px 0 14px') + SIGNATURE_YVAN
-    + `</td></tr></table>`;
+    + `</td></tr></table></td></tr></table>`;
   const corps = ['Bonjour,', 'Un grand merci pour votre confiance !',
     fondateur ? 'Bonne nouvelle : vous faites partie de nos partenaires fondateurs (0 % de commission jusqu’au 31 mars 2027, puis 8 % à vie).' : '',
     'Votre inscription est validée et votre espace pro vous attend.',
