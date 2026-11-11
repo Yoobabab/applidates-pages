@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-W/PYjjva+0wGo9lOuwp9r9Up5ybFLNSnHv1QAQlb1u0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JfVNZ4viW8NEuYWM4sWf5iCrG6x1Qz0rG8ZmmFKMiS8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -189,7 +189,7 @@ nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96
   <form id="f-mail"><label class="l" for="mail">E-mail</label><input id="mail" type="email" required autocomplete="username" placeholder="contact@monactivite.fr">
   <label class="l" for="mdp">Mot de passe</label><input id="mdp" type="password" required autocomplete="current-password">
   <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Se connecter</button></form>
-  <p class="note" style="margin-top:12px;text-align:center"><a href="#" id="oubli">Mot de passe oublié ?</a></p></div>
+  <p class="note" style="margin-top:12px;text-align:center"><a href="#" id="oubli">Mot de passe oublié ?</a> · <a href="#" id="premiere">Première connexion ?</a></p></div>
   <div id="etape-activer" class="cache"><h1 style="margin:24px 0 6px">Bienvenue <span id="a-nom"></span> !</h1>
     <form id="f-activer"><label class="l" for="a-mail">E-mail de connexion</label><input id="a-mail" type="email" required autocomplete="username">
   <p class="note" style="margin-top:6px">Modifiable si vous préférez une autre adresse.</p>
@@ -367,6 +367,7 @@ async function envoyerCode() {
 }
 const ouvrirOubli = (titre) => (e) => { e.preventDefault(); $('#oubli-titre').textContent = titre; $('#o-mail').value = $('#mail').value; etape('oubli'); };
 $('#oubli').onclick = ouvrirOubli('Mot de passe oublié');
+$('#premiere').onclick = ouvrirOubli('Première connexion');  // membres d'équipe invités : code par e-mail, puis mot de passe
 $$('[data-retour]').forEach((a) => a.onclick = (e) => { e.preventDefault(); if (activation) { activation = null; etape('activer'); } else etape('mail'); });
 $('#f-oubli').onsubmit = async (e) => {
   e.preventDefault(); mailEnCours = $('#o-mail').value.trim().toLowerCase(); occupe(e.target, true);
@@ -377,8 +378,12 @@ $('#f-oubli').onsubmit = async (e) => {
 $('#renvoyer').onclick = async (e) => { e.preventDefault(); if (await envoyerCode()) toast('Nouveau code envoyé.'); };
 $('#f-code').onsubmit = async (e) => {
   e.preventDefault();
+  if ($('button', e.target)?.disabled) return;
+  occupe(e.target, true);
   const { error } = await sb.auth.verifyOtp({ email: mailEnCours, token: $('#code').value.trim(), type: 'email' });
+  occupe(e.target, false);
   if (error) return erreur('Code incorrect ou expiré.');
+  $('#code').value = '';
   if (activation) {
     const r = await activer(activation.motDePasse, activation.email);
     if (!r.ok) { await sb.auth.signOut(); etape('activer'); return erreur(messageActivation(r)); }
@@ -397,8 +402,11 @@ $('#f-nouveau').onsubmit = async (e) => {
 };
 $('#f-mfa').onsubmit = async (e) => {
   e.preventDefault();
+  if ($('button', e.target)?.disabled) return;
+  occupe(e.target, true);
   const { data } = await sb.auth.mfa.listFactors(); const f = data?.totp?.find((x) => x.status === 'verified');
   const { error } = await sb.auth.mfa.challengeAndVerify({ factorId: f?.id, code: $('#code-mfa').value.trim() });
+  occupe(e.target, false);
   if (error) return erreur('Code incorrect.');
   demarrer();
 };
@@ -694,12 +702,16 @@ function brancherResas(racine, liste, apres) {
   $$('[data-a]', racine).forEach((b) => b.onclick = () => agir(b.dataset.id, b.dataset.a, apres));
 }
 async function agir(id, a, apres) {
+  if (agir.en) return;
   let motif = '';
   if (a === 'refuser' || a === 'annuler') {
     motif = await demander({ titre: a === 'refuser' ? 'Refuser la demande' : 'Annuler la réservation', texte: 'Le client est prévenu dans l’appli avec ce motif.', champ: 'Motif', valeur: a === 'refuser' ? 'Complet à cette heure' : '', bouton: a === 'refuser' ? 'Refuser' : 'Annuler la réservation', danger: true });
     if (motif === null) return;
   }
-  const r = await rpc('pro_repondre', { p_id: id, p_action: a, p_motif: motif });
+  agir.en = true; $$(`[data-id="${id}"]`).forEach((b) => { b.disabled = true; });
+  let r;
+  try { r = await rpc('pro_repondre', { p_id: id, p_action: a, p_motif: motif }); } catch { agir.en = false; $$(`[data-id="${id}"]`).forEach((b) => { b.disabled = false; }); return; }
+  agir.en = false;
   if (!r.ok) toast('Impossible : la réservation a changé entre-temps.', 'alerte');
   else toast({ accepter: 'Confirmée, le client est prévenu.', refuser: 'Refusée, le client est prévenu.', annuler: 'Annulée, le client est prévenu.', venue: 'Noté : client venu.', absente: 'Noté : client absent, aucune commission.' }[a]);
   $('#couche').innerHTML = ''; await recharger(); apres();
@@ -766,7 +778,9 @@ function proposerChangement(r, apres) {
   };
   $('#c-jour', v).onchange = (e) => { jour = e.target.value; lire(); };
   $('#c-ok', v).onclick = async () => {
-    const rep = await rpc('proposer_changement_reservation', { p_resa: r.id, p_cote: 'pro', p_debut: choisi, p_message: $('#c-mot', v).value });
+    $('#c-ok', v).disabled = true;
+    const rep = await rpc('proposer_changement_reservation', { p_resa: r.id, p_cote: 'pro', p_debut: choisi, p_message: $('#c-mot', v).value }).catch(() => ({ ok: false }));
+    $('#c-ok', v).disabled = false;
     if (!rep.ok) { toast({ pris: 'Ce créneau vient d’être pris.', trop_tard: 'Trop tard : il faut au moins 2 h avant.', meme: 'C’est déjà l’horaire actuel.' }[rep.raison] || 'Impossible pour cette réservation.', 'alerte'); return; }
     fermer(); $('#couche').innerHTML = ''; toast('Proposition envoyée : le client est prévenu dans l’appli.'); apres();
   };
@@ -996,9 +1010,11 @@ function bloquer(o, r, jour, debut) {
       <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px"><input type="checkbox" id="b-tout"> Toutes les salles de cette activité</label>`,
     pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="b-ok">Bloquer</button>` });
   $('#b-ok', v).onclick = async () => {
+    $('#b-ok', v).disabled = true;
     const d = dateParis(jour, hhmm(debut));
     await rpc('pro_fermer', { p_offre: o.id, p_debut: d.toISOString(), p_fin: new Date(d.getTime() + o.duree_min * 6e4).toISOString(), p_motif: $('input[name=b-motif]:checked', v).value,
-      p_ressource: $('#b-tout', v).checked ? null : r.id, p_note: $('#b-note', v).value });
+      p_ressource: $('#b-tout', v).checked ? null : r.id, p_note: $('#b-note', v).value }).catch(() => null);
+    $('#b-ok', v).disabled = false;
     fermer(); toast('Créneau bloqué.'); planning();
   };
 }
@@ -1092,7 +1108,15 @@ function editeur(o) {
     if (titre.length < 2) return toast('Donnez un nom à l’activité.', 'alerte');
     const genres = (await typesP).valeurs();
     if (!genres.length) return toast('Choisissez au moins un type d’activité.', 'alerte');
-    if (+$('#e-min', m).value > +$('#e-max', m).value) return toast('Le minimum de personnes dépasse le maximum.', 'alerte');
+    const mini = +$('#e-min', m).value, maxi = +$('#e-max', m).value, priv = $('input[name=mode]:checked', m).value === 'privatise';
+    if (!(+$('#e-duree', m).value >= 10)) return toast('La durée doit être d’au moins 10 minutes.', 'alerte');
+    if (!(+$('#e-prix', m).value >= 0)) return toast('Indiquez un prix (0 si c’est gratuit).', 'alerte');
+    if (!(mini >= 1) || !(maxi >= 1)) return toast('Indiquez le nombre de personnes minimum et maximum.', 'alerte');
+    if (mini > maxi) return toast('Le minimum de personnes dépasse le maximum.', 'alerte');
+    if (ressources.some((r) => !(r.capacite >= 1))) return toast(`Chaque ${priv ? 'salle' : 'stock de places'} doit accueillir au moins 1 personne.`, 'alerte');
+    const plusGrande = Math.max(...ressources.map((r) => r.capacite));
+    if (priv && maxi > plusGrande) return toast(`Personnes max. (${maxi}) au-dessus de votre plus grande salle (${plusGrande}) : un groupe de ${maxi} ne pourrait jamais réserver.`, 'alerte');
+    if (!priv && mini > ressources.reduce((t, r) => t + r.capacite, 0)) return toast('Le minimum de personnes dépasse le nombre de places.', 'alerte');
     if (horaires.some((h) => h.debut >= h.fin)) return toast('Une plage horaire finit avant de commencer.', 'alerte');
     ressources.forEach((r) => { r.ical_url = (r.ical_url || '').trim().replace(/^webcal:/, 'https:'); });
     if (ressources.some((r) => r.ical_url && !/^https:\/\//.test(r.ical_url))) return toast('Le lien d’agenda doit commencer par https://', 'alerte');
@@ -1259,15 +1283,32 @@ async function pCompte() {
   const totp = (f?.totp || []).find((x) => x.status === 'verified');
   $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('mail')}Connexion</h2>
     <div class="reglage"><div><b>E-mail de connexion</b><p>${esc(u?.user?.email || '')}</p></div><button class="btn p" id="c-mail">Changer</button></div>
+    <div class="reglage"><div><b>Mot de passe</b><p>10 caractères au moins, avec des lettres et des chiffres.</p></div><button class="btn p" id="c-mdp">Changer</button></div>
     <div class="reglage"><div><b>Téléphone de contact</b><p>Pour vous joindre en cas de souci. Jamais montré aux clients.</p></div><div class="copie" style="max-width:260px"><input id="c-tel" value="${esc(espace.entreprise.telephone)}"><button class="btn p" id="c-tel-ok">OK</button></div></div></div>
   <div class="carte" style="margin-top:16px"><h2>${ic('bouclier')}Double authentification</h2>
-    <div class="reglage"><div><b>${totp ? 'Activée' : 'Désactivée'}</b><p>${totp ? 'Un code de votre appli d’authentification est demandé à chaque connexion.' : 'Recommandé : en plus du code par e-mail, un code de votre téléphone (Google Authenticator, Microsoft Authenticator, Mots de passe d’Apple…).'}</p></div>
+    <div class="reglage"><div><b>${totp ? 'Activée' : 'Désactivée'}</b><p>${totp ? 'Un code de votre appli d’authentification est demandé à chaque connexion.' : 'Recommandé : en plus de votre mot de passe, un code de votre téléphone (Google Authenticator, Microsoft Authenticator, Mots de passe d’Apple…).'}</p></div>
     ${totp ? `<button class="btn non p" id="c-mfa-off">Désactiver</button>` : `<button class="btn prim p" id="c-mfa-on">${ic('bouclier')}Activer</button>`}</div></div>
   <div class="carte" style="margin-top:16px"><h2>${ic('sortie')}Sessions</h2><div class="reglage"><div><b>Se déconnecter partout</b><p>Ordinateurs et téléphones où votre compte est ouvert.</p></div><button class="btn p" id="c-partout">Déconnecter</button></div></div>`;
   $('#c-tel-ok').onclick = async () => { await rpc('pro_modifier_entreprise', { p: { telephone: $('#c-tel').value } }); toast('Téléphone enregistré.'); await recharger(); };
   $('#c-mail').onclick = async () => {
     const m = await demander({ titre: 'Changer d’e-mail de connexion', texte: 'Un lien de confirmation est envoyé aux deux adresses.', champ: 'Nouvelle adresse', bouton: 'Envoyer' });
     if (!m) return; const { error } = await sb.auth.updateUser({ email: m.trim() }); toast(error ? error.message : 'Confirmez depuis vos e-mails.', error ? 'alerte' : 'mail');
+  };
+  $('#c-mdp').onclick = () => {
+    const { v, fermer } = fenetre({ titre: 'Changer de mot de passe', petite: true,
+      corps: `<label class="l" for="cm-1">Nouveau mot de passe</label><input id="cm-1" type="password" autocomplete="new-password">
+        <label class="l" for="cm-2">Encore une fois</label><input id="cm-2" type="password" autocomplete="new-password"><p class="note" id="cm-err" style="color:var(--rouge);min-height:18px"></p>`,
+      pied: `<button class="btn" data-fermer>Annuler</button><button class="btn prim" id="cm-ok">Enregistrer</button>` });
+    $('#cm-ok', v).onclick = async () => {
+      const a = $('#cm-1', v).value, b = $('#cm-2', v).value, err = $('#cm-err', v);
+      if (!mdpValable(a)) { err.textContent = 'Trop faible : 10 caractères au moins, avec des lettres et des chiffres.'; return; }
+      if (a !== b) { err.textContent = 'Les deux mots de passe ne sont pas identiques.'; return; }
+      $('#cm-ok', v).disabled = true;
+      const { error } = await sb.auth.updateUser({ password: a });
+      $('#cm-ok', v).disabled = false;
+      if (error) { err.textContent = /same|different/i.test(error.message) ? 'Choisissez un mot de passe différent de l’ancien.' : /reauth|recent/i.test(error.message) ? 'Pour votre sécurité, déconnectez-vous puis reconnectez-vous avant de changer de mot de passe.' : 'Mot de passe refusé : choisissez-en un plus long ou moins courant.'; return; }
+      fermer(); toast('Mot de passe changé.');
+    };
   };
   $('#c-partout').onclick = async () => { if (await demander({ titre: 'Se déconnecter partout ?', bouton: 'Déconnecter', danger: true })) { await sb.auth.signOut({ scope: 'global' }); location.reload(); } };
   if (totp) $('#c-mfa-off').onclick = async () => {
@@ -1343,7 +1384,7 @@ async function pEquipe() {
     ${eq.membres.map((m) => `<div class="logiciel"><span><b>${esc(m.email)}</b>${m.moi ? ' <span class="note">(vous)</span>' : ''}<br><span class="note">${m.role === 'proprietaire' ? 'Responsable' : 'Équipe'}</span></span>${m.role === 'proprietaire' ? '' : `<button class="btn non p" data-retirer="${m.user_id}">Retirer</button>`}</div>`).join('')}
     ${eq.invitations.map((i) => `<div class="logiciel"><span><b>${esc(i)}</b><br><span class="note">Invitée : accès à sa première connexion</span></span><button class="btn p" data-annuler="${esc(i)}">Annuler</button></div>`).join('')}
     <div class="copie" style="margin-top:14px"><input id="q-mail" type="email" placeholder="collegue@monactivite.fr"><button class="btn prim" id="q-ok">${ic('plus')}Inviter</button></div>
-    <p class="note" style="margin:8px 0 0">La personne se connecte sur tikette.fr/pro/espace avec cette adresse (code par e-mail).</p></div>`;
+    <p class="note" style="margin:8px 0 0">La personne va sur tikette.fr/pro/espace, touche « Première connexion ? » et tape cette adresse : elle reçoit un code par e-mail, puis choisit son mot de passe.</p></div>`;
   $('#q-ok').onclick = async () => { const r = await rpc('pro_inviter', { p_email: $('#q-mail').value }); toast(r.ajoute ? 'Ajouté à l’équipe.' : 'Invitation enregistrée.'); pEquipe(); };
   $$('[data-retirer]').forEach((b) => b.onclick = async () => { if (await demander({ titre: 'Retirer cette personne ?', bouton: 'Retirer', danger: true })) { await rpc('pro_retirer_membre', { p_user: b.dataset.retirer }); pEquipe(); } });
   $$('[data-annuler]').forEach((b) => b.onclick = async () => { await rpc('pro_retirer_membre', { p_email: b.dataset.annuler }); pEquipe(); });
@@ -1393,7 +1434,9 @@ function pPart() {
 
 setInterval(async () => {
   if (!espace) return; const avant = +espace.entreprise.a_valider || 0;
-  try { await recharger(); } catch { return; }
+  // Relecture silencieuse (sans message d'erreur toutes les minutes si le réseau coupe).
+  const { data: e2, error } = await sb.rpc('pro_mon_espace'); if (error || !e2) return;
+  espace = e2; await lireALire(); dessinerMenu();
   if ((+espace.entreprise.a_valider || 0) > avant) { toast('Nouvelle demande de réservation.', 'cloche'); if (vueActuelle === 'accueil') accueil(); }
 }, 60000);
 demarrer();
