@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-8XGKHe3ozUNKMHqxJbwcubo8a7i2AkmwopLVewhvkfU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-0hOis+ffRVnM83/GwFJsrpVN7C1YLrDDPgDC78Iq4Qw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -274,7 +274,17 @@ async function demarrer() {
   if (!espace && await rpc('pro_accepter_invitation').catch(() => false)) espace = await rpc('pro_mon_espace');
   if (!espace) { location.href = '/pro/#inscription'; return; }
   $('#connexion').classList.add('cache'); $('#appli').classList.remove('cache');
-  aller(location.hash.slice(1) || 'accueil');
+  // Retour de la page Stripe (« retour » = terminée ou quittée, « reprendre » = lien expiré : on en redemande un).
+  const retourStripe = new URLSearchParams(location.search).get('stripe');
+  if (retourStripe) {
+    history.replaceState(null, '', location.pathname + '#parametres');
+    sousParam = 'paiements';
+    if (retourStripe === 'reprendre' && proprio()) {
+      const r = await stripePro('compte');
+      if (r?.ok && /^https:\/\//.test(r.url || '')) { location.href = r.url; return; }
+    }
+  }
+  aller(retourStripe ? 'parametres' : location.hash.slice(1) || 'accueil');
   window.onhashchange = () => { const v = location.hash.slice(1); if (v && v !== vueActuelle) aller(v); };
 }
 function dessinerMenu() {
@@ -766,10 +776,10 @@ function agenda() {
 // ───── Paramètres ─────
 let sousParam = 'compte';
 function parametres() {
-  const items = [['compte', 'bouclier', 'Compte et sécurité'], ['notifications', 'cloche', 'Notifications'], ['equipe', 'gens', 'Équipe'], ['conges', 'soleil', 'Congés et fermetures'], ['facturation', 'recu', 'Facturation'], ['partenariat', 'boutique', 'Partenariat']];
+  const items = [['compte', 'bouclier', 'Compte et sécurité'], ['paiements', 'euro', 'Paiements'], ['notifications', 'cloche', 'Notifications'], ['equipe', 'gens', 'Équipe'], ['conges', 'soleil', 'Congés et fermetures'], ['facturation', 'recu', 'Facturation'], ['partenariat', 'boutique', 'Partenariat']];
   $('#vue').innerHTML = entete('Paramètres') + `<div class="grille colonnes" style="grid-template-columns:220px 1fr;align-items:start"><div class="sous-nav">${items.map(([k, i, t]) => `<button data-s="${k}" class="${sousParam === k ? 'on' : ''}">${ic(i)}${t}</button>`).join('')}</div><div id="p-corps"></div></div>`;
   $$('[data-s]').forEach((b) => b.onclick = () => { sousParam = b.dataset.s; parametres(); });
-  ({ compte: pCompte, notifications: pNotifs, equipe: pEquipe, conges: pConges, facturation: pFactu, partenariat: pPart }[sousParam])();
+  ({ compte: pCompte, paiements: pPaiements, notifications: pNotifs, equipe: pEquipe, conges: pConges, facturation: pFactu, partenariat: pPart }[sousParam])();
 }
 const nonProprio = '<div class="bandeau info">' + ic('cadenas') + '<div>Réservé au responsable du compte.</div></div>';
 async function pCompte() {
@@ -804,6 +814,36 @@ async function pCompte() {
       const r = await sb.auth.mfa.challengeAndVerify({ factorId: data.id, code: $('#mfa-c', v).value.trim() });
       if (r.error) return toast('Code incorrect.', 'alerte'); fermer(); toast('Double authentification activée.'); pCompte();
     };
+  };
+}
+// Recevoir ses paiements (Stripe Connect) : le client paie dans l'appli, l'argent va directement au pro,
+// Stripe prélève ses frais et notre commission. Le pro remplit une seule page Stripe (~5 min).
+async function stripePro(action) {
+  const { data, error } = await sb.functions.invoke('stripe-pro', { body: { action } });
+  if (error) { let j = null; try { j = await error.context.json(); } catch (e) {} return j || { ok: false, raison: 'reseau' }; }
+  return data;
+}
+async function pPaiements() {
+  if (!proprio()) { $('#p-corps').innerHTML = nonProprio; return; }
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('euro')}Recevoir mes paiements</h2><p class="note">Vérification…</p></div>`;
+  const e = await stripePro('etat');
+  const actif = e?.ok && e.paiements;
+  const commence = e?.ok && e.compte && !e.paiements;
+  const etat = !e?.ok ? (e?.raison === 'pas_active' ? 'Le paiement dans l’appli ouvre bientôt.' : 'Impossible de vérifier pour le moment. Réessayez dans un instant.')
+    : actif ? (e.virements ? 'Actif : vos clients paient dans l’appli, l’argent arrive sur votre compte bancaire.' : 'Les clients peuvent payer. Stripe attend encore une information pour vos virements : ouvrez votre tableau de bord Stripe.')
+    : commence ? 'Votre page Stripe n’est pas terminée. Reprenez-la là où vous l’avez laissée.'
+    : 'Pas encore activé : vos clients réservent dans l’appli et paient sur place.';
+  $('#p-corps').innerHTML = `<div class="carte"><h2>${ic('euro')}Recevoir mes paiements</h2>
+    <div class="reglage"><div><b>${actif ? 'Paiement dans l’appli activé' : 'Paiement dans l’appli'}</b><p>${esc(etat)}</p></div>
+    ${e?.ok ? `<button class="btn ${actif ? 'p' : 'prim'}" id="s-go">${actif ? 'Mon tableau de bord Stripe' : commence ? 'Reprendre ma page Stripe' : 'Recevoir mes paiements'}</button>` : ''}</div>
+    <p class="note" style="margin:10px 0 0">Les clients paient à la réservation, pour tout le groupe. Le paiement est versé directement sur votre compte par <b>Stripe</b> : Tikette ne touche jamais l’argent. Stripe prélève ses frais (environ 1,5 % + 0,25 € par carte européenne) et la commission Tikette au moment du paiement. Si vous refusez, ne répondez pas à temps ou annulez, le client est remboursé automatiquement.</p>
+    <p class="note" style="margin:8px 0 0">Il vous faut 5 minutes : une pièce d’identité, votre SIRET et l’IBAN du compte qui recevra les virements.</p></div>`;
+  if ($('#s-go')) $('#s-go').onclick = async () => {
+    $('#s-go').disabled = true;
+    const r = await stripePro('compte');
+    if (r?.ok && /^https:\/\//.test(r.url || '')) { location.href = r.url; return; }
+    $('#s-go').disabled = false;
+    toast(r?.raison === 'pas_active' ? 'Le paiement dans l’appli ouvre bientôt.' : 'Stripe ne répond pas. Réessayez dans un instant.', 'alerte');
   };
 }
 function pNotifs() {
