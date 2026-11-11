@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Hvv/jCQf81amxjhTarlzQErbG6v+izxs3Gu4DJ1LUSI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZTInPwQbeR1aJ+6Xg468HKF6/zctpj464MDsTQS51mc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1781,8 +1781,20 @@ const STATUTS_PRO = { en_attente: 'À vérifier', valide: 'Validée', suspendu: 
 const COULEUR_PRO = { en_attente: 'var(--jaune)', valide: 'var(--vert)', suspendu: 'var(--rose)', refuse: 'var(--doux)', quitte: 'var(--doux)' };
 let ongletPro = 'entreprises', filtrePro = '';
 // Liste d'attente de tikette.fr/pro (« bientôt disponible ») : supabase/pro-attente.sql du dépôt AppliDates.
-const STATUTS_ATT = { nouveau: 'Nouveau', contacte: 'Contacté', retenu: 'Retenu', refuse: 'Pas retenu' };
-const COULEUR_ATT = { nouveau: 'var(--jaune)', contacte: 'var(--bleu)', retenu: 'var(--vert)', refuse: 'var(--doux)' };
+// On retient tout le monde (Greg, 11 nov. 2026) : plus que « Nouveau » (pas encore contactée) et « Contacté ».
+const STATUTS_ATT = { nouveau: 'Nouveau', contacte: 'Contacté' };
+const COULEUR_ATT = { nouveau: 'var(--jaune)', contacte: 'var(--bleu)' };
+// Mail de bienvenue aux entreprises inscrites d'elles-mêmes (sans mail de prospection reçu).
+function mailAttente(x, rang) {
+  const objet = 'Votre inscription sur Tikette';
+  const corps = ['Bonjour,',
+    'Merci d’avoir laissé vos informations sur tikette.fr/pro ! Nous, c’est Greg et Yvan, les deux potes derrière Tikette.',
+    rang <= 50 ? `Vous êtes n° ${rang} sur la liste : votre place de partenaire fondateur est réservée (0 % de commission jusqu’au 31 mars 2027, puis 8 % à vie).` : `Vous êtes n° ${rang} sur la liste.`,
+    'L’espace pro ouvre très bientôt : on revient vers vous dès qu’il est prêt pour mettre votre activité en ligne dans l’appli.',
+    'Une question d’ici là ? Répondez simplement à ce mail.',
+    'À très vite,\nGreg et Yvan\nTikette · https://tikette.fr'].join('\n\n');
+  return `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps)}`;
+}
 function blocAttente(a, re) {
   const choix = (x) => h('select', { class: 'champ', style: `width:auto;padding:5px 8px;font-size:12.5px;color:${COULEUR_ATT[x.statut]}`,
       onchange: async (e) => { await rpc('console_pro_attente_maj', { p_id: x.id, p_statut: e.target.value }); re(); } },
@@ -1796,15 +1808,20 @@ function blocAttente(a, re) {
       kpi('Cette semaine', nombre(a.semaine), 'nouvelles entreprises en 7 jours'),
       kpi('Places de fondateur', `${50 - a.places} / 50`, `il en reste ${a.places}`)),
     a.liste.length ? h('div', { class: 'panneau tableau', style: 'margin-top:14px' }, h('table', {},
-      h('thead', {}, h('tr', {}, h('th', {}, 'N°'), h('th', {}, 'ENTREPRISE'), h('th', {}, 'CONTACT'), h('th', {}, 'ENVOIS'), h('th', {}, 'STATUT'), h('th', {}, 'NOTE'))),
+      h('thead', {}, h('tr', {}, h('th', {}, 'N°'), h('th', {}, 'ENTREPRISE'), h('th', {}, 'CONTACT'), h('th', {}, 'ENVOIS'), h('th', {}, 'STATUT'), h('th', {}, ''), h('th', {}, 'NOTE'))),
       h('tbody', {}, [...a.liste].sort((x, y) => x.id - y.id).map((x, i) => h('tr', {},
         h('td', { class: 'doux' }, String(i + 1), i < 50 ? h('div', { style: 'color:var(--jaune);font-size:10.5px;font-weight:700' }, 'FONDATEUR') : ''),
-        h('td', {}, h('b', {}, x.nom), h('div', { class: 'doux', style: 'font-size:12px' }, x.activite || '—', ' · ', x.commune || '?', x.code_postal ? ` (${x.code_postal.slice(0, 2)})` : ''),
+        h('td', {}, h('b', {}, x.nom), x.depuis_prospection ? h('span', { class: 'doux', style: 'font-size:11px;margin-left:6px' }, 'via la prospection') : '',
+          h('div', { class: 'doux', style: 'font-size:12px' }, x.activite || '—', ' · ', x.commune || '?', x.code_postal ? ` (${x.code_postal.slice(0, 2)})` : ''),
           h('div', { class: 'doux', style: 'font-size:11.5px' }, 'Le ', dateFr(x.cree_le), x.siret ? ' · SIRET ' + x.siret : ' · sans SIRET')),
         h('td', { style: 'font-size:12.5px' }, h('a', { href: 'mailto:' + x.email, style: 'color:inherit' }, x.email), h('div', { class: 'doux', style: 'font-size:12px' }, x.telephone || ''),
           x.site ? h('a', { href: x.site, target: '_blank', rel: 'noopener', class: 'doux', style: 'font-size:12px' }, 'site') : ''),
         h('td', {}, String(x.tentatives)),
-        h('td', {}, choix(x)), h('td', {}, note(x)))))))
+        h('td', {}, choix(x)),
+        h('td', {}, h('a', { class: x.statut === 'nouveau' ? 'btn' : 'btn-contour', style: 'white-space:nowrap;font-size:12.5px', href: mailAttente(x, i + 1),
+          onclick: async () => { if (x.statut === 'nouveau') { await rpc('console_pro_attente_maj', { p_id: x.id, p_statut: 'contacte' }).catch(() => {}); setTimeout(re, 800); } } },
+          x.statut === 'nouveau' ? 'Écrire' : 'Réécrire')),
+        h('td', {}, note(x)))))))
       : h('div', { class: 'panneau doux', style: 'margin-top:14px' }, 'Personne pour l’instant. Le formulaire de tikette.fr/pro remplit cette liste toute seule.'));
 }
 async function pageEspacePro() {
@@ -1820,7 +1837,7 @@ async function pageEspacePro() {
       ? h('a', { class: 'btn', href: 'https://tikette.fr/pro/demo/', target: '_blank', rel: 'noopener', style: 'margin-left:8px' }, 'Voir la démarche pro (démo, 1 h)') : '';
     const lien = h('span', {}, h('a', { class: 'btn-contour', href: 'https://tikette.fr/pro/', target: '_blank', rel: 'noopener' }, 'Voir tikette.fr/pro'), demo);
     if (att) { afficherPour(g, entete('Espace pro', 'Bientôt disponible : les entreprises qui ont laissé leurs informations sur tikette.fr/pro', lien), blocAttente(att, re),
-      h('p', { class: 'note-bas' }, 'Une entreprise de la Prospection qui remplit le formulaire passe toute seule en « Inscrit ». Les 50 premières de la liste ont une place de partenaire fondateur.')); return; }
+      h('p', { class: 'note-bas' }, 'Une entreprise qui avait reçu notre mail de prospection arrive en « Contacté » (et passe en « Inscrit » dans la Prospection). Une entreprise venue d’elle-même arrive en « Nouveau » : « Écrire » ouvre un mail de bienvenue déjà rédigé et la passe en « Contacté ». On retient tout le monde ; les 50 premières de la liste ont une place de partenaire fondateur.')); return; }
     afficherPour(g, entete('Espace pro', 'Les entreprises inscrites sur tikette.fr/pro'), h('div', { class: 'panneau' }, 'Il faut d’abord lancer dans Supabase (projet Tikette) : ',
       h('b', {}, 'pro-attente.sql'), ' pour la liste d’attente « bientôt disponible ». À l’ouverture : ', h('b', {}, 'pro.sql'), ', ', h('b', {}, 'pro-types.sql'), ', ', h('b', {}, 'pro-auto.sql'), ', ', h('b', {}, 'pro-avis.sql'), ' puis ', h('b', {}, 'console-pro.sql'), '.')); return;
   }
