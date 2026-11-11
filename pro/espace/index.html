@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-0hOis+ffRVnM83/GwFJsrpVN7C1YLrDDPgDC78Iq4Qw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-pktNFe3F9Y+oq/FB6QbtaO75N+TQiOMo5f196XYSqRc='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -819,7 +819,7 @@ async function pCompte() {
 // Recevoir ses paiements (Stripe Connect) : le client paie dans l'appli, l'argent va directement au pro,
 // Stripe prélève ses frais et notre commission. Le pro remplit une seule page Stripe (~5 min).
 async function stripePro(action) {
-  const { data, error } = await sb.functions.invoke('stripe-pro', { body: { action } });
+  const { data, error } = await sb.functions.invoke('stripe-pro', { body: { action, retour: location.origin + location.pathname } });
   if (error) { let j = null; try { j = await error.context.json(); } catch (e) {} return j || { ok: false, raison: 'reseau' }; }
   return data;
 }
