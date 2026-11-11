@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ky/hh777MZ5QDBQ/1a+4JqmvnRzdeIIAurwM1gU6Mdo='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-TnwMwR+u19gSujyrKg8BAP08MMXo/e4p6mn3RsDyYlE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -168,37 +168,35 @@ nav.cote .compteur{position:absolute;top:2px;right:2px}main{padding:18px 16px 96
 <body>
 <section id="connexion" class="ecran-seul cache"><div class="carte">
   <div class="logo"><img src="/mail/tikette.png" alt="">tikette <b>PRO</b></div>
-  <div id="etape-mail"><h1 style="margin:24px 0 6px">Connexion</h1>
-  <p class="note">Votre adresse e-mail et votre mot de passe.</p>
+  <div id="etape-mail"><h1 style="margin:24px 0 4px">Connexion</h1>
   <form id="f-mail"><label class="l" for="mail">E-mail</label><input id="mail" type="email" required autocomplete="username" placeholder="contact@monactivite.fr">
   <label class="l" for="mdp">Mot de passe</label><input id="mdp" type="password" required autocomplete="current-password">
   <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Se connecter</button></form>
-  <p class="note" style="margin-top:12px"><a href="#" id="oubli">Mot de passe oublié ?</a> · <a href="#" id="premiere">Première connexion sans lien ?</a></p></div>
+  <p class="note" style="margin-top:12px;text-align:center"><a href="#" id="oubli">Mot de passe oublié ?</a></p></div>
   <div id="etape-activer" class="cache"><h1 style="margin:24px 0 6px">Bienvenue <span id="a-nom"></span> !</h1>
-  <p class="note">Créez votre mot de passe : vous arrivez ensuite directement dans votre espace pro.</p>
-  <form id="f-activer"><label class="l" for="a-mail">E-mail de connexion</label><input id="a-mail" type="email" required autocomplete="username">
-  <p class="note" style="margin-top:6px">C’est l’adresse à laquelle nous vous avons écrit. Vous pouvez en mettre une autre (celle de votre espace pro, par exemple) : un code de vérification lui sera envoyé.</p>
+    <form id="f-activer"><label class="l" for="a-mail">E-mail de connexion</label><input id="a-mail" type="email" required autocomplete="username">
+  <p class="note" style="margin-top:6px">Modifiable si vous préférez une autre adresse.</p>
   <label class="l" for="a-mdp">Mot de passe</label><input id="a-mdp" type="password" required minlength="10" autocomplete="new-password">
   <label class="l" for="a-mdp2">Le même, encore une fois</label><input id="a-mdp2" type="password" required minlength="10" autocomplete="new-password">
-  <p class="note" style="margin-top:8px">10 caractères au moins, avec des lettres et des chiffres. Gardez-le pour vous : Tikette ne vous le demandera jamais.</p>
+  <p class="note" style="margin-top:6px">10 caractères minimum, lettres et chiffres.</p>
   <button class="btn prim" style="width:100%;margin-top:12px;padding:11px">Créer mon mot de passe</button></form></div>
   <div id="etape-oubli" class="cache"><h1 style="margin:24px 0 6px" id="oubli-titre">Mot de passe oublié</h1>
-  <p class="note">Saisissez l’adresse e-mail de votre espace pro : vous recevez un code à 6 chiffres, puis vous choisissez un nouveau mot de passe.</p>
+  <p class="note">Recevez un code par e-mail, puis choisissez un nouveau mot de passe.</p>
   <form id="f-oubli"><label class="l" for="o-mail">E-mail</label><input id="o-mail" type="email" required autocomplete="email" placeholder="contact@monactivite.fr">
   <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Recevoir un code</button></form><p class="note" style="margin-top:12px"><a href="#" data-retour>Retour à la connexion</a></p></div>
   <div id="etape-code" class="cache"><h1 style="margin:24px 0 6px">Vérifiez vos e-mails</h1><p class="note">Code envoyé à <b id="mail-envoye"></b>.</p>
   <form id="f-code"><label class="l" for="code">Code</label><input id="code" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" style="letter-spacing:.3em;font-size:18px">
-  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Continuer</button></form><p class="note" style="margin-top:12px">Le code est valable 1 heure. Tikette ne vous le demandera jamais, ni par téléphone ni par e-mail : ne le communiquez à personne.</p><p class="note"><a href="#" data-retour>Retour à la connexion</a> · <a href="#" id="renvoyer">Renvoyer un code</a></p></div>
+  <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Continuer</button></form><p class="note" style="margin-top:12px"><a href="#" data-retour>Retour à la connexion</a> · <a href="#" id="renvoyer">Renvoyer un code</a></p></div>
   <div id="etape-nouveau" class="cache"><h1 style="margin:24px 0 6px">Votre mot de passe</h1>
   <form id="f-nouveau"><label class="l" for="n-mdp">Nouveau mot de passe</label><input id="n-mdp" type="password" required minlength="10" autocomplete="new-password">
   <label class="l" for="n-mdp2">Le même, encore une fois</label><input id="n-mdp2" type="password" required minlength="10" autocomplete="new-password">
-  <p class="note" style="margin-top:8px">10 caractères au moins, avec des lettres et des chiffres.</p>
+  <p class="note" style="margin-top:6px">10 caractères minimum, lettres et chiffres.</p>
   <button class="btn prim" style="width:100%;margin-top:12px;padding:11px">Enregistrer et entrer</button></form></div>
   <div id="etape-mfa" class="cache"><h1 style="margin:24px 0 6px">Double authentification</h1><p class="note">Code à 6 chiffres affiché dans votre appli d'authentification.</p>
   <form id="f-mfa"><input id="code-mfa" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" style="letter-spacing:.3em;font-size:18px;margin-top:14px">
   <button class="btn prim" style="width:100%;margin-top:16px;padding:11px">Valider</button></form></div>
   <p id="err-connexion" class="note" style="color:var(--rouge);min-height:1em"></p>
-  <div class="sep"></div><p class="note">Pas encore partenaire ? <a href="/pro/#inscription">Inscrire mon activité</a></p>
+  
 </div></section>
 
 <div id="appli" class="cache">
@@ -352,7 +350,6 @@ async function envoyerCode() {
 }
 const ouvrirOubli = (titre) => (e) => { e.preventDefault(); $('#oubli-titre').textContent = titre; $('#o-mail').value = $('#mail').value; etape('oubli'); };
 $('#oubli').onclick = ouvrirOubli('Mot de passe oublié');
-$('#premiere').onclick = ouvrirOubli('Première connexion');
 $$('[data-retour]').forEach((a) => a.onclick = (e) => { e.preventDefault(); if (activation) { activation = null; etape('activer'); } else etape('mail'); });
 $('#f-oubli').onsubmit = async (e) => {
   e.preventDefault(); mailEnCours = $('#o-mail').value.trim().toLowerCase(); occupe(e.target, true);
