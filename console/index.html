@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-0vT8T8j1q5Hs7yHHkOsUFJOKvV7V8idFLE967Pwalro='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-q3WCx9USkEbQIeqrU5N5+3lUfoukXXw9Ixnq7a4Jt+8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1795,6 +1795,16 @@ function mailAttente(x, rang) {
     'À très vite,\nGreg et Yvan\nTikette · https://tikette.fr'].join('\n\n');
   return `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}&body=${encodeURIComponent(corps)}`;
 }
+// Signature d'Yvan (même rendu que la page Signatures mail).
+const SIGNATURE_YVAN = '<table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;color:#1E1433;margin:0 0 22px">'
+  + '<tr><td style="padding:0 14px 0 0;vertical-align:middle"><img src="https://tikette.fr/mail/tikette.png?v=2" width="56" height="56" alt="Tikette" style="display:block;border:0;width:56px;height:56px;border-radius:12px"></td>'
+  + '<td style="padding:2px 0 2px 14px;border-left:3px solid #FF6B9A;vertical-align:middle">'
+  + '<div style="font-size:15px;font-weight:bold;color:#1E1433">Yvan DRACA</div>'
+  + '<div style="font-size:13px;color:#6B6480">Cofondateur · Tikette</div>'
+  + '<div style="font-size:13px;margin-top:6px"><a href="https://tikette.fr" style="color:#FF6B9A;font-weight:bold;text-decoration:none">tikette.fr</a> &nbsp;·&nbsp; <a href="mailto:contact@tikette.fr" style="color:#4A4458;text-decoration:none">contact@tikette.fr</a></div>'
+  + '<div style="font-size:12px;color:#8A849A;font-style:italic;margin-top:4px">Choisis l’ambiance, On organise.</div>'
+  + '<div style="margin-top:8px;line-height:0"><a href="https://www.instagram.com/tikette.app/" style="text-decoration:none;display:inline-block;margin-right:6px"><img src="https://tikette.fr/mail/instagram.png" width="22" height="22" alt="Instagram" style="display:inline-block;border:0;width:22px;height:22px;vertical-align:middle"></a><a href="https://www.tiktok.com/@tikette.app" style="text-decoration:none;display:inline-block;margin-right:6px"><img src="https://tikette.fr/mail/tiktok.png" width="22" height="22" alt="TikTok" style="display:inline-block;border:0;width:22px;height:22px;vertical-align:middle"></a></div>'
+  + '</td></tr><tr><td colspan="2" style="padding-top:12px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#A39DB3">Tikette est une appli du studio <b style="color:#6B6480">Egg Not Found</b></td></tr></table>';
 // Mail d'ouverture de l'espace pro : mis en forme (tableaux, styles en ligne : ce qu'Outlook garde au collage).
 function mailAcces(x, rang, lien) {
   const objet = 'Bienvenue chez Tikette : votre espace pro est prêt';
@@ -1828,7 +1838,7 @@ function mailAcces(x, rang, lien) {
       : P('<b>Pour vous connecter :</b> utilisez votre adresse de connexion et votre mot de passe (« Mot de passe oublié ? » si besoin).') + bouton('Ouvrir mon espace pro &#10140;'))
     + P('&#127915; Tikette sort le <b>14 décembre</b> : en créant vos activités dès maintenant, vous serez prêt pour le lancement.')
     + P('Une question ? Répondez simplement à ce mail.')
-    + P('À très vite,<br><b>Greg et Yvan</b><br><span style="color:#8A6BD1">Tikette · <a href="https://tikette.fr" style="color:#8A6BD1">tikette.fr</a></span>', '8px 0 20px')
+    + P('À très vite,', '8px 0 14px') + SIGNATURE_YVAN
     + `</td></tr></table>`;
   const corps = ['Bonjour,', 'Un grand merci pour votre confiance !',
     fondateur ? 'Bonne nouvelle : vous faites partie de nos partenaires fondateurs (0 % de commission jusqu’au 31 mars 2027, puis 8 % à vie).' : '',
@@ -1838,7 +1848,7 @@ function mailAcces(x, rang, lien) {
       : `Pour vous connecter : ${url} avec votre adresse de connexion et votre mot de passe.`,
     lien ? 'Ce lien est personnel et ne sert qu’une fois (valable 30 jours) : ne le transférez pas.\nEnsuite, vous vous connecterez depuis le bouton « Espace pro » de tikette.fr/pro avec votre e-mail et votre mot de passe.\nNous ne vous demanderons jamais votre mot de passe.' : '',
     'Tikette sort le 14 décembre : en créant vos activités dès maintenant, vous serez prêt pour le lancement.',
-    'Une question ? Répondez simplement à ce mail.', 'À très vite,\nGreg et Yvan\nTikette · https://tikette.fr'].filter(Boolean).join('\n\n');
+    'Une question ? Répondez simplement à ce mail.', 'À très vite,\n\nYvan DRACA\nCofondateur · Tikette\ntikette.fr · contact@tikette.fr\nChoisis l’ambiance, On organise.'].filter(Boolean).join('\n\n');
   return { a: x.email, objet, corps, html, mailto: `mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent(objet)}` };
 }
 // Bouton « Valider » (supabase/pro-acces.sql) : crée l'espace pro de l'entreprise et prépare le mail avec son lien
