@@ -70,7 +70,7 @@ def lire_periodes(texte, debut, fin):
 SPORT_PRATIQUE = r"\b(initiation|stage|cours|entrainement|ecole de|decouverte du|portes ouvertes|inscriptions?)\b"
 
 # Sorties pour enfants : pas pour un date.
-ENFANTS = r"\b(jeune public|enfants?|tout[- ]petits|bebes?|p.tits|des \d+ ?ans|kids)\b"
+ENFANTS = r"\b(heure du conte|contes? pour|jeune public|enfants?|tout[- ]petits|bebes?|p.tits|des \d+ ?ans|kids)\b"
 
 
 def genre(nom, categories):
