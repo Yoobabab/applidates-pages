@@ -73,9 +73,16 @@ SPORT_PRATIQUE = r"\b(initiation|stage|cours|entrainement|ecole de|decouverte du
 ENFANTS = r"\b(heure du conte|contes? pour|jeune public|enfants?|tout[- ]petits|bebes?|p.tits|des \d+ ?ans|kids)\b"
 
 
+# Pas une sortie pour un date (retour de Greg, 11 nov. 2026 : « La guerre de 1870-1871 », « L'Heure du conte ») :
+# conférences, lectures, ateliers, cérémonies, réunions…
+PAS_UNE_SORTIE = (r"\b(lectures?|bibliotheque|mediatheque|conferences?|causerie|rencontre[- ]debat|debat|colloque|"
+                  r"seminaire|atelier|stage|cours|formation|reunion|assemblee|permanence|ceremonie|commemoration|"
+                  r"armistice|messe|culte|priere|don du sang|ludotheque|scolaire|guerre|familles?)\b")
+
+
 def genre(nom, categories):
     texte = sans_accents(nom)
-    if re.search(ENFANTS, texte):
+    if re.search(ENFANTS, texte) or re.search(PAS_UNE_SORTIE, texte):
         return None
     for g, motif in PAR_MOTS:
         if re.search(motif, texte):
