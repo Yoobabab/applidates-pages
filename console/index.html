@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-5krtyLW3ulrEipw4AmEOIKPKqDMZ5E7qOHbeEx6bdaI='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-fiVIKNVtiIZIPfBohSU60Jt/J/1kC7Yjiz7LyW3Y/6E='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -696,6 +696,11 @@ function dire(texte, ok) { msg.textContent = texte; msg.className = 'message ' +
 document.getElementById('form-email').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('email').value.trim().toLowerCase();
+  if (!/^(admin|contact)@eggnotfound\.fr$/.test(email)) {
+    return dire(/^[^@\s]+@eggnotfound$/.test(email)
+      ? 'Il manque « .fr » à la fin : ' + email + '.fr'
+      : 'Seules admin@eggnotfound.fr et contact@eggnotfound.fr ont accès à la console.');
+  }
   const bouton = e.submitter; bouton.disabled = true; dire('');
   const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
   bouton.disabled = false;
