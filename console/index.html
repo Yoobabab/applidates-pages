@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-fiVIKNVtiIZIPfBohSU60Jt/J/1kC7Yjiz7LyW3Y/6E='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-G8uzWxfmR58UFup6b8bJWay4JZ6m9QGeCKJZG7qlgR8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1888,6 +1888,69 @@ function mailFondateur(p, fondateur) {
   const a = adresseProspect(p);
   return { a, objet, corps, html, mailto: `mailto:${encodeURIComponent(a)}?subject=${encodeURIComponent(objet)}` };
 }
+// File d'envoi à la suite (demande de Greg, 14 nov. 2026) : un clic (ou Entrée) copie le mail du suivant et ouvre Outlook,
+// Greg colle (Ctrl+V) et envoie, puis revient : la ligne passe en « Mail envoyé » et le suivant est prêt.
+let fileEnvoi = null;
+function ouvrirFileEnvoi(type, liste, re) {
+  if (!liste.length) return;
+  fileEnvoi = { type, liste, i: 0, faits: 0, re };
+  dessinerFileEnvoi();
+}
+function fermerFileEnvoi() {
+  const r = fileEnvoi?.re; fileEnvoi = null;
+  document.getElementById('file-envoi')?.remove(); document.removeEventListener('keydown', toucheFileEnvoi);
+  if (r) r();
+}
+function toucheFileEnvoi(e) {
+  if (!fileEnvoi || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || '')) return;
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('file-envoi-go')?.click(); }
+  else if (e.key === 'Escape') fermerFileEnvoi();
+}
+function dessinerFileEnvoi() {
+  document.getElementById('file-envoi')?.remove();
+  if (!fileEnvoi) return;
+  document.removeEventListener('keydown', toucheFileEnvoi); document.addEventListener('keydown', toucheFileEnvoi);
+  const F = fileEnvoi, p = F.liste[F.i], relance = F.type === 'relance';
+  const jour = new Date().toDateString();
+  const aujourdhui = (prospectsCache || []).filter((x) => (x.contacte_le && new Date(x.contacte_le).toDateString() === jour) || (x.relance_le && new Date(x.relance_le).toDateString() === jour)).length;
+  const boite = h('div', { id: 'file-envoi', style: 'position:fixed;right:24px;bottom:24px;z-index:50;width:380px;background:#fff;border:1px solid #E6E1EE;border-radius:16px;box-shadow:0 18px 50px rgba(30,20,51,.22);padding:18px 20px;font-size:14px' });
+  const entete = h('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-bottom:10px' },
+    h('b', {}, relance ? 'Relances à la suite' : 'Premiers mails à la suite'),
+    h('button', { class: 'btn-lien', style: 'font-size:13px', onclick: fermerFileEnvoi, title: 'Échap' }, 'Arrêter ✕'));
+  const avancee = h('div', { class: 'doux', style: 'font-size:12.5px;margin-bottom:12px' },
+    `${Math.min(F.i + 1, F.liste.length)} / ${F.liste.length} · ${F.faits} envoyés là · ${aujourdhui} aujourd’hui`,
+    aujourdhui >= 40 ? h('div', { style: 'color:var(--rouge);margin-top:4px' }, 'Plus de 40 aujourd’hui : au-delà, le risque de finir en indésirables monte. Mieux vaut reprendre demain.') : '');
+  if (!p) {
+    boite.append(entete, avancee, h('p', { style: 'margin:6px 0 12px' }, 'C’est fini pour cette liste ✓'), h('button', { class: 'btn', onclick: fermerFileEnvoi }, 'Fermer'));
+    document.body.append(boite); return;
+  }
+  const m = mailProspect(p, relance);
+  const etat = h('div', { class: 'doux', style: 'font-size:12.5px;margin-top:8px;min-height:18px' }, 'Entrée = copier le mail et ouvrir Outlook');
+  const suivant = () => { F.i++; dessinerFileEnvoi(); };
+  const go = h('button', { id: 'file-envoi-go', class: 'btn', style: 'width:100%;padding:12px;font-size:15px', onclick: async (e) => {
+    const b = e.currentTarget; if (b.disabled) return;
+    if (b.dataset.fait) return suivant();
+    b.disabled = true;
+    const ok = await copierMailProspect(m);
+    if (!ok) { etat.textContent = 'Copie impossible : réessaie.'; b.disabled = false; return; }
+    location.href = m.mailto;
+    try { Object.assign(p, await rpc('console_prospect_maj', { p_id: p.id, p_statut: relance ? 'relance' : 'envoye', p_note: null })); } catch (err) { etat.textContent = 'Mail copié, mais l’étape n’a pas pu être enregistrée.'; }
+    F.faits++;
+    etat.textContent = 'Copié ✓ · Ctrl+V dans Outlook, Envoyer, puis reviens ici';
+    b.textContent = 'Suivant ➜'; b.dataset.fait = '1'; b.disabled = false;
+  } }, relance ? 'Copier la relance et ouvrir Outlook' : 'Copier le mail et ouvrir Outlook');
+  boite.append(entete, avancee,
+    h('div', { style: 'background:#F7F5FA;border-radius:12px;padding:12px 14px;margin-bottom:12px' },
+      h('b', { style: 'font-size:15px' }, nomCourt(p.nom)), p.priorite ? h('span', { style: 'color:var(--rouge);font-size:10.5px;margin-left:6px;font-weight:700' }, 'PRIORITÉ') : '',
+      h('div', { class: 'doux', style: 'font-size:12.5px' }, p.activite, ' · ', p.commune, ' (', p.departement, ')'),
+      h('div', { style: 'font-size:13px;margin-top:4px' }, m.a)),
+    go, etat,
+    h('div', { style: 'display:flex;gap:14px;margin-top:10px;font-size:12.5px' },
+      h('button', { class: 'btn-lien', onclick: suivant }, 'Passer celui-ci'),
+      h('button', { class: 'btn-lien', onclick: async () => { await rpc('console_prospect_maj', { p_id: p.id, p_statut: 'non', p_note: null }).then((r) => Object.assign(p, r)).catch(() => {}); suivant(); } }, 'Ne pas lui écrire (→ Non merci)')));
+  document.body.append(boite);
+  if (F.i === 0 && !F.faits) go.focus();
+}
 async function blocParcours(att, re) {
   if (!prospectsCache) prospectsCache = await rpc('console_prospects', { p_appli: 'tikette' }).catch(() => []);
   const f = filtreParcours, tous = prospectsCache || [];
@@ -1914,6 +1977,10 @@ async function blocParcours(att, re) {
       .sort((a, b) => (ordre[a.statut] - ordre[b.statut]) || (b.priorite - a.priorite) || (aRelancer(b) - aRelancer(a)))
       .map((p) => ({ type: 'prospect', x: p })));
   }
+  // Files d'envoi à la suite : mêmes filtres que la liste (sauf l'étape), priorités d'abord.
+  const pourFile = (p) => garde(p) && (!f.dep || p.departement === f.dep) && (!f.prio || p.priorite) && adresseProspect(p);
+  const aEnvoyer = tous.filter((p) => p.statut === 'a_contacter' && pourFile(p)).sort((a, b) => b.priorite - a.priorite);
+  const aRelancerListe = tous.filter((p) => aRelancer(p) && pourFile(p)).sort((a, b) => new Date(a.contacte_le) - new Date(b.contacte_le));
   const PAR = 50, pages = Math.max(1, Math.ceil(lignes.length / PAR)); pageParcours = Math.min(pageParcours, pages - 1);
   const morceau = lignes.slice(pageParcours * PAR, pageParcours * PAR + PAR);
   const maj = async (p, statut, note) => { Object.assign(p, await rpc('console_prospect_maj', { p_id: p.id, p_statut: statut ?? null, p_note: note ?? null })); };
@@ -1994,7 +2061,11 @@ async function blocParcours(att, re) {
       sel(f.dep, deps.map((d) => [d, 'Dép. ' + d]), (v) => changer(() => { f.dep = v; }), 'Tous les départements'),
       sel(f.act, acts.map((a) => [a, a]), (v) => changer(() => { f.act = v; }), 'Toutes les activités'),
       h('label', { class: 'doux', style: 'font-size:13px;display:flex;gap:6px;align-items:center' }, h('input', { type: 'checkbox', checked: f.prio, onchange: (e) => changer(() => { f.prio = e.target.checked; }) }), 'les 30 en priorité'),
-      h('label', { class: 'doux', style: 'font-size:13px;display:flex;gap:6px;align-items:center' }, h('input', { type: 'checkbox', checked: f.mail, onchange: (e) => changer(() => { f.mail = e.target.checked; }) }), 'avec e-mail')),
+      h('label', { class: 'doux', style: 'font-size:13px;display:flex;gap:6px;align-items:center' }, h('input', { type: 'checkbox', checked: f.mail, onchange: (e) => changer(() => { f.mail = e.target.checked; }) }), 'avec e-mail'),
+      h('span', { style: 'flex:1' }),
+      aEnvoyer.length ? h('button', { class: 'btn', style: 'padding:8px 14px;font-size:13px', title: 'Suit les filtres choisis (département, activité, priorité, recherche)',
+        onclick: () => ouvrirFileEnvoi('premier', aEnvoyer, re) }, `⚡ Envoyer à la suite (${nombre(aEnvoyer.length)})`) : '',
+      aRelancerListe.length ? h('button', { class: 'btn-contour', style: 'padding:8px 14px;font-size:13px', onclick: () => ouvrirFileEnvoi('relance', aRelancerListe, re) }, `Relancer à la suite (${nombre(aRelancerListe.length)})`) : ''),
     h('div', { class: 'panneau tableau' }, h('table', {},
       h('thead', {}, h('tr', {}, h('th', {}, 'N°'), h('th', {}, `ENTREPRISE (${nombre(lignes.length)})`), h('th', {}, 'CONTACT'), h('th', {}, 'ÉTAPE'), h('th', {}, 'PROCHAIN MAIL'))),
       h('tbody', {}, morceau.length ? morceau.map((l) => (l.type === 'inscrit' ? ligneInscrit(l.x) : ligneProspect(l.x)))
@@ -2002,7 +2073,7 @@ async function blocParcours(att, re) {
     pages > 1 ? h('div', { style: 'display:flex;gap:10px;align-items:center;justify-content:center;margin-top:12px' },
       h('button', { class: 'btn-contour', disabled: pageParcours === 0, onclick: () => { pageParcours--; re(); } }, '‹'), h('span', { class: 'doux' }, `${pageParcours + 1} / ${pages}`),
       h('button', { class: 'btn-contour', disabled: pageParcours >= pages - 1, onclick: () => { pageParcours++; re(); } }, '›')) : '',
-    h('p', { class: 'note-bas' }, 'Le bouton de droite prépare le bon mail selon l’étape et le copie : collez avec Ctrl+V dans Outlook (expéditeur contact@tikette.fr), puis envoyez. « Premier mail » = le mail avec votre selfie ; « → Intéressé » quand quelqu’un répond oui ; « Mail place de fondateur » l’envoie vers le formulaire de tikette.fr/pro ; dès qu’il s’inscrit, il arrive tout seul en « Inscrit » ; « Valider » prépare le mail d’accès à son Espace Pro. Les 50 premiers inscrits sont fondateurs ; ensuite les mails parlent de « place de partenaire ». 20 à 30 premiers mails par jour au plus, relance 5 jours après.'));
+    h('p', { class: 'note-bas' }, 'Le bouton de droite prépare le bon mail selon l’étape et le copie : collez avec Ctrl+V dans Outlook (expéditeur contact@tikette.fr), puis envoyez. « Premier mail » = le mail avec votre selfie ; « → Intéressé » quand quelqu’un répond oui ; « Mail place de fondateur » l’envoie vers le formulaire de tikette.fr/pro ; dès qu’il s’inscrit, il arrive tout seul en « Inscrit » ; « Valider » prépare le mail d’accès à son Espace Pro. Les 50 premiers inscrits sont fondateurs ; ensuite les mails parlent de « place de partenaire ». 20 à 30 premiers mails par jour au plus, relance 5 jours après. « ⚡ Envoyer à la suite » enchaîne les entreprises « À contacter » des filtres choisis : Entrée copie le mail et ouvre Outlook, Ctrl+V, Envoyer, puis Entrée pour le suivant.'));
 }
 async function pageEspacePro() {
   const g = generation;
