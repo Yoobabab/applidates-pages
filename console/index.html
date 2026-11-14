@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-G8uzWxfmR58UFup6b8bJWay4JZ6m9QGeCKJZG7qlgR8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-0vjMctfenZiz0or0VqSmc6u1uKglITl2Yedk0mmsk3k='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -2047,7 +2047,21 @@ async function blocParcours(att, re) {
   const changer = (fn) => { fn(); pageParcours = 0; re(); };
   const carteFond = h('div', { class: 'kpi', style: 'background:linear-gradient(135deg,#FFF6DA,#FFE9A8);border-color:#F2CF6B' },
     h('div', { class: 't', style: 'color:#8A6100' }, '★ Fondateurs'), h('div', { class: 'v', style: 'color:#9A6B00' }, `${placesPrises} / 50`), h('div', { class: 's', style: 'color:#8A6100' }, restePlaces ? `il en reste ${restePlaces}` : 'complet : on passe aux partenaires'));
+  // Envoi automatique du mail selfie (supabase/prospection-auto.sql + fonction prospection-robot du dépôt AppliDates).
+  const auto = await rpc('console_prospection_auto').catch(() => null);
+  const regler = async (actif, parJour) => { await rpc('console_prospection_auto_regler', { p_actif: actif, p_par_jour: parJour ?? null }); re(); };
+  const carteAuto = auto ? h('div', { class: 'panneau', style: `display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:14px 18px;margin-bottom:14px;${auto.actif ? 'border-color:#9BD8B4;background:#F2FBF5' : ''}` },
+    h('div', { style: 'flex:1;min-width:260px' },
+      h('b', {}, auto.actif ? '● Envoi automatique en marche' : 'Envoi automatique en pause'),
+      h('div', { class: 'doux', style: 'font-size:12.5px;margin-top:2px' },
+        `Mail selfie depuis contact@tikette.fr, du lundi au vendredi de 9 h à 18 h, un toutes les 10 minutes, ${auto.par_jour} par jour au plus. `,
+        `Aujourd’hui : ${auto.aujourdhui} envoyé(s) · ${nombre(auto.restants)} restent à contacter · ${nombre(auto.auto_total)} partis tout seuls depuis le début.`),
+      auto.derniere_erreur ? h('div', { style: 'color:var(--rouge);font-size:12.5px;margin-top:4px' }, 'Dernière erreur : ', auto.derniere_erreur) : ''),
+    h('label', { class: 'doux', style: 'font-size:13px;display:flex;gap:6px;align-items:center' }, 'Par jour',
+      h('input', { class: 'champ', type: 'number', min: 1, max: 200, value: auto.par_jour, style: 'width:70px;padding:6px 8px', onchange: (e) => regler(auto.actif, Number(e.target.value)) })),
+    h('button', { class: auto.actif ? 'btn-contour' : 'btn', onclick: () => regler(!auto.actif) }, auto.actif ? 'Mettre en pause' : 'Lancer l’envoi auto')) : '';
   return h('div', {},
+    carteAuto,
     h('div', { class: 'kpis' },
       kpi('À contacter', nombre(n('a_contacter')), tous.filter((p) => p.statut === 'a_contacter' && p.email).length + ' avec un e-mail'),
       kpi('Mail envoyé', nombre(n('envoye', 'relance', 'appele')), tous.filter(aRelancer).length + ' à relancer', tous.some(aRelancer) ? 'var(--jaune)' : ''),
