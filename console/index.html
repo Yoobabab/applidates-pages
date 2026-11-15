@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-O9lnSutetTO94bxdtmBIbI785lWN1kcoWaUrmUrw7vQ='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZLADpTWrsdKzSNP8PXBGPphG1ucy3MX62UVLFf0fQ/o='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1650,8 +1650,37 @@ function adresseProspect(p) {
   let site = ''; try { site = new URL(/\/\//.test(p.site || '') ? p.site : 'https://' + (p.site || 'x')).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) {}
   return mails.find((m) => site && m.split('@')[1].toLowerCase() === site) || mails[0] || '';
 }
+// Relance (5 jours après le 1er mail, sans réponse) : même style que le mail « place de fondateur », court.
+function mailRelance(p) {
+  const objet = 'Re : Votre activité dans Tikette (c’est gratuit)';
+  const url = 'https://tikette.fr/pro/';
+  const P = (t, m = '0 0 14px') => `<p style="margin:${m};font-family:Aptos,Calibri,Arial,sans-serif;font-size:15px;line-height:1.5;color:#2A1D45">${t}</p>`;
+  const bouton = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:6px 0 20px"><tr><td align="center" bgcolor="#FFD166" style="background:#FFD166;border-radius:12px;padding:16px 30px;text-align:center"><a href="${url}" style="font-family:Aptos,Calibri,Arial,sans-serif;font-size:16px;font-weight:bold;color:#1E1433;text-decoration:none">Tout voir en 2 minutes &#10140;</a></td></tr></table>`;
+  const reponses = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 18px"><tr>`
+    + `<td width="50%" bgcolor="#E6F7EE" style="background:#E6F7EE;border-left:4px solid #3DBE7A;border-radius:8px;padding:12px 14px;font-family:Aptos,Calibri,Arial,sans-serif;font-size:14px;line-height:1.45;color:#2A1D45">Ça vous tente ?<br>Répondez <b>« oui »</b>, on s’occupe du reste.</td>`
+    + `<td width="12" style="width:12px">&nbsp;</td>`
+    + `<td width="50%" bgcolor="#F4F0FB" style="background:#F4F0FB;border-left:4px solid #C9BBE8;border-radius:8px;padding:12px 14px;font-family:Aptos,Calibri,Arial,sans-serif;font-size:14px;line-height:1.45;color:#2A1D45">Pas intéressé ?<br>Répondez <b>« Non merci »</b>, on ne vous écrira plus.</td>`
+    + `</tr></table>`;
+  const html = `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F1ECFA" style="background:#F1ECFA;border-collapse:collapse"><tr><td align="center" style="padding:28px 12px">`
+    + `<table role="presentation" width="60%" align="center" cellpadding="0" cellspacing="0" border="0" style="width:60%;min-width:320px;border-collapse:collapse;margin:0 auto">`
+    + `<tr><td bgcolor="#A88BE0" style="background:#A88BE0;border-radius:16px 16px 0 0;padding:22px 32px;line-height:0"><img src="https://tikette.fr/mail/titre-relance.png" width="420" height="64" alt="tikette · Petit rappel : votre place vous attend" style="display:block;width:420px;max-width:100%;height:auto;border:0"></td></tr>`
+    + `<tr><td bgcolor="#FFF7FA" style="background:#FFF7FA;padding:32px 40px 12px;border:1px solid #F3DDE6;border-top:0">`
+    + P('Bonjour,')
+    + P('On revient vers vous au sujet de notre message de la semaine dernière : <b>Tikette</b> sort le <b>14 décembre</b>, et on aimerait vraiment y proposer votre activité.')
+    + P('La démarche prend <b>10 minutes</b> et elle est entièrement <b style="color:#E04E84">GRATUITE</b>.')
+    + bouton + reponses
+    + P('À très vite,', '8px 0 14px') + SIGNATURE_YVAN
+    + `</td></tr></table></td></tr></table>`;
+  const corps = ['Bonjour,', 'On revient vers vous au sujet de notre message de la semaine dernière : Tikette sort le 14 décembre, et on aimerait vraiment y proposer votre activité.',
+    `La démarche prend 10 minutes et elle est entièrement GRATUITE. Tout est expliqué ici : ${url}`,
+    'Ça vous tente ? Répondez simplement « oui », on s’occupe du reste.\nPas intéressé ? Répondez « Non merci » et on ne vous écrira plus.',
+    'À très vite,\n\nYvan DRACA\nCofondateur · Tikette\ntikette.fr · contact@tikette.fr\nChoisis l’ambiance, On organise.'].join('\n\n');
+  const a = adresseProspect(p);
+  return { a, objet, corps, html, mailto: `mailto:${encodeURIComponent(a)}?subject=${encodeURIComponent(objet)}` };
+}
 const MAIL_P = (t, m) => `<p style="margin:${m ?? '0 0 12px'}">${t}</p>`;
 function mailProspect(p, relance) {
+  if (relance) return mailRelance(p);
   const objet = relance ? 'Re : Votre activité dans Tikette (c’est gratuit)' : 'Votre activité dans Tikette (c’est gratuit)';
   const lignes = relance ? [
     'Bonjour,',
