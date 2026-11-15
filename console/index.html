@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-Eqv4kP9phvEccXRqRhKzgmo7W7RtgyybEPw7TPU//a8='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-y72uQ2P7r/l8ytcZTdOztarjxvmuBPeNqyyVKkwpOEE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1463,6 +1463,7 @@ async function pageCouts() {
     h('div', { class: 'kpis' },
       kpi('Par mois', euros(coutMensuel(couts)), 'abonnements ramenés au mois', 'var(--rouge)'),
       kpi('Par an', euros(parAn), 'sans les achats uniques'),
+      kpi('Achats uniques', euros(couts.reduce((s, c) => (c.montant == null || c.rythme !== 'unique' ? s : s + Number(c.montant) * (c.devise === 'USD' ? USD : 1)), 0)), 'déjà payés une fois (Meshy, pub…)'),
       kpi('À renouveler sous 15 jours', String(alertes.length), alertes.map((c) => c.nom).join(' · ') || 'rien', alertes.length ? 'var(--rouge)' : null),
       kpi('Montants à compléter', String(couts.filter((c) => c.montant == null).length), 'touche « Modifier »')),
     h('div', { class: 'grille' },
