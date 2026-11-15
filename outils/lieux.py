@@ -44,7 +44,7 @@ ETIQUETTES = {
     'name': ('n', 80), 'amenity': ('am', 30), 'leisure': ('le', 30), 'tourism': ('to', 30), 'sport': ('sp', 30),
     'natural': ('na', 30), 'cuisine': ('cu', 40), 'opening_hours': ('oh', 160),
     'addr:housenumber': ('hn', 12), 'addr:street': ('st', 80), 'addr:city': ('ci', 60),
-    'craft': ('cr', 30), 'shop': ('sh', 30), 'website': ('w', 160),
+    'craft': ('cr', 30), 'shop': ('sh', 30), 'website': ('w', 160), 'brand': ('br', 40),
     # Lus par l'appli pour reconnaître canoë (location), caves avec dégustation et bains.
     'rental': ('re', 30), 'tasting': ('ta', 10), 'bath:type': ('bt', 20),
     # Spas et salons de massage (demande de Greg, 10 nov. 2026).
