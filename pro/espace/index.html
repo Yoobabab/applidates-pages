@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-H9yEkqQodWCjaIMDdQ2Nv03MZgeskkRJr+Y5O2GohiA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-izu7xUIaRLKZvqqlSmKPLxEsU6lfxaU6i0Ogbhv/c/s='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -568,10 +568,11 @@ const TUTOS = [
       ['Revenez dans votre espace', 'Stripe vous ramène tout seul ici. S’il manque une information, le bouton devient « Reprendre ma page Stripe » : touchez-le pour finir.',
         { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'S’il affiche « Reprendre ma page Stripe », il reste une information à donner à Stripe.' }, ['Paiement dans l’appli', 'Votre page Stripe n’est pas terminée.', 'Reprendre ma page Stripe']],
       ['C’est activé', '« Paiement dans l’appli activé » : vos clients paient à la réservation, pour tout le groupe. Vos virements et vos reçus sont dans « Mon tableau de bord Stripe ».',
-        { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'Ce bouton ouvre votre tableau de bord Stripe : virements, reçus, coordonnées bancaires.' }, ['Paiement dans l’appli activé', 'L’argent arrive sur votre compte bancaire.', 'Mon tableau de bord Stripe']],
+        { vue: 'parametres', sous: 'paiements', cible: '#s-go', ou: 'Paramètres › Paiements', bulle: 'Ce bouton ouvre votre tableau de bord Stripe : virements, reçus, coordonnées bancaires.' }, ['Paiement dans l’appli activé', 'Virement le 5 de chaque mois.', 'Mon tableau de bord Stripe']],
     ],
     cote: [['Ce qu’il vous faut', 'Une pièce d’identité du responsable, votre SIRET et l’IBAN du compte qui reçoit les virements.'],
       ['Combien ça coûte', 'Frais Stripe : environ 1,5 % + 0,25 € par carte européenne, prélevés par Stripe. La commission Tikette est prélevée au même moment. Tikette ne touche jamais votre argent.'],
+      ['Quand l’argent arrive', 'Une fois par mois : Stripe vire sur votre compte bancaire, le 5 de chaque mois, tout ce que vos clients ont payé jusque-là (chaque paiement est disponible environ 7 jours après).'],
       ['Remboursements', 'Automatiques si vous refusez, si vous ne répondez pas à temps ou si vous annulez. Un client qui annule plus de 48 h avant est remboursé ; après, non.']] },
   { id: 'agenda', icone: 'lien', titre: 'Relier mon agenda ou mon logiciel', duree: '4 min',
     resume: 'Voir les réservations Tikette dans Google, Outlook ou Apple Calendrier, fermer les créneaux déjà pris ailleurs, connexion directe à votre logiciel.',
@@ -1594,6 +1595,7 @@ async function pPaiements() {
     <div class="reglage"><div><b>${actif ? 'Paiement dans l’appli activé' : 'Paiement dans l’appli'}</b><p>${esc(etat)}</p></div>
     ${e?.ok ? `<button class="btn ${actif ? 'p' : 'prim'}" id="s-go">${actif ? 'Mon tableau de bord Stripe' : commence ? 'Reprendre ma page Stripe' : 'Recevoir mes paiements'}</button>` : ''}</div>
     <p class="note" style="margin:10px 0 0">Les clients paient à la réservation, pour tout le groupe. Le paiement est versé directement sur votre compte par <b>Stripe</b> : Tikette ne touche jamais l’argent. Stripe prélève ses frais (environ 1,5 % + 0,25 € par carte européenne) et la commission Tikette au moment du paiement. Si vous refusez, ne répondez pas à temps ou annulez, le client est remboursé automatiquement.</p>
+    <div class="note" style="margin:10px 0 0;padding:10px 12px;border-radius:10px;background:rgba(255,209,102,.14)">${ic('calendrier')}Vos paiements arrivent <b>une fois par mois</b> : Stripe vire sur votre compte bancaire, le 5 de chaque mois, tout ce que vos clients ont payé jusque-là (Stripe garde chaque paiement environ 7 jours avant de le rendre disponible). Le détail de chaque virement est dans « Mon tableau de bord Stripe ».</div>
     ${actif ? '' : '<p class="note" style="margin:8px 0 0">Il vous faut 5 minutes : une pièce d’identité, votre SIRET et l’IBAN du compte qui recevra les virements.</p>'}</div>`;
   if ($('#s-go')) $('#s-go').onclick = async () => {
     $('#s-go').disabled = true;
