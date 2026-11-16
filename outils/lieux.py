@@ -29,7 +29,7 @@ PAR_DEGRE = round(1 / PAS)
 
 # Même ordre et mêmes identifiants que RUBRIQUES dans l'appli (src/lib/inventaire-outils.ts).
 # Les rubriques ajoutées vont toujours à la fin (les anciennes versions de l'appli lisent les nombres par position).
-RUBRIQUES = ['restos', 'pouce', 'bars', 'cafes', 'boites', 'cinemas', 'jeux', 'sensations', 'scenes', 'musees', 'parcs', 'vues', 'plages', 'stades', 'detente', 'domaines']
+RUBRIQUES = ['restos', 'pouce', 'bars', 'cafes', 'boites', 'cinemas', 'jeux', 'sensations', 'scenes', 'musees', 'parcs', 'vues', 'plages', 'stades', 'detente', 'domaines', 'boutiques']
 RANG = {r: i for i, r in enumerate(RUBRIQUES)}
 
 # Rubriques « à table » (fichiers t/, lus dans un petit rayon) ; les autres vont dans s/.
@@ -113,8 +113,11 @@ def rubrique(t):
         return 'domaines'
     if leisure in ('park', 'garden') and t.get('access') != 'private':
         return 'parcs'
-    if t.get('natural') == 'beach':
+    if t.get('natural') == 'beach' or leisure == 'beach_resort':
         return 'plages'
+    # Centres commerciaux, grands magasins, villages de marque (zones commerciales).
+    if t.get('shop') in ('mall', 'department_store', 'outlet'):
+        return 'boutiques'
     if leisure == 'stadium':
         return 'stades'
     return None
