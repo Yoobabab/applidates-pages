@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ZmGw5KXV81ySVMqVdYN0pgNeFIKBcwWkglKBh8nO0DU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-H9yEkqQodWCjaIMDdQ2Nv03MZgeskkRJr+Y5O2GohiA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex">
@@ -1077,6 +1077,14 @@ function editeur(o) {
   <label class="l" for="e-desc">Description</label><textarea id="e-desc" rows="3" maxlength="1500" placeholder="Ce qui est compris, l’ambiance, à partir de quel âge…">${esc(o.description)}</textarea>
   <label class="l">Types d’activité <span style="color:var(--pale)">· tapez un mot, choisissez, recommencez</span></label><div id="e-types"></div>
   <p class="note" style="margin:8px 0 0">${icp('info')} Tikette s’occupe du reste : selon ces types et le nom de l’activité, elle est proposée dans les bonnes sorties (en amoureux, entre potes, entre copines, insolite…).</p>
+  <div class="sep"></div><h3>Lieu de l’activité</h3>
+  <p class="note" style="margin:2px 0 8px">Un seul compte peut proposer plusieurs activités sur des lieux différents : chacune s’affiche au bon endroit dans Tikette.</p>
+  <div class="reglage" style="margin-top:2px"><div><b>Au même endroit que mon établissement</b><p id="e-lieu-rappel"></p></div><label class="interrupteur"><input type="checkbox" id="e-meme-lieu"><span></span></label></div>
+  <div id="e-lieu-bloc" style="display:none">
+    <label class="l" for="e-adr">Adresse de cette activité</label>
+    <div class="ct-saisie"><input id="e-adr" autocomplete="off" placeholder="route de la Manade, Raphèle-lès-Arles"><div class="ct-liste" id="e-adr-liste" style="display:none"></div></div>
+    <p class="note" id="e-adr-etat" style="margin:6px 0 0"></p>
+  </div>
   <div class="sep"></div><h3>Fonctionnement</h3>
   <div class="choix" style="margin-top:10px"><label><input type="radio" name="mode" value="privatise" ${o.mode === 'privatise' ? 'checked' : ''}><span><b>Une salle = un groupe</b><br><span class="note">Escape game, salle VR, spa privatif : un seul groupe par salle et par créneau.</span></span></label>
   <label><input type="radio" name="mode" value="places" ${o.mode === 'places' ? 'checked' : ''}><span><b>Des places partagées</b><br><span class="note">Canoë, atelier, dégustation, couverts d’un restaurant : plusieurs groupes jusqu’à la capacité.</span></span></label></div>
@@ -1121,6 +1129,35 @@ function editeur(o) {
     $$('[data-rp]', m).forEach((x) => x.onclick = () => { photos.splice(+x.dataset.rp, 1); dessinerPhotos(); });
   };
   dessinerRes(); dessinerHor(); dessinerPhotos();
+  // Lieu de l'activité : même adresse que l'établissement, ou un autre lieu géocodé (Géoplateforme IGN).
+  let lieu = (o.adresse || o.lat != null) ? { adresse: o.adresse || '', commune: o.commune || '', code_postal: o.code_postal || '', lat: o.lat, lon: o.lon } : null;
+  const memeLieu = $('#e-meme-lieu', m), blocLieu = $('#e-lieu-bloc', m), adr = $('#e-adr', m), listeAdr = $('#e-adr-liste', m), etatAdr = $('#e-adr-etat', m);
+  memeLieu.checked = !lieu;
+  $('#e-lieu-rappel', m).textContent = [espace.entreprise.adresse, espace.entreprise.commune].filter(Boolean).join(', ') || 'l’adresse de votre établissement';
+  if (lieu) { adr.value = [lieu.adresse, [lieu.code_postal, lieu.commune].filter(Boolean).join(' ')].filter(Boolean).join(', '); etatAdr.textContent = 'Lieu enregistré : ' + (lieu.commune || lieu.adresse); }
+  const majBlocLieu = () => { blocLieu.style.display = memeLieu.checked ? 'none' : ''; };
+  majBlocLieu();
+  memeLieu.onchange = () => { if (memeLieu.checked) { lieu = null; adr.value = ''; listeAdr.style.display = 'none'; etatAdr.textContent = ''; } majBlocLieu(); };
+  let tAdr;
+  adr.oninput = () => { lieu = null; etatAdr.textContent = ''; clearTimeout(tAdr); const q = adr.value.trim();
+    if (q.length < 4) { listeAdr.style.display = 'none'; return; }
+    tAdr = setTimeout(async () => {
+      try {
+        const r = await fetch(`https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(q)}&limit=5`).then((x) => x.json());
+        const opts = (r.features || []).filter((x) => x.properties?.postcode);
+        listeAdr.innerHTML = '';
+        if (!opts.length) { listeAdr.style.display = 'none'; etatAdr.textContent = 'Adresse introuvable, précisez-la.'; return; }
+        opts.forEach((x) => { const b = document.createElement('button'); b.type = 'button';
+          b.style.cssText = 'display:block;width:100%;text-align:left;border:0;background:transparent;padding:9px 11px;border-radius:8px;cursor:pointer;font-size:14px;color:inherit';
+          b.onmouseover = () => b.style.background = '#F3EFFA'; b.onmouseout = () => b.style.background = 'transparent';
+          b.textContent = x.properties.label;
+          b.onclick = () => { lieu = { adresse: x.properties.name || x.properties.label, commune: x.properties.city, code_postal: x.properties.postcode, lat: x.geometry.coordinates[1], lon: x.geometry.coordinates[0] };
+            adr.value = x.properties.label; listeAdr.style.display = 'none'; etatAdr.textContent = 'Adresse reconnue : ' + lieu.commune; };
+          listeAdr.appendChild(b); });
+        listeAdr.style.display = '';
+      } catch { listeAdr.style.display = 'none'; }
+    }, 350);
+  };
   $$('input[name=mode]', m).forEach((x) => x.onchange = dessinerRes);
   $('#e-plus-res', m).onclick = () => { ressources.push({ nom: `Salle ${ressources.length + 1}`, capacite: ressources[0]?.capacite || 6, ical_url: '' }); dessinerRes(); };
   $('#e-plus-hor', m).onclick = () => { const d = horaires[horaires.length - 1] || { jour: 0, debut: '14:00', fin: '22:00', pas_min: 60 }; horaires.push({ ...d, jour: (d.jour % 7) + 1 }); dessinerHor(); };
@@ -1153,6 +1190,7 @@ function editeur(o) {
     if (priv && maxi > plusGrande) return toast(`Personnes max. (${maxi}) au-dessus de votre plus grande salle (${plusGrande}) : un groupe de ${maxi} ne pourrait jamais réserver.`, 'alerte');
     if (!priv && mini > ressources.reduce((t, r) => t + r.capacite, 0)) return toast('Le minimum de personnes dépasse le nombre de places.', 'alerte');
     if (horaires.some((h) => h.debut >= h.fin)) return toast('Une plage horaire finit avant de commencer.', 'alerte');
+    if (!memeLieu.checked && !lieu) return toast('Choisissez l’adresse de l’activité, ou cochez « Au même endroit que mon établissement ».', 'alerte');
     ressources.forEach((r) => { r.ical_url = (r.ical_url || '').trim().replace(/^webcal:/, 'https:'); });
     if (ressources.some((r) => r.ical_url && !/^https:\/\//.test(r.ical_url))) return toast('Le lien d’agenda doit commencer par https://', 'alerte');
     $('#e-ok', m).disabled = true;
@@ -1161,7 +1199,9 @@ function editeur(o) {
         duree_min: +$('#e-duree', m).value, battement_min: +$('#e-batt', m).value, prix_cents: Math.round(+$('#e-prix', m).value * 100), prix_par: $('#e-par', m).value,
         min_personnes: +$('#e-min', m).value, max_personnes: +$('#e-max', m).value, confirmation: $('input[name=conf]:checked', m).value,
         annulation_h: +$('#e-annul', m).value, delai_reponse_h: +$('#e-delai', m).value, reservable_jours: +$('#e-jours', m).value, preavis_h: +$('#e-preavis', m).value,
-        demander_prenoms: $('#e-prenoms', m).checked, consignes: $('#e-consignes', m).value, photos, actif: $('#e-actif', m).checked, ressources, horaires } });
+        demander_prenoms: $('#e-prenoms', m).checked, consignes: $('#e-consignes', m).value, photos, actif: $('#e-actif', m).checked,
+        adresse: lieu ? lieu.adresse : '', commune: lieu ? lieu.commune : '', code_postal: lieu ? lieu.code_postal : '', lat: lieu ? lieu.lat : null, lon: lieu ? lieu.lon : null,
+        ressources, horaires } });
       toast('Activité enregistrée.'); fermer(); await recharger(); activites();
     } catch { $('#e-ok', m).disabled = false; }
   };
