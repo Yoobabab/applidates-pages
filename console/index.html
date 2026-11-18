@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-7fTkhFv+RNNZyzskPEfJ3D7IgzOMVhjIXt3geIrXzLA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-lktEbs+9+BqplE+LMnUyP8fHCv5xCntyJ/Xl+17yN74='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
@@ -1645,7 +1645,7 @@ const REGION_PROSPECT = { '30': 'du Gard', '84': 'du Vaucluse', '13': 'des Bouch
 function adresseProspect(p) {
   // Adresses revenues en erreur (« Undeliverable ») : à compléter à chaque retour.
   const refusees = ['poterie@poterieanduze.com', 'p.edlinger@blocsession.com', 'marion@ferme-aurons.com'];
-  const faux = /anthropic\.com$|@(mon)?e?mail\.com$|@monemail\.|^(jean|john|jane|pierre|paul|marie|michel)[._-]?(dupont|durand|martin|doe|smith)\d*@|^(prenom[._-]?nom|nom[._-]?prenom|votre(nom|email|mail|adresse)|exemple|example|test|xxx)@|@monsite\.|@votre(site|domaine)\.|@mondomaine\.|example\.|exemple\.|sentry|wixpress/i;
+  const faux = /anthropic\.com$|@(mon)?e?mail\.com$|@monemail\.|^(jean|john|jane|pierre|paul|marie|michel)[._-]?(dupont|durand|martin|doe|smith)\d*@|^(prenom[._-]?nom|nom[._-]?prenom|votre(nom|email|mail|adresse)|exemple|example|test|xxx)@|^(utilisateur|user)@|@(domaine|domain)\.|@monsite\.|@votre(site|domaine)\.|@mondomaine\.|example\.|exemple\.|sentry|wixpress/i;
   const mails = String(p.email || '').replace(/%20|%2C|%3B|mailto:/gi, ' ').split(/[\s,;/]+/).filter((x) => /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9à-ÿ.-]+\.[a-z]{2,}$/i.test(x) && !faux.test(x) && !refusees.includes(x.toLowerCase()));
   let site = ''; try { site = new URL(/\/\//.test(p.site || '') ? p.site : 'https://' + (p.site || 'x')).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) {}
   return mails.find((m) => site && m.split('@')[1].toLowerCase() === site) || mails[0] || '';
