@@ -1646,7 +1646,7 @@ function adresseProspect(p) {
   // Adresses revenues en erreur (« Undeliverable ») : à compléter à chaque retour.
   const refusees = ['poterie@poterieanduze.com', 'p.edlinger@blocsession.com', 'marion@ferme-aurons.com'];
   const faux = /anthropic\.com$|@(mon)?e?mail\.com$|@monemail\.|^(jean|john|jane|pierre|paul|marie|michel)[._-]?(dupont|durand|martin|doe|smith)\d*@|^(prenom[._-]?nom|nom[._-]?prenom|votre(nom|email|mail|adresse)|exemple|example|test|xxx)@|^(utilisateur|user)@|@(domaine|domain)\.|@monsite\.|@votre(site|domaine)\.|@mondomaine\.|example\.|exemple\.|sentry|wixpress/i;
-  const mails = String(p.email || '').replace(/%20|%2C|%3B|mailto:/gi, ' ').split(/[\s,;/]+/).filter((x) => /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9à-ÿ.-]+\.[a-z]{2,}$/i.test(x) && !faux.test(x) && !refusees.includes(x.toLowerCase()));
+  const mails = String(p.email || '').replace(/%20|%2C|%3B|mailto:/gi, ' ').replace(/(^|[\s,;/])20(?=[a-z])/gi, '$1').split(/[\s,;/]+/).filter((x) => /^[a-z0-9][a-z0-9._%+-]*@[a-z0-9à-ÿ.-]+\.[a-z]{2,}$/i.test(x) && !faux.test(x) && !refusees.includes(x.toLowerCase()));
   let site = ''; try { site = new URL(/\/\//.test(p.site || '') ? p.site : 'https://' + (p.site || 'x')).hostname.replace(/^www\./, '').toLowerCase(); } catch (e) {}
   return mails.find((m) => site && m.split('@')[1].toLowerCase() === site) || mails[0] || '';
 }
