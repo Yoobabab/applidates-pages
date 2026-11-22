@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Soutenir Tikette</title>
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=2">
+<link rel="shortcut icon" href="/favicon.ico?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Page « Soutenir Tikette », aux couleurs de l'appli (thème « Luciole »). */
+:root {
+  --fond: #1E1433; --carte: #2A1D45; --bord: #3B2A5C;
+  --texte: #F7F1FF; --doux: #C9BCE3;
+  --lueur: #FFD166; --rose: #FF6B9A; --violet: #7A3BC4;
+  --sur-lueur: #1E1433;
+  --f-titre: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-texte: "DM Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--texte); font-family: var(--f-texte); font-size: 1.0625rem; line-height: 1.6; padding-inline: 16px; }
+.page { max-width: 760px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--f-titre); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--lueur); }
+header.barre { display: flex; justify-content: space-between; align-items: center; padding-block: 22px; gap: 12px; }
+.marque { display: flex; align-items: center; gap: 10px; font-family: var(--f-titre); font-weight: 800; font-size: 1.5rem; letter-spacing: -0.03em; }
+.marque .logo { width: 34px; height: 34px; border-radius: 9px; }
+.statut { font-size: .78rem; font-weight: 700; color: var(--lueur); text-transform: uppercase; letter-spacing: .08em; text-align: right; }
+
+.hero { position: relative; overflow: hidden; border-radius: 28px; padding: 30px 26px 34px; display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: center;
+  background: radial-gradient(circle at 85% 10%, rgba(255,209,102,.45), transparent 40%), linear-gradient(135deg, var(--rose), var(--violet) 55%, #3B2470); }
+.hero > div { min-width: 0; }
+.bulle { display: inline-block; background: rgba(30,20,51,.6); border-radius: 18px 18px 4px 18px; padding: 10px 16px; font-weight: 700; margin-bottom: 16px; }
+.hero h1 { font-size: clamp(2.1rem, 5.5vw, 3.2rem); line-height: 1.04; letter-spacing: -.035em; font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--lueur); }
+.chapo { margin-top: 16px; max-width: 40ch; font-size: 1.08rem; opacity: .95; }
+.tikette { width: 100%; max-width: 230px; aspect-ratio: 1; justify-self: center; overflow: visible; }
+.saut { animation: saut 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+.oeil { animation: cligne 4.6s infinite; transform-box: fill-box; transform-origin: center; }
+.bras { animation: coucou 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: right bottom; }
+@keyframes saut { 0%,100% { transform: translateY(0) scale(1,1); } 40% { transform: translateY(-14px) scale(.98,1.03); } 58% { transform: translateY(0) scale(1.04,.96); } 68% { transform: translateY(-3px); } }
+@keyframes cligne { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
+@keyframes coucou { 0%,55%,100% { transform: translateY(0); } 65% { transform: translateY(-14px); } 75% { transform: translateY(-4px); } 85% { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) { .saut, .oeil, .bras { animation: none; } }
+
+.don-carte { margin-top: 30px; background: var(--carte); border: 1px solid var(--bord); border-radius: 24px; padding: 26px 24px; text-align: center; }
+.montants { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 22px; }
+.montants span { padding: 9px 15px; border-radius: 999px; font-weight: 700; background: rgba(255,209,102,.14); color: var(--lueur); border: 1px solid rgba(255,209,102,.3); }
+.don { display: inline-block; background: var(--lueur); color: var(--sur-lueur); font-family: var(--f-titre); font-weight: 800; font-size: 1.15rem; padding: 16px 32px; border-radius: 999px; text-decoration: none; box-shadow: 0 0 24px rgba(255,209,102,.4); }
+.don.bientot { background: transparent; color: var(--doux); border: 1px dashed var(--bord); box-shadow: none; font-size: 1rem; }
+.note-don { margin-top: 16px; font-size: .9rem; color: var(--doux); max-width: 44ch; margin-inline: auto; }
+
+section { padding-block: 44px 10px; }
+section h2 { font-size: clamp(1.5rem, 3.2vw, 2rem); letter-spacing: -.025em; }
+.grille { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 22px; }
+.grille div { background: var(--carte); border: 1px solid var(--bord); border-radius: 20px; padding: 18px 20px; min-width: 0; }
+.grille h3 { font-size: 1.05rem; margin-bottom: 4px; }
+.grille p { color: var(--doux); font-size: .95rem; }
+footer { border-top: 1px solid var(--bord); margin-top: 40px; padding-block: 24px 40px; font-size: .88rem; color: var(--doux); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+@media (max-width: 680px) { .hero { grid-template-columns: 1fr; padding: 24px 20px 28px; } .tikette { max-width: 180px; order: -1; } .grille { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="barre">
+    <a class="marque" href="/" style="text-decoration:none;color:inherit"><img class="logo" src="/tikette-icone.png" alt="" width="34" height="34">tikette</a>
+    <div class="statut">Merci&nbsp;🧡</div>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="bulle">Merci d’être là&nbsp;!</div>
+      <h1>Un coup de pouce<br><em>au studio</em></h1>
+      <p class="chapo">Tikette est faite par deux potes, sans pub et sans revendre tes données. Un petit don nous aide à payer les serveurs et à sortir les prochaines nouveautés. Chaque euro va au studio.</p>
+    </div>
+    <svg class="tikette" viewBox="36 50 228 220" role="img" aria-label="Tikette, le petit ticket mascotte, fait coucou"><defs><linearGradient id="tc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
+<radialGradient id="tr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="tm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs>
+<ellipse cx="150" cy="258" rx="62" ry="7" fill="#000" opacity=".22"/>
+<g class="saut">
+<g class="bras"><circle cx="60" cy="182" r="16" fill="url(#tm)"/></g><circle cx="240" cy="194" r="16" fill="url(#tm)"/>
+<path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tr)"/>
+<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/>
+<ellipse cx="106" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/><ellipse cx="194" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/>
+<g class="oeil"><ellipse cx="124" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="128" cy="177" r="4" fill="#fff"/><circle cx="121" cy="187" r="2" fill="#fff"/></g>
+<g class="oeil"><ellipse cx="176" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="180" cy="177" r="4" fill="#fff"/><circle cx="173" cy="187" r="2" fill="#fff"/></g>
+<path d="M139 206 q11 13 22 0" fill="none" stroke="#1E1433" stroke-width="5" stroke-linecap="round"/>
+</g></svg>
+  </div>
+
+  <div class="don-carte">
+    <div class="montants"><span>☕ 2 €</span><span>🍹 5 €</span><span>🎁 10 €</span><span>✨ Le montant que tu veux</span></div>
+    <!-- QUAND LE LIEN DE DON EST PRÊT : remplacer le bloc ci-dessous par
+         <a class="don" href="LE_LIEN_STRIPE" target="_blank" rel="noopener">Faire un don</a> -->
+    <span class="don bientot">Le don arrive tout bientôt 🙏</span>
+    <p class="note-don">Paiement sécurisé. Tu choisis ton montant. C’est un vrai coup de pouce, sans contrepartie ni avantage dans l’appli — juste pour nous aider à faire grandir Tikette.</p>
+  </div>
+
+  <section aria-labelledby="t-ou">
+    <h2 id="t-ou">À quoi ça sert&nbsp;?</h2>
+    <div class="grille">
+      <div><h3>Les serveurs</h3><p>La base, l’envoi des codes, les activités à réserver : tout ça tourne sur des serveurs à payer chaque mois.</p></div>
+      <div><h3>Les stores</h3><p>Les comptes développeur Apple et Google, obligatoires pour être sur l’App Store et le Play Store.</p></div>
+      <div><h3>La suite</h3><p>De nouvelles ambiances, de nouvelles villes, de nouvelles idées de sorties. Ton don nous aide à aller plus vite.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Tikette · Egg Not Found · 2026</span>
+    <span><a href="/" style="color:var(--doux)">Retour au site</a></span>
+  </footer>
+</div>
+</body>
+</html>
