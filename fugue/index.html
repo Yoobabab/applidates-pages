@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://mmoyrhyimcalnztwpydi.supabase.co wss://mmoyrhyimcalnztwpydi.supabase.co https://api.github.com https://raw.githubusercontent.com https://recherche-entreprises.api.gouv.fr https://data.geopf.fr https://photon.komoot.io; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tikette a fugué</title>
+<meta name="description" content="Tu as croisé un ticket échappé ? Tikette, l'appli qui organise tes sorties en une minute, arrive le 14 décembre. Choisis l'ambiance, On organise.">
+<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=2">
+<link rel="shortcut icon" href="/favicon.ico?v=2">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap">
+<style>
+/* Page « Tikette a fugué » (cible du QR des stickers), thème Luciole de l'appli. */
+:root {
+  --fond: #1E1433; --carte: #2A1D45; --bord: #3B2A5C;
+  --texte: #F7F1FF; --doux: #C9BCE3;
+  --lueur: #FFD166; --rose: #FF6B9A; --violet: #7A3BC4;
+  --sur-lueur: #1E1433;
+  --f-titre: "Bricolage Grotesque", "Avenir Next", system-ui, sans-serif;
+  --f-texte: "DM Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--texte); font-family: var(--f-texte); font-size: 1.0625rem; line-height: 1.6; padding-inline: 16px; }
+.page { max-width: 640px; margin: 0 auto; min-height: 100svh; display: flex; flex-direction: column; }
+h1, h2 { font-family: var(--f-titre); margin: 0; text-wrap: balance; }
+p { margin: 0; }
+a { color: var(--lueur); }
+header.barre { display: flex; justify-content: center; align-items: center; padding-block: 22px; }
+.marque { font-family: var(--f-titre); font-weight: 800; font-size: 1.4rem; letter-spacing: -0.03em; }
+
+.hero { position: relative; overflow: hidden; border-radius: 28px; padding: 30px 26px 34px; text-align: center;
+  background: radial-gradient(circle at 80% 8%, rgba(255,209,102,.45), transparent 42%), linear-gradient(135deg, var(--rose), var(--violet) 55%, #3B2470); }
+.tikette { width: 100%; max-width: 190px; aspect-ratio: 1; margin: 2px auto 14px; display: block; overflow: visible; }
+.saut { animation: saut 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+.oeil { animation: cligne 4.6s infinite; transform-box: fill-box; transform-origin: center; }
+.bras { animation: coucou 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: right bottom; }
+@keyframes saut { 0%,100% { transform: translateY(0) scale(1,1); } 40% { transform: translateY(-14px) scale(.98,1.03); } 58% { transform: translateY(0) scale(1.04,.96); } 68% { transform: translateY(-3px); } }
+@keyframes cligne { 0%,90%,100% { transform: scaleY(1); } 94% { transform: scaleY(.1); } }
+@keyframes coucou { 0%,55%,100% { transform: translateY(0); } 65% { transform: translateY(-14px); } 75% { transform: translateY(-4px); } 85% { transform: translateY(-14px); } }
+@media (prefers-reduced-motion: reduce) { .saut, .oeil, .bras { animation: none; } }
+.bulle { display: inline-block; background: rgba(30,20,51,.6); border-radius: 18px 18px 18px 4px; padding: 9px 16px; font-weight: 700; margin-bottom: 14px; }
+.hero h1 { font-size: clamp(2.3rem, 9vw, 3.2rem); line-height: 1.02; letter-spacing: -.035em; font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--lueur); }
+.chapo { margin: 16px auto 0; max-width: 34ch; font-size: 1.1rem; opacity: .95; }
+.quand { margin-top: 20px; display: inline-flex; align-items: center; gap: 8px; background: rgba(30,20,51,.5); border: 1px solid rgba(255,255,255,.14); border-radius: 999px; padding: 8px 16px; font-weight: 700; }
+.quand b { color: var(--lueur); }
+
+.actions { margin-top: 26px; display: flex; flex-direction: column; gap: 12px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-family: var(--f-titre); font-weight: 800; font-size: 1.1rem; padding: 16px 26px; border-radius: 999px; }
+.btn.plein { background: var(--lueur); color: var(--sur-lueur); box-shadow: 0 0 24px rgba(255,209,102,.4); }
+.btn.vide { background: transparent; color: var(--doux); border: 1px dashed var(--bord); font-size: 1rem; font-weight: 700; }
+
+.pitch { margin-top: 30px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+.pitch div { background: var(--carte); border: 1px solid var(--bord); border-radius: 18px; padding: 16px 18px; }
+.pitch b { display: block; font-family: var(--f-titre); font-size: 1.05rem; margin-bottom: 2px; }
+.pitch p { color: var(--doux); font-size: .97rem; }
+
+.slogan { margin: 30px 0 6px; text-align: center; font-family: var(--f-titre); font-weight: 800; font-size: 1.2rem; }
+.slogan em { font-style: normal; color: var(--lueur); }
+
+footer { margin-top: auto; border-top: 1px solid var(--bord); padding-block: 22px 36px; font-size: .85rem; color: var(--doux); display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 18px; text-align: center; }
+footer a { color: var(--doux); }
+@media (max-width: 480px) { .hero { padding: 24px 18px 28px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="barre"><span class="marque">tikette</span></header>
+
+  <main>
+    <section class="hero">
+      <svg class="tikette" viewBox="36 50 228 220" role="img" aria-label="Tikette, le petit ticket mascotte, fait coucou"><defs><linearGradient id="tc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF89AF"/><stop offset="1" stop-color="#E05E88"/></linearGradient>
+<radialGradient id="tr" cx=".28" cy=".18" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="tm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF77A2"/><stop offset="1" stop-color="#D65A81"/></linearGradient></defs>
+<ellipse cx="150" cy="258" rx="62" ry="7" fill="#000" opacity=".22"/>
+<g class="saut">
+<g class="bras"><circle cx="60" cy="182" r="16" fill="url(#tm)"/></g><circle cx="240" cy="194" r="16" fill="url(#tm)"/>
+<path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tc)"/><path d="M118 76 L182 76 A38 38 0 0 1 220 114 L220 123 A13 13 0 0 0 220 149 L220 198 A38 38 0 0 1 182 236 L118 236 A38 38 0 0 1 80 198 L80 149 A13 13 0 0 0 80 123 L80 114 A38 38 0 0 1 118 76 Z" fill="url(#tr)"/>
+<line x1="96" y1="136" x2="204" y2="136" stroke="#1E1433" stroke-opacity=".7" stroke-width="4" stroke-dasharray="2 9" stroke-linecap="round"/>
+<path transform="translate(150 107) scale(.85)" d="M0 -6 c-7 -9 -20 -4 -17 6 c2 8 17 17 17 17 c0 0 15 -9 17 -17 c3 -10 -10 -15 -17 -6 z" fill="#1E1433"/>
+<ellipse cx="106" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/><ellipse cx="194" cy="202" rx="11" ry="6.5" fill="#FF9DBB" opacity=".9"/>
+<g class="oeil"><ellipse cx="124" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="128" cy="177" r="4" fill="#fff"/><circle cx="121" cy="187" r="2" fill="#fff"/></g>
+<g class="oeil"><ellipse cx="176" cy="182" rx="12" ry="15" fill="#1E1433"/><circle cx="180" cy="177" r="4" fill="#fff"/><circle cx="173" cy="187" r="2" fill="#fff"/></g>
+<path d="M139 206 q11 13 22 0" fill="none" stroke="#1E1433" stroke-width="5" stroke-linecap="round"/>
+</g></svg>
+
+      <span class="bulle">Coucou, tu m'as retrouvée !</span>
+      <h1>Tikette a <em>fugué</em>.</h1>
+      <p class="chapo">Tu es tombé sur un petit ticket échappé. En vrai, Tikette, c'est l'appli qui organise ta sortie clé en main — en une minute.</p>
+      <div class="quand">🎟️ Dispo le <b>14 décembre</b></div>
+
+      <div class="actions">
+        <a class="btn plein" href="https://apps.apple.com/fr/app/id6831303434">Précommander sur l'App&nbsp;Store</a>
+        <span class="btn vide">Google Play — bientôt</span>
+      </div>
+    </section>
+
+    <section class="pitch">
+      <div><b>Tu choisis l'ambiance</b><p>En couple, entre potes, entre copines, en famille ou en solo.</p></div>
+      <div><b>On compose le programme</b><p>Activité, resto, bar, balade… avec les vraies adresses et les horaires.</p></div>
+      <div><b>Y a plus qu'à y aller</b><p>Itinéraire, plan B pluie, et tu peux même faire voter ta bande.</p></div>
+    </section>
+
+    <p class="slogan">Choisis l'ambiance, <em>On organise.</em></p>
+  </main>
+
+  <footer>
+    <a href="https://tikette.fr">tikette.fr</a>
+    <a href="/conditions/">Conditions</a>
+    <a href="/confidentialite/">Confidentialité</a>
+    <a href="/mentions-legales/">Mentions légales</a>
+  </footer>
+</div>
+</body>
+</html>
